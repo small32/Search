@@ -9,6 +9,7 @@ struct SettingsPanel: View {
     @ObservedObject var browser: Browser
     @ObservedObject var prefs: Preferences
 
+    @ObservedObject private var language = LanguageSettings.shared
     @ObservedObject private var updater = Updater.shared
     @ObservedObject private var shield = Shield.shared
     @State private var isDefault = Links.isDefault
@@ -21,15 +22,15 @@ struct SettingsPanel: View {
         var id: String { rawValue }
         var title: String {
             switch self {
-            case .general: return "通用"
-            case .tabs: return "标签页"
-            case .shortcuts: return "快捷键"
-            case .extensions: return "扩展"
-            case .passwords: return "密码"
-            case .downloads: return "下载"
-            case .privacy: return "隐私"
+            case .general: return L10n.text("Settings.0692")
+            case .tabs: return L10n.text("Settings.0693")
+            case .shortcuts: return L10n.text("Settings.0694")
+            case .extensions: return L10n.text("Settings.0695")
+            case .passwords: return L10n.text("Settings.0696")
+            case .downloads: return L10n.text("Settings.0697")
+            case .privacy: return L10n.text("Settings.0698")
             case .ai: return "AI"
-            case .about: return "关于"
+            case .about: return L10n.text("Settings.0699")
             }
         }
         var icon: String {
@@ -72,7 +73,7 @@ struct SettingsPanel: View {
 
     private var pages: some View {
         VStack(alignment: .leading, spacing: 2) {
-            Text("设置")
+            Text(L10n.text("Settings.0700"))
                 .font(.system(size: 13, weight: .semibold))
                 .foregroundStyle(Palette.ink)
                 .padding(.horizontal, 10)
@@ -130,7 +131,7 @@ struct SettingsPanel: View {
                     .font(.system(size: 17, weight: .semibold))
                     .foregroundStyle(Palette.ink)
                 Spacer()
-                Door(icon: "xmark", help: "完成   esc") { browser.tuning = false }
+                Door(icon: "xmark", help: L10n.text("Settings.0701")) { browser.tuning = false }
             }
             .padding(.bottom, 16)
 
@@ -163,9 +164,25 @@ struct SettingsPanel: View {
 
     private var general: some View {
         Card {
+            Line(L10n.text("language.title"), L10n.text("language.detail")) {
+                Picker(L10n.text("language.title"), selection: $language.selection) {
+                    ForEach(InterfaceLanguage.allCases) { item in
+                        Text(item.title).tag(item)
+                    }
+                }
+                .labelsHidden()
+                .pickerStyle(.menu)
+            }
+            if language.needsRestart {
+                Rule()
+                Line(L10n.text("language.pending"), L10n.text("language.restartDetail")) {
+                    Pill(L10n.text("language.restart"), filled: true) { language.restart() }
+                }
+            }
+            Rule()
             Line(
-                "打开其他应用中的链接",
-                isDefault ? "Search 已是此 Mac 的默认浏览器" : "邮件、Slack 等应用的链接仍在其他浏览器中打开"
+                L10n.text("Settings.0702"),
+                isDefault ? L10n.text("Settings.0703") : L10n.text("Settings.0704")
             ) {
                 if isDefault {
                     Image(systemName: "checkmark")
@@ -173,10 +190,10 @@ struct SettingsPanel: View {
                         .foregroundStyle(Palette.ink)
                         .frame(width: 24)
                 } else {
-                    Pill("设为默认", filled: true) {
+                    Pill(L10n.text("Settings.0705"), filled: true) {
                         Links.becomeDefault { worked in
                             isDefault = Links.isDefault
-                            browser.announce(worked && isDefault ? "链接现在会在 Search 中打开" : "macOS 未更改默认浏览器")
+                            browser.announce(worked && isDefault ? L10n.text("Settings.0706") : L10n.text("Settings.0707"))
                         }
                     }
                 }
@@ -184,14 +201,14 @@ struct SettingsPanel: View {
             Rule()
             // Coming from another browser, now or any time later: the same
             // sheet as File › Bring Things Over… and the Welcome's.
-            Line("导入浏览器数据", "从此 Mac 上的其他浏览器或其导出的文件中导入书签、历史记录、密码和扩展") {
-                Pill("导入浏览器数据…") {
+            Line(L10n.text("Settings.0708"), L10n.text("Settings.0709")) {
+                Pill(L10n.text("Settings.0710")) {
                     browser.tuning = false
                     browser.bringingIn = ""
                 }
             }
             Rule()
-            Line("搜索引擎", searchDetail) {
+            Line(L10n.text("Settings.0711"), searchDetail) {
                 Picker("", selection: $prefs.engine) {
                     ForEach(Engine.allCases) { engine in
                         Text(engine.title).tag(engine)
@@ -219,13 +236,13 @@ struct SettingsPanel: View {
                 .padding(.bottom, 11)
             }
             Rule()
-            Line("网站搜索快捷词", keywordDetail) {
+            Line(L10n.text("Settings.0712"), keywordDetail) {
                 if draft == nil {
-                    Pill("添加") { draft = Keyword() }
+                    Pill(L10n.text("Settings.0713")) { draft = Keyword() }
                 } else {
                     HStack(spacing: 6) {
-                        Pill("取消") { draft = nil }
-                        Pill("保存", filled: true) { saveDraft() }
+                        Pill(L10n.text("Settings.0714")) { draft = nil }
+                        Pill(L10n.text("Settings.0715"), filled: true) { saveDraft() }
                             .disabled(draftProblem != nil)
                             .opacity(draftProblem == nil ? 1 : 0.4)
                     }
@@ -281,64 +298,64 @@ struct SettingsPanel: View {
                 .padding(.bottom, 6)
             }
             Rule()
-            Line("外观", "选择浅色、深色或跟随系统，网页也会采用相同外观") {
+            Line(L10n.text("Settings.0716"), L10n.text("Settings.0717")) {
                 Segmented(options: Look.allCases.map { ($0, $0.title) }, selection: $prefs.look)
             }
             Rule()
-            Line("页面缩放", "网站的默认缩放比例。通过 ⌘+ 和 ⌘− 设置的比例仍会按网站单独保存。") {
+            Line(L10n.text("Settings.0718"), L10n.text("Settings.0719")) {
                 // The number itself takes it back to 100%.
                 Steps(stops: Preferences.zooms, value: $prefs.pageZoom, home: 1) { "\(Int(($0 * 100).rounded()))%" }
             }
             Rule()
-            Line("输入时自动纠正拼写", "在网页中使用 macOS 的自动纠正功能，包括自动大写") {
+            Line(L10n.text("Settings.0720"), L10n.text("Settings.0721")) {
                 Switch(on: $prefs.autocorrect)
             }
             Rule()
-            Line("按住 Shift 单击预览链接", "在当前页面上方打开预览面板。按 Esc 关闭，也可将预览保留为标签页") {
+            Line(L10n.text("Settings.0722"), L10n.text("Settings.0723")) {
                 Switch(on: $prefs.peeksLinks)
             }
             Rule()
-            Line("在小窗口中打开其他应用的链接", "阅读后关闭，或选择“在 Search 中打开”（⌘O）保留页面") {
+            Line(L10n.text("Settings.0724"), L10n.text("Settings.0725")) {
                 Switch(on: $prefs.littleLinks)
             }
             Rule()
-            Line("地址栏命令", "在地址栏单独输入“设置”或“新建标签页”等命令即可执行") {
+            Line(L10n.text("Settings.0726"), L10n.text("Settings.0727")) {
                 Switch(on: $prefs.commandBar)
             }
             Rule()
-            Line("显示链接地址", "将指针移到链接上时，在页面底部显示目标地址") {
+            Line(L10n.text("Settings.0728"), L10n.text("Settings.0729")) {
                 Switch(on: $prefs.showsLinks)
             }
             Rule()
-            Line("使用鼠标中键滚动", "在页面中单击滚轮，再上下移动鼠标即可滚动。再次单击停止") {
+            Line(L10n.text("Settings.0730"), L10n.text("Settings.0731")) {
                 Switch(on: $prefs.autoScroll)
             }
             Rule()
-            Line("以 120 Hz 刷新页面", "在支持的屏幕上，网页动画和滚动最高可达每秒 120 帧，会增加耗电。已打开的标签页重新载入后生效") {
+            Line(L10n.text("Settings.0732"), L10n.text("Settings.0733")) {
                 Switch(on: $prefs.fastPages)
             }
             Rule()
-            Line("滑动后按住以选择历史页面", "向后或向前滑动后保持手指按住，显示该方向的历史页面；上下移动选择要打开的页面") {
+            Line(L10n.text("Settings.0734"), L10n.text("Settings.0735")) {
                 Switch(on: $prefs.holdsHistory)
             }
             Rule()
-            Line("滑动画中画窗口使其贴边", "在画中画窗口上用双指滑动，可将其移至对应的屏幕边缘或角落。向贴近的边缘快速滑动可收起窗口，点击露出的边缘可恢复。仍可自由拖动") {
+            Line(L10n.text("Settings.0736"), L10n.text("Settings.0737")) {
                 Switch(on: $prefs.floatFlicks)
             }
             Rule()
-            Line("点击后才播放视频", "视频不会自动播放，即使已静音。点击播放才开始。已打开的标签页关闭重开或休眠后生效") {
+            Line(L10n.text("Settings.0738"), L10n.text("Settings.0739")) {
                 Switch(on: $prefs.waitsForPlay)
             }
             Rule()
-            Line("切换标签页时自动开启画中画", "切换标签页时，YouTube 等网站正在播放的视频会进入画中画；返回时恢复。也可按 ⇧⌘P 手动开启") {
+            Line(L10n.text("Settings.0740"), L10n.text("Settings.0741")) {
                 Switch(on: $prefs.floatsOnLeave)
             }
             Rule()
-            Line("切换应用时自动开启画中画", "切换到其他应用时，当前网站正在播放的视频会进入画中画；返回时恢复到标签页") {
+            Line(L10n.text("Settings.0742"), L10n.text("Settings.0743")) {
                 Switch(on: $prefs.floatsAway)
             }
             Rule()
-            Line("允许脚本控制 Search", "启用用于测试的本地套接字。脚本标签页带有烧瓶图标，与普通标签页并列显示。详见 ./bench") {
+            Line(L10n.text("Settings.0744"), L10n.text("Settings.0745")) {
                 Switch(on: $prefs.bench)
             }
         }
@@ -353,12 +370,12 @@ struct SettingsPanel: View {
 
     private var keywordDetail: String {
         guard let draft else {
-            return "在搜索词前加上快捷词即可搜索指定网站，例如“yt cats”会在 YouTube 搜索"
+            return L10n.text("Settings.0746")
         }
         if draft.keyword.isEmpty, draft.template.isEmpty {
-            return "输入快捷词及网站搜索地址，用 %s 表示搜索词的位置"
+            return L10n.text("Settings.0747")
         }
-        return draftProblem ?? "\(draft.keyword.trimmingCharacters(in: .whitespacesAndNewlines)) 将在 \(draft.name) 搜索"
+        return draftProblem ?? L10n.text("Settings.0748", String(describing: draft.keyword.trimmingCharacters(in: .whitespacesAndNewlines)), String(describing: draft.name))
     }
 
     private func saveDraft() {
@@ -371,11 +388,11 @@ struct SettingsPanel: View {
     }
 
     private var searchDetail: String {
-        guard prefs.engine == .custom else { return "非网址的内容会通过此引擎搜索" }
+        guard prefs.engine == .custom else { return L10n.text("Settings.0749") }
         guard Engine.accepts(prefs.customEngine) else {
-            return "请输入含 %s 的 HTTP 或 HTTPS 搜索地址。设置有效前使用 Google"
+            return L10n.text("Settings.0750")
         }
-        return "搜索词将发送至 \(prefs.engine.name(custom: prefs.customEngine))"
+        return L10n.text("Settings.0751", String(describing: prefs.engine.name(custom: prefs.customEngine)))
     }
 
     // MARK: - tabs
@@ -385,7 +402,7 @@ struct SettingsPanel: View {
     /// move, and the line isn't shown.
     private var toolbar: some View {
         Card {
-            Line("在左侧显示后退、前进和重新载入按钮", "位于窗口按钮旁、标签页之前") {
+            Line(L10n.text("Settings.0752"), L10n.text("Settings.0753")) {
                 Switch(on: $prefs.navigationLeft)
             }
         }
@@ -393,7 +410,7 @@ struct SettingsPanel: View {
 
     private var tabs: some View {
         Card {
-            Line("在侧边栏显示标签页", "在\(prefs.sidePosition.title)竖排显示标签页。拖动边缘调整宽度，双击边缘恢复默认。") {
+            Line(L10n.text("Settings.0754"), L10n.text("Settings.0755", String(describing: prefs.sidePosition.rawValue))) {
                 Switch(on: Binding(
                     get: { prefs.sidebar },
                     set: { on in withAnimation(Motion.glide) { prefs.sidebar = on } }
@@ -401,58 +418,58 @@ struct SettingsPanel: View {
             }
             if prefs.sidebar {
                 Rule()
-                Line("侧边栏位置", "标签页显示在窗口\(prefs.sidePosition.title)") {
+                Line(L10n.text("Settings.0756"), L10n.text("Settings.0757", String(describing: prefs.sidePosition.rawValue))) {
                     Segmented(options: SidebarPosition.allCases.map { ($0, $0.title) }, selection: $prefs.sidePosition)
                 }
                 Rule()
-                Line("指针移至边缘时才显示侧边栏", "页面占满窗口；将指针移至\(prefs.sidePosition.title)边缘显示标签页。按 ⌘S 保持侧边栏展开。") {
+                Line(L10n.text("Settings.0758"), L10n.text("Settings.0759", String(describing: prefs.sidePosition.rawValue))) {
                     Switch(on: $prefs.sideHides)
                 }
             }
             Rule()
-            Line("标签页显示", "用于标题旁的图标和固定标签页方块") {
+            Line(L10n.text("Settings.0760"), L10n.text("Settings.0761")) {
                 Segmented(options: Glyph.allCases.map { ($0, $0.title) }, selection: $prefs.glyph)
             }
             Rule()
-            Line("显示书签栏", "在页面上方显示书签，文件夹以菜单展开。书签栏会随标签栏一起收起") {
+            Line(L10n.text("Settings.0762"), L10n.text("Settings.0763")) {
                 Switch(on: $prefs.bookmarksBar)
             }
             Rule()
-            Line("显示阅读进度", "向下滚动时，当前标签页逐渐填充灰色以显示进度") {
+            Line(L10n.text("Settings.0764"), L10n.text("Settings.0765")) {
                 Switch(on: $prefs.showsReading)
             }
             Rule()
-            Line("休眠闲置标签页", "闲置半小时后休眠，再次打开时恢复原位置。固定标签页、音频、通话和有输入内容的页面保持活跃。") {
+            Line(L10n.text("Settings.0766"), L10n.text("Settings.0767")) {
                 Switch(on: $prefs.sleepsTabs)
             }
             Rule()
-            Line("切换到后台标签页时才加载", "通过 ⌘ 单击、鼠标中键或其他应用批量打开的后台链接，会等到切换到对应标签页时才加载。⇧⌘ 单击仍会立即打开。") {
+            Line(L10n.text("Settings.0768"), L10n.text("Settings.0769")) {
                 Switch(on: $prefs.lazyTabs)
             }
             Rule()
-            Line("在地址栏搜索网站", "输入网站名称的开头，如 red 或 yout，再按 Tab，即可在该网站搜索。访问过且支持搜索的网站会加入列表。") {
+            Line(L10n.text("Settings.0770"), L10n.text("Settings.0771")) {
                 Switch(on: $prefs.searchesSites)
             }
             Rule()
-            Line("启动时打开全新窗口", "每次启动 Search 时保留固定标签页，不恢复上次的其他标签页。") {
+            Line(L10n.text("Settings.0772"), L10n.text("Settings.0773")) {
                 Switch(on: $prefs.startsFresh)
             }
             Rule()
-            Line("空间", "将标签页分为不同空间，可共享登录状态或独立登录。用 ⌃1–⌃9、在侧边栏双指横向滑动或点击空间图标切换。若启用了调度中心的同名快捷键，系统会优先处理。") {
+            Line(L10n.text("Settings.0774"), L10n.text("Settings.0775")) {
                 Switch(on: $prefs.usesSpaces)
             }
             Rule()
-            Line("标签页分组", "在侧边栏中按名称分组。右键点击标签页创建分组，点击组标题展开或收起。") {
+            Line(L10n.text("Settings.0776"), L10n.text("Settings.0777")) {
                 Switch(on: $prefs.usesTabGroups)
             }
             if prefs.sidebar {
                 Rule()
-                Line("以列表显示固定标签页", "类似 Arc：常用网站固定为方块，保留页面固定为下方列表，其余标签页上方显示“清除”。右键点击标签页可将其固定为列表项。") {
+                Line(L10n.text("Settings.0778"), L10n.text("Settings.0779")) {
                     Switch(on: $prefs.listsPins)
                 }
             }
             Rule()
-            Line("分屏浏览", "并排显示两个标签页。将标签页拖到页面上即可组合。") {
+            Line(L10n.text("Settings.0780"), L10n.text("Settings.0781")) {
                 Switch(on: $prefs.splitView)
             }
         }
@@ -463,52 +480,52 @@ struct SettingsPanel: View {
     /// Says so when a password manager extension has taken the saving over.
     private var savingDetail: String {
         if #available(macOS 15.4, *), let name = Extensions.shared.passwordSavingTakenBy {
-            return "\(name) 正在管理密码，已要求 Search 停止询问保存"
+            return L10n.text("Settings.0782", String(describing: name))
         }
-        return "每个网站询问一次；拒绝后不再询问"
+        return L10n.text("Settings.0783")
     }
 
     private var passwords: some View {
         VStack(alignment: .leading, spacing: 18) {
             Card {
-                Line("已保存的密码", "保存在 macOS 钥匙串中，通过触控 ID 查看") {
-                    Pill("打开…") {
+                Line(L10n.text("Settings.0784"), L10n.text("Settings.0785")) {
+                    Pill(L10n.text("Settings.0786")) {
                         browser.tuning = false
                         browser.managing = true
                     }
                 }
                 Rule()
-                Line("询问是否保存密码", savingDetail) {
+                Line(L10n.text("Settings.0787"), savingDetail) {
                     Switch(on: $prefs.savesPasswords)
                 }
                 Rule()
-                Line("自动填充登录信息", "点击登录输入框时，显示此网站已保存的账户") {
+                Line(L10n.text("Settings.0788"), L10n.text("Settings.0789")) {
                     Switch(on: $prefs.fillsPasswords)
                 }
                 Rule()
                 Line(
-                    "启用通行密钥",
+                    L10n.text("Settings.0790"),
                     !prefs.passkeysPossible
-                        ? "当前构建缺少 Apple 所需的授权；关闭后网站仍使用密码登录"
+                        ? L10n.text("Settings.0791")
                         : Passkeys.access == .denied
-                        ? "macOS 已拒绝访问；可在“系统设置 › 隐私与安全性 › 网页浏览器的通行密钥访问”中更改"
-                        : "在支持的网站上使用触控 ID 或 iCloud 通行密钥"
+                        ? L10n.text("Settings.0792")
+                        : L10n.text("Settings.0793")
                 ) {
                     Switch(on: $prefs.passkeys)
                 }
                 if !Vault.never.isEmpty {
                     Rule()
-                    Line("不再询问的网站", "已在 \(Vault.never.count) 个网站上停止询问") {
-                        Pill("清除") {
+                    Line(L10n.text("Settings.0794"), L10n.text("Settings.0795", String(describing: Vault.never.count))) {
+                        Pill(L10n.text("Settings.0796")) {
                             Vault.never = []
-                            browser.announce("所有网站均可再次询问")
+                            browser.announce(L10n.text("Settings.0797"))
                         }
                     }
                 }
             }
             Card {
-                Line("导入密码", "从此 Mac 上的其他浏览器导入，数据不会离开本机") {
-                    Pill("导入…") {
+                Line(L10n.text("Settings.0798"), L10n.text("Settings.0799")) {
+                    Pill(L10n.text("Settings.0800")) {
                         browser.tuning = false
                         browser.bringingIn = ""
                     }
@@ -521,15 +538,15 @@ struct SettingsPanel: View {
 
     private var downloads: some View {
         Card {
-            Line("保存位置", prefs.downloads.path.replacingOccurrences(of: NSHomeDirectory(), with: "~")) {
-                Pill("更改…") { chooseFolder() }
+            Line(L10n.text("Settings.0801"), prefs.downloads.path.replacingOccurrences(of: NSHomeDirectory(), with: "~")) {
+                Pill(L10n.text("Settings.0802")) { chooseFolder() }
             }
             Rule()
-            Line("每次下载时询问保存位置") {
+            Line(L10n.text("Settings.0803")) {
                 Switch(on: $prefs.asksWhereToSave)
             }
             Rule()
-            Line("始终显示下载按钮", "没有正在下载的文件时也显示下载按钮。关闭后仅在下载过程中显示") {
+            Line(L10n.text("Settings.0804"), L10n.text("Settings.0805")) {
                 Switch(on: $prefs.alwaysShowsDownloads)
             }
         }
@@ -540,18 +557,18 @@ struct SettingsPanel: View {
     private var privacy: some View {
         VStack(alignment: .leading, spacing: 18) {
             Card {
-                Line("拦截广告和跟踪器", shield.trouble ?? "拦截用于跟踪浏览行为的第三方内容") {
+                Line(L10n.text("Settings.0806"), shield.trouble ?? L10n.text("Settings.0807")) {
                     Switch(on: $prefs.shielded)
                 }
                 if let trouble = shield.trouble {
                     Rule()
-                    Line(trouble, "问题解决前不会拦截任何内容。请重试或重新启动 Search") {
-                        Pill("重试") { shield.compile() }
+                    Line(trouble, L10n.text("Settings.0808")) {
+                        Pill(L10n.text("Settings.0809")) { shield.compile() }
                     }
                 }
                 if let host = browser.hereHost, prefs.shielded, shield.trouble == nil {
                     Rule()
-                    Line("在 \(host) 上拦截", "若网站异常，可在此关闭拦截；页面会重新载入") {
+                    Line(L10n.text("Settings.0810", String(describing: host)), L10n.text("Settings.0811")) {
                         Switch(on: Binding(
                             get: { !Shield.shared.isPaused(on: host) },
                             set: { on in
@@ -562,30 +579,30 @@ struct SettingsPanel: View {
                     }
                 }
                 Rule()
-                Line("阻止跨网站跟踪", "与 Safari 类似。关闭后，较少访问的网站会保留登录状态，第三方跟踪器也能跨网站跟踪。无痕标签页始终开启此功能") {
+                Line(L10n.text("Settings.0812"), L10n.text("Settings.0813")) {
                     Switch(on: Binding(get: { !prefs.keepsSignIns }, set: { prefs.keepsSignIns = !$0 }))
                 }
                 Rule()
-                Line("摄像头、麦克风、位置和通知", "各网站的允许或拒绝记录，以及禁用画中画的网站") {
-                    Pill("清除权限记录") { browser.forgetCaptureChoices() }
+                Line(L10n.text("Settings.0814"), L10n.text("Settings.0815")) {
+                    Pill(L10n.text("Settings.0816")) { browser.forgetCaptureChoices() }
                 }
                 Rule()
-                Line("允许网站请求发送通知", "网站会在页面上方请求权限，只有获准的网站才能发送 Mac 通知。无痕标签页不会询问") {
+                Line(L10n.text("Settings.0817"), L10n.text("Settings.0818")) {
                     Switch(on: $prefs.siteNotifications)
                 }
                 NotificationSites()
             }
             Card {
-                Line("历史记录", "访问过的所有地址") {
-                    Pill("清除") { browser.clearHistory() }
+                Line(L10n.text("Settings.0819"), L10n.text("Settings.0820")) {
+                    Pill(L10n.text("Settings.0821")) { browser.clearHistory() }
                 }
                 Rule()
-                Line("Cookie 和登录状态", "退出所有网站的登录") {
-                    Pill("退出所有网站") { browser.clearSites() }
+                Line(L10n.text("Settings.0822"), L10n.text("Settings.0823")) {
+                    Pill(L10n.text("Settings.0824")) { browser.clearSites() }
                 }
                 Rule()
-                Line("缓存", "仅用于显示页面的缓存内容") {
-                    Pill("清除") { browser.clearCache() }
+                Line(L10n.text("Settings.0825"), L10n.text("Settings.0826")) {
+                    Pill(L10n.text("Settings.0827")) { browser.clearCache() }
                 }
             }
         }
@@ -604,7 +621,7 @@ struct SettingsPanel: View {
                     Text("Search")
                         .font(.system(size: 15, weight: .semibold))
                         .foregroundStyle(Palette.ink)
-                    Text("Office Commun 出品 · 版本 \(Updater.version)")
+                    Text(L10n.text("Settings.0828", String(describing: Updater.version)))
                         .font(.system(size: 12))
                         .foregroundStyle(Palette.muted)
                 }
@@ -614,43 +631,43 @@ struct SettingsPanel: View {
             Card {
                 Line(versionTitle, versionDetail) { versionControl }
                 Rule()
-                Line("自动安装更新", "关闭后，Search 仍会每小时检查并通知更新，点击“安装”后才会安装") {
+                Line(L10n.text("Settings.0829"), L10n.text("Settings.0830")) {
                     Switch(on: $prefs.installsUpdates)
                 }
                 Rule()
-                Line("发现问题？", "打开已填写版本信息的反馈草稿") {
-                    Pill("发送反馈") { Links.writeFeedback() }
+                Line(L10n.text("Settings.0831"), L10n.text("Settings.0832")) {
+                    Pill(L10n.text("Settings.0833")) { Links.writeFeedback() }
                 }
                 Rule()
-                Line("更新内容", "各版本更新说明，最新版本在前") {
-                    Pill("更新内容…") { browser.notesShowing = true }
+                Line(L10n.text("Settings.0834"), L10n.text("Settings.0835")) {
+                    Pill(L10n.text("Settings.0836")) { browser.notesShowing = true }
                 }
             }
 
             Card {
-                Shortcut("⌘L", "地址栏")
+                Shortcut("⌘L", L10n.text("Settings.0837"))
                 Rule()
-                Shortcut("⌘K", "切换标签页")
+                Shortcut("⌘K", L10n.text("Settings.0838"))
                 Rule()
-                Shortcut("⌘T  ⌘W  ⇧⌘T", "新建、关闭、重新打开标签页")
+                Shortcut("⌘T  ⌘W  ⇧⌘T", L10n.text("Settings.0839"))
                 Rule()
-                Shortcut("⇧⌘V", "粘贴并前往")
+                Shortcut("⇧⌘V", L10n.text("Settings.0840"))
                 Rule()
-                Shortcut("⇧⌘C", "复制地址")
+                Shortcut("⇧⌘C", L10n.text("Settings.0841"))
                 Rule()
-                Shortcut("⌃⇥  ⌘1–9", "切换到下一个标签页，或按位置切换")
+                Shortcut("⌃⇥  ⌘1–9", L10n.text("Settings.0842"))
                 Rule()
-                Shortcut("⇧⌘S", "在侧边栏显示标签页")
+                Shortcut("⇧⌘S", L10n.text("Settings.0843"))
                 Rule()
-                Shortcut("⌘S", "收起侧边栏")
+                Shortcut("⌘S", L10n.text("Settings.0844"))
                 Rule()
-                Shortcut("⇧⌘R", "阅读模式")
+                Shortcut("⇧⌘R", L10n.text("Settings.0845"))
                 Rule()
-                Shortcut("⇧⌘H", "隐藏网站元素")
+                Shortcut("⇧⌘H", L10n.text("Settings.0846"))
                 Rule()
-                Shortcut("⇧⌘P", "画中画")
+                Shortcut("⇧⌘P", L10n.text("Settings.0847"))
                 Rule()
-                Shortcut("⇧⌘⌫", "清除浏览数据")
+                Shortcut("⇧⌘⌫", L10n.text("Settings.0848"))
             }
         }
     }
@@ -659,26 +676,26 @@ struct SettingsPanel: View {
     /// in place; with none, it is simply this one.
     private var versionTitle: String {
         switch updater.stage {
-        case .none: return "更新"
-        case .fetching(let next): return "正在下载 Search \(next.version)…"
-        case .ready(let next): return "Search \(next.version) 已准备就绪"
-        case .offered(let next), .waiting(let next): return "Search \(next.version) 已发布"
+        case .none: return L10n.text("Settings.0849")
+        case .fetching(let next): return L10n.text("Settings.0850", String(describing: next.version))
+        case .ready(let next): return L10n.text("Settings.0851", String(describing: next.version))
+        case .offered(let next), .waiting(let next): return L10n.text("Settings.0852", String(describing: next.version))
         }
     }
 
     private var versionDetail: String {
         switch updater.stage {
         case .none:
-            return updater.lastChecked.map { "检查时间：\($0.formatted(.relative(presentation: .named)))；每小时自动检查" }
-                ?? "每小时自动检查"
+            return updater.lastChecked.map { L10n.text("Settings.0853", String(describing: $0.formatted(.relative(presentation: .named)))) }
+                ?? L10n.text("Settings.0854")
         case .fetching(let next):
-            return WhatsNew.notes.first(where: { $0.version == next.version })?.headline ?? "在后台下载，不会更改已有设置"
+            return next.notes ?? L10n.text("Settings.0855")
         case .ready(let next):
-            return WhatsNew.notes.first(where: { $0.version == next.version })?.headline ?? "下次启动 Search 时生效"
+            return next.notes ?? L10n.text("Settings.0856")
         case .offered(let next):
-            return WhatsNew.notes.first(where: { $0.version == next.version })?.headline ?? "打开磁盘映像，按首次安装的方式安装"
+            return next.notes ?? L10n.text("Settings.0857")
         case .waiting(let next):
-            return WhatsNew.notes.first(where: { $0.version == next.version })?.headline ?? "点击“安装”后校验并安装"
+            return next.notes ?? L10n.text("Settings.0858")
         }
     }
 
@@ -686,21 +703,21 @@ struct SettingsPanel: View {
     private var versionControl: some View {
         switch updater.stage {
         case .none:
-            Pill(updater.checking ? "正在检查…" : "立即检查") {
+            Pill(updater.checking ? L10n.text("Settings.0859") : L10n.text("Settings.0860")) {
                 updater.check { found in
-                    if found == nil { browser.announce("已是最新版本") }
+                    if found == nil { browser.announce(L10n.text("Settings.0861")) }
                 }
             }
             .disabled(updater.checking)
         case .fetching:
             Ring(size: 12)
         case .ready:
-            Pill("立即重新启动", filled: true) { updater.relaunch() }
+            Pill(L10n.text("Settings.0862"), filled: true) { updater.relaunch() }
         case .offered:
-            Pill(updater.fetchingDisk ? "正在下载…" : "下载", filled: true) { updater.openDisk() }
+            Pill(updater.fetchingDisk ? L10n.text("Settings.0863") : L10n.text("Settings.0864"), filled: true) { updater.openDisk() }
                 .disabled(updater.fetchingDisk)
         case .waiting:
-            Pill("安装", filled: true) { updater.install() }
+            Pill(L10n.text("Settings.0865"), filled: true) { updater.install() }
         }
     }
 
@@ -712,7 +729,7 @@ struct SettingsPanel: View {
         panel.canChooseFiles = false
         panel.canCreateDirectories = true
         panel.directoryURL = prefs.downloads
-        panel.prompt = "使用此文件夹"
+        panel.prompt = L10n.text("Settings.0866")
         guard panel.runModal() == .OK, let url = panel.url else { return }
         prefs.downloads = url
     }
@@ -828,7 +845,7 @@ struct Steps: View {
                     .contentShape(Rectangle())
             }
             .buttonStyle(.plain)
-            .help("恢复为 \(label(home))")
+            .help(L10n.text("Settings.0867", String(describing: label(home))))
             Step(icon: "plus", to: above) { value = $0 }
         }
         .padding(.horizontal, 2)
@@ -904,8 +921,8 @@ private struct NotificationSites: View {
         if !sites.isEmpty {
             ForEach(sites, id: \.self) { site in
                 Rule()
-                Line(URL(string: site).map(SiteCard.site) ?? site, "允许发送通知") {
-                    Pill("移除") { SiteNotifications.forget(site) }
+                Line(URL(string: site).map(SiteCard.site) ?? site, L10n.text("Settings.0868")) {
+                    Pill(L10n.text("Settings.0869")) { SiteNotifications.forget(site) }
                 }
             }
         }

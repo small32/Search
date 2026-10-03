@@ -506,8 +506,8 @@ final class PaneDivider: NSView {
     /// may be folded away.
     override func menu(for event: NSEvent) -> NSMenu? {
         let menu = NSMenu()
-        for (title, action) in [("交换页面", PaneStage.Action.swap), ("均分宽度", .even),
-                                ("分离页面", .separate), ("关闭两侧页面", .closeBoth)] {
+        for (title, action) in [(L10n.text("PaneStage.0603"), PaneStage.Action.swap), (L10n.text("PaneStage.0604"), .even),
+                                (L10n.text("PaneStage.0605"), .separate), (L10n.text("PaneStage.0606"), .closeBoth)] {
             let item = NSMenuItem(title: title, action: #selector(chose(_:)), keyEquivalent: "")
             item.target = self
             item.representedObject = action
@@ -526,7 +526,7 @@ final class PaneDivider: NSView {
 
     override func isAccessibilityElement() -> Bool { true }
     override func accessibilityRole() -> NSAccessibility.Role? { .splitter }
-    override func accessibilityLabel() -> String? { "页面间的分隔线" }
+    override func accessibilityLabel() -> String? { L10n.text("PaneStage.0607") }
     override func accessibilityValue() -> Any? { Int(((stage?.currentShare ?? 0.5) * 100).rounded()) }
     override func accessibilityPerformIncrement() -> Bool {
         stage.map { $0.setShare($0.currentShare + 0.05) } != nil

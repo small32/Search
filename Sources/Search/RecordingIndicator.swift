@@ -192,7 +192,7 @@ struct PillView: View {
                         .fixedSize()
                     Spacer(minLength: 12)
                     Button { indicator.stop(line.id) } label: {
-                        Text("停止")
+                        Text(L10n.text("RecordingIndicator.0689"))
                             .font(.system(size: 12, weight: .medium))
                             .foregroundStyle(Palette.ground)
                             .padding(.horizontal, 11)
@@ -200,7 +200,7 @@ struct PillView: View {
                             .background(Palette.ink, in: Capsule())
                     }
                     .buttonStyle(.plain)
-                    .accessibilityLabel("停止 \(line.name)")
+                    .accessibilityLabel(L10n.text("RecordingIndicator.0690", String(describing: line.name)))
                 }
             }
         }
@@ -212,6 +212,6 @@ struct PillView: View {
         .overlay(RoundedRectangle(cornerRadius: 18, style: .continuous).strokeBorder(Palette.hairline, lineWidth: 1))
         .fixedSize()
         .accessibilityElement(children: .contain)
-        .accessibilityLabel("正在录制")
+        .accessibilityLabel(L10n.text("RecordingIndicator.0691"))
     }
 }

@@ -15,16 +15,16 @@ struct AccountList: View {
         VStack(alignment: .leading, spacing: 0) {
             ForEach(asked.passkeys) { passkey in
                 Row(mark: .symbol("person.badge.key"), name: passkey.name,
-                    detail: "通行密钥" + (passkey.provider.map { " · \($0)" } ?? "")) { browser.choose(passkey) }
+                    detail: L10n.text("Accounts.0110") + (passkey.provider.map { " · \($0)" } ?? "")) { browser.choose(passkey) }
             }
             ForEach(asked.logins) { login in
                 Row(mark: .letter(login.user.first.map { String($0).uppercased() } ?? "•"),
-                    name: login.user.isEmpty ? "无名称" : login.user, detail: login.host) { browser.choose(login) }
+                    name: login.user.isEmpty ? L10n.text("Accounts.0111") : login.user, detail: login.host) { browser.choose(login) }
             }
             HStack(spacing: 6) {
                 Image(systemName: "key")
                     .font(.system(size: 9, weight: .medium))
-                Text(asked.logins.isEmpty ? "此 Mac 上的通行密钥" : "来自钥匙串")
+                Text(asked.logins.isEmpty ? L10n.text("Accounts.0112") : L10n.text("Accounts.0113"))
                     .font(.system(size: 10.5))
                 Spacer(minLength: 0)
             }

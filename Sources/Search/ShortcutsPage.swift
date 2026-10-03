@@ -25,9 +25,9 @@ struct ShortcutsPage: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 18) {
-            Hunt(text: $hunt, prompt: "搜索命令或快捷键", focus: $hunting)
+            Hunt(text: $hunt, prompt: L10n.text("ShortcutsPage.0930"), focus: $hunting)
             let found = Command.all.filter(shown)
-            if found.isEmpty { Nothing("没有匹配的命令或快捷键") }
+            if found.isEmpty { Nothing(L10n.text("ShortcutsPage.0931")) }
             ForEach(Command.Section.allCases, id: \.self) { section in
                 let commands = found.filter { $0.section == section }
                 if !commands.isEmpty {
@@ -40,9 +40,9 @@ struct ShortcutsPage: View {
                                 KeyBox(browser: browser, store: store, id: command.id)
                             }
                             .contextMenu {
-                                Button("清除快捷键") { store.clear(command.id) }
+                                Button(L10n.text("ShortcutsPage.0932")) { store.clear(command.id) }
                                     .disabled(store.key(for: command.id) == nil)
-                                Button("恢复默认") { store.reset(command.id) }
+                                Button(L10n.text("ShortcutsPage.0933")) { store.reset(command.id) }
                                     .disabled(!store.isChanged(command.id))
                             }
                         }
@@ -52,7 +52,7 @@ struct ShortcutsPage: View {
             }
             if #available(macOS 15.4, *) { extensionCommands }
             if store.anyChanged, hunt.isEmpty {
-                Pill("全部恢复默认") { store.resetAll() }
+                Pill(L10n.text("ShortcutsPage.0934")) { store.resetAll() }
             }
         }
     }
@@ -71,7 +71,7 @@ extension ShortcutsPage {
         }
         if !commands.isEmpty {
             VStack(alignment: .leading, spacing: 6) {
-                Caption("扩展")
+                Caption(L10n.text("ShortcutsPage.0935"))
                 Card {
                     ForEach(Array(commands.enumerated()), id: \.element.id) { index, item in
                         if index > 0 { Rule() }
@@ -79,9 +79,9 @@ extension ShortcutsPage {
                             KeyBox(browser: browser, store: store, id: item.id)
                         }
                         .contextMenu {
-                            Button("清除快捷键") { store.clear(item.id) }
+                            Button(L10n.text("ShortcutsPage.0936")) { store.clear(item.id) }
                                 .disabled(store.key(for: item.id) == nil)
-                            Button("恢复默认") { store.reset(item.id) }
+                            Button(L10n.text("ShortcutsPage.0937")) { store.reset(item.id) }
                                 .disabled(!store.isChanged(item.id))
                         }
                     }
@@ -130,11 +130,11 @@ private struct KeyBox: View {
 
     private var label: String {
         if let taking, let other = store.owner(of: taking, except: id) {
-            return "已被“\(other.title)”使用，再按一次可替换"
+            return L10n.text("ShortcutsPage.0938", String(describing: other.title))
         }
         if let note { return note }
-        if listening { return "输入快捷键" }
-        return store.key(for: id)?.display ?? "无"
+        if listening { return L10n.text("ShortcutsPage.0939") }
+        return store.key(for: id)?.display ?? L10n.text("ShortcutsPage.0940")
     }
 
     private func listen() {
@@ -157,12 +157,12 @@ private struct KeyBox: View {
             return stop()
         }
         guard let combo = KeyCombo(event: event) else { return }
-        guard combo.isUsable else { return say("请加上 ⌘、⌥ 或 ⌃") }
-        guard !KeyCombo.isReserved(combo) else { return say("无法更改") }
+        guard combo.isUsable else { return say(L10n.text("ShortcutsPage.0941")) }
+        guard !KeyCombo.isReserved(combo) else { return say(L10n.text("ShortcutsPage.0942")) }
         // An extension's command takes a key as its manifest would: one
         // that types a character, not an arrow or a function key.
-        guard !id.hasPrefix("ext:") || combo.key.count == 1 else { return say("扩展不可使用此快捷键") }
-        guard !id.hasPrefix("ext:") || !KeyCombo.isBrowserOnly(combo) else { return say("扩展不可使用此快捷键") }
+        guard !id.hasPrefix("ext:") || combo.key.count == 1 else { return say(L10n.text("ShortcutsPage.0943")) }
+        guard !id.hasPrefix("ext:") || !KeyCombo.isBrowserOnly(combo) else { return say(L10n.text("ShortcutsPage.0944")) }
         if store.owner(of: combo, except: id) != nil, taking != combo {
             taking = combo
             return
@@ -170,7 +170,7 @@ private struct KeyBox: View {
         let other = store.owner(of: combo, except: id)
         store.assign(combo, to: id)
         stop()
-        if let other { browser.announce("\(combo.display) 已从“\(other.title)”移至此命令") }
+        if let other { browser.announce(L10n.text("ShortcutsPage.0945", String(describing: combo.display), String(describing: other.title))) }
     }
 
     /// Why that key won't do, for a moment, still listening.

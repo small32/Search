@@ -36,7 +36,7 @@ struct GroupHeading: View {
     var body: some View {
         HStack(spacing: 8) {
             if editing {
-                TextField("分组名称", text: $draft)
+                TextField(L10n.text("TabGroups.1123"), text: $draft)
                     .textFieldStyle(.plain)
                     .font(.system(size: 12.5, weight: .medium))
                     .frame(width: horizontal ? max(60, Self.width(for: group.name) - 20) : nil)
@@ -103,11 +103,11 @@ struct GroupHeading: View {
         }
         .onDrag { NSItemProvider(object: "search-group:\(group.id.uuidString)" as NSString) }
         .contextMenu {
-            Button("重命名分组") { browser.editingGroupID = group.id }
-            Button(group.collapsed ? "展开分组" : "折叠分组") { browser.toggleTabGroup(group.id) }
+            Button(L10n.text("TabGroups.1124")) { browser.editingGroupID = group.id }
+            Button(group.collapsed ? L10n.text("TabGroups.1125") : L10n.text("TabGroups.1126")) { browser.toggleTabGroup(group.id) }
             Divider()
-            Button("取消标签页分组") { browser.removeTabGroup(group.id) }
-            Button("关闭分组") { browser.closeTabGroup(group.id) }
+            Button(L10n.text("TabGroups.1127")) { browser.removeTabGroup(group.id) }
+            Button(L10n.text("TabGroups.1128")) { browser.closeTabGroup(group.id) }
         }
     }
 

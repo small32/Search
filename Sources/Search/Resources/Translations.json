@@ -1,0 +1,5358 @@
+{
+  "AI.0001": {
+    "en": "On this Mac",
+    "zh-Hans": "在此 Mac 上"
+  },
+  "AIAssist.0002": {
+    "en": "There's nothing on this page to read.",
+    "zh-Hans": "此页面没有可读取的内容。"
+  },
+  "AIAssist.0003": {
+    "en": "on this Mac · {0}",
+    "zh-Hans": "在此 Mac 上 · {0}"
+  },
+  "AIAssist.0004": {
+    "en": "on this Mac · {0} · {1}",
+    "zh-Hans": "在此 Mac 上 · {0} · {1}"
+  },
+  "AIAssist.0005": {
+    "en": "sent to {0} · {1}",
+    "zh-Hans": "发送至 {0} · {1}"
+  },
+  "AIAssist.0006": {
+    "en": "When you ask, Search sends this page's text, its address and your question to {0}",
+    "zh-Hans": "提问时，Search 会将页面文本、地址和你的问题发送至 {0}"
+  },
+  "AIAssist.0007": {
+    "en": ", which passes them to the model's provider.",
+    "zh-Hans": "，再由其转交给模型提供商。"
+  },
+  "AIAssist.0008": {
+    "en": " Their terms and privacy policy apply. Nothing is sent until you ask, never from a private tab, and Search keeps no copy.",
+    "zh-Hans": "适用其服务条款和隐私政策。仅在你提问时发送，无痕标签页不会发送，Search 也不会保留副本。"
+  },
+  "AIAssist.0009": {
+    "en": "\n\nOn Gemini's free tier, outside the EEA, Switzerland and the UK, Google may use this to improve its products, and people may read it. Don't use it on sensitive pages.",
+    "zh-Hans": "\n\n在欧洲经济区、瑞士和英国以外使用 Gemini 免费服务时，Google 可能用这些内容改进产品，人工也可能查看。请勿用于含敏感信息的页面。"
+  },
+  "AIAssist.0010": {
+    "en": "\n\nSearch asks OpenRouter to use only providers that keep nothing (zero data retention).",
+    "zh-Hans": "\n\nSearch 要求 OpenRouter 仅使用不保留数据的提供商（零数据保留）。"
+  },
+  "AIAssist.0011": {
+    "en": "Choose where the AI runs",
+    "zh-Hans": "选择 AI 运行位置"
+  },
+  "AIAssist.0012": {
+    "en": "Turn on AI in Settings › AI",
+    "zh-Hans": "在“设置 › AI”中启用 AI"
+  },
+  "AIAssist.0013": {
+    "en": "AI works on web pages",
+    "zh-Hans": "AI 仅适用于网页"
+  },
+  "AIAssist.0014": {
+    "en": "In a private tab, only an AI on this Mac",
+    "zh-Hans": "无痕标签页仅可使用本机 AI"
+  },
+  "AIAssist.0015": {
+    "en": "The model isn't on this Mac yet",
+    "zh-Hans": "此 Mac 尚未安装模型"
+  },
+  "AIAssist.0016": {
+    "en": "Choose a model for {0}",
+    "zh-Hans": "为 {0} 选择模型"
+  },
+  "AIAssist.0017": {
+    "en": "No key for {0} yet",
+    "zh-Hans": "尚未设置 {0} 的密钥"
+  },
+  "AIAssist.0018": {
+    "en": "Summary",
+    "zh-Hans": "摘要"
+  },
+  "AIAssist.0019": {
+    "en": "About this page",
+    "zh-Hans": "关于此页面"
+  },
+  "AIAssist.0020": {
+    "en": "Close   esc",
+    "zh-Hans": "关闭   esc"
+  },
+  "AIAssist.0021": {
+    "en": "Ask about this page…",
+    "zh-Hans": "询问此页面…"
+  },
+  "AIAssist.0022": {
+    "en": "Ask about this page…",
+    "zh-Hans": "询问此页面…"
+  },
+  "AIAssist.0023": {
+    "en": "AI — may be wrong · {0}",
+    "zh-Hans": "AI 可能出错 · {0}"
+  },
+  "AIAssist.0024": {
+    "en": "Reading the page…",
+    "zh-Hans": "正在读取页面…"
+  },
+  "AIAssist.0025": {
+    "en": "This page has text written for an AI to follow. The answer may have been steered by it.",
+    "zh-Hans": "此页面包含针对 AI 的指令，回答可能受到这些内容的影响。"
+  },
+  "AIAssist.0026": {
+    "en": "Answers from {0}",
+    "zh-Hans": "由 {0} 回答"
+  },
+  "AIAssist.0027": {
+    "en": "Continue",
+    "zh-Hans": "继续"
+  },
+  "AIAssist.0028": {
+    "en": "Cancel",
+    "zh-Hans": "取消"
+  },
+  "AIAssist.0029": {
+    "en": "Not on the page: ",
+    "zh-Hans": "页面中未提及："
+  },
+  "AIAssist.0030": {
+    "en": "Use AI on pages",
+    "zh-Hans": "在网页中使用 AI"
+  },
+  "AIAssist.0031": {
+    "en": "Summarize a page, or ask about it, from the View menu. Nothing is sent until you ask",
+    "zh-Hans": "通过“显示”菜单总结页面或提问。仅在你发起请求时发送内容"
+  },
+  "AIAssist.0032": {
+    "en": "Where it runs",
+    "zh-Hans": "运行位置"
+  },
+  "AIAssist.0033": {
+    "en": "{0}, on this Mac",
+    "zh-Hans": "{0}，在此 Mac 上"
+  },
+  "AIAssist.0034": {
+    "en": "Choose…",
+    "zh-Hans": "选择…"
+  },
+  "AIAssist.0035": {
+    "en": "Choose…",
+    "zh-Hans": "选择…"
+  },
+  "AIAssist.0036": {
+    "en": "{0}, on this Mac",
+    "zh-Hans": "{0}，在此 Mac 上"
+  },
+  "AIAssist.0037": {
+    "en": "Forget every key",
+    "zh-Hans": "清除所有密钥"
+  },
+  "AIAssist.0038": {
+    "en": "Deletes them from this Mac's keychain. A key made by signing in with OpenRouter still works until you delete it on openrouter.ai",
+    "zh-Hans": "从此 Mac 的钥匙串删除密钥。通过 OpenRouter 登录生成的密钥仍有效，需到 openrouter.ai 删除才能撤销"
+  },
+  "AIAssist.0039": {
+    "en": "Forget",
+    "zh-Hans": "清除"
+  },
+  "AIAssist.0040": {
+    "en": "Keys forgotten",
+    "zh-Hans": "密钥已清除"
+  },
+  "AIAssist.0041": {
+    "en": "Model",
+    "zh-Hans": "模型"
+  },
+  "AIAssist.0042": {
+    "en": "Needs the Apple Silicon version of Search — this copy runs translated",
+    "zh-Hans": "需要 Apple 芯片版 Search；当前版本正通过转译运行"
+  },
+  "AIAssist.0043": {
+    "en": "Model",
+    "zh-Hans": "模型"
+  },
+  "AIAssist.0044": {
+    "en": "{0}, downloaded once ({1}) and checked. Nothing leaves this Mac",
+    "zh-Hans": "{0}，一次下载并校验（{1}），数据不会离开此 Mac"
+  },
+  "AIAssist.0045": {
+    "en": "Download",
+    "zh-Hans": "下载"
+  },
+  "AIAssist.0046": {
+    "en": "Model",
+    "zh-Hans": "模型"
+  },
+  "AIAssist.0047": {
+    "en": "Downloading… {0}%",
+    "zh-Hans": "正在下载… {0}%"
+  },
+  "AIAssist.0048": {
+    "en": "Cancel",
+    "zh-Hans": "取消"
+  },
+  "AIAssist.0049": {
+    "en": "Model",
+    "zh-Hans": "模型"
+  },
+  "AIAssist.0050": {
+    "en": "Preparing it for this Mac — about twenty seconds, once",
+    "zh-Hans": "正在为此 Mac 准备模型，首次约需 20 秒"
+  },
+  "AIAssist.0051": {
+    "en": "Model",
+    "zh-Hans": "模型"
+  },
+  "AIAssist.0052": {
+    "en": "{0}, on this Mac. Nothing leaves it",
+    "zh-Hans": "{0}，在此 Mac 上运行，数据不会离开本机"
+  },
+  "AIAssist.0053": {
+    "en": "Remove",
+    "zh-Hans": "移除"
+  },
+  "AIAssist.0054": {
+    "en": "Model",
+    "zh-Hans": "模型"
+  },
+  "AIAssist.0055": {
+    "en": "Try Again",
+    "zh-Hans": "重试"
+  },
+  "AIAssist.0056": {
+    "en": "A provider you have a key with, or an app on this Mac",
+    "zh-Hans": "选择已有密钥的服务提供商，或本机应用"
+  },
+  "AIAssist.0057": {
+    "en": "Nothing leaves this Mac. Also in private tabs",
+    "zh-Hans": "数据不会离开此 Mac，也可用于无痕标签页"
+  },
+  "AIAssist.0058": {
+    "en": "Your key, kept in this Mac's keychain, sent only to {0}. Never from a private tab",
+    "zh-Hans": "密钥保存在此 Mac 的钥匙串，仅发送至 {0}。无痕标签页不会发送"
+  },
+  "AIAssist.0059": {
+    "en": "Key",
+    "zh-Hans": "密钥"
+  },
+  "AIAssist.0060": {
+    "en": "{0}, in this Mac's keychain",
+    "zh-Hans": "{0}，保存在此 Mac 的钥匙串中"
+  },
+  "AIAssist.0061": {
+    "en": "Forget",
+    "zh-Hans": "清除"
+  },
+  "AIAssist.0062": {
+    "en": "Key",
+    "zh-Hans": "密钥"
+  },
+  "AIAssist.0063": {
+    "en": "This copy of Search can't keep keys safely — it isn't the signed release. An app on this Mac still works",
+    "zh-Hans": "此 Search 版本不是签名发行版，无法安全保存密钥。仍可使用本机应用"
+  },
+  "AIAssist.0064": {
+    "en": "Key",
+    "zh-Hans": "密钥"
+  },
+  "AIAssist.0065": {
+    "en": "Paste one, or sign in and OpenRouter makes one for you",
+    "zh-Hans": "粘贴密钥，或登录 OpenRouter 自动创建"
+  },
+  "AIAssist.0066": {
+    "en": "Paste your API key",
+    "zh-Hans": "粘贴 API 密钥"
+  },
+  "AIAssist.0067": {
+    "en": "Key",
+    "zh-Hans": "密钥"
+  },
+  "AIAssist.0068": {
+    "en": "Save",
+    "zh-Hans": "保存"
+  },
+  "AIAssist.0069": {
+    "en": "Sign In…",
+    "zh-Hans": "登录…"
+  },
+  "AIAssist.0070": {
+    "en": "Model",
+    "zh-Hans": "模型"
+  },
+  "AIAssist.0071": {
+    "en": "Leave empty for {0}",
+    "zh-Hans": "留空则使用 {0}"
+  },
+  "AIAssist.0072": {
+    "en": "Model",
+    "zh-Hans": "模型"
+  },
+  "AIAssist.0073": {
+    "en": "Asking {0}…",
+    "zh-Hans": "正在查询 {0}…"
+  },
+  "AIAssist.0074": {
+    "en": "{0} isn't running, or has no model yet",
+    "zh-Hans": "{0} 未运行或尚未安装模型"
+  },
+  "AIAssist.0075": {
+    "en": "Look Again",
+    "zh-Hans": "重新检查"
+  },
+  "AIAssist.0076": {
+    "en": "Model",
+    "zh-Hans": "模型"
+  },
+  "AIAssist.0077": {
+    "en": "From {0} on this Mac",
+    "zh-Hans": "来自此 Mac 上的 {0}"
+  },
+  "AIAssist.0078": {
+    "en": "Choose…",
+    "zh-Hans": "选择…"
+  },
+  "AIAssist.0079": {
+    "en": "Key kept in the keychain",
+    "zh-Hans": "密钥已保存到钥匙串"
+  },
+  "AIAssist.0080": {
+    "en": "This copy of Search can't keep keys",
+    "zh-Hans": "此 Search 版本无法保存密钥"
+  },
+  "AIAssist.0081": {
+    "en": "The key wasn't kept",
+    "zh-Hans": "密钥未保存"
+  },
+  "AIClient.0082": {
+    "en": "No key is kept for this provider.",
+    "zh-Hans": "未保存此提供商的密钥。"
+  },
+  "AIClient.0083": {
+    "en": "That address isn't the provider's.",
+    "zh-Hans": "此地址不属于该提供商。"
+  },
+  "AIClient.0084": {
+    "en": "The provider answered {0}.",
+    "zh-Hans": "提供商返回状态码 {0}。"
+  },
+  "AIClient.0085": {
+    "en": "The provider's answer couldn't be read.",
+    "zh-Hans": "无法读取提供商的回答。"
+  },
+  "AIClient.0086": {
+    "en": "{0} isn't running on this Mac.",
+    "zh-Hans": "{0} 未在此 Mac 上运行。"
+  },
+  "AIClient.0087": {
+    "en": "This Mac is offline.",
+    "zh-Hans": "此 Mac 未连接网络。"
+  },
+  "AIClient.0088": {
+    "en": "{0} took too long to answer.",
+    "zh-Hans": "{0} 响应超时。"
+  },
+  "AIClient.0089": {
+    "en": "The connection to {0} isn't secure.",
+    "zh-Hans": "与 {0} 的连接不安全。"
+  },
+  "AIClient.0090": {
+    "en": "{0} couldn't be reached.",
+    "zh-Hans": "无法连接 {0}。"
+  },
+  "AIEngine.0091": {
+    "en": "The engine's signature doesn't hold up.",
+    "zh-Hans": "引擎签名验证失败。"
+  },
+  "AIEngine.0092": {
+    "en": "The engine isn't installed.",
+    "zh-Hans": "尚未安装引擎。"
+  },
+  "AIEngine.0093": {
+    "en": "The engine's signature doesn't hold up. Remove it in Settings › AI and download it again.",
+    "zh-Hans": "引擎签名验证失败。请在“设置 › AI”中移除后重新下载。"
+  },
+  "AIEngine.0094": {
+    "en": "The model isn't the one Search expects. Remove it in Settings › AI and download it again.",
+    "zh-Hans": "模型与预期不符。请在“设置 › AI”中移除后重新下载。"
+  },
+  "AIEngine.0095": {
+    "en": "The engine didn't start.",
+    "zh-Hans": "引擎未能启动。"
+  },
+  "AIEngine.0096": {
+    "en": "The engine couldn't be started.",
+    "zh-Hans": "无法启动引擎。"
+  },
+  "AIEngine.0097": {
+    "en": "The engine's signature doesn't hold up. Remove it in Settings › AI and download it again.",
+    "zh-Hans": "引擎签名验证失败。请在“设置 › AI”中移除后重新下载。"
+  },
+  "AIEngine.0098": {
+    "en": "The engine stopped.",
+    "zh-Hans": "引擎已停止。"
+  },
+  "AIEngine.0099": {
+    "en": "Stopped.",
+    "zh-Hans": "已停止。"
+  },
+  "AIEngine.0100": {
+    "en": "Not a secure address.",
+    "zh-Hans": "此地址不安全。"
+  },
+  "AIEngine.0101": {
+    "en": "There isn't enough free space on this Mac ({0} needed).",
+    "zh-Hans": "此 Mac 的可用空间不足（需要 {0}）。"
+  },
+  "AIEngine.0102": {
+    "en": "The download was refused.",
+    "zh-Hans": "下载被拒绝。"
+  },
+  "AIEngine.0103": {
+    "en": "What arrived isn't what was expected, so it was deleted.",
+    "zh-Hans": "下载内容与预期不符，已删除。"
+  },
+  "AISignIn.0104": {
+    "en": "The sign-in took too long — try again.",
+    "zh-Hans": "登录超时，请重试。"
+  },
+  "AISignIn.0105": {
+    "en": "The sign-in didn't come back from OpenRouter.",
+    "zh-Hans": "未收到 OpenRouter 的登录回调。"
+  },
+  "AISignIn.0106": {
+    "en": "This copy of Search can't keep keys (it isn't the signed release).",
+    "zh-Hans": "此 Search 版本不是签名发行版，无法保存密钥。"
+  },
+  "AISignIn.0107": {
+    "en": "The keychain refused the key.",
+    "zh-Hans": "钥匙串拒绝保存密钥。"
+  },
+  "AISignIn.0108": {
+    "en": "Signed in with OpenRouter",
+    "zh-Hans": "已登录 OpenRouter"
+  },
+  "AISignIn.0109": {
+    "en": "The sign-in didn't work",
+    "zh-Hans": "登录失败"
+  },
+  "Accounts.0110": {
+    "en": "Passkey",
+    "zh-Hans": "通行密钥"
+  },
+  "Accounts.0111": {
+    "en": "No name",
+    "zh-Hans": "无名称"
+  },
+  "Accounts.0112": {
+    "en": "Passkeys on this Mac",
+    "zh-Hans": "此 Mac 上的通行密钥"
+  },
+  "Accounts.0113": {
+    "en": "From your keychain",
+    "zh-Hans": "来自钥匙串"
+  },
+  "App.0114": {
+    "en": "New Window",
+    "zh-Hans": "新建窗口"
+  },
+  "App.0115": {
+    "en": "New Tab",
+    "zh-Hans": "新建标签页"
+  },
+  "App.0116": {
+    "en": "New Private Tab",
+    "zh-Hans": "新建无痕标签页"
+  },
+  "App.0117": {
+    "en": "Open Address…",
+    "zh-Hans": "打开地址…"
+  },
+  "App.0118": {
+    "en": "Bring Things Over…",
+    "zh-Hans": "导入浏览器数据…"
+  },
+  "App.0119": {
+    "en": "Close Tab",
+    "zh-Hans": "关闭标签页"
+  },
+  "App.0120": {
+    "en": "Share…",
+    "zh-Hans": "共享…"
+  },
+  "App.0121": {
+    "en": "Print…",
+    "zh-Hans": "打印…"
+  },
+  "App.0122": {
+    "en": "Find on Page…",
+    "zh-Hans": "在页面中查找…"
+  },
+  "App.0123": {
+    "en": "Find Next",
+    "zh-Hans": "查找下一个"
+  },
+  "App.0124": {
+    "en": "Find Previous",
+    "zh-Hans": "查找上一个"
+  },
+  "App.0125": {
+    "en": "Show Tabs in Sidebar",
+    "zh-Hans": "在侧边栏显示标签页"
+  },
+  "App.0126": {
+    "en": "Show Sidebar",
+    "zh-Hans": "显示侧边栏"
+  },
+  "App.0127": {
+    "en": "Hide Sidebar",
+    "zh-Hans": "隐藏侧边栏"
+  },
+  "App.0128": {
+    "en": "Show Tab Bar",
+    "zh-Hans": "显示标签栏"
+  },
+  "App.0129": {
+    "en": "Hide Tab Bar",
+    "zh-Hans": "隐藏标签栏"
+  },
+  "App.0130": {
+    "en": "Tabs Wear",
+    "zh-Hans": "标签页图标"
+  },
+  "App.0131": {
+    "en": "Reload Page",
+    "zh-Hans": "重新载入页面"
+  },
+  "App.0132": {
+    "en": "Reload Page From Origin",
+    "zh-Hans": "从源站重新载入页面"
+  },
+  "App.0133": {
+    "en": "Reading Mode",
+    "zh-Hans": "阅读模式"
+  },
+  "App.0134": {
+    "en": "Float Video",
+    "zh-Hans": "画中画"
+  },
+  "App.0135": {
+    "en": "Summarize Page",
+    "zh-Hans": "总结页面"
+  },
+  "App.0136": {
+    "en": "Ask About This Page…",
+    "zh-Hans": "询问此页面…"
+  },
+  "App.0137": {
+    "en": "Hide Elements…",
+    "zh-Hans": "隐藏页面元素…"
+  },
+  "App.0138": {
+    "en": "Hidden on This Site…",
+    "zh-Hans": "此网站隐藏的元素…"
+  },
+  "App.0139": {
+    "en": "Zoom In",
+    "zh-Hans": "放大"
+  },
+  "App.0140": {
+    "en": "Zoom Out",
+    "zh-Hans": "缩小"
+  },
+  "App.0141": {
+    "en": "Actual Size",
+    "zh-Hans": "实际大小"
+  },
+  "App.0142": {
+    "en": "Web Inspector",
+    "zh-Hans": "网页检查器"
+  },
+  "App.0143": {
+    "en": "JavaScript Console",
+    "zh-Hans": "JavaScript 控制台"
+  },
+  "App.0144": {
+    "en": "Inspect Element",
+    "zh-Hans": "检查元素"
+  },
+  "App.0145": {
+    "en": "Tabs",
+    "zh-Hans": "标签页"
+  },
+  "App.0146": {
+    "en": "Back",
+    "zh-Hans": "后退"
+  },
+  "App.0147": {
+    "en": "Forward",
+    "zh-Hans": "前进"
+  },
+  "App.0148": {
+    "en": "Next Tab",
+    "zh-Hans": "下一个标签页"
+  },
+  "App.0149": {
+    "en": "Previous Tab",
+    "zh-Hans": "上一个标签页"
+  },
+  "App.0150": {
+    "en": "Search Tabs…",
+    "zh-Hans": "搜索标签页…"
+  },
+  "App.0151": {
+    "en": "Split Current Page",
+    "zh-Hans": "拆分当前页面"
+  },
+  "App.0152": {
+    "en": "Focus Left Page",
+    "zh-Hans": "切换到左侧页面"
+  },
+  "App.0153": {
+    "en": "Focus Right Page",
+    "zh-Hans": "切换到右侧页面"
+  },
+  "App.0154": {
+    "en": "Swap Pages",
+    "zh-Hans": "交换页面"
+  },
+  "App.0155": {
+    "en": "Separate Split Tabs",
+    "zh-Hans": "分离分屏标签页"
+  },
+  "App.0156": {
+    "en": "Close Both Pages",
+    "zh-Hans": "关闭两个页面"
+  },
+  "App.0157": {
+    "en": "Pin Tab",
+    "zh-Hans": "固定标签页"
+  },
+  "App.0158": {
+    "en": "Pin Tab as Row",
+    "zh-Hans": "以列表形式固定标签页"
+  },
+  "App.0159": {
+    "en": "Show Pin as Square",
+    "zh-Hans": "以方块显示固定标签页"
+  },
+  "App.0160": {
+    "en": "Show Pin as Row",
+    "zh-Hans": "以列表显示固定标签页"
+  },
+  "App.0161": {
+    "en": "Change Letter",
+    "zh-Hans": "更改字母"
+  },
+  "App.0162": {
+    "en": "Unpin Tab",
+    "zh-Hans": "取消固定标签页"
+  },
+  "App.0163": {
+    "en": "Rename Tab",
+    "zh-Hans": "重命名标签页"
+  },
+  "App.0164": {
+    "en": "Duplicate Tab",
+    "zh-Hans": "复制标签页"
+  },
+  "App.0165": {
+    "en": "Copy Address",
+    "zh-Hans": "复制地址"
+  },
+  "App.0166": {
+    "en": "Copy as Markdown Link",
+    "zh-Hans": "复制为 Markdown 链接"
+  },
+  "App.0167": {
+    "en": "Paste and Go",
+    "zh-Hans": "粘贴并前往"
+  },
+  "App.0168": {
+    "en": "Close Other Tabs",
+    "zh-Hans": "关闭其他标签页"
+  },
+  "App.0169": {
+    "en": "Stop Sound in Tab",
+    "zh-Hans": "停止标签页声音"
+  },
+  "App.0170": {
+    "en": "Bookmarks",
+    "zh-Hans": "书签"
+  },
+  "App.0171": {
+    "en": "Edit Bookmark…",
+    "zh-Hans": "编辑书签…"
+  },
+  "App.0172": {
+    "en": "Add This Page",
+    "zh-Hans": "添加此页面"
+  },
+  "App.0173": {
+    "en": "Show Bookmarks…",
+    "zh-Hans": "显示书签…"
+  },
+  "App.0174": {
+    "en": "Show Bookmarks Bar",
+    "zh-Hans": "显示书签栏"
+  },
+  "App.0175": {
+    "en": "History",
+    "zh-Hans": "历史记录"
+  },
+  "App.0176": {
+    "en": "Recently Visited",
+    "zh-Hans": "最近访问"
+  },
+  "App.0177": {
+    "en": "Recently Closed",
+    "zh-Hans": "最近关闭"
+  },
+  "App.0178": {
+    "en": "Show History…",
+    "zh-Hans": "显示历史记录…"
+  },
+  "App.0179": {
+    "en": "Downloads…",
+    "zh-Hans": "下载…"
+  },
+  "App.0180": {
+    "en": "Clear Browsing Data…",
+    "zh-Hans": "清除浏览数据…"
+  },
+  "App.0181": {
+    "en": "Clear History",
+    "zh-Hans": "清除历史记录"
+  },
+  "App.0182": {
+    "en": "Settings…",
+    "zh-Hans": "设置…"
+  },
+  "App.0183": {
+    "en": "Welcome…",
+    "zh-Hans": "欢迎使用…"
+  },
+  "App.0184": {
+    "en": "Passwords…",
+    "zh-Hans": "密码…"
+  },
+  "App.0185": {
+    "en": "Send Feedback…",
+    "zh-Hans": "发送反馈…"
+  },
+  "App.0186": {
+    "en": "Click anything to hide it   ⌘Z undo   esc done",
+    "zh-Hans": "点击元素以隐藏   ⌘Z 撤销   esc 完成"
+  },
+  "App.0187": {
+    "en": "Show in Finder",
+    "zh-Hans": "在访达中显示"
+  },
+  "App.0188": {
+    "en": "microphone",
+    "zh-Hans": "麦克风"
+  },
+  "App.0189": {
+    "en": "{0} wants to know your location",
+    "zh-Hans": "{0} 请求获取你的位置"
+  },
+  "App.0190": {
+    "en": "{0} wants to send you notifications",
+    "zh-Hans": "{0} 请求发送通知"
+  },
+  "App.0191": {
+    "en": "{0} wants to use your {1}",
+    "zh-Hans": "{0} 请求使用你的{1}"
+  },
+  "App.0192": {
+    "en": "Allow once",
+    "zh-Hans": "允许一次"
+  },
+  "App.0193": {
+    "en": "Allow",
+    "zh-Hans": "允许"
+  },
+  "App.0194": {
+    "en": "Always allow",
+    "zh-Hans": "始终允许"
+  },
+  "App.0195": {
+    "en": "Don't allow",
+    "zh-Hans": "不允许"
+  },
+  "App.0196": {
+    "en": "Update the password for {0} on {1}?",
+    "zh-Hans": "更新 {0} 上 {1} 的密码？"
+  },
+  "App.0197": {
+    "en": "Save this password for {0}?",
+    "zh-Hans": "保存 {0} 的密码？"
+  },
+  "App.0198": {
+    "en": "Save the password for {0} on {1}?",
+    "zh-Hans": "保存 {0} 上 {1} 的密码？"
+  },
+  "App.0199": {
+    "en": "Update",
+    "zh-Hans": "更新"
+  },
+  "App.0200": {
+    "en": "Save",
+    "zh-Hans": "保存"
+  },
+  "App.0201": {
+    "en": "Not now",
+    "zh-Hans": "暂不"
+  },
+  "App.0202": {
+    "en": "Never here",
+    "zh-Hans": "此网站不再询问"
+  },
+  "App.0203": {
+    "en": "Checking for Updates…",
+    "zh-Hans": "正在检查更新…"
+  },
+  "App.0204": {
+    "en": "Check for Updates…",
+    "zh-Hans": "检查更新…"
+  },
+  "App.0205": {
+    "en": "Install Update",
+    "zh-Hans": "安装更新"
+  },
+  "App.0206": {
+    "en": "Downloading Update…",
+    "zh-Hans": "正在下载更新…"
+  },
+  "App.0207": {
+    "en": "Restart to Update",
+    "zh-Hans": "重新启动以更新"
+  },
+  "App.0208": {
+    "en": "Downloading Update…",
+    "zh-Hans": "正在下载更新…"
+  },
+  "App.0209": {
+    "en": "Download Update…",
+    "zh-Hans": "下载更新…"
+  },
+  "App.0210": {
+    "en": "Importing {0}, {1}",
+    "zh-Hans": "正在导入 {0}，{1}"
+  },
+  "App.0211": {
+    "en": "Cancelling…",
+    "zh-Hans": "正在取消…"
+  },
+  "App.0212": {
+    "en": "Cancel",
+    "zh-Hans": "取消"
+  },
+  "Bookmarks.0213": {
+    "en": "New Folder",
+    "zh-Hans": "新建文件夹"
+  },
+  "Bookmarks.0214": {
+    "en": "Folder name",
+    "zh-Hans": "文件夹名称"
+  },
+  "Bookmarks.0215": {
+    "en": "Make",
+    "zh-Hans": "创建"
+  },
+  "Bookmarks.0216": {
+    "en": "The empty folders in it go too.",
+    "zh-Hans": "其中的空文件夹也会被移除。"
+  },
+  "Bookmarks.0217": {
+    "en": "The bookmark in it goes too.",
+    "zh-Hans": "其中的书签也会被移除。"
+  },
+  "Bookmarks.0218": {
+    "en": "The {0} bookmarks in it go too.",
+    "zh-Hans": "其中的 {0} 个书签也会被移除。"
+  },
+  "Bookmarks.0219": {
+    "en": "Remove “{0}”?",
+    "zh-Hans": "移除“{0}”？"
+  },
+  "Bookmarks.0220": {
+    "en": "Remove",
+    "zh-Hans": "移除"
+  },
+  "Bookmarks.0221": {
+    "en": "Empty",
+    "zh-Hans": "空"
+  },
+  "Bookmarks.0222": {
+    "en": "Rename Folder",
+    "zh-Hans": "重命名文件夹"
+  },
+  "Bookmarks.0223": {
+    "en": "Rename Bookmark",
+    "zh-Hans": "重命名书签"
+  },
+  "Bookmarks.0224": {
+    "en": "Rename",
+    "zh-Hans": "重命名"
+  },
+  "Bookmarks.0225": {
+    "en": "Open",
+    "zh-Hans": "打开"
+  },
+  "Bookmarks.0226": {
+    "en": "Rename…",
+    "zh-Hans": "重命名…"
+  },
+  "Bookmarks.0227": {
+    "en": "New Folder Inside…",
+    "zh-Hans": "新建子文件夹…"
+  },
+  "Bookmarks.0228": {
+    "en": "Move to",
+    "zh-Hans": "移至"
+  },
+  "Bookmarks.0229": {
+    "en": "Top Level",
+    "zh-Hans": "顶层"
+  },
+  "Bookmarks.0230": {
+    "en": "Remove",
+    "zh-Hans": "移除"
+  },
+  "Bookmarks.0231": {
+    "en": "Bookmarks",
+    "zh-Hans": "书签"
+  },
+  "Bookmarks.0232": {
+    "en": "Bookmarked",
+    "zh-Hans": "已添加书签"
+  },
+  "Bookmarks.0233": {
+    "en": "Name",
+    "zh-Hans": "名称"
+  },
+  "Bookmarks.0234": {
+    "en": "Folder",
+    "zh-Hans": "文件夹"
+  },
+  "Bookmarks.0235": {
+    "en": "Remove",
+    "zh-Hans": "移除"
+  },
+  "Bookmarks.0236": {
+    "en": "Done",
+    "zh-Hans": "完成"
+  },
+  "Bookmarks.0237": {
+    "en": "Top Level",
+    "zh-Hans": "顶层"
+  },
+  "Bookmarks.0238": {
+    "en": "New Folder…",
+    "zh-Hans": "新建文件夹…"
+  },
+  "Bookmarks.0239": {
+    "en": "New Folder",
+    "zh-Hans": "新建文件夹"
+  },
+  "Bookmarks.0240": {
+    "en": "Name",
+    "zh-Hans": "名称"
+  },
+  "Bookmarks.0241": {
+    "en": "Create",
+    "zh-Hans": "创建"
+  },
+  "Bookmarks.0242": {
+    "en": "Top Level",
+    "zh-Hans": "顶层"
+  },
+  "Bookmarks.0243": {
+    "en": "No bookmarks yet",
+    "zh-Hans": "暂无书签"
+  },
+  "Bookmarks.0244": {
+    "en": "Edit This Bookmark…",
+    "zh-Hans": "编辑此书签…"
+  },
+  "Bookmarks.0245": {
+    "en": "Add This Page",
+    "zh-Hans": "添加此页面"
+  },
+  "Bookmarks.0246": {
+    "en": "Manage Bookmarks…",
+    "zh-Hans": "管理书签…"
+  },
+  "Bookmarks.0247": {
+    "en": "Bookmarks",
+    "zh-Hans": "书签"
+  },
+  "Bookmarks.0248": {
+    "en": "Search bookmarks",
+    "zh-Hans": "搜索书签"
+  },
+  "Bookmarks.0249": {
+    "en": "Nothing kept yet. Add this page with ⇧⌘B, or bring yours in below.",
+    "zh-Hans": "暂无书签。按 ⇧⌘B 添加此页面，或在下方导入书签。"
+  },
+  "Bookmarks.0250": {
+    "en": "Bring in from",
+    "zh-Hans": "导入来源"
+  },
+  "Bookmarks.0251": {
+    "en": "Bring in…",
+    "zh-Hans": "导入…"
+  },
+  "Bookmarks.0252": {
+    "en": "File…",
+    "zh-Hans": "文件…"
+  },
+  "Bookmarks.0253": {
+    "en": "New Folder…",
+    "zh-Hans": "新建文件夹…"
+  },
+  "Bookmarks.0254": {
+    "en": "1 bookmark",
+    "zh-Hans": "1 个书签"
+  },
+  "Bookmarks.0255": {
+    "en": "{0} bookmarks",
+    "zh-Hans": "{0} 个书签"
+  },
+  "Bookmarks.0256": {
+    "en": "Nothing matches.",
+    "zh-Hans": "没有匹配项。"
+  },
+  "Bookmarks.0257": {
+    "en": "Show in Folder",
+    "zh-Hans": "在文件夹中显示"
+  },
+  "Bookmarks.0258": {
+    "en": "Open",
+    "zh-Hans": "打开"
+  },
+  "Bookmarks.0259": {
+    "en": "Show in Folder",
+    "zh-Hans": "在文件夹中显示"
+  },
+  "Bookmarks.0260": {
+    "en": "Top level",
+    "zh-Hans": "顶层"
+  },
+  "Bookmarks.0261": {
+    "en": "Bookmarks",
+    "zh-Hans": "书签"
+  },
+  "Bookmarks.0262": {
+    "en": "Bookmarks",
+    "zh-Hans": "书签"
+  },
+  "Bookmarks.0263": {
+    "en": "Empty",
+    "zh-Hans": "空"
+  },
+  "Bookmarks.0264": {
+    "en": "Empty",
+    "zh-Hans": "空"
+  },
+  "BookmarksFile.0265": {
+    "en": "Reading bookmark file",
+    "zh-Hans": "正在读取书签文件"
+  },
+  "BookmarksFile.0266": {
+    "en": "Parsing bookmarks",
+    "zh-Hans": "正在解析书签"
+  },
+  "BookmarksFile.0267": {
+    "en": "Folder",
+    "zh-Hans": "文件夹"
+  },
+  "BookmarksFile.0268": {
+    "en": "Parsing bookmarks",
+    "zh-Hans": "正在解析书签"
+  },
+  "BookmarksFile.0269": {
+    "en": "Parsing bookmarks",
+    "zh-Hans": "正在解析书签"
+  },
+  "Browser.0270": {
+    "en": "Bookmarked",
+    "zh-Hans": "已添加书签"
+  },
+  "Browser.0271": {
+    "en": "Already a bookmark",
+    "zh-Hans": "已添加到书签"
+  },
+  "Browser.0272": {
+    "en": "Couldn't read all of {0}'s bookmarks: what came from it before was kept",
+    "zh-Hans": "无法读取 {0} 的全部书签；此前导入的书签已保留"
+  },
+  "Browser.0273": {
+    "en": "No bookmarks in {0}",
+    "zh-Hans": "{0} 中没有书签"
+  },
+  "Browser.0274": {
+    "en": "The bookmarks from {0} were all here already",
+    "zh-Hans": "{0} 的书签已全部导入过"
+  },
+  "Browser.0275": {
+    "en": "{0} bookmarks from {1}",
+    "zh-Hans": "从 {0} 导入 {1} 个书签"
+  },
+  "Browser.0276": {
+    "en": "{0} new bookmarks from {1}, {2} already here",
+    "zh-Hans": "从 {0} 新增 {1} 个书签，{2} 个已存在"
+  },
+  "Browser.0277": {
+    "en": "Cancelling…",
+    "zh-Hans": "正在取消…"
+  },
+  "Browser.0278": {
+    "en": "Search unavailable",
+    "zh-Hans": "无法查找"
+  },
+  "Browser.0279": {
+    "en": "Whole words unavailable",
+    "zh-Hans": "不支持全字匹配"
+  },
+  "Browser.0280": {
+    "en": "Match found",
+    "zh-Hans": "找到匹配项"
+  },
+  "Browser.0281": {
+    "en": "No matches",
+    "zh-Hans": "无匹配项"
+  },
+  "Browser.0282": {
+    "en": "No matches",
+    "zh-Hans": "无匹配项"
+  },
+  "Browser.0283": {
+    "en": "Paused",
+    "zh-Hans": "已暂停"
+  },
+  "Browser.0284": {
+    "en": "It's back",
+    "zh-Hans": "已恢复"
+  },
+  "Browser.0285": {
+    "en": "{0} is back",
+    "zh-Hans": "已恢复 {0}"
+  },
+  "Browser.0286": {
+    "en": "Everything is back",
+    "zh-Hans": "已全部恢复"
+  },
+  "Browser.0287": {
+    "en": "The keychain refused it",
+    "zh-Hans": "钥匙串拒绝了此操作"
+  },
+  "Browser.0288": {
+    "en": "Password updated for {0}",
+    "zh-Hans": "已更新 {0} 的密码"
+  },
+  "Browser.0289": {
+    "en": "Password saved for {0}",
+    "zh-Hans": "已保存 {0} 的密码"
+  },
+  "Browser.0290": {
+    "en": "Never for {0}",
+    "zh-Hans": "{0} 将不再询问"
+  },
+  "Browser.0291": {
+    "en": "Couldn't find the sign-in fields anymore",
+    "zh-Hans": "无法找到登录输入框"
+  },
+  "Browser.0292": {
+    "en": "The keychain refused it",
+    "zh-Hans": "钥匙串拒绝了此操作"
+  },
+  "Browser.0293": {
+    "en": "Kept for {0}",
+    "zh-Hans": "已为 {0} 保存"
+  },
+  "Browser.0294": {
+    "en": "copy the password for {0}",
+    "zh-Hans": "复制 {0} 的密码"
+  },
+  "Browser.0295": {
+    "en": "The keychain refused it",
+    "zh-Hans": "钥匙串拒绝了此操作"
+  },
+  "Browser.0296": {
+    "en": "Password copied",
+    "zh-Hans": "密码已复制"
+  },
+  "Browser.0297": {
+    "en": "Nothing new in {0}",
+    "zh-Hans": "{0} 中没有新内容"
+  },
+  "Browser.0298": {
+    "en": "{0} passwords from {1}",
+    "zh-Hans": "从 {0} 导入 {1} 个密码"
+  },
+  "Browser.0299": {
+    "en": "{0} didn't give up its keychain key",
+    "zh-Hans": "未能获取 {0} 的钥匙串密钥"
+  },
+  "Browser.0300": {
+    "en": "{0} has a primary password — export your passwords from it (Settings › Passwords › ⋯ › Export) and bring in the CSV file",
+    "zh-Hans": "{0} 设置了主密码，请在原浏览器的“设置 › 密码 › ⋯ › 导出”中导出密码，再导入 CSV 文件"
+  },
+  "Browser.0301": {
+    "en": "Nothing readable in {0}",
+    "zh-Hans": "{0} 中没有可读取的数据"
+  },
+  "Browser.0302": {
+    "en": "Bring In",
+    "zh-Hans": "导入"
+  },
+  "Browser.0303": {
+    "en": "A file another browser exported: bookmarks (.html), passwords (.csv), or Safari's File › Export Browsing Data (.zip).",
+    "zh-Hans": "选择其他浏览器导出的文件：书签（.html）、密码（.csv），或 Safari“文件 › 导出浏览数据”生成的文件（.zip）。"
+  },
+  "Browser.0304": {
+    "en": "An import is already running",
+    "zh-Hans": "已有导入任务正在进行"
+  },
+  "Browser.0305": {
+    "en": "Reading…",
+    "zh-Hans": "正在读取…"
+  },
+  "Browser.0306": {
+    "en": "bookmark",
+    "zh-Hans": "个书签"
+  },
+  "Browser.0307": {
+    "en": "bookmarks",
+    "zh-Hans": "个书签"
+  },
+  "Browser.0308": {
+    "en": "{0}, {1} already here",
+    "zh-Hans": "{0}, {1} 个已存在"
+  },
+  "Browser.0309": {
+    "en": "place",
+    "zh-Hans": "条浏览记录"
+  },
+  "Browser.0310": {
+    "en": "places",
+    "zh-Hans": "条浏览记录"
+  },
+  "Browser.0311": {
+    "en": "password",
+    "zh-Hans": "个密码"
+  },
+  "Browser.0312": {
+    "en": "passwords",
+    "zh-Hans": "个密码"
+  },
+  "Browser.0313": {
+    "en": "{0}, {1} skipped",
+    "zh-Hans": "{0}, 跳过 {1} 项"
+  },
+  "Browser.0314": {
+    "en": "Import cancelled after merging bookmarks",
+    "zh-Hans": "已取消导入，已合并的书签保留"
+  },
+  "Browser.0315": {
+    "en": "Import cancelled; nothing was changed",
+    "zh-Hans": "已取消导入，未更改数据"
+  },
+  "Browser.0316": {
+    "en": "Import cancelled after ",
+    "zh-Hans": "已取消导入，已完成："
+  },
+  "Browser.0317": {
+    "en": "That file couldn't be read",
+    "zh-Hans": "无法读取此文件"
+  },
+  "Browser.0318": {
+    "en": "Import stopped after ",
+    "zh-Hans": "导入已停止，已完成："
+  },
+  "Browser.0319": {
+    "en": "Bookmark folders imported",
+    "zh-Hans": "书签文件夹已导入"
+  },
+  "Browser.0320": {
+    "en": "Nothing to bring in from that file",
+    "zh-Hans": "此文件没有可导入的数据"
+  },
+  "Browser.0321": {
+    "en": " — the exported file holds your passwords in the clear: delete it now",
+    "zh-Hans": " — 导出文件以明文保存密码，请及时删除"
+  },
+  "Browser.0322": {
+    "en": "Signed out of everything",
+    "zh-Hans": "已退出所有网站"
+  },
+  "Browser.0323": {
+    "en": "Cache cleared",
+    "zh-Hans": "缓存已清除"
+  },
+  "Browser.0324": {
+    "en": "History cleared",
+    "zh-Hans": "历史记录已清除"
+  },
+  "Browser.0325": {
+    "en": "Camera, microphone, location and notification choices forgotten",
+    "zh-Hans": "摄像头、麦克风、位置和通知权限记录已清除"
+  },
+  "Browser.0326": {
+    "en": "Address copied",
+    "zh-Hans": "地址已复制"
+  },
+  "Browser.0327": {
+    "en": "Link copied",
+    "zh-Hans": "链接已复制"
+  },
+  "Browser.0328": {
+    "en": "“Let a script drive Search” was turned on outside Settings, and stays off",
+    "zh-Hans": "“允许脚本控制 Search”在设置之外被启用，已保持关闭"
+  },
+  "Browser.0329": {
+    "en": "Ads and trackers blocked",
+    "zh-Hans": "已拦截广告和跟踪器"
+  },
+  "Browser.0330": {
+    "en": "Blocking off — reload to see the difference",
+    "zh-Hans": "拦截已关闭，重新载入后生效"
+  },
+  "Browser.0331": {
+    "en": "Scripts can drive Search — see ./bench",
+    "zh-Hans": "已允许脚本控制 Search，详见 ./bench"
+  },
+  "Browser.0332": {
+    "en": "The bench is closed",
+    "zh-Hans": "脚本控制已关闭"
+  },
+  "Browser.0333": {
+    "en": "Passkeys offered again — reload the page",
+    "zh-Hans": "通行密钥已启用，请重新载入页面"
+  },
+  "Browser.0334": {
+    "en": "Sites will ask for a password instead",
+    "zh-Hans": "网站将改用密码登录"
+  },
+  "Browser.0335": {
+    "en": "Autocorrect on",
+    "zh-Hans": "自动纠正已开启"
+  },
+  "Browser.0336": {
+    "en": "Autocorrect off",
+    "zh-Hans": "自动纠正已关闭"
+  },
+  "Browser.0337": {
+    "en": "Reopen Closed Tab",
+    "zh-Hans": "重新打开关闭的标签页"
+  },
+  "Browser.0338": {
+    "en": "Reopen Cleared Tab",
+    "zh-Hans": "重新打开清除的标签页"
+  },
+  "Browser.0339": {
+    "en": "Reopen {0} Cleared Tabs",
+    "zh-Hans": "重新打开 {0} 个清除的标签页"
+  },
+  "Browser.0340": {
+    "en": "Move Tab?",
+    "zh-Hans": "移动标签页？"
+  },
+  "Browser.0341": {
+    "en": "This page has unsaved form entries. It will reopen in “{0}” with that Space’s sign-ins, so the entries may be lost.",
+    "zh-Hans": "此页面有未保存的表单内容。页面将在“{0}”中使用该空间的登录状态重新打开，输入内容可能丢失。"
+  },
+  "Browser.0342": {
+    "en": "Move",
+    "zh-Hans": "移动"
+  },
+  "Browser.0343": {
+    "en": "Moved to {0}",
+    "zh-Hans": "已移至 {0}"
+  },
+  "Browser.0344": {
+    "en": "Group {0}",
+    "zh-Hans": "分组 {0}"
+  },
+  "Browser.0345": {
+    "en": "A tab that keeps nothing",
+    "zh-Hans": "无痕标签页，不保留浏览数据"
+  },
+  "Browser.0346": {
+    "en": "Nothing is playing here",
+    "zh-Hans": "此处没有正在播放的内容"
+  },
+  "Browser.0347": {
+    "en": "Hidden on this page — ⌘Z puts it back",
+    "zh-Hans": "已在此页面隐藏，按 ⌘Z 恢复"
+  },
+  "Browser.0348": {
+    "en": "Hidden — ⌘Z puts it back",
+    "zh-Hans": "已隐藏，按 ⌘Z 恢复"
+  },
+  "Browser.0349": {
+    "en": "Couldn't hide that — {0}",
+    "zh-Hans": "无法隐藏：{0}"
+  },
+  "Browser.0350": {
+    "en": "Nothing to read on this page",
+    "zh-Hans": "此页面没有可阅读的内容"
+  },
+  "Browser.0351": {
+    "en": "Open “{0}”?",
+    "zh-Hans": "打开“{0}”？"
+  },
+  "Browser.0352": {
+    "en": "{0} wants to open {1}.",
+    "zh-Hans": "{0} 请求打开 {1}。"
+  },
+  "Browser.0353": {
+    "en": "Open",
+    "zh-Hans": "打开"
+  },
+  "Browser.0354": {
+    "en": "Cancel",
+    "zh-Hans": "取消"
+  },
+  "Browser.0355": {
+    "en": "This page",
+    "zh-Hans": "此页面"
+  },
+  "Browser.0356": {
+    "en": "An extension",
+    "zh-Hans": "一个扩展"
+  },
+  "Browser.0357": {
+    "en": "camera",
+    "zh-Hans": "摄像头"
+  },
+  "Browser.0358": {
+    "en": "microphone",
+    "zh-Hans": "麦克风"
+  },
+  "Browser.0359": {
+    "en": "camera and microphone",
+    "zh-Hans": "摄像头和麦克风"
+  },
+  "Browser.0360": {
+    "en": "camera and microphone",
+    "zh-Hans": "摄像头和麦克风"
+  },
+  "Browser.0361": {
+    "en": "No site at that address.",
+    "zh-Hans": "此地址没有网站。"
+  },
+  "Browser.0362": {
+    "en": "No connection.",
+    "zh-Hans": "无法连接网络。"
+  },
+  "Browser.0363": {
+    "en": "The site took too long to answer.",
+    "zh-Hans": "网站响应超时。"
+  },
+  "Browser.0364": {
+    "en": "The site refused the connection.",
+    "zh-Hans": "网站拒绝了连接。"
+  },
+  "Browser.0365": {
+    "en": "The connection isn't secure.",
+    "zh-Hans": "连接不安全。"
+  },
+  "Browser.0366": {
+    "en": "The page didn't load.",
+    "zh-Hans": "页面未能加载。"
+  },
+  "Browser.0367": {
+    "en": "Downloading {0}",
+    "zh-Hans": "正在下载 {0}"
+  },
+  "Browser.0368": {
+    "en": "Download finished",
+    "zh-Hans": "下载完成"
+  },
+  "Browser.0369": {
+    "en": "Saved {0}",
+    "zh-Hans": "已保存 {0}"
+  },
+  "Browser.0370": {
+    "en": "Download failed",
+    "zh-Hans": "下载失败"
+  },
+  "Browser.0371": {
+    "en": "Saved {0}",
+    "zh-Hans": "已保存 {0}"
+  },
+  "Browser.0372": {
+    "en": "Download failed",
+    "zh-Hans": "下载失败"
+  },
+  "Design.0373": {
+    "en": "Light",
+    "zh-Hans": "浅色"
+  },
+  "Design.0374": {
+    "en": "Dark",
+    "zh-Hans": "深色"
+  },
+  "Design.0375": {
+    "en": "System",
+    "zh-Hans": "跟随系统"
+  },
+  "Dialogs.0376": {
+    "en": "OK",
+    "zh-Hans": "好"
+  },
+  "Dialogs.0377": {
+    "en": "OK",
+    "zh-Hans": "好"
+  },
+  "Dialogs.0378": {
+    "en": "Cancel",
+    "zh-Hans": "取消"
+  },
+  "Dialogs.0379": {
+    "en": "OK",
+    "zh-Hans": "好"
+  },
+  "Dialogs.0380": {
+    "en": "Cancel",
+    "zh-Hans": "取消"
+  },
+  "Dialogs.0381": {
+    "en": "Choose a file for this page",
+    "zh-Hans": "为此页面选择文件"
+  },
+  "Dialogs.0382": {
+    "en": "Choose a file for {0}",
+    "zh-Hans": "为 {0} 选择文件"
+  },
+  "Dialogs.0383": {
+    "en": "{0} can't prove who it is",
+    "zh-Hans": "无法验证 {0} 的身份"
+  },
+  "Dialogs.0384": {
+    "en": "Its certificate isn't trusted by this Mac. Someone could be reading what you send. Continue only if you know why it looks like this.",
+    "zh-Hans": "此 Mac 不信任该网站的证书，你发送的信息可能被他人读取。仅在了解原因时继续。"
+  },
+  "Dialogs.0385": {
+    "en": "Go Back",
+    "zh-Hans": "返回"
+  },
+  "Dialogs.0386": {
+    "en": "Continue Anyway",
+    "zh-Hans": "仍要继续"
+  },
+  "Dialogs.0387": {
+    "en": "{0} asks you to sign in",
+    "zh-Hans": "{0} 要求登录"
+  },
+  "Dialogs.0388": {
+    "en": "The site wants a name and a password.",
+    "zh-Hans": "此网站需要用户名和密码。"
+  },
+  "Dialogs.0389": {
+    "en": "\nThat wasn't accepted — try again.",
+    "zh-Hans": "\n登录信息未被接受，请重试。"
+  },
+  "Dialogs.0390": {
+    "en": "Sign In",
+    "zh-Hans": "登录"
+  },
+  "Dialogs.0391": {
+    "en": "Cancel",
+    "zh-Hans": "取消"
+  },
+  "Dialogs.0392": {
+    "en": "Name",
+    "zh-Hans": "名称"
+  },
+  "Dialogs.0393": {
+    "en": "Password",
+    "zh-Hans": "密码"
+  },
+  "Dialogs.0394": {
+    "en": "This page says",
+    "zh-Hans": "此页面提示"
+  },
+  "Engine.0395": {
+    "en": "Custom",
+    "zh-Hans": "自定义"
+  },
+  "ExtensionCapture.0396": {
+    "en": "is sharing your screen",
+    "zh-Hans": "正在共享屏幕"
+  },
+  "ExtensionCapture.0397": {
+    "en": "is recording your screen",
+    "zh-Hans": "正在录制屏幕"
+  },
+  "ExtensionCapture.0398": {
+    "en": "is using your camera and microphone",
+    "zh-Hans": "正在使用摄像头和麦克风"
+  },
+  "ExtensionCapture.0399": {
+    "en": "is using your camera",
+    "zh-Hans": "正在使用摄像头"
+  },
+  "ExtensionCapture.0400": {
+    "en": "is using your microphone",
+    "zh-Hans": "正在使用麦克风"
+  },
+  "Extensions.0401": {
+    "en": "Already installed",
+    "zh-Hans": "已安装"
+  },
+  "Extensions.0402": {
+    "en": "Load Extension",
+    "zh-Hans": "加载扩展"
+  },
+  "Extensions.0403": {
+    "en": "Choose the folder that holds the extension's manifest.json.",
+    "zh-Hans": "选择包含扩展 manifest.json 的文件夹。"
+  },
+  "Extensions.0404": {
+    "en": "That folder has no manifest.json",
+    "zh-Hans": "此文件夹中没有 manifest.json"
+  },
+  "Extensions.0405": {
+    "en": "Couldn't install the extension: {0}",
+    "zh-Hans": "无法安装扩展：{0}"
+  },
+  "Extensions.0406": {
+    "en": "The folder {0} was loaded from is gone",
+    "zh-Hans": "找不到 {0} 的原始文件夹"
+  },
+  "Extensions.0407": {
+    "en": "Couldn't copy {0} again: {1}",
+    "zh-Hans": "无法重新复制 {0}：{1}"
+  },
+  "Extensions.0408": {
+    "en": "{0} wasn't reloaded — its manifest couldn't be read",
+    "zh-Hans": "{0} 未重新载入，无法读取清单"
+  },
+  "Extensions.0409": {
+    "en": "{0} wasn't reloaded — it asks for more than before",
+    "zh-Hans": "{0} 未重新载入，请求的权限比之前更多"
+  },
+  "Extensions.0410": {
+    "en": "Couldn't replace {0}: {1}",
+    "zh-Hans": "无法替换 {0}：{1}"
+  },
+  "Extensions.0411": {
+    "en": "{0} couldn't start — see Settings › Extensions",
+    "zh-Hans": "{0} 无法启动，请查看“设置 › 扩展”"
+  },
+  "Extensions.0412": {
+    "en": "{0} is installed",
+    "zh-Hans": "{0} 已安装"
+  },
+  "Extensions.0413": {
+    "en": "{0} is installed, but WebKit couldn't start it",
+    "zh-Hans": "{0} 已安装，但 WebKit 无法启动它"
+  },
+  "Extensions.0414": {
+    "en": "Show “{0}” in new tabs?",
+    "zh-Hans": "在新标签页中显示“{0}”？"
+  },
+  "Extensions.0415": {
+    "en": "It asked to replace the new tab page. You can change this later in Settings › Extensions.",
+    "zh-Hans": "此扩展请求替换新标签页。以后可在“设置 › 扩展”中更改。"
+  },
+  "Extensions.0416": {
+    "en": "Keep It",
+    "zh-Hans": "保留"
+  },
+  "Extensions.0417": {
+    "en": "Don't Allow",
+    "zh-Hans": "不允许"
+  },
+  "Extensions.0418": {
+    "en": "Run scripts you add to it on websites",
+    "zh-Hans": "在网站中运行你添加的脚本"
+  },
+  "Extensions.0419": {
+    "en": "Read and change your history",
+    "zh-Hans": "读取和修改历史记录"
+  },
+  "Extensions.0420": {
+    "en": "Read and change your bookmarks",
+    "zh-Hans": "读取和修改书签"
+  },
+  "Extensions.0421": {
+    "en": "Manage your downloads",
+    "zh-Hans": "管理下载"
+  },
+  "Extensions.0422": {
+    "en": "Change your privacy settings",
+    "zh-Hans": "修改隐私设置"
+  },
+  "Extensions.0423": {
+    "en": "Clear your browsing data",
+    "zh-Hans": "清除浏览数据"
+  },
+  "Extensions.0424": {
+    "en": "See your other extensions",
+    "zh-Hans": "查看其他扩展"
+  },
+  "Extensions.0425": {
+    "en": "Show notifications",
+    "zh-Hans": "显示通知"
+  },
+  "Extensions.0426": {
+    "en": "See your recently closed tabs",
+    "zh-Hans": "查看最近关闭的标签页"
+  },
+  "Extensions.0427": {
+    "en": "See your most visited sites",
+    "zh-Hans": "查看最常访问的网站"
+  },
+  "Extensions.0428": {
+    "en": "Read and change your reading list",
+    "zh-Hans": "读取和修改阅读列表"
+  },
+  "Extensions.0429": {
+    "en": "Open files it downloads",
+    "zh-Hans": "打开其下载的文件"
+  },
+  "Extensions.0430": {
+    "en": "Record your screen or a window, when you choose what to share",
+    "zh-Hans": "在你选择共享范围后录制屏幕或窗口"
+  },
+  "Extensions.0431": {
+    "en": "Record a tab, when you ask it to",
+    "zh-Hans": "在你请求时录制标签页"
+  },
+  "Extensions.0432": {
+    "en": "Read and change everything on every website",
+    "zh-Hans": "读取和修改所有网站的内容"
+  },
+  "Extensions.0433": {
+    "en": "Read and change what's on ",
+    "zh-Hans": "读取和修改以下网站的内容："
+  },
+  "Extensions.0434": {
+    "en": " and {0} more",
+    "zh-Hans": "，以及另外 {0} 个网站"
+  },
+  "Extensions.0435": {
+    "en": "See your open tabs and their addresses",
+    "zh-Hans": "查看已打开的标签页及其地址"
+  },
+  "Extensions.0436": {
+    "en": "Read and change cookies",
+    "zh-Hans": "读取和修改 Cookie"
+  },
+  "Extensions.0437": {
+    "en": "See where you go",
+    "zh-Hans": "查看浏览的网站"
+  },
+  "Extensions.0438": {
+    "en": "See the requests pages make",
+    "zh-Hans": "查看网页发出的请求"
+  },
+  "Extensions.0439": {
+    "en": "Block or change requests pages make",
+    "zh-Hans": "拦截或修改网页请求"
+  },
+  "Extensions.0440": {
+    "en": "Write to the clipboard",
+    "zh-Hans": "写入剪贴板"
+  },
+  "Extensions.0441": {
+    "en": "Talk to apps on this Mac",
+    "zh-Hans": "与此 Mac 上的应用通信"
+  },
+  "Extensions.0442": {
+    "en": "Run scripts in pages",
+    "zh-Hans": "在网页中运行脚本"
+  },
+  "Extensions.0443": {
+    "en": "Add “{0}” to Search?",
+    "zh-Hans": "将“{0}”添加到 Search？"
+  },
+  "Extensions.0444": {
+    "en": "It doesn't ask for anything special.",
+    "zh-Hans": "此扩展没有请求特殊权限。"
+  },
+  "Extensions.0445": {
+    "en": "It will be able to:\n• ",
+    "zh-Hans": "此扩展将能够：\n•"
+  },
+  "Extensions.0446": {
+    "en": "Add Extension",
+    "zh-Hans": "添加扩展"
+  },
+  "Extensions.0447": {
+    "en": "Cancel",
+    "zh-Hans": "取消"
+  },
+  "Extensions.0448": {
+    "en": "asks for more access",
+    "zh-Hans": "请求更多权限"
+  },
+  "Extensions.0449": {
+    "en": "An extension",
+    "zh-Hans": "一个扩展"
+  },
+  "Extensions.0450": {
+    "en": "“{0}” wants to record your screen or a window.",
+    "zh-Hans": "“{0}”请求录制屏幕或窗口。"
+  },
+  "Extensions.0451": {
+    "en": "macOS will ask what to share. Search remembers your answer for {0}; Settings › Extensions takes it back.",
+    "zh-Hans": "macOS 会询问共享范围。Search 会记住你对 {0} 的选择，可在“设置 › 扩展”中撤销。"
+  },
+  "Extensions.0452": {
+    "en": "Continue",
+    "zh-Hans": "继续"
+  },
+  "Extensions.0453": {
+    "en": "Don't Allow",
+    "zh-Hans": "不允许"
+  },
+  "Extensions.0454": {
+    "en": "{0} {1}",
+    "zh-Hans": "{0} {1}"
+  },
+  "Extensions.0455": {
+    "en": "Allow",
+    "zh-Hans": "允许"
+  },
+  "Extensions.0456": {
+    "en": "Don't Allow",
+    "zh-Hans": "不允许"
+  },
+  "Extensions.0457": {
+    "en": "asks for more access",
+    "zh-Hans": "请求更多权限"
+  },
+  "Extensions.0458": {
+    "en": "every website",
+    "zh-Hans": "所有网站"
+  },
+  "Extensions.0459": {
+    "en": "wants to read and change {0}",
+    "zh-Hans": "请求读取和修改 {0}"
+  },
+  "Extensions.0460": {
+    "en": "Until you remove the extension.",
+    "zh-Hans": "权限会持续到你移除扩展为止。"
+  },
+  "Extensions.0461": {
+    "en": "Extensions",
+    "zh-Hans": "扩展"
+  },
+  "Extensions.0462": {
+    "en": "Unpin",
+    "zh-Hans": "取消固定"
+  },
+  "Extensions.0463": {
+    "en": "Pin to Toolbar",
+    "zh-Hans": "固定到工具栏"
+  },
+  "Extensions.0464": {
+    "en": "Options…",
+    "zh-Hans": "选项…"
+  },
+  "Extensions.0465": {
+    "en": "Reload",
+    "zh-Hans": "重新载入"
+  },
+  "Extensions.0466": {
+    "en": "Remove “{0}”…",
+    "zh-Hans": "移除“{0}”…"
+  },
+  "Extensions.0467": {
+    "en": "Remove “{0}”?",
+    "zh-Hans": "移除“{0}”？"
+  },
+  "Extensions.0468": {
+    "en": "Its settings and data go with it.",
+    "zh-Hans": "其设置和数据也会被删除。"
+  },
+  "Extensions.0469": {
+    "en": "Remove",
+    "zh-Hans": "移除"
+  },
+  "Extensions.0470": {
+    "en": "Cancel",
+    "zh-Hans": "取消"
+  },
+  "Extensions.0471": {
+    "en": "None of your extensions is on",
+    "zh-Hans": "没有已启用的扩展"
+  },
+  "Extensions.0472": {
+    "en": "Chrome Web Store…",
+    "zh-Hans": "Chrome 应用商店…"
+  },
+  "Extensions.0473": {
+    "en": "Load Unpacked…",
+    "zh-Hans": "加载解压后的扩展…"
+  },
+  "Extensions.0474": {
+    "en": "Manage Extensions…",
+    "zh-Hans": "管理扩展…"
+  },
+  "Extensions.0475": {
+    "en": "Reload from its folder",
+    "zh-Hans": "从文件夹重新载入"
+  },
+  "Extensions.0476": {
+    "en": "Unpin",
+    "zh-Hans": "取消固定"
+  },
+  "Extensions.0477": {
+    "en": "Pin to toolbar",
+    "zh-Hans": "固定到工具栏"
+  },
+  "ExtensionsUI.0478": {
+    "en": "Chrome extensions",
+    "zh-Hans": "Chrome 扩展"
+  },
+  "ExtensionsUI.0479": {
+    "en": "Need macOS 15.4 or later — the version whose WebKit can run them.",
+    "zh-Hans": "需要 macOS 15.4 或更新版本，其 WebKit 才能运行扩展。"
+  },
+  "ExtensionsUI.0480": {
+    "en": "Add from the Chrome Web Store",
+    "zh-Hans": "从 Chrome 应用商店添加"
+  },
+  "ExtensionsUI.0481": {
+    "en": "Open the Store",
+    "zh-Hans": "打开应用商店"
+  },
+  "ExtensionsUI.0482": {
+    "en": "Paste a link to an extension, or its id",
+    "zh-Hans": "粘贴扩展链接或扩展 ID"
+  },
+  "ExtensionsUI.0483": {
+    "en": "Add",
+    "zh-Hans": "添加"
+  },
+  "ExtensionsUI.0484": {
+    "en": "Or find it in the store and press Add to Search on its page.",
+    "zh-Hans": "也可在商店中找到扩展，并点击页面上的“添加到 Search”。"
+  },
+  "ExtensionsUI.0485": {
+    "en": "From another browser",
+    "zh-Hans": "从其他浏览器导入"
+  },
+  "ExtensionsUI.0486": {
+    "en": "What Chrome, Arc, Brave and the others added from the Chrome Web Store — installed fresh from the store, you say yes to each one",
+    "zh-Hans": "导入 Chrome、Arc、Brave 等浏览器中的商店扩展。会从商店重新安装，每个扩展都需要你确认"
+  },
+  "ExtensionsUI.0487": {
+    "en": "Bring them over…",
+    "zh-Hans": "导入扩展…"
+  },
+  "ExtensionsUI.0488": {
+    "en": "Allow on private tabs",
+    "zh-Hans": "允许在无痕标签页中使用"
+  },
+  "ExtensionsUI.0489": {
+    "en": "Off by default - a private tab keeps nothing, extensions included",
+    "zh-Hans": "默认关闭。无痕标签页不会保留数据，扩展也不例外"
+  },
+  "ExtensionsUI.0490": {
+    "en": "No extensions yet.",
+    "zh-Hans": "暂无扩展。"
+  },
+  "ExtensionsUI.0491": {
+    "en": "Load an unpacked extension",
+    "zh-Hans": "加载解压后的扩展"
+  },
+  "ExtensionsUI.0492": {
+    "en": "A folder with a manifest.json — your own, or one exported from another browser. Reload picks up what you've changed in it since.",
+    "zh-Hans": "选择包含 manifest.json 的文件夹，可以是自己开发或从其他浏览器导出的扩展。重新载入后应用文件更改"
+  },
+  "ExtensionsUI.0493": {
+    "en": "Choose…",
+    "zh-Hans": "选择…"
+  },
+  "ExtensionsUI.0494": {
+    "en": "Can record your screen — macOS asks what to share each time",
+    "zh-Hans": "可录制屏幕；macOS 每次都会询问共享范围"
+  },
+  "ExtensionsUI.0495": {
+    "en": "Remove",
+    "zh-Hans": "移除"
+  },
+  "ExtensionsUI.0496": {
+    "en": "Unpin",
+    "zh-Hans": "取消固定"
+  },
+  "ExtensionsUI.0497": {
+    "en": "Pin to Toolbar",
+    "zh-Hans": "固定到工具栏"
+  },
+  "ExtensionsUI.0498": {
+    "en": "Stop in New Tabs",
+    "zh-Hans": "不在新标签页中显示"
+  },
+  "ExtensionsUI.0499": {
+    "en": "Show in New Tabs",
+    "zh-Hans": "在新标签页中显示"
+  },
+  "ExtensionsUI.0500": {
+    "en": "Reload",
+    "zh-Hans": "重新载入"
+  },
+  "ExtensionsUI.0501": {
+    "en": "Options",
+    "zh-Hans": "选项"
+  },
+  "ExtensionsUI.0502": {
+    "en": "Remove",
+    "zh-Hans": "移除"
+  },
+  "ExtensionsUI.0503": {
+    "en": "From “{0}”",
+    "zh-Hans": "来自“{0}”"
+  },
+  "ExtensionsUI.0504": {
+    "en": "From a folder",
+    "zh-Hans": "来自文件夹"
+  },
+  "ExtensionsUI.0505": {
+    "en": "Version {0}",
+    "zh-Hans": "版本 {0}"
+  },
+  "ExtensionsUI.0506": {
+    "en": "Chrome Web Store",
+    "zh-Hans": "Chrome 应用商店"
+  },
+  "ExtensionsUI.0507": {
+    "en": "couldn't start",
+    "zh-Hans": "无法启动"
+  },
+  "ExtensionsUI.0508": {
+    "en": "shows in new tabs",
+    "zh-Hans": "显示在新标签页中"
+  },
+  "ExtensionsUI.0509": {
+    "en": "Adding…",
+    "zh-Hans": "正在添加…"
+  },
+  "ExtensionsUI.0510": {
+    "en": "Add this extension to Search",
+    "zh-Hans": "将此扩展添加到 Search"
+  },
+  "ExtensionsUI.0511": {
+    "en": "Add",
+    "zh-Hans": "添加"
+  },
+  "Fetching.0512": {
+    "en": "The file changed while the download was stopped.",
+    "zh-Hans": "下载暂停期间，文件已发生变化。"
+  },
+  "Fetching.0513": {
+    "en": "The server doesn't let this download pause.",
+    "zh-Hans": "服务器不支持暂停此下载。"
+  },
+  "Fetching.0514": {
+    "en": "The download failed for an unknown reason.",
+    "zh-Hans": "下载失败，原因未知。"
+  },
+  "Fetching.0515": {
+    "en": "Downloads (⇧⌘J)",
+    "zh-Hans": "下载（⇧⌘J）"
+  },
+  "Find.0516": {
+    "en": "Find on page",
+    "zh-Hans": "在页面中查找"
+  },
+  "Find.0517": {
+    "en": "Find on page",
+    "zh-Hans": "在页面中查找"
+  },
+  "Find.0518": {
+    "en": "Type text to search this page. Press Return to find the next match.",
+    "zh-Hans": "输入文字搜索此页面。按回车查找下一个匹配项。"
+  },
+  "Find.0519": {
+    "en": "Find result status",
+    "zh-Hans": "查找结果状态"
+  },
+  "Find.0520": {
+    "en": "Previous match",
+    "zh-Hans": "上一个匹配项"
+  },
+  "Find.0521": {
+    "en": "Find the previous match.",
+    "zh-Hans": "查找上一个匹配项。"
+  },
+  "Find.0522": {
+    "en": "Next match",
+    "zh-Hans": "下一个匹配项"
+  },
+  "Find.0523": {
+    "en": "Find the next match.",
+    "zh-Hans": "查找下一个匹配项。"
+  },
+  "Find.0524": {
+    "en": "Match case",
+    "zh-Hans": "区分大小写"
+  },
+  "Find.0525": {
+    "en": "Match uppercase and lowercase letters exactly.",
+    "zh-Hans": "精确匹配字母的大小写。"
+  },
+  "Find.0526": {
+    "en": "Whole words",
+    "zh-Hans": "全字匹配"
+  },
+  "Find.0527": {
+    "en": "Match complete words. This option is unavailable for PDF pages.",
+    "zh-Hans": "仅匹配完整单词。PDF 页面不支持此选项。"
+  },
+  "Find.0528": {
+    "en": "Search options",
+    "zh-Hans": "查找选项"
+  },
+  "Find.0529": {
+    "en": "Choose whether to match case or whole words.",
+    "zh-Hans": "选择是否区分大小写或匹配完整单词。"
+  },
+  "Find.0530": {
+    "en": "Search options",
+    "zh-Hans": "查找选项"
+  },
+  "Find.0531": {
+    "en": "Close Find on Page",
+    "zh-Hans": "关闭页面查找"
+  },
+  "Find.0532": {
+    "en": "Close the find field and clear its selection.",
+    "zh-Hans": "关闭查找框并清除选中内容。"
+  },
+  "Hidden.0533": {
+    "en": "This page",
+    "zh-Hans": "此页面"
+  },
+  "Hidden.0534": {
+    "en": "Nothing is hidden here.",
+    "zh-Hans": "此处没有隐藏元素。"
+  },
+  "Hidden.0535": {
+    "en": "Hidden on this site — rest on a line to see it",
+    "zh-Hans": "此网站的隐藏元素 — 将指针移至条目上可预览"
+  },
+  "Hidden.0536": {
+    "en": "Hide something…",
+    "zh-Hans": "隐藏元素…"
+  },
+  "Hidden.0537": {
+    "en": "Restore all",
+    "zh-Hans": "全部恢复"
+  },
+  "Hidden.0538": {
+    "en": "Restore",
+    "zh-Hans": "恢复"
+  },
+  "ImageMenu.0539": {
+    "en": "Open Image in New Tab",
+    "zh-Hans": "在新标签页中打开图片"
+  },
+  "ImageMenu.0540": {
+    "en": "Copy Image",
+    "zh-Hans": "复制图片"
+  },
+  "ImageMenu.0541": {
+    "en": "Download Image",
+    "zh-Hans": "下载图片"
+  },
+  "ImageMenu.0542": {
+    "en": "Copy Image Address",
+    "zh-Hans": "复制图片地址"
+  },
+  "ImageMenu.0543": {
+    "en": "Couldn't copy that image",
+    "zh-Hans": "无法复制此图片"
+  },
+  "ImageMenu.0544": {
+    "en": "Image copied",
+    "zh-Hans": "图片已复制"
+  },
+  "ImportFile.0545": {
+    "en": "{0}: Files read",
+    "zh-Hans": "{0}: 文件读取完成"
+  },
+  "ImportFile.0546": {
+    "en": "{0}: Scanning folders",
+    "zh-Hans": "{0}: 正在扫描文件夹"
+  },
+  "ImportFile.0547": {
+    "en": "{0}: Reading CSV",
+    "zh-Hans": "{0}: 正在读取 CSV"
+  },
+  "ImportFile.0548": {
+    "en": "{0}: File complete",
+    "zh-Hans": "{0}: 文件处理完成"
+  },
+  "ImportFile.0549": {
+    "en": "{0}: Reading history",
+    "zh-Hans": "{0}: 正在读取历史记录"
+  },
+  "ImportFile.0550": {
+    "en": "{0}: Parsing history",
+    "zh-Hans": "{0}: 正在解析历史记录"
+  },
+  "ImportFile.0551": {
+    "en": "{0}: Parsing history",
+    "zh-Hans": "{0}: 正在解析历史记录"
+  },
+  "ImportFile.0552": {
+    "en": "{0}: Extracting ZIP",
+    "zh-Hans": "{0}: 正在解压 ZIP"
+  },
+  "ImportFile.0553": {
+    "en": "{0}: ZIP extracted",
+    "zh-Hans": "{0}: ZIP 解压完成"
+  },
+  "ImportPanel.0554": {
+    "en": "Nothing in the other browser changes. Passwords go into your keychain.",
+    "zh-Hans": "原浏览器的数据不会改变。密码会保存在你的钥匙串中。"
+  },
+  "ImportPanel.0555": {
+    "en": "Looking on this Mac…",
+    "zh-Hans": "正在查找此 Mac 上的浏览器…"
+  },
+  "ImportPanel.0556": {
+    "en": "No other browser found on this Mac.",
+    "zh-Hans": "此 Mac 上未找到其他浏览器。"
+  },
+  "ImportPanel.0557": {
+    "en": "On this Mac",
+    "zh-Hans": "在此 Mac 上"
+  },
+  "ImportPanel.0558": {
+    "en": "Bring things over",
+    "zh-Hans": "导入浏览器数据"
+  },
+  "ImportPanel.0559": {
+    "en": "Show bookmarks",
+    "zh-Hans": "显示书签"
+  },
+  "ImportPanel.0560": {
+    "en": "Show passwords",
+    "zh-Hans": "显示密码"
+  },
+  "ImportPanel.0561": {
+    "en": "Bringing…",
+    "zh-Hans": "正在导入…"
+  },
+  "ImportPanel.0562": {
+    "en": "Bring them in",
+    "zh-Hans": "导入"
+  },
+  "ImportPanel.0563": {
+    "en": "Or from a file another browser exported…",
+    "zh-Hans": "或从其他浏览器导出的文件导入…"
+  },
+  "ImportPanel.0564": {
+    "en": "Safari — macOS keeps its data from other apps: in Safari, File › Export Browsing Data, then bring the file in below.",
+    "zh-Hans": "Safari — macOS 不允许其他应用直接读取其数据。请在 Safari 中选择“文件 › 导出浏览数据”，再在下方导入文件。"
+  },
+  "ImportPanel.0565": {
+    "en": "Brought before",
+    "zh-Hans": "此前导入"
+  },
+  "ImportPanel.0566": {
+    "en": "Profile",
+    "zh-Hans": "配置文件"
+  },
+  "ImportPanel.0567": {
+    "en": "Most recent: {0}",
+    "zh-Hans": "最近使用：{0}"
+  },
+  "ImportPanel.0568": {
+    "en": "All profiles",
+    "zh-Hans": "所有配置文件"
+  },
+  "ImportPanel.0569": {
+    "en": "Passwords",
+    "zh-Hans": "密码"
+  },
+  "ImportPanel.0570": {
+    "en": "None in {0}",
+    "zh-Hans": "{0} 中没有此类数据"
+  },
+  "ImportPanel.0571": {
+    "en": "macOS asks once for {0}'s keychain key",
+    "zh-Hans": "macOS 会请求一次访问 {0} 的钥匙串密钥"
+  },
+  "ImportPanel.0572": {
+    "en": "Read from {0}'s own files, unless it has a primary password",
+    "zh-Hans": "从 {0} 的文件读取，设置了主密码时除外"
+  },
+  "ImportPanel.0573": {
+    "en": "Bookmarks",
+    "zh-Hans": "书签"
+  },
+  "ImportPanel.0574": {
+    "en": "None in {0}",
+    "zh-Hans": "{0} 中没有此类数据"
+  },
+  "ImportPanel.0575": {
+    "en": "In a “{0}” folder, or at the top if you have none yet",
+    "zh-Hans": "保存到“{0}”文件夹；若尚无书签，则保存到顶层"
+  },
+  "ImportPanel.0576": {
+    "en": "Replace what came from {0} before",
+    "zh-Hans": "替换此前从 {0} 导入的书签"
+  },
+  "ImportPanel.0577": {
+    "en": "Its bookmarks from {0} go, and these come fresh; passwords only ever add",
+    "zh-Hans": "替换 {0} 导入的书签；密码只会新增"
+  },
+  "ImportPanel.0578": {
+    "en": "Nothing recorded from {0} yet — only what is new comes",
+    "zh-Hans": "尚无从 {0} 导入的记录，仅添加新内容"
+  },
+  "ImportPanel.0579": {
+    "en": "History",
+    "zh-Hans": "历史记录"
+  },
+  "ImportPanel.0580": {
+    "en": "None in {0}",
+    "zh-Hans": "{0} 中没有此类数据"
+  },
+  "ImportPanel.0581": {
+    "en": "The last {0} places",
+    "zh-Hans": "最近 {0} 条浏览记录"
+  },
+  "ImportPanel.0582": {
+    "en": "Spaces and pinned tabs",
+    "zh-Hans": "空间和固定标签页"
+  },
+  "ImportPanel.0583": {
+    "en": "{0}, {1} pinned — each a space here, its pinned tabs asleep in it, the favourites as pins",
+    "zh-Hans": "{0} 个空间、{1} 个固定标签页；导入后各空间独立保留，固定标签页处于休眠状态，收藏夹作为固定项"
+  },
+  "ImportPanel.0584": {
+    "en": "Extensions",
+    "zh-Hans": "扩展"
+  },
+  "ImportPanel.0585": {
+    "en": "{0} found — installed fresh from the Chrome Web Store, you say yes to each one",
+    "zh-Hans": "找到 {0} 个扩展，将从 Chrome 应用商店重新安装，每个都需确认"
+  },
+  "ImportPanel.0586": {
+    "en": "{0} is on this Mac, but nothing of it was found in {1}.",
+    "zh-Hans": "此 Mac 上有 {0}，但在 {1} 中未找到可导入的数据。"
+  },
+  "ImportPanel.0587": {
+    "en": " ({0} skipped: no address)",
+    "zh-Hans": "（跳过 {0} 项：缺少地址）"
+  },
+  "Keyword.0588": {
+    "en": "A word to type first, like yt",
+    "zh-Hans": "输入一个快捷词，例如 yt"
+  },
+  "Keyword.0589": {
+    "en": "One word, with no spaces in it",
+    "zh-Hans": "快捷词不能包含空格"
+  },
+  "Keyword.0590": {
+    "en": "{0} already goes to {1}",
+    "zh-Hans": "{0} 已用于搜索 {1}"
+  },
+  "Keyword.0591": {
+    "en": "An http or https address with %s once, where the words go",
+    "zh-Hans": "请输入 HTTP 或 HTTPS 地址，并用一个 %s 表示搜索词的位置"
+  },
+  "Links.0592": {
+    "en": "New Window",
+    "zh-Hans": "新建窗口"
+  },
+  "Little.0593": {
+    "en": "Open in Search",
+    "zh-Hans": "在 Search 中打开"
+  },
+  "Little.0594": {
+    "en": "Open in Search   ⌘O",
+    "zh-Hans": "在 Search 中打开   ⌘O"
+  },
+  "Little.0595": {
+    "en": "Not secure — ",
+    "zh-Hans": "不安全 —"
+  },
+  "Little.0596": {
+    "en": "Extension page",
+    "zh-Hans": "扩展页面"
+  },
+  "Little.0597": {
+    "en": "Not a website",
+    "zh-Hans": "非网站页面"
+  },
+  "Omnibox.0598": {
+    "en": "Searching {0}",
+    "zh-Hans": "正在搜索 {0}"
+  },
+  "Omnibox.0599": {
+    "en": "Search {0}",
+    "zh-Hans": "搜索 {0}"
+  },
+  "Omnibox.0600": {
+    "en": "Tab",
+    "zh-Hans": "Tab 键"
+  },
+  "Omnibox.0601": {
+    "en": "Search {0}, press Tab",
+    "zh-Hans": "搜索 {0}，按 Tab"
+  },
+  "Omnibox.0602": {
+    "en": "Enter a web address",
+    "zh-Hans": "输入网址"
+  },
+  "PaneStage.0603": {
+    "en": "Swap Pages",
+    "zh-Hans": "交换页面"
+  },
+  "PaneStage.0604": {
+    "en": "Even Out",
+    "zh-Hans": "均分宽度"
+  },
+  "PaneStage.0605": {
+    "en": "Separate",
+    "zh-Hans": "分离页面"
+  },
+  "PaneStage.0606": {
+    "en": "Close Both",
+    "zh-Hans": "关闭两侧页面"
+  },
+  "PaneStage.0607": {
+    "en": "Divider between the pages",
+    "zh-Hans": "页面间的分隔线"
+  },
+  "Passwords.0608": {
+    "en": "Passwords",
+    "zh-Hans": "密码"
+  },
+  "Passwords.0609": {
+    "en": "Search sites and accounts",
+    "zh-Hans": "搜索网站和账户"
+  },
+  "Passwords.0610": {
+    "en": "Cancel",
+    "zh-Hans": "取消"
+  },
+  "Passwords.0611": {
+    "en": "Add",
+    "zh-Hans": "添加"
+  },
+  "Passwords.0612": {
+    "en": "Nothing kept yet. Sign in somewhere and say yes, or bring yours in below.",
+    "zh-Hans": "暂无密码。登录网站时允许保存密码，或在下方导入。"
+  },
+  "Passwords.0613": {
+    "en": "Nothing matches.",
+    "zh-Hans": "没有匹配项。"
+  },
+  "Passwords.0614": {
+    "en": "Bring in from",
+    "zh-Hans": "导入来源"
+  },
+  "Passwords.0615": {
+    "en": "Bring in…",
+    "zh-Hans": "导入…"
+  },
+  "Passwords.0616": {
+    "en": "File…",
+    "zh-Hans": "文件…"
+  },
+  "Passwords.0617": {
+    "en": "1 password",
+    "zh-Hans": "1 个密码"
+  },
+  "Passwords.0618": {
+    "en": "{0} passwords",
+    "zh-Hans": "{0} 个密码"
+  },
+  "Passwords.0619": {
+    "en": "macOS asks once for that browser's keychain key. Nothing is changed there; everything lands in your own keychain, under Search.",
+    "zh-Hans": "macOS 会请求一次访问原浏览器的钥匙串密钥。原数据不会改变；导入内容保存在你自己的钥匙串中，归属 Search。"
+  },
+  "Passwords.0620": {
+    "en": "{0} accounts",
+    "zh-Hans": "{0} 个账户"
+  },
+  "Passwords.0621": {
+    "en": "No username",
+    "zh-Hans": "无用户名"
+  },
+  "Passwords.0622": {
+    "en": "Hide",
+    "zh-Hans": "隐藏"
+  },
+  "Passwords.0623": {
+    "en": "Show",
+    "zh-Hans": "显示"
+  },
+  "Passwords.0624": {
+    "en": "Copy",
+    "zh-Hans": "复制"
+  },
+  "Passwords.0625": {
+    "en": "Remove",
+    "zh-Hans": "移除"
+  },
+  "Passwords.0626": {
+    "en": "show the password for {0}",
+    "zh-Hans": "显示 {0} 的密码"
+  },
+  "Passwords.0627": {
+    "en": "Site",
+    "zh-Hans": "网站"
+  },
+  "Passwords.0628": {
+    "en": "Username",
+    "zh-Hans": "用户名"
+  },
+  "Passwords.0629": {
+    "en": "Password",
+    "zh-Hans": "密码"
+  },
+  "Passwords.0630": {
+    "en": "Save",
+    "zh-Hans": "保存"
+  },
+  "Peek.0631": {
+    "en": "Close (esc)",
+    "zh-Hans": "关闭（esc）"
+  },
+  "Peek.0632": {
+    "en": "Open as a tab (⌘↩)",
+    "zh-Hans": "作为标签页打开（⌘↩）"
+  },
+  "Peek.0633": {
+    "en": "Keep beside this page (⌥⌘↩)",
+    "zh-Hans": "在此页面旁打开（⌥⌘↩）"
+  },
+  "Plate.0634": {
+    "en": "Done   esc",
+    "zh-Hans": "完成   esc"
+  },
+  "Plate.0635": {
+    "en": "Search",
+    "zh-Hans": "搜索"
+  },
+  "Prefs.0636": {
+    "en": "Letters",
+    "zh-Hans": "字母"
+  },
+  "Prefs.0637": {
+    "en": "Site icons",
+    "zh-Hans": "网站图标"
+  },
+  "Prefs.0638": {
+    "en": "Left",
+    "zh-Hans": "左侧"
+  },
+  "Prefs.0639": {
+    "en": "Right",
+    "zh-Hans": "右侧"
+  },
+  "Recall.0640": {
+    "en": "Today",
+    "zh-Hans": "今天"
+  },
+  "Recall.0641": {
+    "en": "Yesterday",
+    "zh-Hans": "昨天"
+  },
+  "Recall.0642": {
+    "en": "History",
+    "zh-Hans": "历史记录"
+  },
+  "Recall.0643": {
+    "en": "Search everywhere you have been",
+    "zh-Hans": "搜索浏览历史"
+  },
+  "Recall.0644": {
+    "en": "Nothing yet.",
+    "zh-Hans": "暂无记录。"
+  },
+  "Recall.0645": {
+    "en": "Nothing matches.",
+    "zh-Hans": "没有匹配项。"
+  },
+  "Recall.0646": {
+    "en": "1 page",
+    "zh-Hans": "1 个页面"
+  },
+  "Recall.0647": {
+    "en": "{0} pages",
+    "zh-Hans": "{0} 个页面"
+  },
+  "Recall.0648": {
+    "en": "Clear…",
+    "zh-Hans": "清除…"
+  },
+  "Recall.0649": {
+    "en": "History",
+    "zh-Hans": "历史记录"
+  },
+  "Recall.0650": {
+    "en": "Everywhere you have been",
+    "zh-Hans": "所有浏览记录"
+  },
+  "Recall.0651": {
+    "en": "Clear",
+    "zh-Hans": "清除"
+  },
+  "Recall.0652": {
+    "en": "Cookies and sign-ins",
+    "zh-Hans": "Cookie 和登录状态"
+  },
+  "Recall.0653": {
+    "en": "Signs you out of every site",
+    "zh-Hans": "退出所有网站的登录"
+  },
+  "Recall.0654": {
+    "en": "Sign out of everything",
+    "zh-Hans": "退出所有网站"
+  },
+  "Recall.0655": {
+    "en": "Cache",
+    "zh-Hans": "缓存"
+  },
+  "Recall.0656": {
+    "en": "Only what was fetched to draw pages",
+    "zh-Hans": "仅用于显示页面的缓存内容"
+  },
+  "Recall.0657": {
+    "en": "Clear",
+    "zh-Hans": "清除"
+  },
+  "Recall.0658": {
+    "en": "Back",
+    "zh-Hans": "后退"
+  },
+  "Recall.0659": {
+    "en": "Remove",
+    "zh-Hans": "移除"
+  },
+  "Recall.0660": {
+    "en": "Downloads",
+    "zh-Hans": "下载"
+  },
+  "Recall.0661": {
+    "en": "Nothing downloaded yet.",
+    "zh-Hans": "暂无下载。"
+  },
+  "Recall.0662": {
+    "en": "Current downloads",
+    "zh-Hans": "当前下载"
+  },
+  "Recall.0663": {
+    "en": "Completed",
+    "zh-Hans": "已完成"
+  },
+  "Recall.0664": {
+    "en": "Files land in {0}",
+    "zh-Hans": "文件保存至 {0}"
+  },
+  "Recall.0665": {
+    "en": "Clearing the list leaves the files where they are",
+    "zh-Hans": "清除列表不会删除已下载的文件"
+  },
+  "Recall.0666": {
+    "en": "Clear list",
+    "zh-Hans": "清除列表"
+  },
+  "Recall.0667": {
+    "en": "Downloading",
+    "zh-Hans": "正在下载"
+  },
+  "Recall.0668": {
+    "en": "Pausing…",
+    "zh-Hans": "正在暂停…"
+  },
+  "Recall.0669": {
+    "en": "Paused",
+    "zh-Hans": "已暂停"
+  },
+  "Recall.0670": {
+    "en": "Resuming…",
+    "zh-Hans": "正在恢复…"
+  },
+  "Recall.0671": {
+    "en": "Failed",
+    "zh-Hans": "失败"
+  },
+  "Recall.0672": {
+    "en": "The download failed.",
+    "zh-Hans": "下载失败。"
+  },
+  "Recall.0673": {
+    "en": "Pause",
+    "zh-Hans": "暂停"
+  },
+  "Recall.0674": {
+    "en": "Cancel",
+    "zh-Hans": "取消"
+  },
+  "Recall.0675": {
+    "en": "Pausing…",
+    "zh-Hans": "正在暂停…"
+  },
+  "Recall.0676": {
+    "en": "Cancel",
+    "zh-Hans": "取消"
+  },
+  "Recall.0677": {
+    "en": "Resume",
+    "zh-Hans": "继续"
+  },
+  "Recall.0678": {
+    "en": "Retry",
+    "zh-Hans": "重试"
+  },
+  "Recall.0679": {
+    "en": "Start the download again from the beginning",
+    "zh-Hans": "从头重新下载"
+  },
+  "Recall.0680": {
+    "en": "Remove",
+    "zh-Hans": "移除"
+  },
+  "Recall.0681": {
+    "en": "Resuming…",
+    "zh-Hans": "正在恢复…"
+  },
+  "Recall.0682": {
+    "en": "Cancel",
+    "zh-Hans": "取消"
+  },
+  "Recall.0683": {
+    "en": "Resume",
+    "zh-Hans": "继续"
+  },
+  "Recall.0684": {
+    "en": "Retry",
+    "zh-Hans": "重试"
+  },
+  "Recall.0685": {
+    "en": "Start the download again from the beginning",
+    "zh-Hans": "从头重新下载"
+  },
+  "Recall.0686": {
+    "en": "Remove",
+    "zh-Hans": "移除"
+  },
+  "Recall.0687": {
+    "en": "Show in Finder",
+    "zh-Hans": "在访达中显示"
+  },
+  "Recall.0688": {
+    "en": "Remove",
+    "zh-Hans": "移除"
+  },
+  "RecordingIndicator.0689": {
+    "en": "Stop",
+    "zh-Hans": "停止"
+  },
+  "RecordingIndicator.0690": {
+    "en": "Stop {0}",
+    "zh-Hans": "停止 {0}"
+  },
+  "RecordingIndicator.0691": {
+    "en": "Recording",
+    "zh-Hans": "正在录制"
+  },
+  "Settings.0692": {
+    "en": "General",
+    "zh-Hans": "通用"
+  },
+  "Settings.0693": {
+    "en": "Tabs",
+    "zh-Hans": "标签页"
+  },
+  "Settings.0694": {
+    "en": "Shortcuts",
+    "zh-Hans": "快捷键"
+  },
+  "Settings.0695": {
+    "en": "Extensions",
+    "zh-Hans": "扩展"
+  },
+  "Settings.0696": {
+    "en": "Passwords",
+    "zh-Hans": "密码"
+  },
+  "Settings.0697": {
+    "en": "Downloads",
+    "zh-Hans": "下载"
+  },
+  "Settings.0698": {
+    "en": "Privacy",
+    "zh-Hans": "隐私"
+  },
+  "Settings.0699": {
+    "en": "About",
+    "zh-Hans": "关于"
+  },
+  "Settings.0700": {
+    "en": "Settings",
+    "zh-Hans": "设置"
+  },
+  "Settings.0701": {
+    "en": "Done   esc",
+    "zh-Hans": "完成   esc"
+  },
+  "Settings.0702": {
+    "en": "Open links from other apps",
+    "zh-Hans": "打开其他应用中的链接"
+  },
+  "Settings.0703": {
+    "en": "Search is the default browser on this Mac",
+    "zh-Hans": "Search 已是此 Mac 的默认浏览器"
+  },
+  "Settings.0704": {
+    "en": "Mail, Slack and the rest still send links elsewhere",
+    "zh-Hans": "邮件、Slack 等应用的链接仍在其他浏览器中打开"
+  },
+  "Settings.0705": {
+    "en": "Make default",
+    "zh-Hans": "设为默认"
+  },
+  "Settings.0706": {
+    "en": "Links now open here",
+    "zh-Hans": "链接现在会在 Search 中打开"
+  },
+  "Settings.0707": {
+    "en": "macOS didn't change it",
+    "zh-Hans": "macOS 未更改默认浏览器"
+  },
+  "Settings.0708": {
+    "en": "Bring things over",
+    "zh-Hans": "导入浏览器数据"
+  },
+  "Settings.0709": {
+    "en": "Bookmarks, history, passwords and extensions from another browser on this Mac, or from a file it exported",
+    "zh-Hans": "从此 Mac 上的其他浏览器或其导出的文件中导入书签、历史记录、密码和扩展"
+  },
+  "Settings.0710": {
+    "en": "Bring Things Over…",
+    "zh-Hans": "导入浏览器数据…"
+  },
+  "Settings.0711": {
+    "en": "Search with",
+    "zh-Hans": "搜索引擎"
+  },
+  "Settings.0712": {
+    "en": "Site shortcuts",
+    "zh-Hans": "网站搜索快捷词"
+  },
+  "Settings.0713": {
+    "en": "Add",
+    "zh-Hans": "添加"
+  },
+  "Settings.0714": {
+    "en": "Cancel",
+    "zh-Hans": "取消"
+  },
+  "Settings.0715": {
+    "en": "Save",
+    "zh-Hans": "保存"
+  },
+  "Settings.0716": {
+    "en": "Appearance",
+    "zh-Hans": "外观"
+  },
+  "Settings.0717": {
+    "en": "Light, dark, or whatever the Mac is doing — pages follow it too",
+    "zh-Hans": "选择浅色、深色或跟随系统，网页也会采用相同外观"
+  },
+  "Settings.0718": {
+    "en": "Page zoom",
+    "zh-Hans": "页面缩放"
+  },
+  "Settings.0719": {
+    "en": "Where every site starts. ⌘+ and ⌘− are still remembered for each site.",
+    "zh-Hans": "网站的默认缩放比例。通过 ⌘+ 和 ⌘− 设置的比例仍会按网站单独保存。"
+  },
+  "Settings.0720": {
+    "en": "Correct spelling as you type",
+    "zh-Hans": "输入时自动纠正拼写"
+  },
+  "Settings.0721": {
+    "en": "macOS's autocorrect inside pages — the one that capitalises for you",
+    "zh-Hans": "在网页中使用 macOS 的自动纠正功能，包括自动大写"
+  },
+  "Settings.0722": {
+    "en": "Peek at a link with a shift-click",
+    "zh-Hans": "按住 Shift 单击预览链接"
+  },
+  "Settings.0723": {
+    "en": "Its page opens in a panel over the one you're reading. Escape puts it away; the other button keeps it as a tab",
+    "zh-Hans": "在当前页面上方打开预览面板。按 Esc 关闭，也可将预览保留为标签页"
+  },
+  "Settings.0724": {
+    "en": "Open links from other apps in a small window",
+    "zh-Hans": "在小窗口中打开其他应用的链接"
+  },
+  "Settings.0725": {
+    "en": "To read and close, or keep with Open in Search (⌘O)",
+    "zh-Hans": "阅读后关闭，或选择“在 Search 中打开”（⌘O）保留页面"
+  },
+  "Settings.0726": {
+    "en": "Address bar commands",
+    "zh-Hans": "地址栏命令"
+  },
+  "Settings.0727": {
+    "en": "A word like \"settings\" or \"new tab\", typed alone in the address field, goes there instead of searching for it",
+    "zh-Hans": "在地址栏单独输入“设置”或“新建标签页”等命令即可执行"
+  },
+  "Settings.0728": {
+    "en": "Show where links go",
+    "zh-Hans": "显示链接地址"
+  },
+  "Settings.0729": {
+    "en": "Point at a link and its address shows at the bottom of the page",
+    "zh-Hans": "将指针移到链接上时，在页面底部显示目标地址"
+  },
+  "Settings.0730": {
+    "en": "Scroll with the middle button",
+    "zh-Hans": "使用鼠标中键滚动"
+  },
+  "Settings.0731": {
+    "en": "Click the wheel on a page, then move the mouse up or down to scroll, as on Windows. Click again to stop",
+    "zh-Hans": "在页面中单击滚轮，再上下移动鼠标即可滚动。再次单击停止"
+  },
+  "Settings.0732": {
+    "en": "Pages at 120 Hz",
+    "zh-Hans": "以 120 Hz 刷新页面"
+  },
+  "Settings.0733": {
+    "en": "Animations and scrolling in pages at up to 120 frames a second on a screen that can, instead of 60 as in Safari. Uses more battery. Open tabs follow when reloaded",
+    "zh-Hans": "在支持的屏幕上，网页动画和滚动最高可达每秒 120 帧，会增加耗电。已打开的标签页重新载入后生效"
+  },
+  "Settings.0734": {
+    "en": "Hold a swipe to pick from history",
+    "zh-Hans": "滑动后按住以选择历史页面"
+  },
+  "Settings.0735": {
+    "en": "Swipe back or forward and keep your fingers down: the pages that way appear, and moving up or down picks one to go to",
+    "zh-Hans": "向后或向前滑动后保持手指按住，显示该方向的历史页面；上下移动选择要打开的页面"
+  },
+  "Settings.0736": {
+    "en": "Flick the floating video to a corner",
+    "zh-Hans": "滑动画中画窗口使其贴边"
+  },
+  "Settings.0737": {
+    "en": "Two fingers on it send it to the corner or edge they point at, instead of pushing it along; a strong swipe at the side of the screen it is against tucks it in there, a sliver left to bring it back by. Dragging still puts it anywhere",
+    "zh-Hans": "在画中画窗口上用双指滑动，可将其移至对应的屏幕边缘或角落。向贴近的边缘快速滑动可收起窗口，点击露出的边缘可恢复。仍可自由拖动"
+  },
+  "Settings.0738": {
+    "en": "Videos wait for a click",
+    "zh-Hans": "点击后才播放视频"
+  },
+  "Settings.0739": {
+    "en": "Videos don't start by themselves, even without sound; they play when you press play. Tabs already open follow once closed and opened again, or after they've slept",
+    "zh-Hans": "视频不会自动播放，即使已静音。点击播放才开始。已打开的标签页关闭重开或休眠后生效"
+  },
+  "Settings.0740": {
+    "en": "Float the video when you switch tabs",
+    "zh-Hans": "切换标签页时自动开启画中画"
+  },
+  "Settings.0741": {
+    "en": "A video playing on YouTube and the like comes out into its floating window when you go to another tab, and back when you return. ⇧⌘P still floats one by hand",
+    "zh-Hans": "切换标签页时，YouTube 等网站正在播放的视频会进入画中画；返回时恢复。也可按 ⇧⌘P 手动开启"
+  },
+  "Settings.0742": {
+    "en": "Float the video when you switch apps",
+    "zh-Hans": "切换应用时自动开启画中画"
+  },
+  "Settings.0743": {
+    "en": "A video playing on the site you're on comes out into its floating window as another app comes to the front, and goes back into its tab when you return",
+    "zh-Hans": "切换到其他应用时，当前网站正在播放的视频会进入画中画；返回时恢复到标签页"
+  },
+  "Settings.0744": {
+    "en": "Let a script drive Search",
+    "zh-Hans": "允许脚本控制 Search"
+  },
+  "Settings.0745": {
+    "en": "A local socket for testing. Its tabs open beside yours with a flask on them and never take over — see ./bench",
+    "zh-Hans": "启用用于测试的本地套接字。脚本标签页带有烧瓶图标，与普通标签页并列显示。详见 ./bench"
+  },
+  "Settings.0746": {
+    "en": "A word before your search goes straight to that site, whatever engine you've picked — \"yt cats\" to YouTube",
+    "zh-Hans": "在搜索词前加上快捷词即可搜索指定网站，例如“yt cats”会在 YouTube 搜索"
+  },
+  "Settings.0747": {
+    "en": "A word, then the site's search address with %s where the words go",
+    "zh-Hans": "输入快捷词及网站搜索地址，用 %s 表示搜索词的位置"
+  },
+  "Settings.0748": {
+    "en": "{0} will search {1}",
+    "zh-Hans": "{0} 将在 {1} 搜索"
+  },
+  "Settings.0749": {
+    "en": "Where words that aren't an address go",
+    "zh-Hans": "非网址的内容会通过此引擎搜索"
+  },
+  "Settings.0750": {
+    "en": "An http or https address with %s where the words go. Until then, Google",
+    "zh-Hans": "请输入含 %s 的 HTTP 或 HTTPS 搜索地址。设置有效前使用 Google"
+  },
+  "Settings.0751": {
+    "en": "Words go to {0}",
+    "zh-Hans": "搜索词将发送至 {0}"
+  },
+  "Settings.0752": {
+    "en": "Back, forward and reload on the left",
+    "zh-Hans": "在左侧显示后退、前进和重新载入按钮"
+  },
+  "Settings.0753": {
+    "en": "Beside the window's buttons, before the tabs",
+    "zh-Hans": "位于窗口按钮旁、标签页之前"
+  },
+  "Settings.0754": {
+    "en": "Tabs in a sidebar",
+    "zh-Hans": "在侧边栏显示标签页"
+  },
+  "Settings.0755": {
+    "en": "Down the {0} instead of across the top. Pull its edge to make it wider; double-click the edge to reset.",
+    "zh-Hans": "在{0}竖排显示标签页。拖动边缘调整宽度，双击边缘恢复默认。"
+  },
+  "Settings.0756": {
+    "en": "Sidebar position",
+    "zh-Hans": "侧边栏位置"
+  },
+  "Settings.0757": {
+    "en": "Tabs down the {0} edge of the window",
+    "zh-Hans": "标签页显示在窗口{0}"
+  },
+  "Settings.0758": {
+    "en": "Hide the sidebar until the pointer reaches the edge",
+    "zh-Hans": "指针移至边缘时才显示侧边栏"
+  },
+  "Settings.0759": {
+    "en": "The page takes the whole window; push against its {0} edge for the tabs. ⌘S keeps them out.",
+    "zh-Hans": "页面占满窗口；将指针移至{0}边缘显示标签页。按 ⌘S 保持侧边栏展开。"
+  },
+  "Settings.0760": {
+    "en": "Tabs show",
+    "zh-Hans": "标签页显示"
+  },
+  "Settings.0761": {
+    "en": "Beside the title, and on a pinned square",
+    "zh-Hans": "用于标题旁的图标和固定标签页方块"
+  },
+  "Settings.0762": {
+    "en": "Show the bookmarks bar",
+    "zh-Hans": "显示书签栏"
+  },
+  "Settings.0763": {
+    "en": "Your bookmarks in a row above the page, folders opening as menus. It folds away with the tabs",
+    "zh-Hans": "在页面上方显示书签，文件夹以菜单展开。书签栏会随标签栏一起收起"
+  },
+  "Settings.0764": {
+    "en": "Show how far you've read",
+    "zh-Hans": "显示阅读进度"
+  },
+  "Settings.0765": {
+    "en": "The tab you're on fills with grey as you scroll down the page",
+    "zh-Hans": "向下滚动时，当前标签页逐渐填充灰色以显示进度"
+  },
+  "Settings.0766": {
+    "en": "Sleep tabs you aren't using",
+    "zh-Hans": "休眠闲置标签页"
+  },
+  "Settings.0767": {
+    "en": "After half an hour away they come back where you left them. Pinned tabs, sound, calls and anything typed stay awake.",
+    "zh-Hans": "闲置半小时后休眠，再次打开时恢复原位置。固定标签页、音频、通话和有输入内容的页面保持活跃。"
+  },
+  "Settings.0768": {
+    "en": "Load background tabs when you go to them",
+    "zh-Hans": "切换到后台标签页时才加载"
+  },
+  "Settings.0769": {
+    "en": "A link opened behind the page, with ⌘-click or the middle button, or a batch of links from another app, waits until you go to its tab. ⇧⌘-click still takes you there at once.",
+    "zh-Hans": "通过 ⌘ 单击、鼠标中键或其他应用批量打开的后台链接，会等到切换到对应标签页时才加载。⇧⌘ 单击仍会立即打开。"
+  },
+  "Settings.0770": {
+    "en": "Search a site from the address field",
+    "zh-Hans": "在地址栏搜索网站"
+  },
+  "Settings.0771": {
+    "en": "Type the start of a site's name, like red or yout, then Tab, and what you type next searches that site. Sites you visit that offer a search join the list.",
+    "zh-Hans": "输入网站名称的开头，如 red 或 yout，再按 Tab，即可在该网站搜索。访问过且支持搜索的网站会加入列表。"
+  },
+  "Settings.0772": {
+    "en": "Start with a fresh window",
+    "zh-Hans": "启动时打开全新窗口"
+  },
+  "Settings.0773": {
+    "en": "Each time Search opens, your pinned tabs are there and last time's other tabs aren't.",
+    "zh-Hans": "每次启动 Search 时保留固定标签页，不恢复上次的其他标签页。"
+  },
+  "Settings.0774": {
+    "en": "Spaces",
+    "zh-Hans": "空间"
+  },
+  "Settings.0775": {
+    "en": "Separate sets of tabs, signed in where the others are or starting afresh, switched with ⌃1–⌃9, two fingers sideways over the column, or the space's icon. Mission Control's own ⌃1–⌃9, if you turned them on, take those keys first.",
+    "zh-Hans": "将标签页分为不同空间，可共享登录状态或独立登录。用 ⌃1–⌃9、在侧边栏双指横向滑动或点击空间图标切换。若启用了调度中心的同名快捷键，系统会优先处理。"
+  },
+  "Settings.0776": {
+    "en": "Tab groups",
+    "zh-Hans": "标签页分组"
+  },
+  "Settings.0777": {
+    "en": "Named sections in the sidebar. Right-click a tab to start a group; click its heading to hide or show its tabs.",
+    "zh-Hans": "在侧边栏中按名称分组。右键点击标签页创建分组，点击组标题展开或收起。"
+  },
+  "Settings.0778": {
+    "en": "Pinned rows",
+    "zh-Hans": "以列表显示固定标签页"
+  },
+  "Settings.0779": {
+    "en": "As in Arc: pins as squares for the sites you live in, pins as rows under them for pages you keep, and a line over the rest with Clear. Right-click a tab to pin it as a row.",
+    "zh-Hans": "类似 Arc：常用网站固定为方块，保留页面固定为下方列表，其余标签页上方显示“清除”。右键点击标签页可将其固定为列表项。"
+  },
+  "Settings.0780": {
+    "en": "Split View",
+    "zh-Hans": "分屏浏览"
+  },
+  "Settings.0781": {
+    "en": "Show two tabs side by side. Drag a tab onto a page to pair them.",
+    "zh-Hans": "并排显示两个标签页。将标签页拖到页面上即可组合。"
+  },
+  "Settings.0782": {
+    "en": "{0} does the saving — it asked Search not to offer",
+    "zh-Hans": "{0} 正在管理密码，已要求 Search 停止询问保存"
+  },
+  "Settings.0783": {
+    "en": "Asked once per site, never again for a site you refuse",
+    "zh-Hans": "每个网站询问一次；拒绝后不再询问"
+  },
+  "Settings.0784": {
+    "en": "Your passwords",
+    "zh-Hans": "已保存的密码"
+  },
+  "Settings.0785": {
+    "en": "In the macOS keychain, shown with Touch ID",
+    "zh-Hans": "保存在 macOS 钥匙串中，通过触控 ID 查看"
+  },
+  "Settings.0786": {
+    "en": "Open…",
+    "zh-Hans": "打开…"
+  },
+  "Settings.0787": {
+    "en": "Offer to save passwords",
+    "zh-Hans": "询问是否保存密码"
+  },
+  "Settings.0788": {
+    "en": "Fill in sign-ins",
+    "zh-Hans": "自动填充登录信息"
+  },
+  "Settings.0789": {
+    "en": "Click a sign-in box and the accounts kept for the site hang from it",
+    "zh-Hans": "点击登录输入框时，显示此网站已保存的账户"
+  },
+  "Settings.0790": {
+    "en": "Offer passkeys",
+    "zh-Hans": "启用通行密钥"
+  },
+  "Settings.0791": {
+    "en": "Needs an Apple entitlement this build doesn't have — off keeps sites to the password",
+    "zh-Hans": "当前构建缺少 Apple 所需的授权；关闭后网站仍使用密码登录"
+  },
+  "Settings.0792": {
+    "en": "macOS was told no — System Settings › Privacy & Security › Passkeys Access for Web Browsers",
+    "zh-Hans": "macOS 已拒绝访问；可在“系统设置 › 隐私与安全性 › 网页浏览器的通行密钥访问”中更改"
+  },
+  "Settings.0793": {
+    "en": "Touch ID or an iCloud passkey, on sites that offer one",
+    "zh-Hans": "在支持的网站上使用触控 ID 或 iCloud 通行密钥"
+  },
+  "Settings.0794": {
+    "en": "Sites never asked",
+    "zh-Hans": "不再询问的网站"
+  },
+  "Settings.0795": {
+    "en": "{0} sites told to stop offering",
+    "zh-Hans": "已在 {0} 个网站上停止询问"
+  },
+  "Settings.0796": {
+    "en": "Forget",
+    "zh-Hans": "清除"
+  },
+  "Settings.0797": {
+    "en": "Every site can ask again",
+    "zh-Hans": "所有网站均可再次询问"
+  },
+  "Settings.0798": {
+    "en": "Bring yours in",
+    "zh-Hans": "导入密码"
+  },
+  "Settings.0799": {
+    "en": "From another browser on this Mac — nothing leaves it",
+    "zh-Hans": "从此 Mac 上的其他浏览器导入，数据不会离开本机"
+  },
+  "Settings.0800": {
+    "en": "Import…",
+    "zh-Hans": "导入…"
+  },
+  "Settings.0801": {
+    "en": "Save to",
+    "zh-Hans": "保存位置"
+  },
+  "Settings.0802": {
+    "en": "Change…",
+    "zh-Hans": "更改…"
+  },
+  "Settings.0803": {
+    "en": "Ask where to save each file",
+    "zh-Hans": "每次下载时询问保存位置"
+  },
+  "Settings.0804": {
+    "en": "Always show the downloads button",
+    "zh-Hans": "始终显示下载按钮"
+  },
+  "Settings.0805": {
+    "en": "Beside the other buttons, even with nothing downloading. Off, it shows only while a file comes in",
+    "zh-Hans": "没有正在下载的文件时也显示下载按钮。关闭后仅在下载过程中显示"
+  },
+  "Settings.0806": {
+    "en": "Block ads and trackers",
+    "zh-Hans": "拦截广告和跟踪器"
+  },
+  "Settings.0807": {
+    "en": "Third parties whose only job is to watch",
+    "zh-Hans": "拦截用于跟踪浏览行为的第三方内容"
+  },
+  "Settings.0808": {
+    "en": "Nothing is being blocked until this clears — try again, or restart Search",
+    "zh-Hans": "问题解决前不会拦截任何内容。请重试或重新启动 Search"
+  },
+  "Settings.0809": {
+    "en": "Try again",
+    "zh-Hans": "重试"
+  },
+  "Settings.0810": {
+    "en": "Block on {0}",
+    "zh-Hans": "在 {0} 上拦截"
+  },
+  "Settings.0811": {
+    "en": "Turn off here if the site breaks — the page reloads",
+    "zh-Hans": "若网站异常，可在此关闭拦截；页面会重新载入"
+  },
+  "Settings.0812": {
+    "en": "Prevent cross-site tracking",
+    "zh-Hans": "阻止跨网站跟踪"
+  },
+  "Settings.0813": {
+    "en": "As in Safari. Off, sites you rarely open keep their sign-ins, and trackers inside other sites can follow you across them again, as in Chrome. Private tabs keep it on",
+    "zh-Hans": "与 Safari 类似。关闭后，较少访问的网站会保留登录状态，第三方跟踪器也能跨网站跟踪。无痕标签页始终开启此功能"
+  },
+  "Settings.0814": {
+    "en": "Camera, microphone, location and notifications",
+    "zh-Hans": "摄像头、麦克风、位置和通知"
+  },
+  "Settings.0815": {
+    "en": "What each site was allowed or refused, and the sites whose videos don't float",
+    "zh-Hans": "各网站的允许或拒绝记录，以及禁用画中画的网站"
+  },
+  "Settings.0816": {
+    "en": "Forget choices",
+    "zh-Hans": "清除权限记录"
+  },
+  "Settings.0817": {
+    "en": "Let sites ask to send notifications",
+    "zh-Hans": "允许网站请求发送通知"
+  },
+  "Settings.0818": {
+    "en": "A site asks on a card over its page, and only one you allow reaches your Mac's notifications. Private tabs are never asked",
+    "zh-Hans": "网站会在页面上方请求权限，只有获准的网站才能发送 Mac 通知。无痕标签页不会询问"
+  },
+  "Settings.0819": {
+    "en": "History",
+    "zh-Hans": "历史记录"
+  },
+  "Settings.0820": {
+    "en": "Every address you have been to",
+    "zh-Hans": "访问过的所有地址"
+  },
+  "Settings.0821": {
+    "en": "Clear",
+    "zh-Hans": "清除"
+  },
+  "Settings.0822": {
+    "en": "Cookies and sign-ins",
+    "zh-Hans": "Cookie 和登录状态"
+  },
+  "Settings.0823": {
+    "en": "Signs you out of every site",
+    "zh-Hans": "退出所有网站的登录"
+  },
+  "Settings.0824": {
+    "en": "Sign out of everything",
+    "zh-Hans": "退出所有网站"
+  },
+  "Settings.0825": {
+    "en": "Cache",
+    "zh-Hans": "缓存"
+  },
+  "Settings.0826": {
+    "en": "Only what was fetched to draw pages",
+    "zh-Hans": "仅用于显示页面的缓存内容"
+  },
+  "Settings.0827": {
+    "en": "Clear",
+    "zh-Hans": "清除"
+  },
+  "Settings.0828": {
+    "en": "by Office Commun · version {0}",
+    "zh-Hans": "Office Commun 出品 · 版本 {0}"
+  },
+  "Settings.0829": {
+    "en": "Install updates on its own",
+    "zh-Hans": "自动安装更新"
+  },
+  "Settings.0830": {
+    "en": "Off, Search still looks every hour and tells you, and installs only when you press Install",
+    "zh-Hans": "关闭后，Search 仍会每小时检查并通知更新，点击“安装”后才会安装"
+  },
+  "Settings.0831": {
+    "en": "Found something wrong?",
+    "zh-Hans": "发现问题？"
+  },
+  "Settings.0832": {
+    "en": "Opens a draft with the version already in it",
+    "zh-Hans": "打开已填写版本信息的反馈草稿"
+  },
+  "Settings.0833": {
+    "en": "Send Feedback",
+    "zh-Hans": "发送反馈"
+  },
+  "Settings.0834": {
+    "en": "What's new",
+    "zh-Hans": "更新内容"
+  },
+  "Settings.0835": {
+    "en": "Every version's notes, newest first",
+    "zh-Hans": "各版本更新说明，最新版本在前"
+  },
+  "Settings.0836": {
+    "en": "What's New…",
+    "zh-Hans": "更新内容…"
+  },
+  "Settings.0837": {
+    "en": "Address",
+    "zh-Hans": "地址栏"
+  },
+  "Settings.0838": {
+    "en": "Switch tab",
+    "zh-Hans": "切换标签页"
+  },
+  "Settings.0839": {
+    "en": "New, close, reopen tab",
+    "zh-Hans": "新建、关闭、重新打开标签页"
+  },
+  "Settings.0840": {
+    "en": "Paste and go",
+    "zh-Hans": "粘贴并前往"
+  },
+  "Settings.0841": {
+    "en": "Copy address",
+    "zh-Hans": "复制地址"
+  },
+  "Settings.0842": {
+    "en": "Next tab, a tab by its place",
+    "zh-Hans": "切换到下一个标签页，或按位置切换"
+  },
+  "Settings.0843": {
+    "en": "Tabs in a sidebar",
+    "zh-Hans": "在侧边栏显示标签页"
+  },
+  "Settings.0844": {
+    "en": "Fold the sidebar away",
+    "zh-Hans": "收起侧边栏"
+  },
+  "Settings.0845": {
+    "en": "Reading mode",
+    "zh-Hans": "阅读模式"
+  },
+  "Settings.0846": {
+    "en": "Hide something on this site",
+    "zh-Hans": "隐藏网站元素"
+  },
+  "Settings.0847": {
+    "en": "Float the video",
+    "zh-Hans": "画中画"
+  },
+  "Settings.0848": {
+    "en": "Clear browsing data",
+    "zh-Hans": "清除浏览数据"
+  },
+  "Settings.0849": {
+    "en": "Updates",
+    "zh-Hans": "更新"
+  },
+  "Settings.0850": {
+    "en": "Search {0} is downloading…",
+    "zh-Hans": "正在下载 Search {0}…"
+  },
+  "Settings.0851": {
+    "en": "Search {0} is ready",
+    "zh-Hans": "Search {0} 已准备就绪"
+  },
+  "Settings.0852": {
+    "en": "Search {0} is out",
+    "zh-Hans": "Search {0} 已发布"
+  },
+  "Settings.0853": {
+    "en": "Checked {0} — every hour on its own",
+    "zh-Hans": "检查时间：{0}；每小时自动检查"
+  },
+  "Settings.0854": {
+    "en": "Checked every hour on its own",
+    "zh-Hans": "每小时自动检查"
+  },
+  "Settings.0855": {
+    "en": "Quietly, in the background — nothing you have set is touched",
+    "zh-Hans": "在后台下载，不会更改已有设置"
+  },
+  "Settings.0856": {
+    "en": "It's there the next time you open Search",
+    "zh-Hans": "下次启动 Search 时生效"
+  },
+  "Settings.0857": {
+    "en": "Open the disk image, the same as the first time",
+    "zh-Hans": "打开磁盘映像，按首次安装的方式安装"
+  },
+  "Settings.0858": {
+    "en": "Checked and put in place when you press Install",
+    "zh-Hans": "点击“安装”后校验并安装"
+  },
+  "Settings.0859": {
+    "en": "Checking…",
+    "zh-Hans": "正在检查…"
+  },
+  "Settings.0860": {
+    "en": "Check now",
+    "zh-Hans": "立即检查"
+  },
+  "Settings.0861": {
+    "en": "This is the latest one",
+    "zh-Hans": "已是最新版本"
+  },
+  "Settings.0862": {
+    "en": "Relaunch now",
+    "zh-Hans": "立即重新启动"
+  },
+  "Settings.0863": {
+    "en": "Downloading…",
+    "zh-Hans": "正在下载…"
+  },
+  "Settings.0864": {
+    "en": "Download",
+    "zh-Hans": "下载"
+  },
+  "Settings.0865": {
+    "en": "Install",
+    "zh-Hans": "安装"
+  },
+  "Settings.0866": {
+    "en": "Use this folder",
+    "zh-Hans": "使用此文件夹"
+  },
+  "Settings.0867": {
+    "en": "Back to {0}",
+    "zh-Hans": "恢复为 {0}"
+  },
+  "Settings.0868": {
+    "en": "Can send notifications",
+    "zh-Hans": "允许发送通知"
+  },
+  "Settings.0869": {
+    "en": "Remove",
+    "zh-Hans": "移除"
+  },
+  "Shield.0870": {
+    "en": "Couldn't build the block list",
+    "zh-Hans": "无法生成拦截列表"
+  },
+  "Shield.0871": {
+    "en": "WebKit has nowhere to compile it",
+    "zh-Hans": "WebKit 无法编译拦截列表"
+  },
+  "Shield.0872": {
+    "en": "Compiling the block list failed",
+    "zh-Hans": "编译拦截列表失败"
+  },
+  "Shortcuts.0873": {
+    "en": "Space",
+    "zh-Hans": "空格"
+  },
+  "Shortcuts.0874": {
+    "en": "Settings…",
+    "zh-Hans": "设置…"
+  },
+  "Shortcuts.0875": {
+    "en": "Welcome…",
+    "zh-Hans": "欢迎使用…"
+  },
+  "Shortcuts.0876": {
+    "en": "Passwords…",
+    "zh-Hans": "密码…"
+  },
+  "Shortcuts.0877": {
+    "en": "New Window",
+    "zh-Hans": "新建窗口"
+  },
+  "Shortcuts.0878": {
+    "en": "New Tab",
+    "zh-Hans": "新建标签页"
+  },
+  "Shortcuts.0879": {
+    "en": "New Private Tab",
+    "zh-Hans": "新建无痕标签页"
+  },
+  "Shortcuts.0880": {
+    "en": "Reopen Closed Tab",
+    "zh-Hans": "重新打开关闭的标签页"
+  },
+  "Shortcuts.0881": {
+    "en": "Open Address…",
+    "zh-Hans": "打开地址…"
+  },
+  "Shortcuts.0882": {
+    "en": "Close Tab",
+    "zh-Hans": "关闭标签页"
+  },
+  "Shortcuts.0883": {
+    "en": "Bring Things Over…",
+    "zh-Hans": "导入浏览器数据…"
+  },
+  "Shortcuts.0884": {
+    "en": "Share…",
+    "zh-Hans": "共享…"
+  },
+  "Shortcuts.0885": {
+    "en": "Print…",
+    "zh-Hans": "打印…"
+  },
+  "Shortcuts.0886": {
+    "en": "Find on Page…",
+    "zh-Hans": "在页面中查找…"
+  },
+  "Shortcuts.0887": {
+    "en": "Find Next",
+    "zh-Hans": "查找下一个"
+  },
+  "Shortcuts.0888": {
+    "en": "Find Previous",
+    "zh-Hans": "查找上一个"
+  },
+  "Shortcuts.0889": {
+    "en": "Show Tabs in Sidebar",
+    "zh-Hans": "在侧边栏显示标签页"
+  },
+  "Shortcuts.0890": {
+    "en": "Hide Sidebar or Tab Bar",
+    "zh-Hans": "隐藏侧边栏或标签栏"
+  },
+  "Shortcuts.0891": {
+    "en": "Reload Page",
+    "zh-Hans": "重新载入页面"
+  },
+  "Shortcuts.0892": {
+    "en": "Reload Page From Origin",
+    "zh-Hans": "从源站重新载入页面"
+  },
+  "Shortcuts.0893": {
+    "en": "Reading Mode",
+    "zh-Hans": "阅读模式"
+  },
+  "Shortcuts.0894": {
+    "en": "Float Video",
+    "zh-Hans": "画中画"
+  },
+  "Shortcuts.0895": {
+    "en": "Summarize Page",
+    "zh-Hans": "总结页面"
+  },
+  "Shortcuts.0896": {
+    "en": "Ask About This Page…",
+    "zh-Hans": "询问此页面…"
+  },
+  "Shortcuts.0897": {
+    "en": "Hide Elements…",
+    "zh-Hans": "隐藏页面元素…"
+  },
+  "Shortcuts.0898": {
+    "en": "Hidden on This Site…",
+    "zh-Hans": "此网站隐藏的元素…"
+  },
+  "Shortcuts.0899": {
+    "en": "Zoom In",
+    "zh-Hans": "放大"
+  },
+  "Shortcuts.0900": {
+    "en": "Zoom Out",
+    "zh-Hans": "缩小"
+  },
+  "Shortcuts.0901": {
+    "en": "Actual Size",
+    "zh-Hans": "实际大小"
+  },
+  "Shortcuts.0902": {
+    "en": "Web Inspector",
+    "zh-Hans": "网页检查器"
+  },
+  "Shortcuts.0903": {
+    "en": "JavaScript Console",
+    "zh-Hans": "JavaScript 控制台"
+  },
+  "Shortcuts.0904": {
+    "en": "Inspect Element",
+    "zh-Hans": "检查元素"
+  },
+  "Shortcuts.0905": {
+    "en": "Back",
+    "zh-Hans": "后退"
+  },
+  "Shortcuts.0906": {
+    "en": "Forward",
+    "zh-Hans": "前进"
+  },
+  "Shortcuts.0907": {
+    "en": "Next Tab",
+    "zh-Hans": "下一个标签页"
+  },
+  "Shortcuts.0908": {
+    "en": "Previous Tab",
+    "zh-Hans": "上一个标签页"
+  },
+  "Shortcuts.0909": {
+    "en": "Search Tabs…",
+    "zh-Hans": "搜索标签页…"
+  },
+  "Shortcuts.0910": {
+    "en": "Split Current Page",
+    "zh-Hans": "拆分当前页面"
+  },
+  "Shortcuts.0911": {
+    "en": "Focus Left Page",
+    "zh-Hans": "切换到左侧页面"
+  },
+  "Shortcuts.0912": {
+    "en": "Focus Right Page",
+    "zh-Hans": "切换到右侧页面"
+  },
+  "Shortcuts.0913": {
+    "en": "Focus Other Page",
+    "zh-Hans": "切换到另一侧页面"
+  },
+  "Shortcuts.0914": {
+    "en": "Swap Pages",
+    "zh-Hans": "交换页面"
+  },
+  "Shortcuts.0915": {
+    "en": "Separate Split Tabs",
+    "zh-Hans": "分离分屏标签页"
+  },
+  "Shortcuts.0916": {
+    "en": "Rename Tab",
+    "zh-Hans": "重命名标签页"
+  },
+  "Shortcuts.0917": {
+    "en": "Duplicate Tab",
+    "zh-Hans": "复制标签页"
+  },
+  "Shortcuts.0918": {
+    "en": "Copy Address",
+    "zh-Hans": "复制地址"
+  },
+  "Shortcuts.0919": {
+    "en": "Copy as Markdown Link",
+    "zh-Hans": "复制为 Markdown 链接"
+  },
+  "Shortcuts.0920": {
+    "en": "Paste and Go",
+    "zh-Hans": "粘贴并前往"
+  },
+  "Shortcuts.0921": {
+    "en": "Close Other Tabs",
+    "zh-Hans": "关闭其他标签页"
+  },
+  "Shortcuts.0922": {
+    "en": "Stop Sound in Tab",
+    "zh-Hans": "停止标签页声音"
+  },
+  "Shortcuts.0923": {
+    "en": "Add This Page",
+    "zh-Hans": "添加此页面"
+  },
+  "Shortcuts.0924": {
+    "en": "Show Bookmarks…",
+    "zh-Hans": "显示书签…"
+  },
+  "Shortcuts.0925": {
+    "en": "Show Bookmarks Bar",
+    "zh-Hans": "显示书签栏"
+  },
+  "Shortcuts.0926": {
+    "en": "Show History…",
+    "zh-Hans": "显示历史记录…"
+  },
+  "Shortcuts.0927": {
+    "en": "Downloads…",
+    "zh-Hans": "下载…"
+  },
+  "Shortcuts.0928": {
+    "en": "Clear Browsing Data…",
+    "zh-Hans": "清除浏览数据…"
+  },
+  "Shortcuts.0929": {
+    "en": "Clear History",
+    "zh-Hans": "清除历史记录"
+  },
+  "ShortcutsPage.0930": {
+    "en": "Search commands or keys",
+    "zh-Hans": "搜索命令或快捷键"
+  },
+  "ShortcutsPage.0931": {
+    "en": "No command called that, or on that key",
+    "zh-Hans": "没有匹配的命令或快捷键"
+  },
+  "ShortcutsPage.0932": {
+    "en": "Clear Shortcut",
+    "zh-Hans": "清除快捷键"
+  },
+  "ShortcutsPage.0933": {
+    "en": "Reset to Default",
+    "zh-Hans": "恢复默认"
+  },
+  "ShortcutsPage.0934": {
+    "en": "Reset All to Defaults",
+    "zh-Hans": "全部恢复默认"
+  },
+  "ShortcutsPage.0935": {
+    "en": "Extensions",
+    "zh-Hans": "扩展"
+  },
+  "ShortcutsPage.0936": {
+    "en": "Clear Shortcut",
+    "zh-Hans": "清除快捷键"
+  },
+  "ShortcutsPage.0937": {
+    "en": "Reset to Default",
+    "zh-Hans": "恢复默认"
+  },
+  "ShortcutsPage.0938": {
+    "en": "Used by {0} — press again",
+    "zh-Hans": "已被“{0}”使用，再按一次可替换"
+  },
+  "ShortcutsPage.0939": {
+    "en": "Type a shortcut",
+    "zh-Hans": "输入快捷键"
+  },
+  "ShortcutsPage.0940": {
+    "en": "None",
+    "zh-Hans": "无"
+  },
+  "ShortcutsPage.0941": {
+    "en": "Add ⌘, ⌥ or ⌃",
+    "zh-Hans": "请加上 ⌘、⌥ 或 ⌃"
+  },
+  "ShortcutsPage.0942": {
+    "en": "Can’t be changed",
+    "zh-Hans": "无法更改"
+  },
+  "ShortcutsPage.0943": {
+    "en": "Not for an extension",
+    "zh-Hans": "扩展不可使用此快捷键"
+  },
+  "ShortcutsPage.0944": {
+    "en": "Not for an extension",
+    "zh-Hans": "扩展不可使用此快捷键"
+  },
+  "ShortcutsPage.0945": {
+    "en": "{0} moved from {1}",
+    "zh-Hans": "{0} 已从“{1}”移至此命令"
+  },
+  "Side.0946": {
+    "en": "New tab",
+    "zh-Hans": "新建标签页"
+  },
+  "Side.0947": {
+    "en": "Recording",
+    "zh-Hans": "正在录制"
+  },
+  "Side.0948": {
+    "en": "Clear",
+    "zh-Hans": "清除"
+  },
+  "Side.0949": {
+    "en": "Close the tabs under the line. Pins and groups stay; ⇧⌘T brings them all back.",
+    "zh-Hans": "关闭分隔线下方的标签页。固定标签页和分组会保留；按 ⇧⌘T 可全部恢复。"
+  },
+  "Side.0950": {
+    "en": "Unmute Tab",
+    "zh-Hans": "取消标签页静音"
+  },
+  "Side.0951": {
+    "en": "Mute Tab",
+    "zh-Hans": "标签页静音"
+  },
+  "SiteCard.0952": {
+    "en": "File",
+    "zh-Hans": "文件"
+  },
+  "SiteCard.0953": {
+    "en": "Copy Address",
+    "zh-Hans": "复制地址"
+  },
+  "SiteCard.0954": {
+    "en": "Print…",
+    "zh-Hans": "打印…"
+  },
+  "SiteCard.0955": {
+    "en": "Zoom",
+    "zh-Hans": "缩放"
+  },
+  "SiteCard.0956": {
+    "en": "Zoom Out   ⌘-",
+    "zh-Hans": "缩小   ⌘-"
+  },
+  "SiteCard.0957": {
+    "en": "Actual Size   ⌘0",
+    "zh-Hans": "实际大小   ⌘0"
+  },
+  "SiteCard.0958": {
+    "en": "Zoom In   ⌘+",
+    "zh-Hans": "放大   ⌘+"
+  },
+  "SiteCard.0959": {
+    "en": "Play Sound by Itself",
+    "zh-Hans": "允许自动播放声音"
+  },
+  "SiteCard.0960": {
+    "en": "from the next page",
+    "zh-Hans": "下次加载页面时生效"
+  },
+  "SiteCard.0961": {
+    "en": "Don't Float Videos Here",
+    "zh-Hans": "此网站禁用画中画"
+  },
+  "SiteCard.0962": {
+    "en": "Show Certificate (Not Valid)…",
+    "zh-Hans": "显示证书（无效）…"
+  },
+  "SiteCard.0963": {
+    "en": "Show Certificate…",
+    "zh-Hans": "显示证书…"
+  },
+  "SiteCard.0964": {
+    "en": "Back",
+    "zh-Hans": "后退"
+  },
+  "SiteCard.0965": {
+    "en": "Connection is not secure",
+    "zh-Hans": "连接不安全"
+  },
+  "SiteCard.0966": {
+    "en": "This site's certificate isn't trusted by this Mac. Someone could be reading what you send.",
+    "zh-Hans": "此 Mac 不信任该网站的证书，你发送的信息可能被他人读取。"
+  },
+  "SiteCard.0967": {
+    "en": "Parts of this page are not secure",
+    "zh-Hans": "此页面的部分内容不安全"
+  },
+  "SiteCard.0968": {
+    "en": "The page came privately, but some of what it shows was fetched over plain http, where anyone on the network could read or change it.",
+    "zh-Hans": "页面通过加密连接加载，但部分内容使用明文 HTTP，网络上的其他人可能读取或修改这些内容。"
+  },
+  "SiteCard.0969": {
+    "en": "Connection is secure",
+    "zh-Hans": "连接安全"
+  },
+  "SiteCard.0970": {
+    "en": "Your information (for example, passwords or credit card numbers) is private when it is sent to this site.",
+    "zh-Hans": "你的信息（如密码或信用卡号）在发送到此网站时会受到加密保护。"
+  },
+  "SiteCard.0971": {
+    "en": "Connection is not secure",
+    "zh-Hans": "连接不安全"
+  },
+  "SiteCard.0972": {
+    "en": "Don't enter passwords or credit card numbers here: anything sent to this site can be read on the way.",
+    "zh-Hans": "请勿在此输入密码或信用卡号，发送到此网站的信息可能在传输途中被读取。"
+  },
+  "Sleep.0973": {
+    "en": "on screen",
+    "zh-Hans": "正在显示"
+  },
+  "Sleep.0974": {
+    "en": "a bench tab",
+    "zh-Hans": "测试标签页"
+  },
+  "Sleep.0975": {
+    "en": "already asleep",
+    "zh-Hans": "已休眠"
+  },
+  "Sleep.0976": {
+    "en": "no page",
+    "zh-Hans": "没有页面"
+  },
+  "Sleep.0977": {
+    "en": "still loading",
+    "zh-Hans": "仍在加载"
+  },
+  "Sleep.0978": {
+    "en": "playing sound",
+    "zh-Hans": "正在播放声音"
+  },
+  "Sleep.0979": {
+    "en": "its video is out",
+    "zh-Hans": "正在画中画播放"
+  },
+  "Sleep.0980": {
+    "en": "on a call",
+    "zh-Hans": "正在通话"
+  },
+  "Sleep.0981": {
+    "en": "recording the screen",
+    "zh-Hans": "正在录制屏幕"
+  },
+  "Sleep.0982": {
+    "en": "a question waiting",
+    "zh-Hans": "有待处理的请求"
+  },
+  "Sleep.0983": {
+    "en": "the page on screen came from it",
+    "zh-Hans": "当前页面由此标签页打开"
+  },
+  "Sleep.0984": {
+    "en": "the page on screen came from it",
+    "zh-Hans": "当前页面由此标签页打开"
+  },
+  "Sleep.0985": {
+    "en": "holding something typed",
+    "zh-Hans": "包含已输入的内容"
+  },
+  "SpaceSwipe.0986": {
+    "en": "Signed in wherever your other spaces are.",
+    "zh-Hans": "与其他空间共享 Cookie 和登录状态。"
+  },
+  "SpaceSwipe.0987": {
+    "en": "Its own cookies and sign-ins, starting from none.",
+    "zh-Hans": "使用独立的 Cookie 和登录状态，从空白开始。"
+  },
+  "SpaceSwipe.0988": {
+    "en": "Signed in",
+    "zh-Hans": "共享登录"
+  },
+  "SpaceSwipe.0989": {
+    "en": "Signed out",
+    "zh-Hans": "独立登录"
+  },
+  "SpaceSwipe.0990": {
+    "en": "Cancel",
+    "zh-Hans": "取消"
+  },
+  "SpaceSwipe.0991": {
+    "en": "Create",
+    "zh-Hans": "创建"
+  },
+  "SpaceSwipe.0992": {
+    "en": "New space",
+    "zh-Hans": "新建空间"
+  },
+  "SpaceSwipe.0993": {
+    "en": "Its own tabs.",
+    "zh-Hans": "使用独立的标签页。"
+  },
+  "SpaceSwipe.0994": {
+    "en": "Signed in",
+    "zh-Hans": "共享登录"
+  },
+  "SpaceSwipe.0995": {
+    "en": "Signed out",
+    "zh-Hans": "独立登录"
+  },
+  "SpaceSwipe.0996": {
+    "en": "Cancel",
+    "zh-Hans": "取消"
+  },
+  "SpaceSwipe.0997": {
+    "en": "Create",
+    "zh-Hans": "创建"
+  },
+  "SpaceSwipe.0998": {
+    "en": "New space — choose its icon",
+    "zh-Hans": "新建空间 — 选择图标"
+  },
+  "SpaceSwipe.0999": {
+    "en": "Choose an icon",
+    "zh-Hans": "选择图标"
+  },
+  "SpaceSwipe.1000": {
+    "en": "New space",
+    "zh-Hans": "新建空间"
+  },
+  "SpaceSwipe.1001": {
+    "en": "Name",
+    "zh-Hans": "名称"
+  },
+  "Spaces.1002": {
+    "en": "Slate",
+    "zh-Hans": "灰色"
+  },
+  "Spaces.1003": {
+    "en": "Blue",
+    "zh-Hans": "蓝色"
+  },
+  "Spaces.1004": {
+    "en": "Green",
+    "zh-Hans": "绿色"
+  },
+  "Spaces.1005": {
+    "en": "Orange",
+    "zh-Hans": "橙色"
+  },
+  "Spaces.1006": {
+    "en": "Red",
+    "zh-Hans": "红色"
+  },
+  "Spaces.1007": {
+    "en": "Violet",
+    "zh-Hans": "紫色"
+  },
+  "Spaces.1008": {
+    "en": "camera",
+    "zh-Hans": "摄像头"
+  },
+  "Spaces.1009": {
+    "en": "Work",
+    "zh-Hans": "工作"
+  },
+  "Spaces.1010": {
+    "en": "Office",
+    "zh-Hans": "办公"
+  },
+  "Spaces.1011": {
+    "en": "Desktop",
+    "zh-Hans": "台式机"
+  },
+  "Spaces.1012": {
+    "en": "Laptop",
+    "zh-Hans": "笔记本"
+  },
+  "Spaces.1013": {
+    "en": "Code",
+    "zh-Hans": "编程"
+  },
+  "Spaces.1014": {
+    "en": "Terminal",
+    "zh-Hans": "终端"
+  },
+  "Spaces.1015": {
+    "en": "Thinking",
+    "zh-Hans": "思考"
+  },
+  "Spaces.1016": {
+    "en": "Ideas",
+    "zh-Hans": "灵感"
+  },
+  "Spaces.1017": {
+    "en": "Games",
+    "zh-Hans": "游戏"
+  },
+  "Spaces.1018": {
+    "en": "Leisure",
+    "zh-Hans": "休闲"
+  },
+  "Spaces.1019": {
+    "en": "Café",
+    "zh-Hans": "咖啡"
+  },
+  "Spaces.1020": {
+    "en": "Music",
+    "zh-Hans": "音乐"
+  },
+  "Spaces.1021": {
+    "en": "Film",
+    "zh-Hans": "影视"
+  },
+  "Spaces.1022": {
+    "en": "Art",
+    "zh-Hans": "艺术"
+  },
+  "Spaces.1023": {
+    "en": "Photos",
+    "zh-Hans": "照片"
+  },
+  "Spaces.1024": {
+    "en": "Home",
+    "zh-Hans": "家庭"
+  },
+  "Spaces.1025": {
+    "en": "Reading",
+    "zh-Hans": "阅读"
+  },
+  "Spaces.1026": {
+    "en": "Studies",
+    "zh-Hans": "学习"
+  },
+  "Spaces.1027": {
+    "en": "Shopping",
+    "zh-Hans": "购物"
+  },
+  "Spaces.1028": {
+    "en": "Travel",
+    "zh-Hans": "旅行"
+  },
+  "Spaces.1029": {
+    "en": "Sport",
+    "zh-Hans": "运动"
+  },
+  "Spaces.1030": {
+    "en": "Nature",
+    "zh-Hans": "自然"
+  },
+  "Spaces.1031": {
+    "en": "Personal",
+    "zh-Hans": "个人"
+  },
+  "Spaces.1032": {
+    "en": "Personal",
+    "zh-Hans": "个人"
+  },
+  "Spaces.1033": {
+    "en": "{0} — ⌃1–⌃9, or two fingers {1} over the tabs, to switch",
+    "zh-Hans": "{0} — 按 ⌃1–⌃9 或在标签栏上双指{1}滑动切换"
+  },
+  "Spaces.1034": {
+    "en": "New Space…",
+    "zh-Hans": "新建空间…"
+  },
+  "Spaces.1035": {
+    "en": "Rename “{0}”…",
+    "zh-Hans": "重命名“{0}”…"
+  },
+  "Spaces.1036": {
+    "en": "Rename Space",
+    "zh-Hans": "重命名空间"
+  },
+  "Spaces.1037": {
+    "en": "Rename",
+    "zh-Hans": "重命名"
+  },
+  "Spaces.1038": {
+    "en": "Icon",
+    "zh-Hans": "图标"
+  },
+  "Spaces.1039": {
+    "en": "Move Left",
+    "zh-Hans": "左移"
+  },
+  "Spaces.1040": {
+    "en": "Move Right",
+    "zh-Hans": "右移"
+  },
+  "Spaces.1041": {
+    "en": "Downloads to “{0}”…",
+    "zh-Hans": "下载至“{0}”…"
+  },
+  "Spaces.1042": {
+    "en": "Downloads Folder…",
+    "zh-Hans": "下载文件夹…"
+  },
+  "Spaces.1043": {
+    "en": "Downloads to the Folder in Settings",
+    "zh-Hans": "使用设置中的下载文件夹"
+  },
+  "Spaces.1044": {
+    "en": "Delete “{0}”…",
+    "zh-Hans": "删除“{0}”…"
+  },
+  "Spaces.1045": {
+    "en": "Delete “{0}”?",
+    "zh-Hans": "删除“{0}”？"
+  },
+  "Spaces.1046": {
+    "en": "Its tabs close, and its cookies and sign-ins are erased from this Mac. History and bookmarks stay.",
+    "zh-Hans": "关闭该空间的标签页，并清除其 Cookie 和登录状态。历史记录和书签会保留。"
+  },
+  "Spaces.1047": {
+    "en": "Delete",
+    "zh-Hans": "删除"
+  },
+  "Spaces.1048": {
+    "en": "Cancel",
+    "zh-Hans": "取消"
+  },
+  "Spaces.1049": {
+    "en": "New Space",
+    "zh-Hans": "新建空间"
+  },
+  "Spaces.1050": {
+    "en": "Its own tabs. Signed in where your other spaces are, unless it starts afresh.",
+    "zh-Hans": "独立管理标签页。默认与其他空间共享登录状态，也可选择独立登录。"
+  },
+  "Spaces.1051": {
+    "en": "Work",
+    "zh-Hans": "工作"
+  },
+  "Spaces.1052": {
+    "en": "Start signed out, with its own cookies",
+    "zh-Hans": "从未登录状态开始，使用独立的 Cookie"
+  },
+  "Spaces.1053": {
+    "en": "Create",
+    "zh-Hans": "创建"
+  },
+  "Spaces.1054": {
+    "en": "Cancel",
+    "zh-Hans": "取消"
+  },
+  "Spaces.1055": {
+    "en": "Cancel",
+    "zh-Hans": "取消"
+  },
+  "Spaces.1056": {
+    "en": "Use for This Space",
+    "zh-Hans": "用于此空间"
+  },
+  "Spaces.1057": {
+    "en": "Downloads in this space go here. Cancel keeps the folder it has.",
+    "zh-Hans": "此空间的下载保存到此处。取消则保留原文件夹。"
+  },
+  "SplitTabItem.1058": {
+    "en": "Split tabs",
+    "zh-Hans": "分屏标签页"
+  },
+  "SplitTabItem.1059": {
+    "en": "Close the left page",
+    "zh-Hans": "关闭左侧页面"
+  },
+  "SplitTabItem.1060": {
+    "en": "Close the right page",
+    "zh-Hans": "关闭右侧页面"
+  },
+  "SplitTabItem.1061": {
+    "en": "New Tab",
+    "zh-Hans": "新建标签页"
+  },
+  "SplitTabItem.1062": {
+    "en": "Focused page",
+    "zh-Hans": "当前页面"
+  },
+  "SplitTabItem.1063": {
+    "en": "Click to focus this page; right-click for tab actions",
+    "zh-Hans": "单击切换到此页面；右键打开标签页菜单"
+  },
+  "SplitTabItem.1064": {
+    "en": "Focus page",
+    "zh-Hans": "切换到此页面"
+  },
+  "SplitTabItem.1065": {
+    "en": "Close tab",
+    "zh-Hans": "关闭标签页"
+  },
+  "SplitTabItem.1066": {
+    "en": "Asking a question",
+    "zh-Hans": "正在询问"
+  },
+  "SplitView.1067": {
+    "en": "New Tab",
+    "zh-Hans": "新建标签页"
+  },
+  "SplitView.1068": {
+    "en": "Click to focus this page",
+    "zh-Hans": "点击切换到此页面"
+  },
+  "SplitView.1069": {
+    "en": "Focus page",
+    "zh-Hans": "切换到此页面"
+  },
+  "SplitView.1070": {
+    "en": "New Tab",
+    "zh-Hans": "新建标签页"
+  },
+  "SplitView.1071": {
+    "en": "Page",
+    "zh-Hans": "页面"
+  },
+  "SplitView.1072": {
+    "en": "Page",
+    "zh-Hans": "页面"
+  },
+  "SplitView.1073": {
+    "en": "New Tab",
+    "zh-Hans": "新建标签页"
+  },
+  "SplitView.1074": {
+    "en": "Or bring in an open tab",
+    "zh-Hans": "或选择已打开的标签页"
+  },
+  "SplitView.1075": {
+    "en": "New Tab",
+    "zh-Hans": "新建标签页"
+  },
+  "SplitView.1076": {
+    "en": "Bring this tab into the split",
+    "zh-Hans": "将此标签页加入分屏"
+  },
+  "SplitView.1077": {
+    "en": "This page says",
+    "zh-Hans": "此页面提示"
+  },
+  "SplitView.1078": {
+    "en": "Cancel",
+    "zh-Hans": "取消"
+  },
+  "SplitView.1079": {
+    "en": "OK",
+    "zh-Hans": "好"
+  },
+  "SplitView.1080": {
+    "en": "{0} asks",
+    "zh-Hans": "{0} 请求确认"
+  },
+  "Stage.1081": {
+    "en": "This page is playing in the floating window.",
+    "zh-Hans": "此页面正在画中画窗口中播放。"
+  },
+  "Stage.1082": {
+    "en": "Try again",
+    "zh-Hans": "重试"
+  },
+  "Tab.1084": {
+    "en": "New Tab",
+    "zh-Hans": "新建标签页"
+  },
+  "Tab.1085": {
+    "en": "Open Link in New Tab",
+    "zh-Hans": "在新标签页中打开链接"
+  },
+  "Tab.1086": {
+    "en": "Search with {0}",
+    "zh-Hans": "使用 {0} 搜索"
+  },
+  "TabBar.1087": {
+    "en": "Back   ⌘[",
+    "zh-Hans": "后退   ⌘["
+  },
+  "TabBar.1088": {
+    "en": "Forward   ⌘]",
+    "zh-Hans": "前进   ⌘]"
+  },
+  "TabBar.1089": {
+    "en": "Stop   ⌘.",
+    "zh-Hans": "停止   ⌘."
+  },
+  "TabBar.1090": {
+    "en": "Reload   ⌘R",
+    "zh-Hans": "重新载入   ⌘R"
+  },
+  "TabBar.1091": {
+    "en": "Recording",
+    "zh-Hans": "正在录制"
+  },
+  "TabBar.1092": {
+    "en": "Move to Group",
+    "zh-Hans": "移至分组"
+  },
+  "TabBar.1093": {
+    "en": "New Group",
+    "zh-Hans": "新建分组"
+  },
+  "TabBar.1094": {
+    "en": "Remove from Group",
+    "zh-Hans": "移出分组"
+  },
+  "TabBar.1095": {
+    "en": "Pin",
+    "zh-Hans": "固定"
+  },
+  "TabBar.1096": {
+    "en": "Pin as Row",
+    "zh-Hans": "以列表形式固定"
+  },
+  "TabBar.1097": {
+    "en": "Show as Square",
+    "zh-Hans": "显示为方块"
+  },
+  "TabBar.1098": {
+    "en": "Show as Row",
+    "zh-Hans": "显示为列表"
+  },
+  "TabBar.1099": {
+    "en": "Back to Pinned Page",
+    "zh-Hans": "返回固定页面"
+  },
+  "TabBar.1100": {
+    "en": "Change Letter",
+    "zh-Hans": "更改字母"
+  },
+  "TabBar.1101": {
+    "en": "Unpin",
+    "zh-Hans": "取消固定"
+  },
+  "TabBar.1102": {
+    "en": "Move to Space",
+    "zh-Hans": "移至空间"
+  },
+  "TabBar.1103": {
+    "en": "New Space…",
+    "zh-Hans": "新建空间…"
+  },
+  "TabBar.1104": {
+    "en": "Pages moved to a Space with different sign-ins reopen there.",
+    "zh-Hans": "移至登录状态不同的空间后，页面会在该空间重新打开。"
+  },
+  "TabBar.1105": {
+    "en": "Swap Pages",
+    "zh-Hans": "交换页面"
+  },
+  "TabBar.1106": {
+    "en": "Separate Split Tabs",
+    "zh-Hans": "分离分屏标签页"
+  },
+  "TabBar.1107": {
+    "en": "Close Both Pages",
+    "zh-Hans": "关闭两个页面"
+  },
+  "TabBar.1108": {
+    "en": "Open in Split View",
+    "zh-Hans": "在分屏中打开"
+  },
+  "TabBar.1109": {
+    "en": "Move to New Window",
+    "zh-Hans": "移至新窗口"
+  },
+  "TabBar.1110": {
+    "en": "Move to Window",
+    "zh-Hans": "移至窗口"
+  },
+  "TabBar.1111": {
+    "en": "New Window",
+    "zh-Hans": "新建窗口"
+  },
+  "TabBar.1112": {
+    "en": "Rename",
+    "zh-Hans": "重命名"
+  },
+  "TabBar.1113": {
+    "en": "Duplicate",
+    "zh-Hans": "复制"
+  },
+  "TabBar.1114": {
+    "en": "Site Information…",
+    "zh-Hans": "网站信息…"
+  },
+  "TabBar.1115": {
+    "en": "Copy Address",
+    "zh-Hans": "复制地址"
+  },
+  "TabBar.1116": {
+    "en": "Copy as Markdown Link",
+    "zh-Hans": "复制为 Markdown 链接"
+  },
+  "TabBar.1117": {
+    "en": "Unmute Tab",
+    "zh-Hans": "取消标签页静音"
+  },
+  "TabBar.1118": {
+    "en": "Mute Tab",
+    "zh-Hans": "标签页静音"
+  },
+  "TabBar.1119": {
+    "en": "Put to Sleep",
+    "zh-Hans": "休眠"
+  },
+  "TabBar.1120": {
+    "en": "Stays awake: {0}",
+    "zh-Hans": "保持活跃：{0}"
+  },
+  "TabBar.1121": {
+    "en": "Close Tab",
+    "zh-Hans": "关闭标签页"
+  },
+  "TabBar.1122": {
+    "en": "Close Other Tabs",
+    "zh-Hans": "关闭其他标签页"
+  },
+  "TabGroups.1123": {
+    "en": "Group name",
+    "zh-Hans": "分组名称"
+  },
+  "TabGroups.1124": {
+    "en": "Rename Group",
+    "zh-Hans": "重命名分组"
+  },
+  "TabGroups.1125": {
+    "en": "Expand Group",
+    "zh-Hans": "展开分组"
+  },
+  "TabGroups.1126": {
+    "en": "Collapse Group",
+    "zh-Hans": "折叠分组"
+  },
+  "TabGroups.1127": {
+    "en": "Ungroup Tabs",
+    "zh-Hans": "取消标签页分组"
+  },
+  "TabGroups.1128": {
+    "en": "Close Group",
+    "zh-Hans": "关闭分组"
+  },
+  "TabSwitcher.1129": {
+    "en": "Switch to {0}",
+    "zh-Hans": "切换到 {0}"
+  },
+  "TabSwitcher.1130": {
+    "en": "Selected",
+    "zh-Hans": "已选中"
+  },
+  "Updater.1131": {
+    "en": "Search {0} is ready — relaunch to use it",
+    "zh-Hans": "Search {0} 已就绪，重新启动后生效"
+  },
+  "Updater.1132": {
+    "en": "Search {0} is downloading…",
+    "zh-Hans": "正在下载 Search {0}…"
+  },
+  "Updater.1133": {
+    "en": "Checking for updates…",
+    "zh-Hans": "正在检查更新…"
+  },
+  "Updater.1134": {
+    "en": "Search is up to date",
+    "zh-Hans": "Search 已是最新版本"
+  },
+  "Updater.1135": {
+    "en": "Search {0} is out — choose Install Update in the Search menu",
+    "zh-Hans": "Search {0} 已发布，请在 Search 菜单中选择“安装更新”"
+  },
+  "Updater.1136": {
+    "en": "Downloading Search {0}…",
+    "zh-Hans": "正在下载 Search {0}…"
+  },
+  "Updater.1137": {
+    "en": "That download didn't check out — get Search from officecommun.com/search",
+    "zh-Hans": "下载校验失败，请从 officecommun.com/search 下载 Search"
+  },
+  "Updater.1138": {
+    "en": "Search {0} is downloading…",
+    "zh-Hans": "正在下载 Search {0}…"
+  },
+  "Updater.1139": {
+    "en": "Search {0} is ready — it's there the next time you open it",
+    "zh-Hans": "Search {0} 已就绪，下次启动时生效"
+  },
+  "Updater.1140": {
+    "en": "Search {0} is out — choose Download Update in the Search menu",
+    "zh-Hans": "Search {0} 已发布，请在 Search 菜单中选择“下载更新”"
+  },
+  "Vault.1141": {
+    "en": "Reading password CSV…",
+    "zh-Hans": "正在读取密码 CSV…"
+  },
+  "Vault.1142": {
+    "en": "Saving passwords…",
+    "zh-Hans": "正在保存密码…"
+  },
+  "Vault.1143": {
+    "en": "Saving passwords…",
+    "zh-Hans": "正在保存密码…"
+  },
+  "Vault.1144": {
+    "en": "Reading password CSV…",
+    "zh-Hans": "正在读取密码 CSV…"
+  },
+  "Vault.1145": {
+    "en": "Reading password CSV…",
+    "zh-Hans": "正在读取密码 CSV…"
+  },
+  "Welcome.1146": {
+    "en": "A browser with nothing in the way. Four megabytes, the engine already in your Mac, and as little around the page as we could manage.",
+    "zh-Hans": "简洁轻巧的浏览器。仅约 4 MB，使用 Mac 内置引擎，让你专注于网页。"
+  },
+  "Welcome.1147": {
+    "en": "Bring things over.",
+    "zh-Hans": "导入浏览器数据。"
+  },
+  "Welcome.1148": {
+    "en": "Passwords go into your keychain, bookmarks into the menu, and history means the address field already knows where you go. Nothing in the other browser changes.",
+    "zh-Hans": "密码保存到钥匙串，书签显示在菜单中，历史记录用于补全地址。原浏览器的数据不会改变。"
+  },
+  "Welcome.1149": {
+    "en": "No other browser found on this Mac — nothing to bring.",
+    "zh-Hans": "此 Mac 上未找到其他浏览器，暂无可导入的数据。"
+  },
+  "Welcome.1150": {
+    "en": "{0} is on this Mac, but nothing of it was found in {1}.",
+    "zh-Hans": "此 Mac 上有 {0}，但在 {1} 中未找到可导入的数据。"
+  },
+  "Welcome.1151": {
+    "en": "From {0}",
+    "zh-Hans": "来自 {0}"
+  },
+  "Welcome.1152": {
+    "en": "Passwords",
+    "zh-Hans": "密码"
+  },
+  "Welcome.1153": {
+    "en": "macOS will ask once for that browser's keychain key",
+    "zh-Hans": "macOS 会请求一次访问该浏览器的钥匙串密钥"
+  },
+  "Welcome.1154": {
+    "en": "Bookmarks",
+    "zh-Hans": "书签"
+  },
+  "Welcome.1155": {
+    "en": "Folders and all, behind the bookmark button",
+    "zh-Hans": "包括文件夹，可通过书签按钮查看"
+  },
+  "Welcome.1156": {
+    "en": "History",
+    "zh-Hans": "历史记录"
+  },
+  "Welcome.1157": {
+    "en": "The last few thousand places, for finishing addresses",
+    "zh-Hans": "最近数千条浏览记录，用于补全地址"
+  },
+  "Welcome.1158": {
+    "en": "Bringing…",
+    "zh-Hans": "正在导入…"
+  },
+  "Welcome.1159": {
+    "en": "Bring them in",
+    "zh-Hans": "导入"
+  },
+  "Welcome.1160": {
+    "en": "From a file another browser exported…",
+    "zh-Hans": "从其他浏览器导出的文件导入…"
+  },
+  "Welcome.1161": {
+    "en": "Two ways to hold it.",
+    "zh-Hans": "两种标签页布局。"
+  },
+  "Welcome.1162": {
+    "en": "Titles across the top, or down the side. The grey slides to the tab you pick either way, and you can change your mind with ⇧⌘S.",
+    "zh-Hans": "标签页可横排在顶部或竖排在侧边，灰色背景指示当前标签页。按 ⇧⌘S 可随时切换布局。"
+  },
+  "Welcome.1163": {
+    "en": "Tab strip",
+    "zh-Hans": "标签栏"
+  },
+  "Welcome.1164": {
+    "en": "Sidebar",
+    "zh-Hans": "侧边栏"
+  },
+  "Welcome.1165": {
+    "en": "Tabs wear",
+    "zh-Hans": "标签页图标"
+  },
+  "Welcome.1166": {
+    "en": "Links from other apps.",
+    "zh-Hans": "其他应用中的链接。"
+  },
+  "Welcome.1167": {
+    "en": "A click in Mail, in Slack, in a PDF — macOS sends it to whichever browser is the default. It can be this one.",
+    "zh-Hans": "点击邮件、Slack 或 PDF 中的链接时，macOS 会用默认浏览器打开。你可以将 Search 设为默认浏览器。"
+  },
+  "Welcome.1168": {
+    "en": "Search is the default browser",
+    "zh-Hans": "Search 已是默认浏览器"
+  },
+  "Welcome.1169": {
+    "en": "Make Search the default",
+    "zh-Hans": "将 Search 设为默认浏览器"
+  },
+  "Welcome.1170": {
+    "en": "macOS asks in its own dialog",
+    "zh-Hans": "macOS 会显示系统确认对话框"
+  },
+  "Welcome.1171": {
+    "en": "A few things worth knowing",
+    "zh-Hans": "常用操作"
+  },
+  "Welcome.1172": {
+    "en": "A new tab. Type a place, or words to search.",
+    "zh-Hans": "新建标签页，输入网址或搜索词。"
+  },
+  "Welcome.1173": {
+    "en": "Every open tab, by name.",
+    "zh-Hans": "按名称查找已打开的标签页。"
+  },
+  "Welcome.1174": {
+    "en": "Settings, including passwords and updates.",
+    "zh-Hans": "打开设置，包括密码和更新。"
+  },
+  "Welcome.1175": {
+    "en": "Spaces: separate tabs and sign-ins. Turn them on in Settings › Tabs.",
+    "zh-Hans": "空间可分别管理标签页和登录状态。在“设置 › 标签页”中启用。"
+  },
+  "Welcome.1176": {
+    "en": "Split a page in two; ⌃⌘← and ⌃⌘→ go from one page to the other. Turn Split View on in Settings › Tabs.",
+    "zh-Hans": "分屏显示两个页面，用 ⌃⌘← 和 ⌃⌘→ 切换。在“设置 › 标签页”中启用分屏浏览。"
+  },
+  "Welcome.1177": {
+    "en": "Links from other apps can open in a small window. Settings › General.",
+    "zh-Hans": "其他应用的链接可在小窗口中打开。在“设置 › 通用”中启用。"
+  },
+  "Welcome.1178": {
+    "en": "AI summaries and questions about a page — off until you turn it on in Settings › AI.",
+    "zh-Hans": "使用 AI 总结页面或回答问题。在“设置 › AI”中启用。"
+  },
+  "Welcome.1179": {
+    "en": "Back",
+    "zh-Hans": "后退"
+  },
+  "Welcome.1180": {
+    "en": "Skip",
+    "zh-Hans": "跳过"
+  },
+  "Welcome.1181": {
+    "en": "Continue",
+    "zh-Hans": "继续"
+  },
+  "Welcome.1182": {
+    "en": "Start browsing",
+    "zh-Hans": "开始浏览"
+  },
+  "Welcome.1183": {
+    "en": "{0} passwords",
+    "zh-Hans": "{0} 个密码"
+  },
+  "Welcome.1184": {
+    "en": "passwords: macOS didn't hand over the key — allow it and try again",
+    "zh-Hans": "密码：macOS 未提供密钥，请允许访问后重试"
+  },
+  "Welcome.1185": {
+    "en": "passwords: {0} has a primary password — export them from it and bring in the CSV",
+    "zh-Hans": "密码：{0} 设置了主密码，请导出密码后导入 CSV 文件"
+  },
+  "Welcome.1186": {
+    "en": "passwords: nothing readable",
+    "zh-Hans": "密码：无可读取的数据"
+  },
+  "Welcome.1187": {
+    "en": "{0} bookmarks",
+    "zh-Hans": "{0} 个书签"
+  },
+  "Welcome.1188": {
+    "en": "{0} places",
+    "zh-Hans": "{0} 条浏览记录"
+  },
+  "WhatsNew.1189": {
+    "en": "AI on pages",
+    "zh-Hans": "网页 AI"
+  },
+  "WhatsNew.1190": {
+    "en": "Summarize a page or ask about it. Choose where it runs in Settings › AI.",
+    "zh-Hans": "总结网页或针对网页提问。在“设置 › AI”中选择运行位置。"
+  },
+  "WhatsNew.1191": {
+    "en": "Split View",
+    "zh-Hans": "分屏浏览"
+  },
+  "WhatsNew.1192": {
+    "en": "Two tabs side by side: drag a tab to the edge of a page, or press ⌥⌘N.",
+    "zh-Hans": "并排显示两个标签页：拖动标签页到页面边缘，或按 ⌥⌘N。"
+  },
+  "WhatsNew.1193": {
+    "en": "Search a site from the address field",
+    "zh-Hans": "在地址栏搜索网站"
+  },
+  "WhatsNew.1194": {
+    "en": "The start of a site's name, then Tab: red, Tab, and your words search Reddit.",
+    "zh-Hans": "输入网站名称的开头再按 Tab，例如输入 red、按 Tab 后即可在 Reddit 搜索。"
+  },
+  "WhatsNew.1195": {
+    "en": "Start with a fresh window",
+    "zh-Hans": "启动时打开全新窗口"
+  },
+  "WhatsNew.1196": {
+    "en": "Your pinned tabs, and none of last time's others.",
+    "zh-Hans": "保留固定标签页，不恢复上次的其他标签页。"
+  },
+  "WhatsNew.1197": {
+    "en": "Tab groups",
+    "zh-Hans": "标签页分组"
+  },
+  "WhatsNew.1198": {
+    "en": "Named sections of tabs. Right-click a tab to start one.",
+    "zh-Hans": "为标签页创建命名分组，右键点击标签页即可开始。"
+  },
+  "WhatsNew.1199": {
+    "en": "Sidebar on the right",
+    "zh-Hans": "右侧侧边栏"
+  },
+  "WhatsNew.1200": {
+    "en": "The tabs down the right edge of the window.",
+    "zh-Hans": "在窗口右侧竖排显示标签页。"
+  },
+  "WhatsNew.1201": {
+    "en": "Videos wait for a click",
+    "zh-Hans": "点击后才播放视频"
+  },
+  "WhatsNew.1202": {
+    "en": "Videos don't start by themselves, even without sound.",
+    "zh-Hans": "视频不会自动播放，即使已静音。"
+  },
+  "WhatsNew.1203": {
+    "en": "Always show the downloads button",
+    "zh-Hans": "始终显示下载按钮"
+  },
+  "WhatsNew.1204": {
+    "en": "Your downloads one click away, beside the other buttons.",
+    "zh-Hans": "在其他按钮旁显示下载按钮，一键查看下载。"
+  },
+  "WhatsNew.1205": {
+    "en": "Spaces",
+    "zh-Hans": "空间"
+  },
+  "WhatsNew.1206": {
+    "en": "Separate sets of tabs, each with its own sign-ins. ⌃1–⌃9 to switch.",
+    "zh-Hans": "使用独立的标签页和登录状态，按 ⌃1–⌃9 切换。"
+  },
+  "WhatsNew.1207": {
+    "en": "A sidebar that hides",
+    "zh-Hans": "自动隐藏侧边栏"
+  },
+  "WhatsNew.1208": {
+    "en": "The page takes the whole window; the tabs come out at the edge.",
+    "zh-Hans": "页面占满窗口，将指针移至边缘即可显示标签页。"
+  },
+  "WhatsNew.1209": {
+    "en": "Bookmarks bar",
+    "zh-Hans": "书签栏"
+  },
+  "WhatsNew.1210": {
+    "en": "Your bookmarks in a row above the page.",
+    "zh-Hans": "在页面上方显示书签栏。"
+  },
+  "WhatsNew.1211": {
+    "en": "Float the video when you switch apps",
+    "zh-Hans": "切换应用时自动开启画中画"
+  },
+  "WhatsNew.1212": {
+    "en": "A playing video follows you out into a small window.",
+    "zh-Hans": "切换应用时，正在播放的视频会进入画中画窗口。"
+  },
+  "WhatsNew.1213": {
+    "en": "Pages at 120 Hz",
+    "zh-Hans": "以 120 Hz 刷新页面"
+  },
+  "WhatsNew.1214": {
+    "en": "Smoother scrolling and animations on screens that can. Uses more battery.",
+    "zh-Hans": "在支持的屏幕上获得更流畅的滚动和动画，但会增加耗电。"
+  },
+  "WhatsNew.1215": {
+    "en": "Scroll with the middle button",
+    "zh-Hans": "使用鼠标中键滚动"
+  },
+  "WhatsNew.1216": {
+    "en": "Click the wheel, then move the mouse to scroll, as on Windows.",
+    "zh-Hans": "单击滚轮后移动鼠标即可滚动，操作与 Windows 类似。"
+  },
+  "WhatsNew.1217": {
+    "en": "27 September 2026",
+    "zh-Hans": "2026 年 9 月 27 日"
+  },
+  "WhatsNew.1218": {
+    "en": "Several windows, and a lot to discover. Most of what's new is off until you turn it on, and the card after the update offers it.",
+    "zh-Hans": "支持多窗口并新增多项功能。多数新功能默认关闭，可通过更新后的提示卡启用。"
+  },
+  "WhatsNew.1219": {
+    "en": "Several windows. ⌘N opens one with its own tabs; drag a tab out of the row, or use Move to Window in its menu, and it moves with its page as it is. Pinned tabs are the same in every window.",
+    "zh-Hans": "支持多窗口。⌘N 打开独立窗口；将标签页拖出标签栏，或在菜单中选择“移至窗口”，即可连同页面一起移动。所有窗口共享固定标签页。"
+  },
+  "WhatsNew.1220": {
+    "en": "Tab groups, and a sidebar on the right.",
+    "zh-Hans": "新增标签页分组和右侧侧边栏。"
+  },
+  "WhatsNew.1221": {
+    "en": "⌃Tab shows your recent tabs as pictures, the last one first: a quick ⌃Tab goes back to the tab you were on.",
+    "zh-Hans": "⌃Tab 以缩略图显示最近使用的标签页，最近使用的排在前面；快速按 ⌃Tab 可返回上一个标签页。"
+  },
+  "WhatsNew.1222": {
+    "en": "Your own keyboard shortcuts, in Settings › Shortcuts.",
+    "zh-Hans": "可在“设置 › 快捷键”中自定义快捷键。"
+  },
+  "WhatsNew.1223": {
+    "en": "Downloads show while they happen: a small circle fills beside the other buttons, and the Finder and the Dock show the progress too. The button can stay there for good.",
+    "zh-Hans": "下载时在按钮旁显示圆形进度，访达和程序坞也会显示进度。下载按钮可设置为始终显示。"
+  },
+  "WhatsNew.1224": {
+    "en": "Bring things over from Firefox, Zen, Helium, Comet, Opera, Chrome's other channels and Arc, its spaces and pinned tabs included, or from an exported file.",
+    "zh-Hans": "支持从 Firefox、Zen、Helium、Comet、Opera、Chrome 的其他版本及 Arc 导入数据，包括 Arc 的空间和固定标签页，也可导入已导出的文件。"
+  },
+  "WhatsNew.1225": {
+    "en": "Site shortcuts: a word of your own before a search sends it to that site, like yt cats to YouTube.",
+    "zh-Hans": "网站搜索快捷词：在搜索前加上自定义词即可搜索指定网站，例如用 yt cats 搜索 YouTube。"
+  },
+  "WhatsNew.1226": {
+    "en": "Bookmarks in the order you choose, folders of your own, and a card to name a bookmark as you add it.",
+    "zh-Hans": "支持书签排序、自建文件夹，添加书签时可在卡片中命名。"
+  },
+  "WhatsNew.1227": {
+    "en": "Videos can wait for a click, and every site can start at a zoom of your choice.",
+    "zh-Hans": "视频可设置为点击后播放，网站可使用自定义的默认缩放比例。"
+  },
+  "WhatsNew.1228": {
+    "en": "A double-click on a pinned tab takes it back to the page it was pinned at.",
+    "zh-Hans": "双击固定标签页可返回最初固定的页面。"
+  },
+  "WhatsNew.1229": {
+    "en": "Hold a back or forward swipe to pick a page from history.",
+    "zh-Hans": "向后或向前滑动后按住，可从历史记录中选择页面。"
+  },
+  "WhatsNew.1230": {
+    "en": "Scrolling asks far less of the window, and a tab still loading no longer keeps the Mac busy.",
+    "zh-Hans": "降低滚动时的窗口开销，正在加载的标签页也不再让 Mac 持续忙碌。"
+  },
+  "WhatsNew.1231": {
+    "en": "Where links go, peeking at a link with a shift-click, and flicking the floating video to a corner are now on.",
+    "zh-Hans": "默认开启链接地址显示、Shift 单击预览链接和滑动画中画窗口贴边。"
+  },
+  "WhatsNew.1232": {
+    "en": "Tab managers and other extensions see every tab, in every window.",
+    "zh-Hans": "标签页管理器等扩展可查看所有窗口中的标签页。"
+  },
+  "WhatsNew.1233": {
+    "en": "Window › Move & Resize and the Mac's tiling work with Search's window.",
+    "zh-Hans": "支持“窗口 › 移动与调整大小”和 Mac 的窗口平铺功能。"
+  },
+  "WhatsNew.1234": {
+    "en": "⌘K always opens the list of your tabs, whatever the page.",
+    "zh-Hans": "无论当前页面是什么，⌘K 都会打开标签页列表。"
+  },
+  "WhatsNew.1235": {
+    "en": "⌘← and ⌘→ go back and forward again.",
+    "zh-Hans": "恢复 ⌘← 和 ⌘→ 后退、前进功能。"
+  },
+  "WhatsNew.1236": {
+    "en": "Links from Notion and other apps bring Search to the front.",
+    "zh-Hans": "从 Notion 等应用打开链接时，Search 会切换到前台。"
+  },
+  "WhatsNew.1237": {
+    "en": "Addresses a dev server prints, like 0.0.0.0:3000, open.",
+    "zh-Hans": "支持打开开发服务器输出的地址，如 0.0.0.0:3000。"
+  },
+  "WhatsNew.1238": {
+    "en": "The tabs you had at quit are the ones that come back.",
+    "zh-Hans": "重启后恢复退出时的标签页。"
+  },
+  "WhatsNew.1239": {
+    "en": "The × closes a tab in the tab bar folded away with ⌘S.",
+    "zh-Hans": "修复用 ⌘S 收起标签栏后，× 按钮关闭标签页的问题。"
+  },
+  "WhatsNew.1240": {
+    "en": "1Password, Bitwarden, NordPass, Passbolt, iCloud Passwords and the Claude extension each get their fixes.",
+    "zh-Hans": "修复 1Password、Bitwarden、NordPass、Passbolt、iCloud 密码和 Claude 扩展的相关问题。"
+  },
+  "WhatsNew.1241": {
+    "en": "And many smaller fixes.",
+    "zh-Hans": "以及多项细节修复。"
+  },
+  "WhatsNew.1242": {
+    "en": "24 September 2026",
+    "zh-Hans": "2026 年 9 月 24 日"
+  },
+  "WhatsNew.1243": {
+    "en": "Security, and the mouse wheel.",
+    "zh-Hans": "安全性和鼠标滚轮改进。"
+  },
+  "WhatsNew.1244": {
+    "en": "Copying a saved password asks for Touch ID.",
+    "zh-Hans": "复制已保存密码时要求触控 ID 验证。"
+  },
+  "WhatsNew.1245": {
+    "en": "A mouse wheel scrolls smoothly again on x.com and pages like it.",
+    "zh-Hans": "恢复 x.com 等页面上的流畅滚轮滚动。"
+  },
+  "WhatsNew.1246": {
+    "en": "History opens at once.",
+    "zh-Hans": "加快历史记录面板的打开速度。"
+  },
+  "WhatsNew.1247": {
+    "en": "Music keeps playing when you switch spaces.",
+    "zh-Hans": "切换空间时音乐继续播放。"
+  },
+  "WhatsNew.1248": {
+    "en": "Pop-ups need a click.",
+    "zh-Hans": "弹出窗口需要用户点击才能打开。"
+  },
+  "WhatsNew.1249": {
+    "en": "The holes found in this week's reviews: an extension could read files outside its own folder, and a page or an ad could open another app without asking.",
+    "zh-Hans": "修复本周审查发现的漏洞：扩展可读取自身目录以外的文件，网页或广告可未经确认打开其他应用。"
+  },
+  "WhatsNew.1250": {
+    "en": "Bitwarden signs in to a self-hosted server, and extension popups hear what changes while they're open.",
+    "zh-Hans": "支持 Bitwarden 登录自托管服务器，扩展弹出窗口可在打开期间接收状态变化。"
+  },
+  "WhatsNew.1251": {
+    "en": "A link from Mail brings Search to the front, and a full-screen video no longer goes black.",
+    "zh-Hans": "邮件中的链接会让 Search 切换到前台，修复全屏视频黑屏问题。"
+  },
+  "WhatsNew.1252": {
+    "en": "Your extensions may each ask once more for their permissions at their next update.",
+    "zh-Hans": "扩展下次更新时，可能会再次请求权限确认。"
+  },
+  "WhatsNew.1253": {
+    "en": "24 September 2026",
+    "zh-Hans": "2026 年 9 月 24 日"
+  },
+  "WhatsNew.1254": {
+    "en": "Passkeys, password managers and Google.",
+    "zh-Hans": "通行密钥、密码管理器及 Google 兼容性改进。"
+  },
+  "WhatsNew.1255": {
+    "en": "A site's passkey button brings up the Mac's own passkey sheet: Touch ID, your iPhone, a security key.",
+    "zh-Hans": "网站的通行密钥按钮可调起 Mac 的系统面板，支持触控 ID、iPhone 和安全密钥。"
+  },
+  "WhatsNew.1256": {
+    "en": "Search can be the Mac's default browser.",
+    "zh-Hans": "Search 可设为 Mac 的默认浏览器。"
+  },
+  "WhatsNew.1257": {
+    "en": "Each off until you turn it on in Settings: a bookmarks bar, a peek at a link with a shift-click, the video that follows you to another app, pages at 120 Hz, and where a link goes.",
+    "zh-Hans": "新增书签栏、Shift 单击预览链接、切换应用时自动画中画、120 Hz 页面刷新和链接地址显示，可在设置中开启。"
+  },
+  "WhatsNew.1258": {
+    "en": "Mute a tab, share a page, copy a link as Markdown, the mouse's back and forward buttons, and spaces in the bar across the top.",
+    "zh-Hans": "支持标签页静音、共享页面、复制 Markdown 链接、鼠标前进后退按钮，以及在顶部标签栏中显示空间。"
+  },
+  "WhatsNew.1259": {
+    "en": "Faster to open, and new tabs in about 10 ms.",
+    "zh-Hans": "加快启动速度，新建标签页约需 10 毫秒。"
+  },
+  "WhatsNew.1260": {
+    "en": "Pages see nothing of Search that Safari doesn't show them, and a saved password is offered only on its own site.",
+    "zh-Hans": "网页能读取的浏览器信息与 Safari 保持一致，已保存密码仅在对应网站上提供。"
+  },
+  "WhatsNew.1261": {
+    "en": "1Password, Bitwarden and Proton Pass.",
+    "zh-Hans": "改进 1Password、Bitwarden 和 Proton Pass 的兼容性。"
+  },
+  "WhatsNew.1262": {
+    "en": "If passkeys still fail after the update, restart your Mac once.",
+    "zh-Hans": "更新后若通行密钥仍无法使用，请重启 Mac。"
+  },
+  "WhatsNew.1263": {
+    "en": "23 September 2026",
+    "zh-Hans": "2026 年 9 月 23 日"
+  },
+  "WhatsNew.1264": {
+    "en": "The first update, made of a day of your replies and pull requests.",
+    "zh-Hans": "首次更新，根据一天内收到的反馈和拉取请求改进。"
+  },
+  "WhatsNew.1265": {
+    "en": "Each off until you turn it on in Settings: Spaces, a sidebar that hides until the pointer reaches the edge, and the search engine of your choice.",
+    "zh-Hans": "新增空间、指针移至边缘才显示的侧边栏和自选搜索引擎，可在设置中启用。"
+  },
+  "WhatsNew.1266": {
+    "en": "⌘S folds the sidebar away, a middle-click closes a tab, a tab can be renamed, and the Web Inspector is in the View menu.",
+    "zh-Hans": "⌘S 可收起侧边栏，中键可关闭标签页，支持重命名标签页，并在“显示”菜单中加入网页检查器。"
+  },
+  "WhatsNew.1267": {
+    "en": "Search opens again on macOS 14.",
+    "zh-Hans": "恢复 macOS 14 上的启动支持。"
+  },
+  "WhatsNew.1268": {
+    "en": "Signing in to Google no longer reloads the page over and over with iCloud Passwords installed.",
+    "zh-Hans": "修复安装 iCloud 密码扩展后，登录 Google 时页面反复重载的问题。"
+  },
+  "WhatsNew.1269": {
+    "en": "⌘1–⌘9 on every keyboard layout, Tab between a form's fields, dragging tabs, a double-click along the top to fill the screen, and the Mac's beep while typing.",
+    "zh-Hans": "修复不同键盘布局下的 ⌘1–⌘9、表单 Tab 切换、拖动标签页、双击顶部填满屏幕，以及输入时的系统提示音问题。"
+  },
+  "WhatsNew.1270": {
+    "en": "23 September 2026",
+    "zh-Hans": "2026 年 9 月 23 日"
+  },
+  "WhatsNew.1271": {
+    "en": "The first version. A browser for the Mac with nothing in the way.",
+    "zh-Hans": "首个版本。为 Mac 打造的简洁浏览器。"
+  },
+  "WhatsNew.1272": {
+    "en": "Tabs in a row or down the side, pinned tabs that keep their place, and one field for addresses and searches.",
+    "zh-Hans": "标签页可横排或竖排，固定标签页保留位置，一个输入框同时用于网址和搜索。"
+  },
+  "WhatsNew.1273": {
+    "en": "Ads blocked before they load; passwords and passkeys in your keychain.",
+    "zh-Hans": "加载前拦截广告，密码和通行密钥保存在钥匙串中。"
+  },
+  "WhatsNew.1274": {
+    "en": "Anything on a page can be hidden; articles open in a reading mode and videos float.",
+    "zh-Hans": "可隐藏网页元素，文章支持阅读模式，视频支持画中画。"
+  },
+  "WhatsNew.1275": {
+    "en": "Chrome extensions from the Chrome Web Store, on macOS 15.4 or later.",
+    "zh-Hans": "在 macOS 15.4 或更新版本上支持 Chrome 应用商店扩展。"
+  },
+  "WhatsNew.1276": {
+    "en": "Tabs you haven't looked at for half an hour sleep and give their memory back.",
+    "zh-Hans": "半小时未查看的标签页会休眠并释放内存。"
+  },
+  "WhatsNew.1277": {
+    "en": "It runs on the engine already in macOS and weighs 2.9 MB.",
+    "zh-Hans": "使用 macOS 内置引擎，体积仅 2.9 MB。"
+  },
+  "WhatsNew.1278": {
+    "en": "New in Search {0}",
+    "zh-Hans": "Search {0} 的新功能"
+  },
+  "WhatsNew.1279": {
+    "en": "From earlier versions, in case you missed them",
+    "zh-Hans": "此前版本的功能"
+  },
+  "WhatsNew.1280": {
+    "en": "Everything that's new…",
+    "zh-Hans": "查看全部更新内容…"
+  },
+  "WhatsNew.1281": {
+    "en": "Close",
+    "zh-Hans": "关闭"
+  },
+  "WhatsNew.1282": {
+    "en": "What's New",
+    "zh-Hans": "更新内容"
+  },
+  "WhatsNew.1283": {
+    "en": "New",
+    "zh-Hans": "新增"
+  },
+  "WhatsNew.1284": {
+    "en": "Better",
+    "zh-Hans": "改进"
+  },
+  "WhatsNew.1285": {
+    "en": "Fixed",
+    "zh-Hans": "修复"
+  },
+  "Windows.1286": {
+    "en": "New Tab",
+    "zh-Hans": "新建标签页"
+  },
+  "Windows.1287": {
+    "en": "Window",
+    "zh-Hans": "窗口"
+  },
+  "Browser.1288": {
+    "en": "Merging bookmarks…",
+    "zh-Hans": "正在合并书签…"
+  },
+  "Browser.1289": {
+    "en": "Adding history…",
+    "zh-Hans": "正在添加历史记录…"
+  },
+  "Browser.1290": {
+    "en": "Saving passwords…",
+    "zh-Hans": "正在保存密码…"
+  },
+  "ExtensionsUI.1291": {
+    "en": "{0} warning{1}",
+    "zh-Hans": "{0} 条警告{1}"
+  },
+  "ImportPanel.1292": {
+    "en": "Counting…",
+    "zh-Hans": "正在统计…"
+  },
+  "ImportPanel.1293": {
+    "en": "{0} profiles",
+    "zh-Hans": "{0} 个配置文件"
+  },
+  "ImportPanel.1294": {
+    "en": "bookmark",
+    "zh-Hans": "个书签"
+  },
+  "ImportPanel.1295": {
+    "en": "place",
+    "zh-Hans": "条浏览记录"
+  },
+  "ImportPanel.1296": {
+    "en": "password",
+    "zh-Hans": "个密码"
+  },
+  "ImportPanel.1297": {
+    "en": "space",
+    "zh-Hans": "个空间"
+  },
+  "ImportPanel.1298": {
+    "en": "brought {0}",
+    "zh-Hans": "导入于 {0}"
+  },
+  "ImportPanel.1299": {
+    "en": "Nothing to bring in",
+    "zh-Hans": "没有可导入的数据"
+  },
+  "ImportPanel.1304": {
+    "en": "pinned tab",
+    "zh-Hans": "个固定标签页"
+  },
+  "ImportPanel.1305": {
+    "en": "Nothing new",
+    "zh-Hans": "没有新内容"
+  },
+  "ImportPanel.1306": {
+    "en": "1 password",
+    "zh-Hans": "1 个密码"
+  },
+  "ImportPanel.1307": {
+    "en": "{0} passwords",
+    "zh-Hans": "{0} 个密码"
+  },
+  "ImportPanel.1308": {
+    "en": "macOS didn't hand over {0}'s key — allow it and try again",
+    "zh-Hans": "macOS 未提供 {0} 的密钥，请允许访问后重试"
+  },
+  "ImportPanel.1309": {
+    "en": "{0} has a primary password: export your passwords from it and bring in the CSV file",
+    "zh-Hans": "{0} 设置了主密码，请先导出密码，再导入 CSV 文件"
+  },
+  "ImportPanel.1310": {
+    "en": "No passwords readable in {0}",
+    "zh-Hans": "{0} 中没有可读取的密码"
+  },
+  "ImportPanel.1311": {
+    "en": "Couldn't read all of {0}'s bookmarks: what came from it before was kept, {1} new",
+    "zh-Hans": "无法读取 {0} 的全部书签；此前导入的已保留，新增 {1} 个"
+  },
+  "ImportPanel.1312": {
+    "en": "No bookmarks in {0}",
+    "zh-Hans": "{0} 中没有书签"
+  },
+  "ImportPanel.1313": {
+    "en": "{0} bookmarks",
+    "zh-Hans": "{0} 个书签"
+  },
+  "ImportPanel.1314": {
+    "en": "{0} new bookmarks, {1} already here",
+    "zh-Hans": "新增 {0} 个书签，{1} 个已存在"
+  },
+  "ImportPanel.1315": {
+    "en": "{0} places",
+    "zh-Hans": "{0} 条浏览记录"
+  },
+  "ImportPanel.1316": {
+    "en": "1 extension to confirm",
+    "zh-Hans": "1 个扩展待确认"
+  },
+  "ImportPanel.1317": {
+    "en": "{0} extensions to confirm",
+    "zh-Hans": "{0} 个扩展待确认"
+  },
+  "ImportPanel.1318": {
+    "en": "Arc's spaces and pins were all here already",
+    "zh-Hans": "Arc 的空间和固定标签页已全部导入过"
+  },
+  "Browser.1323": {
+    "en": "new bookmarks",
+    "zh-Hans": "个新书签"
+  },
+  "Browser.1324": {
+    "en": "new bookmark",
+    "zh-Hans": "个新书签"
+  },
+  "Browser.1325": {
+    "en": "passwords",
+    "zh-Hans": "个密码"
+  },
+  "Browser.1326": {
+    "en": "password",
+    "zh-Hans": "个密码"
+  },
+  "Browser.1327": {
+    "en": "This page",
+    "zh-Hans": "此页面"
+  },
+  "Extensions.1328": {
+    "en": "An extension",
+    "zh-Hans": "一个扩展"
+  },
+  "Spaces.1329": {
+    "en": "up or down",
+    "zh-Hans": "上下"
+  },
+  "Spaces.1330": {
+    "en": "sideways",
+    "zh-Hans": "横向"
+  },
+  "SplitView.1331": {
+    "en": "This page",
+    "zh-Hans": "此页面"
+  },
+  "language.system": {
+    "en": "Follow System",
+    "zh-Hans": "跟随系统"
+  },
+  "language.title": {
+    "en": "Language",
+    "zh-Hans": "界面语言"
+  },
+  "language.detail": {
+    "en": "Choose the language for windows, menus and settings. Restart Search to apply changes.",
+    "zh-Hans": "选择窗口、菜单和设置的显示语言。更改后需重新启动 Search。"
+  },
+  "language.pending": {
+    "en": "Language change saved",
+    "zh-Hans": "语言设置已保存"
+  },
+  "language.restartDetail": {
+    "en": "The selected language takes effect after restarting Search.",
+    "zh-Hans": "重新启动 Search 后，所选语言会应用到所有窗口和菜单。"
+  },
+  "language.restart": {
+    "en": "Restart Search",
+    "zh-Hans": "重新启动 Search"
+  },
+  "section.file": {
+    "en": "File",
+    "zh-Hans": "文件"
+  },
+  "section.edit": {
+    "en": "Edit",
+    "zh-Hans": "编辑"
+  },
+  "section.view": {
+    "en": "View",
+    "zh-Hans": "显示"
+  },
+  "section.tabs": {
+    "en": "Tabs",
+    "zh-Hans": "标签页"
+  },
+  "section.bookmarks": {
+    "en": "Bookmarks",
+    "zh-Hans": "书签"
+  },
+  "section.history": {
+    "en": "History",
+    "zh-Hans": "历史记录"
+  },
+  "import.newSpace": {
+    "en": "new space",
+    "zh-Hans": "个新空间"
+  },
+  "import.pin": {
+    "en": "pin",
+    "zh-Hans": "个固定项"
+  },
+  "store.added": {
+    "en": "Added to Search",
+    "zh-Hans": "已添加到 Search"
+  },
+  "store.adding": {
+    "en": "Adding…",
+    "zh-Hans": "正在添加…"
+  },
+  "store.add": {
+    "en": "Add to Search",
+    "zh-Hans": "添加到 Search"
+  }
+}

@@ -136,7 +136,7 @@ extension Browser {
         }
         ask(from: webView, show: {
             let alert = Dialogs.alert(from: frame, saying: message)
-            alert.addButton(withTitle: "好")
+            alert.addButton(withTitle: L10n.text("Dialogs.0376"))
             Dialogs.show(alert, over: webView) { _ in completionHandler() }
         }, drop: completionHandler)
     }
@@ -152,8 +152,8 @@ extension Browser {
         }
         ask(from: webView, show: {
             let alert = Dialogs.alert(from: frame, saying: message)
-            alert.addButton(withTitle: "好")
-            alert.addButton(withTitle: "取消")
+            alert.addButton(withTitle: L10n.text("Dialogs.0377"))
+            alert.addButton(withTitle: L10n.text("Dialogs.0378"))
             Dialogs.show(alert, over: webView) { answer in
                 completionHandler(answer == .alertFirstButtonReturn)
             }
@@ -174,8 +174,8 @@ extension Browser {
         }
         ask(from: webView, show: {
             let alert = Dialogs.alert(from: frame, saying: prompt)
-            alert.addButton(withTitle: "好")
-            alert.addButton(withTitle: "取消")
+            alert.addButton(withTitle: L10n.text("Dialogs.0379"))
+            alert.addButton(withTitle: L10n.text("Dialogs.0380"))
             let field = NSTextField(string: defaultText ?? "")
             field.frame = NSRect(x: 0, y: 0, width: 260, height: 24)
             alert.accessoryView = field
@@ -211,7 +211,7 @@ extension Browser {
             panel.resolvesAliases = true
             // The site the file goes to, named.
             let host = frame.securityOrigin.host
-            panel.message = host.isEmpty ? "为此页面选择文件" : "为 \(host) 选择文件"
+            panel.message = host.isEmpty ? L10n.text("Dialogs.0381") : L10n.text("Dialogs.0382", String(describing: host))
             let finish: (NSApplication.ModalResponse) -> Void = { answer in
                 completionHandler(answer == .OK ? panel.urls : nil)
             }
@@ -279,11 +279,11 @@ extension Browser {
         // Over its own tab only, as a page's own questions are (see ask).
         ask(from: webView, show: {
             let alert = NSAlert()
-            alert.messageText = "无法验证 \(host) 的身份"
-            alert.informativeText = "此 Mac 不信任该网站的证书，你发送的信息可能被他人读取。仅在了解原因时继续。"
+            alert.messageText = L10n.text("Dialogs.0383", String(describing: host))
+            alert.informativeText = L10n.text("Dialogs.0384")
             alert.alertStyle = .warning
-            alert.addButton(withTitle: "返回")
-            alert.addButton(withTitle: "仍要继续")
+            alert.addButton(withTitle: L10n.text("Dialogs.0385"))
+            alert.addButton(withTitle: L10n.text("Dialogs.0386"))
             Dialogs.show(alert, over: webView) { answer in
                 guard answer == .alertSecondButtonReturn else {
                     completionHandler(.cancelAuthenticationChallenge, nil)
@@ -321,19 +321,19 @@ extension Browser {
     ) {
         let space = challenge.protectionSpace
         let alert = NSAlert()
-        alert.messageText = "\(space.host) 要求登录"
-        alert.informativeText = space.realm.map { "“\($0)”" } ?? "此网站需要用户名和密码。"
+        alert.messageText = L10n.text("Dialogs.0387", String(describing: space.host))
+        alert.informativeText = space.realm.map { "“\($0)”" } ?? L10n.text("Dialogs.0388")
         if challenge.previousFailureCount > 0 {
-            alert.informativeText += "\n登录信息未被接受，请重试。"
+            alert.informativeText += L10n.text("Dialogs.0389")
         }
-        alert.addButton(withTitle: "登录")
-        alert.addButton(withTitle: "取消")
+        alert.addButton(withTitle: L10n.text("Dialogs.0390"))
+        alert.addButton(withTitle: L10n.text("Dialogs.0391"))
 
         let box = NSView(frame: NSRect(x: 0, y: 0, width: 260, height: 56))
         let name = NSTextField(frame: NSRect(x: 0, y: 32, width: 260, height: 24))
-        name.placeholderString = "名称"
+        name.placeholderString = L10n.text("Dialogs.0392")
         let pass = NSSecureTextField(frame: NSRect(x: 0, y: 0, width: 260, height: 24))
-        pass.placeholderString = "密码"
+        pass.placeholderString = L10n.text("Dialogs.0393")
         name.nextKeyView = pass
         box.addSubview(name)
         box.addSubview(pass)
@@ -380,7 +380,7 @@ enum Dialogs {
         // The site's name as the title, so a page can't dress its message up
         // as one from the system or from the browser.
         let host = frame.securityOrigin.host
-        alert.messageText = host.isEmpty ? "此页面提示" : host
+        alert.messageText = host.isEmpty ? L10n.text("Dialogs.0394") : host
         alert.informativeText = message
         alert.alertStyle = .informational
         return alert

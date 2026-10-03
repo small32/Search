@@ -120,8 +120,8 @@ struct LittleView: View {
                     .lineLimit(1)
                 Spacer(minLength: 0)
                 if let keep {
-                    Pill("在 Search 中打开", action: keep)
-                        .help("在 Search 中打开   ⌘O")
+                    Pill(L10n.text("Little.0593"), action: keep)
+                        .help(L10n.text("Little.0594"))
                 } else {
                     Spacer().frame(width: 64)
                 }
@@ -141,9 +141,9 @@ struct LittleView: View {
         guard let url = tab.pageAddress else { return "" }
         switch url.scheme?.lowercased() {
         case "https": return SiteCard.site(url)
-        case "http": return "不安全 —" + SiteCard.site(url)
-        case "chrome-extension", "webkit-extension": return "扩展页面"
-        default: return url.absoluteString == "about:blank" ? "" : "非网站页面"
+        case "http": return L10n.text("Little.0595") + SiteCard.site(url)
+        case "chrome-extension", "webkit-extension": return L10n.text("Little.0596")
+        default: return url.absoluteString == "about:blank" ? "" : L10n.text("Little.0597")
         }
     }
 }

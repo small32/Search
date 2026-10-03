@@ -64,28 +64,28 @@ extension Browser {
     /// Why a tab has to stay awake — nil when nothing keeps it. The clock is
     /// the caller's business; this is everything else.
     func awake(because tab: Tab) -> String? {
-        if visibleTabIDs.contains(tab.id) { return "正在显示" }
+        if visibleTabIDs.contains(tab.id) { return L10n.text("Sleep.0973") }
         if tab.pin != nil { return "pinned" }
-        if tab.bench { return "测试标签页" }
+        if tab.bench { return L10n.text("Sleep.0974") }
         if tab.isBlank { return "blank" }
-        if tab.asleep { return "已休眠" }
-        guard let web = tab.built else { return "没有页面" }
-        if tab.loading { return "仍在加载" }
-        if tab.noisy { return "正在播放声音" }
-        if tab.floating || floating == tab.id { return "正在画中画播放" }
-        if web.cameraCaptureState != .none || web.microphoneCaptureState != .none { return "正在通话" }
-        if #available(macOS 15.4, *), ExtensionCapture.screen(web) { return "正在录制屏幕" }
+        if tab.asleep { return L10n.text("Sleep.0975") }
+        guard let web = tab.built else { return L10n.text("Sleep.0976") }
+        if tab.loading { return L10n.text("Sleep.0977") }
+        if tab.noisy { return L10n.text("Sleep.0978") }
+        if tab.floating || floating == tab.id { return L10n.text("Sleep.0979") }
+        if web.cameraCaptureState != .none || web.microphoneCaptureState != .none { return L10n.text("Sleep.0980") }
+        if #available(macOS 15.4, *), ExtensionCapture.screen(web) { return L10n.text("Sleep.0981") }
         if downloading.contains(where: { $0.webView === web }) { return "downloading" }
         if heldDialogs[tab.id]?.isEmpty == false || paneQuestions.contains(where: { $0.tab == tab.id }) {
-            return "有待处理的请求"
+            return L10n.text("Sleep.0982")
         }
         // A sign-in window hands its answer back to the page that opened it.
         if let pair = activeSplit {
             if tabs.contains(where: { pair.contains($0.id) && $0.opener == tab.id }) {
-                return "当前页面由此标签页打开"
+                return L10n.text("Sleep.0983")
             }
         } else if active?.opener == tab.id {
-            return "当前页面由此标签页打开"
+            return L10n.text("Sleep.0984")
         }
         return nil
     }
@@ -101,7 +101,7 @@ extension Browser {
         tab.unsaved { [weak self, weak tab] typed in
             guard let self, let tab else { return }
             if typed {
-                done?("包含已输入的内容")
+                done?(L10n.text("Sleep.0985"))
                 return
             }
             if let reason = self.awake(because: tab) {

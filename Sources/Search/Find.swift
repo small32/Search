@@ -18,14 +18,14 @@ struct FindBar: View {
         HStack(spacing: 6) {
             ZStack(alignment: .leading) {
                 if browser.needle.isEmpty {
-                    Text("在页面中查找")
+                    Text(L10n.text("Find.0516"))
                         .foregroundStyle(Palette.ink.opacity(0.3))
                 }
                 TextField("", text: $browser.needle)
                     .textFieldStyle(.plain)
                     .foregroundStyle(Palette.ink)
-                    .accessibilityLabel("在页面中查找")
-                    .accessibilityHint("输入文字搜索此页面。按回车查找下一个匹配项。")
+                    .accessibilityLabel(L10n.text("Find.0517"))
+                    .accessibilityHint(L10n.text("Find.0518"))
                     .focused($focused)
                     .onSubmit { browser.look(forward: true) }
             }
@@ -41,25 +41,25 @@ struct FindBar: View {
                     .lineLimit(1)
                     .fixedSize()
                     .accessibilityLabel(status)
-                    .accessibilityIdentifier("查找结果状态")
+                    .accessibilityIdentifier(L10n.text("Find.0519"))
             }
 
             // A pane too narrow for them keeps Return and ⇧Return instead.
             if !narrow {
-                step("chevron.up", label: "上一个匹配项", help: "查找上一个匹配项。") {
+                step("chevron.up", label: L10n.text("Find.0520"), help: L10n.text("Find.0521")) {
                     browser.look(forward: false)
                 }
-                step("chevron.down", label: "下一个匹配项", help: "查找下一个匹配项。") {
+                step("chevron.down", label: L10n.text("Find.0522"), help: L10n.text("Find.0523")) {
                     browser.look(forward: true)
                 }
             }
 
             Menu {
-                Toggle("区分大小写", isOn: $browser.matchCase)
-                    .help("精确匹配字母的大小写。")
-                Toggle("全字匹配", isOn: $browser.wholeWords)
+                Toggle(L10n.text("Find.0524"), isOn: $browser.matchCase)
+                    .help(L10n.text("Find.0525"))
+                Toggle(L10n.text("Find.0526"), isOn: $browser.wholeWords)
                     .disabled(browser.findResult?.nativeFallback == true && !browser.wholeWords)
-                    .help("仅匹配完整单词。PDF 页面不支持此选项。")
+                    .help(L10n.text("Find.0527"))
             } label: {
                 Image(systemName: "ellipsis")
                     .font(.system(size: 10, weight: .semibold))
@@ -70,11 +70,11 @@ struct FindBar: View {
             .menuStyle(.borderlessButton)
             .menuIndicator(.hidden)
             .fixedSize()
-            .accessibilityLabel("查找选项")
-            .accessibilityHint("选择是否区分大小写或匹配完整单词。")
-            .help("查找选项")
+            .accessibilityLabel(L10n.text("Find.0528"))
+            .accessibilityHint(L10n.text("Find.0529"))
+            .help(L10n.text("Find.0530"))
 
-            step("xmark", label: "关闭页面查找", help: "关闭查找框并清除选中内容。") {
+            step("xmark", label: L10n.text("Find.0531"), help: L10n.text("Find.0532")) {
                 browser.closeFind()
             }
         }

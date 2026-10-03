@@ -66,9 +66,9 @@ enum Look: String, CaseIterable, Identifiable {
 
     var title: String {
         switch self {
-        case .light: return "浅色"
-        case .dark: return "深色"
-        case .system: return "跟随系统"
+        case .light: return L10n.text("Design.0373")
+        case .dark: return L10n.text("Design.0374")
+        case .system: return L10n.text("Design.0375")
         }
     }
 

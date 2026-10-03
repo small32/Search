@@ -9,12 +9,12 @@ struct HiddenPanel: View {
     @ObservedObject var browser: Browser
 
     var body: some View {
-        Plate(browser.hereHost ?? "此页面", width: 380, close: { browser.reviewing = false }) {
+        Plate(browser.hereHost ?? L10n.text("Hidden.0533"), width: 380, close: { browser.reviewing = false }) {
             if browser.hereVeils.isEmpty {
-                Card { Nothing("此处没有隐藏元素。") }
+                Card { Nothing(L10n.text("Hidden.0534")) }
             } else {
                 VStack(alignment: .leading, spacing: 6) {
-                    Caption("此网站的隐藏元素 — 将指针移至条目上可预览")
+                    Caption(L10n.text("Hidden.0535"))
                     ScrollView(showsIndicators: false) {
                         Card {
                             ForEach(Array(browser.hereVeils.enumerated()), id: \.element.id) { index, veil in
@@ -33,9 +33,9 @@ struct HiddenPanel: View {
             }
         } foot: {
             HStack(spacing: 8) {
-                Pill("隐藏元素…", filled: true) { browser.toggleHiding() }
+                Pill(L10n.text("Hidden.0536"), filled: true) { browser.toggleHiding() }
                 if !browser.hereVeils.isEmpty {
-                    Pill("全部恢复") { browser.restoreAll() }
+                    Pill(L10n.text("Hidden.0537")) { browser.restoreAll() }
                 }
                 Spacer()
             }
@@ -70,7 +70,7 @@ struct HiddenPanel: View {
                 }
                 Spacer(minLength: 8)
 
-                Quick("恢复", act: restore)
+                Quick(L10n.text("Hidden.0538"), act: restore)
                     .opacity(hovering ? 1 : 0)
             }
             .padding(.horizontal, 14)

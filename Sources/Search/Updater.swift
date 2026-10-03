@@ -159,18 +159,18 @@ final class Updater: ObservableObject {
     func checkByHand() {
         switch stage {
         case .ready(let next):
-            say?("Search \(next.version) 已就绪，重新启动后生效")
+            say?(L10n.text("Updater.1131", String(describing: next.version)))
             return
         case .fetching(let next):
-            say?("正在下载 Search \(next.version)…")
+            say?(L10n.text("Updater.1132", String(describing: next.version)))
             return
         default: break
         }
         guard !checking else { return }
-        say?("正在检查更新…")
+        say?(L10n.text("Updater.1133"))
         check { [weak self] found in
             guard let self else { return }
-            if found == nil { self.say?("Search 已是最新版本"); return }
+            if found == nil { self.say?(L10n.text("Updater.1134")); return }
             // The waiting branch or `take` announces the next state afterward.
         }
     }
@@ -201,7 +201,7 @@ final class Updater: ObservableObject {
             case .waiting(let known) where known == found: break
             case .none, .offered, .waiting:
                 stage = .waiting(found)
-                say?("Search \(found.version) 已发布，请在 Search 菜单中选择“安装更新”")
+                say?(L10n.text("Updater.1135", String(describing: found.version)))
             }
         }
     }
@@ -216,7 +216,7 @@ final class Updater: ObservableObject {
     func openDisk() {
         guard case .offered(let release) = stage, !fetchingDisk else { return }
         fetchingDisk = true
-        say?("正在下载 Search \(release.version)…")
+        say?(L10n.text("Updater.1136", String(describing: release.version)))
         Task.detached(priority: .utility) {
             let result: Result<URL, Error>
             do { result = .success(try await Swap.disk(release)) } catch { result = .failure(error) }
@@ -228,7 +228,7 @@ final class Updater: ObservableObject {
                     if Store.testing { Updater.diskVerdict = "verified" } else { NSWorkspace.shared.open(dmg) }
                 case .failure(let error):
                     Updater.diskVerdict = "refused: \(error)"
-                    say?("下载校验失败，请从 officecommun.com/search 下载 Search")
+                    say?(L10n.text("Updater.1137"))
                 }
             }
         }
@@ -251,7 +251,7 @@ final class Updater: ObservableObject {
         case .none, .offered, .waiting: break
         }
         stage = .fetching(release)
-        say?("正在下载 Search \(release.version)…")
+        say?(L10n.text("Updater.1138", String(describing: release.version)))
         Task.detached(priority: .utility) {
             let worked: Bool
             do {
@@ -268,8 +268,8 @@ final class Updater: ObservableObject {
         guard case .fetching(let fetching) = stage, fetching == release else { return }
         stage = worked ? .ready(release) : .offered(release)
         say?(worked
-            ? "Search \(release.version) 已就绪，下次启动时生效"
-            : "Search \(release.version) 已发布，请在 Search 菜单中选择“下载更新”")
+            ? L10n.text("Updater.1139", String(describing: release.version))
+            : L10n.text("Updater.1140", String(describing: release.version)))
     }
 
     /// Quit, and come back as the new one. A shell waits for this process

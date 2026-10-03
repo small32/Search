@@ -103,7 +103,7 @@ final class StoreRelay: NSObject, WKScriptMessageHandler {
         var id = pageID();
         var installed = !!id && state.installed.indexOf(id) >= 0;
         var busy = !!id && state.busy === id;
-        label(ours, installed ? '已添加到 Search' : (busy ? '正在添加…' : '添加到 Search'));
+        label(ours, installed ? \(L10n.javaScriptString(L10n.text("store.added"))) : (busy ? \(L10n.javaScriptString(L10n.text("store.adding"))) : \(L10n.javaScriptString(L10n.text("store.add")))));
         ours.disabled = installed || busy;
       }
 

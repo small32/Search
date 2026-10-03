@@ -66,7 +66,7 @@ struct WelcomePanel: View {
                 Text("Search")
                     .font(.system(size: 34, weight: .medium))
                     .foregroundStyle(Palette.ink)
-                Text("简洁轻巧的浏览器。仅约 4 MB，使用 Mac 内置引擎，让你专注于网页。")
+                Text(L10n.text("Welcome.1146"))
                     .font(.system(size: 14.5))
                     .foregroundStyle(Palette.muted)
                     .multilineTextAlignment(.center)
@@ -78,14 +78,14 @@ struct WelcomePanel: View {
 
     private var bring: some View {
         VStack(alignment: .leading, spacing: 22) {
-            heading("导入浏览器数据。", "密码保存到钥匙串，书签显示在菜单中，历史记录用于补全地址。原浏览器的数据不会改变。")
+            heading(L10n.text("Welcome.1147"), L10n.text("Welcome.1148"))
 
             let sources = ImportSource.installed()
             let unreadable = Chromium.unreadable()
             if sources.isEmpty {
                 Text(unreadable.isEmpty
-                     ? "此 Mac 上未找到其他浏览器，暂无可导入的数据。"
-                     : unreadable.map { "此 Mac 上有 \($0.source.name)，但在 \($0.looked) 中未找到可导入的数据。" }.joined(separator: "\n"))
+                     ? L10n.text("Welcome.1149")
+                     : unreadable.map { L10n.text("Welcome.1150", String(describing: $0.source.name), String(describing: $0.looked)) }.joined(separator: "\n"))
                     .font(.system(size: 13))
                     .foregroundStyle(Palette.faint)
                     .fixedSize(horizontal: false, vertical: true)
@@ -97,17 +97,17 @@ struct WelcomePanel: View {
                             selection: Binding(get: { source ?? sources[0] }, set: { source = $0 })
                         )
                     } else {
-                        Text("来自 \(sources[0].name)")
+                        Text(L10n.text("Welcome.1151", String(describing: sources[0].name)))
                             .font(.system(size: 13))
                             .foregroundStyle(Palette.muted)
                     }
-                    Choice("密码", "macOS 会请求一次访问该浏览器的钥匙串密钥", on: $wantsPasswords)
-                    Choice("书签", "包括文件夹，可通过书签按钮查看", on: $wantsBookmarks)
-                    Choice("历史记录", "最近数千条浏览记录，用于补全地址", on: $wantsHistory)
+                    Choice(L10n.text("Welcome.1152"), L10n.text("Welcome.1153"), on: $wantsPasswords)
+                    Choice(L10n.text("Welcome.1154"), L10n.text("Welcome.1155"), on: $wantsBookmarks)
+                    Choice(L10n.text("Welcome.1156"), L10n.text("Welcome.1157"), on: $wantsHistory)
                 }
 
                 HStack(spacing: 12) {
-                    Big(bringing ? "正在导入…" : "导入", filled: true) { bringAll() }
+                    Big(bringing ? L10n.text("Welcome.1158") : L10n.text("Welcome.1159"), filled: true) { bringAll() }
                         .disabled(bringing || brought != nil || !(wantsPasswords || wantsHistory || wantsBookmarks))
                     if bringing { Ring(size: 10) }
                     if let brought {
@@ -122,23 +122,23 @@ struct WelcomePanel: View {
 
             // Safari, a browser on another Mac, one Search can't read: what
             // it exported, bookmarks, passwords or Safari's own ZIP.
-            Pill("从其他浏览器导出的文件导入…") { browser.importFile() }
+            Pill(L10n.text("Welcome.1160")) { browser.importFile() }
         }
     }
 
     private var hold: some View {
         VStack(alignment: .leading, spacing: 22) {
-            heading("两种标签页布局。", "标签页可横排在顶部或竖排在侧边，灰色背景指示当前标签页。按 ⇧⌘S 可随时切换布局。")
+            heading(L10n.text("Welcome.1161"), L10n.text("Welcome.1162"))
             HStack(spacing: 12) {
-                Way(title: "标签栏", sidebar: false, chosen: !prefs.sidebar) {
+                Way(title: L10n.text("Welcome.1163"), sidebar: false, chosen: !prefs.sidebar) {
                     withAnimation(Motion.glide) { prefs.sidebar = false }
                 }
-                Way(title: "侧边栏", sidebar: true, chosen: prefs.sidebar) {
+                Way(title: L10n.text("Welcome.1164"), sidebar: true, chosen: prefs.sidebar) {
                     withAnimation(Motion.glide) { prefs.sidebar = true }
                 }
             }
             HStack(spacing: 12) {
-                Text("标签页图标")
+                Text(L10n.text("Welcome.1165"))
                     .font(.system(size: 13))
                     .foregroundStyle(Palette.muted)
                 Segmented(options: Glyph.allCases.map { ($0, $0.title) }, selection: $prefs.glyph)
@@ -148,23 +148,23 @@ struct WelcomePanel: View {
 
     private var links: some View {
         VStack(alignment: .leading, spacing: 22) {
-            heading("其他应用中的链接。", "点击邮件、Slack 或 PDF 中的链接时，macOS 会用默认浏览器打开。你可以将 Search 设为默认浏览器。")
+            heading(L10n.text("Welcome.1166"), L10n.text("Welcome.1167"))
             HStack(spacing: 12) {
                 if isDefault {
                     HStack(spacing: 8) {
                         Image(systemName: "checkmark")
                             .font(.system(size: 11, weight: .medium))
-                        Text("Search 已是默认浏览器")
+                        Text(L10n.text("Welcome.1168"))
                     }
                     .font(.system(size: 13))
                     .foregroundStyle(Palette.ink)
                 } else {
-                    Big("将 Search 设为默认浏览器", filled: true) {
+                    Big(L10n.text("Welcome.1169"), filled: true) {
                         asked = true
                         Links.becomeDefault { _ in isDefault = Links.isDefault }
                     }
                     if asked, !isDefault {
-                        Text("macOS 会显示系统确认对话框")
+                        Text(L10n.text("Welcome.1170"))
                             .font(.system(size: 13))
                             .foregroundStyle(Palette.faint)
                     }
@@ -173,19 +173,19 @@ struct WelcomePanel: View {
             .animation(Motion.settle, value: isDefault)
 
             VStack(alignment: .leading, spacing: 8) {
-                Text("常用操作")
+                Text(L10n.text("Welcome.1171"))
                     .font(.system(size: 11, weight: .medium))
                     .foregroundStyle(Palette.faint)
                     .textCase(.uppercase)
                     .tracking(0.6)
                     .padding(.top, 6)
-                Key("⌘T", "新建标签页，输入网址或搜索词。")
-                Key("⌘K", "按名称查找已打开的标签页。")
-                Key("⌘,", "打开设置，包括密码和更新。")
-                Key("⌃1", "空间可分别管理标签页和登录状态。在“设置 › 标签页”中启用。")
-                Key("⌥⌘N", "分屏显示两个页面，用 ⌃⌘← 和 ⌃⌘→ 切换。在“设置 › 标签页”中启用分屏浏览。")
-                Key("⌘O", "其他应用的链接可在小窗口中打开。在“设置 › 通用”中启用。")
-                Key("⌘,", "使用 AI 总结页面或回答问题。在“设置 › AI”中启用。")
+                Key("⌘T", L10n.text("Welcome.1172"))
+                Key("⌘K", L10n.text("Welcome.1173"))
+                Key("⌘,", L10n.text("Welcome.1174"))
+                Key("⌃1", L10n.text("Welcome.1175"))
+                Key("⌥⌘N", L10n.text("Welcome.1176"))
+                Key("⌘O", L10n.text("Welcome.1177"))
+                Key("⌘,", L10n.text("Welcome.1178"))
             }
         }
     }
@@ -203,18 +203,18 @@ struct WelcomePanel: View {
             }
             Spacer()
             if page > 0 {
-                Button("后退") { forward = false; page -= 1 }
+                Button(L10n.text("Welcome.1179")) { forward = false; page -= 1 }
                     .buttonStyle(.plain)
                     .font(.system(size: 13))
                     .foregroundStyle(Palette.muted)
             }
             if page < pages - 1 {
-                Button("跳过") { finish() }
+                Button(L10n.text("Welcome.1180")) { finish() }
                     .buttonStyle(.plain)
                     .font(.system(size: 13))
                     .foregroundStyle(Palette.muted)
             }
-            Big(page < pages - 1 ? "继续" : "开始浏览", filled: true) {
+            Big(page < pages - 1 ? L10n.text("Welcome.1181") : L10n.text("Welcome.1182"), filled: true) {
                 if page < pages - 1 { forward = true; page += 1 } else { finish() }
             }
             .keyboardShortcut(.defaultAction)
@@ -241,25 +241,25 @@ struct WelcomePanel: View {
                     case .success(let found):
                         let kept = browser.keep(found)
                         ImportRecords.note(source.name, passwords: kept)
-                        lines.append("\(kept) 个密码")
+                        lines.append(L10n.text("Welcome.1183", String(describing: kept)))
                     case .failure(Chromium.Trouble.noPassphrase):
-                        lines.append("密码：macOS 未提供密钥，请允许访问后重试")
+                        lines.append(L10n.text("Welcome.1184"))
                     case .failure(Mozilla.Trouble.primaryPassword):
-                        lines.append("密码：\(source.name) 设置了主密码，请导出密码后导入 CSV 文件")
+                        lines.append(L10n.text("Welcome.1185", String(describing: source.name)))
                     case .failure:
-                        lines.append("密码：无可读取的数据")
+                        lines.append(L10n.text("Welcome.1186"))
                     }
                     group.leave()
                 }
             }
         }
         if wantsBookmarks {
-            lines.append("\(browser.takeBookmarks(from: source, profile: profile).added) 个书签")
+            lines.append(L10n.text("Welcome.1187", String(describing: browser.takeBookmarks(from: source, profile: profile).added)))
         }
         if wantsHistory {
             group.enter()
             browser.takePlaces(from: source, profile: profile) { count in
-                lines.append("\(count) 条浏览记录")
+                lines.append(L10n.text("Welcome.1188", String(describing: count)))
                 group.leave()
             }
         }

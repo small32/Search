@@ -455,16 +455,16 @@ struct Helm: View {
             let back = !tab.isBlank && tab.canGoBack
             let forward = !tab.isBlank && tab.canGoForward
             HStack(spacing: 4) {
-                Door(icon: "chevron.left", help: "后退   ⌘[") { browser.back() }
+                Door(icon: "chevron.left", help: L10n.text("TabBar.1087")) { browser.back() }
                     .disabled(!back)
                     .opacity(back ? 1 : 0.3)
-                Door(icon: "chevron.right", help: "前进   ⌘]") { browser.forward() }
+                Door(icon: "chevron.right", help: L10n.text("TabBar.1088")) { browser.forward() }
                     .disabled(!forward)
                     .opacity(forward ? 1 : 0.3)
                 // Reload, or stop while it is still coming.
                 Door(
                     icon: tab.loading ? "xmark" : "arrow.clockwise",
-                    help: tab.loading ? "停止   ⌘." : "重新载入   ⌘R"
+                    help: tab.loading ? L10n.text("TabBar.1089") : L10n.text("TabBar.1090")
                 ) {
                     if tab.loading { tab.stop() } else { browser.reload() }
                 }
@@ -621,7 +621,7 @@ private struct TabPill: View {
                     Image(systemName: "record.circle")
                         .font(.system(size: 10))
                         .foregroundStyle(colour.opacity(0.8))
-                        .help("正在录制")
+                        .help(L10n.text("TabBar.1091"))
                 }
                 Text(tab.label)
                     .font(.system(size: 12.5))
@@ -953,8 +953,8 @@ struct TabMenu: View {
 
     var body: some View {
         if browser.prefs.usesTabGroups && tab.pin == nil && !tab.shy && !tab.bench {
-            Menu("移至分组") {
-                Button("新建分组") { browser.addTabGroup(containing: tab) }
+            Menu(L10n.text("TabBar.1092")) {
+                Button(L10n.text("TabBar.1093")) { browser.addTabGroup(containing: tab) }
                 if !browser.tabGroups.isEmpty { Divider() }
                 ForEach(browser.tabGroups) { group in
                     Button(group.name) { browser.move(tab, toGroup: group.id) }
@@ -962,36 +962,36 @@ struct TabMenu: View {
                 }
                 if tab.groupID != nil {
                     Divider()
-                    Button("移出分组") { browser.move(tab, toGroup: nil) }
+                    Button(L10n.text("TabBar.1094")) { browser.move(tab, toGroup: nil) }
                 }
             }
         }
         let rows = browser.prefs.showsPinRows
         if tab.pin == nil {
-            Button("固定") { browser.pin(tab) }
+            Button(L10n.text("TabBar.1095")) { browser.pin(tab) }
                 .disabled(tab.isBlank || tab.shy)
             if rows {
-                Button("以列表形式固定") { browser.pin(tab, listed: true) }
+                Button(L10n.text("TabBar.1096")) { browser.pin(tab, listed: true) }
                     .disabled(tab.isBlank || tab.shy)
             }
         } else {
             if rows {
-                Button(tab.listed ? "显示为方块" : "显示为列表") { browser.setListed(tab, !tab.listed) }
+                Button(tab.listed ? L10n.text("TabBar.1097") : L10n.text("TabBar.1098")) { browser.setListed(tab, !tab.listed) }
             }
             // A row wears its title, not its letter; and a click on it is
             // the address, so the way home a square's double-click is
             // (Browser.goHome) is here instead, while it has wandered.
             if rows && tab.listed {
-                Button("返回固定页面") { browser.goHome(tab) }
+                Button(L10n.text("TabBar.1099")) { browser.goHome(tab) }
                     .disabled(tab.home.map { Browser.samePage($0, tab.address) } ?? true)
             } else {
-                Button("更改字母") { browser.editLetter(tab) }
+                Button(L10n.text("TabBar.1100")) { browser.editLetter(tab) }
             }
-            Button("取消固定") { browser.unpin(tab) }
+            Button(L10n.text("TabBar.1101")) { browser.unpin(tab) }
         }
         if browser.prefs.usesSpaces, !tab.bench,
            tab.address.flatMap({ Browser.extensionHost(of: $0) }) == nil {
-            Menu("移至空间") {
+            Menu(L10n.text("TabBar.1102")) {
                 ForEach(browser.spaces.filter { $0.id != browser.spaceID }) { space in
                     Button {
                         browser.move(tab, toSpace: space.id)
@@ -1000,7 +1000,7 @@ struct TabMenu: View {
                     }
                 }
                 if browser.spaces.count > 1 { Divider() }
-                Button("新建空间…") {
+                Button(L10n.text("TabBar.1103")) {
                     browser.askForSpace { space in
                         browser.move(tab, toSpace: space.id) {
                             browser.switchSpace(to: space.id)
@@ -1008,23 +1008,23 @@ struct TabMenu: View {
                     }
                 }
             }
-            .help("移至登录状态不同的空间后，页面会在该空间重新打开。")
+            .help(L10n.text("TabBar.1104"))
         }
         if browser.prefs.splitView {
             if browser.split(for: tab) != nil {
-                Button("交换页面") {
+                Button(L10n.text("TabBar.1105")) {
                     browser.focusPane(tab)
                     browser.swapSplit()
                 }
-                Button("分离分屏标签页") { browser.detachSplit(tab) }
-                Button("关闭两个页面") {
+                Button(L10n.text("TabBar.1106")) { browser.detachSplit(tab) }
+                Button(L10n.text("TabBar.1107")) {
                     browser.focusPane(tab)
                     browser.closeSplit()
                 }
             } else {
                 // Beside the page on screen; on that page itself, an empty
                 // page beside it.
-                Button("在分屏中打开") { browser.openInSplit(tab) }
+                Button(L10n.text("TabBar.1108")) { browser.openInSplit(tab) }
                     .disabled(tab.bench)
             }
         }
@@ -1032,11 +1032,11 @@ struct TabMenu: View {
             // Another window, or a new one (see Browser.moveToWindow).
             let others = Browsers.all.filter { $0 !== browser && $0.isOpen && $0.extensionPopup == nil }
             if others.isEmpty {
-                Button("移至新窗口") { browser.moveToWindow(tab, nil) }
+                Button(L10n.text("TabBar.1109")) { browser.moveToWindow(tab, nil) }
                     .disabled(browser.tabs.count < 2)
             } else {
-                Menu("移至窗口") {
-                    Button("新建窗口") { browser.moveToWindow(tab, nil) }
+                Menu(L10n.text("TabBar.1110")) {
+                    Button(L10n.text("TabBar.1111")) { browser.moveToWindow(tab, nil) }
                         .disabled(browser.tabs.count < 2)
                     Divider()
                     ForEach(Array(others.enumerated()), id: \.offset) { _, other in
@@ -1046,41 +1046,41 @@ struct TabMenu: View {
             }
         }
         Divider()
-        Button("重命名") { browser.beginTabRename(tab) }
-        Button("复制") {
+        Button(L10n.text("TabBar.1112")) { browser.beginTabRename(tab) }
+        Button(L10n.text("TabBar.1113")) {
             browser.select(tab)
             browser.duplicate()
         }
         .disabled(tab.isBlank)
         // The card a click on the tab you are on shows under its address.
-        Button("网站信息…") {
+        Button(L10n.text("TabBar.1114")) {
             if browser.activeID != tab.id { browser.select(tab) }
             browser.beginTabEdit(tab)
         }
         .disabled(tab.isBlank || tab.address == nil || tab.pin != nil)
-        Button("复制地址") {
+        Button(L10n.text("TabBar.1115")) {
             browser.select(tab)
             browser.copyAddress()
         }
         .disabled(tab.isBlank)
-        Button("复制为 Markdown 链接") {
+        Button(L10n.text("TabBar.1116")) {
             browser.select(tab)
             browser.copyMarkdownLink()
         }
         .disabled(tab.isBlank)
-        Button(tab.muted ? "取消标签页静音" : "标签页静音") { tab.toggleMute() }
+        Button(tab.muted ? L10n.text("TabBar.1117") : L10n.text("TabBar.1118")) { tab.toggleMute() }
         // Its page let go of now, as it would be after half an hour unseen:
         // the row keeps its title and picture, and it loads again when gone
         // to. Not the tab on screen, nor one that has to stay awake (#310).
-        Button("休眠") {
+        Button(L10n.text("TabBar.1119")) {
             browser.sleep(tab) { outcome in
-                if outcome != "asleep" { browser.announce("保持活跃：\(outcome)") }
+                if outcome != "asleep" { browser.announce(L10n.text("TabBar.1120", String(describing: outcome))) }
             }
         }
         .disabled(browser.awake(because: tab) != nil)
         Divider()
-        Button("关闭标签页", action: close)
-        Button("关闭其他标签页") { browser.closeOthers(but: tab) }
+        Button(L10n.text("TabBar.1121"), action: close)
+        Button(L10n.text("TabBar.1122")) { browser.closeOthers(but: tab) }
             .disabled(browser.tabs.count < 2)
         // ⌘⇧T, and the History menu's Recently Closed, where few think to
         // look for it: here too, where tabs are closed.

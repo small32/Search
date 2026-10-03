@@ -44,7 +44,7 @@ struct Page: View {
             if tab.floating {
                 // The tab is not empty, its page is simply elsewhere. Saying so
                 // is kinder than a white rectangle.
-                Text("此页面正在画中画窗口中播放。")
+                Text(L10n.text("Stage.1081"))
                     .font(.system(size: 13))
                     .foregroundStyle(Palette.muted)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -335,7 +335,7 @@ private struct Trouble: View {
             Text(message)
                 .font(.system(size: 14))
                 .foregroundStyle(Palette.ink)
-            Button("重试", action: retry)
+            Button(L10n.text("Stage.1082"), action: retry)
                 .buttonStyle(.plain)
                 .font(.system(size: 12))
                 .foregroundStyle(Palette.muted)

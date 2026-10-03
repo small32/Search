@@ -342,7 +342,7 @@ struct TabSwitcherOverlay: View {
         .background(GeometryReader { box in
             Color.clear.preference(key: CardFrames.self, value: [tab.id: box.frame(in: .global)])
         })
-        .accessibilityLabel("切换到 \(tab.label)")
-        .accessibilityValue(tab.id == switcher.selectedID ? "已选中" : "")
+        .accessibilityLabel(L10n.text("TabSwitcher.1129", String(describing: tab.label)))
+        .accessibilityValue(tab.id == switcher.selectedID ? L10n.text("TabSwitcher.1130") : "")
     }
 }

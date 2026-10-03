@@ -512,7 +512,7 @@ struct SideBar: View {
     private static let footHeight: CGFloat = 26 + 10
 
     private var newTab: some View {
-        Quiet(icon: "plus", title: "新建标签页", height: SideBar.row) { browser.newTab() }
+        Quiet(icon: "plus", title: L10n.text("Side.0946"), height: SideBar.row) { browser.newTab() }
             .padding(.top, SideBar.gap)
     }
 
@@ -667,7 +667,7 @@ private struct SideRow: View {
                     Image(systemName: "record.circle")
                         .font(.system(size: 10))
                         .foregroundStyle(colour.opacity(0.8))
-                        .help("正在录制")
+                        .help(L10n.text("Side.0947"))
                 }
                 Text(tab.label)
                     .font(.system(size: 12.5))
@@ -843,14 +843,14 @@ struct KeepLine: View {
                     HStack(spacing: 3) {
                         Image(systemName: "arrow.down")
                             .font(.system(size: 8, weight: .semibold))
-                        Text("清除")
+                        Text(L10n.text("Side.0948"))
                             .font(.system(size: 11))
                     }
                     .foregroundStyle(Palette.muted)
                     .contentShape(Rectangle())
                 }
                 .buttonStyle(.plain)
-                .help("关闭分隔线下方的标签页。固定标签页和分组会保留；按 ⇧⌘T 可全部恢复。")
+                .help(L10n.text("Side.0949"))
                 .transition(.opacity)
             }
         }
@@ -882,7 +882,7 @@ struct Speaker: View {
         }
         .buttonStyle(.plain)
         .onHover { hovering = $0 }
-        .help(tab.muted ? "取消标签页静音" : "标签页静音")
+        .help(tab.muted ? L10n.text("Side.0950") : L10n.text("Side.0951"))
         .animation(Motion.quick, value: hovering)
     }
 }

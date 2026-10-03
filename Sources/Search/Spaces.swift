@@ -49,21 +49,21 @@ enum Spaces {
         Color(red: 0.90, green: 0.33, blue: 0.40), // red
         Color(red: 0.62, green: 0.40, blue: 0.90), // violet
     ]
-    static let colourNames = ["灰色", "蓝色", "绿色", "橙色", "红色", "紫色"]
+    static let colourNames = [L10n.text("Spaces.1002"), L10n.text("Spaces.1003"), L10n.text("Spaces.1004"), L10n.text("Spaces.1005"), L10n.text("Spaces.1006"), L10n.text("Spaces.1007")]
 
     /// The icons a space can wear: Apple's own symbols, drawn in one weight
     /// and one grey, grouped as work, thinking, leisure and life.
     static let icons = [
         "briefcase", "building.2", "desktopcomputer", "laptopcomputer", "chevron.left.forwardslash.chevron.right", "terminal",
         "sparkles", "brain.head.profile", "lightbulb", "gamecontroller", "beach.umbrella", "cup.and.saucer",
-        "music.note", "film", "paintpalette", "摄像头", "house", "book",
+        "music.note", "film", "paintpalette", L10n.text("Spaces.1008"), "house", "book",
         "graduationcap", "cart", "airplane", "dumbbell", "leaf", "heart",
     ]
     static let iconNames = [
-        "工作", "办公", "台式机", "笔记本", "编程", "终端",
-        "AI", "思考", "灵感", "游戏", "休闲", "咖啡",
-        "音乐", "影视", "艺术", "照片", "家庭", "阅读",
-        "学习", "购物", "旅行", "运动", "自然", "个人",
+        L10n.text("Spaces.1009"), L10n.text("Spaces.1010"), L10n.text("Spaces.1011"), L10n.text("Spaces.1012"), L10n.text("Spaces.1013"), L10n.text("Spaces.1014"),
+        "AI", L10n.text("Spaces.1015"), L10n.text("Spaces.1016"), L10n.text("Spaces.1017"), L10n.text("Spaces.1018"), L10n.text("Spaces.1019"),
+        L10n.text("Spaces.1020"), L10n.text("Spaces.1021"), L10n.text("Spaces.1022"), L10n.text("Spaces.1023"), L10n.text("Spaces.1024"), L10n.text("Spaces.1025"),
+        L10n.text("Spaces.1026"), L10n.text("Spaces.1027"), L10n.text("Spaces.1028"), L10n.text("Spaces.1029"), L10n.text("Spaces.1030"), L10n.text("Spaces.1031"),
     ]
 
     private static var file: URL { Store.file("spaces.json") }
@@ -72,7 +72,7 @@ enum Spaces {
     /// list yet.
     static func read() -> [Space] {
         let saved = (try? Data(contentsOf: file)).flatMap { try? JSONDecoder().decode([Space].self, from: $0) } ?? []
-        let first = saved.first(where: \.isFirst) ?? Space(id: Space.firstID, name: "个人", colour: 0)
+        let first = saved.first(where: \.isFirst) ?? Space(id: Space.firstID, name: L10n.text("Spaces.1032"), colour: 0)
         return [first] + saved.filter { !$0.isFirst }
     }
 
@@ -378,7 +378,7 @@ struct SpaceDot: View {
         }
         .buttonStyle(.plain)
         .onHover { hovering = $0 }
-        .help("\(browser.space.name) — 按 ⌃1–⌃9 或在标签栏上双指\(browser.prefs.sidebar ? "横向" : "上下")滑动切换")
+        .help(L10n.text("Spaces.1033", String(describing: browser.space.name), String(describing: browser.prefs.sidebar ? L10n.text("Spaces.1330") : L10n.text("Spaces.1329"))))
         .onChange(of: key) { _, now in
             let symbol = symbol
             DispatchQueue.main.async {
@@ -457,11 +457,11 @@ enum SpaceMenu {
             menu.addItem(entry)
         }
         menu.addItem(.separator())
-        menu.addItem(item("新建空间…") { browser.askForSpace() })
+        menu.addItem(item(L10n.text("Spaces.1034")) { browser.askForSpace() })
         menu.addItem(.separator())
         let here = browser.space
-        menu.addItem(item("重命名“\(here.name)”…") {
-            Ask.name("重命名空间", placeholder: here.name, initial: here.name, confirm: "重命名") { browser.renameSpace(here.id, to: $0) }
+        menu.addItem(item(L10n.text("Spaces.1035", String(describing: here.name))) {
+            Ask.name(L10n.text("Spaces.1036"), placeholder: here.name, initial: here.name, confirm: L10n.text("Spaces.1037")) { browser.renameSpace(here.id, to: $0) }
         })
         let icons = NSMenu()
         for (symbol, name) in zip(Spaces.icons, Spaces.iconNames) {
@@ -469,25 +469,25 @@ enum SpaceMenu {
             choice.image = NSImage(systemSymbolName: symbol, accessibilityDescription: name)
             icons.addItem(choice)
         }
-        let icon = NSMenuItem(title: "图标", action: nil, keyEquivalent: "")
+        let icon = NSMenuItem(title: L10n.text("Spaces.1038"), action: nil, keyEquivalent: "")
         icon.submenu = icons
         menu.addItem(icon)
         // The order is the swipe's, and ⌃1–⌃9's.
         if let at = browser.spaces.firstIndex(where: { $0.id == here.id }) {
-            if at > 0 { menu.addItem(item("左移") { browser.moveSpace(here.id, to: at - 1) }) }
-            if at < browser.spaces.count - 1 { menu.addItem(item("右移") { browser.moveSpace(here.id, to: at + 1) }) }
+            if at > 0 { menu.addItem(item(L10n.text("Spaces.1039")) { browser.moveSpace(here.id, to: at - 1) }) }
+            if at < browser.spaces.count - 1 { menu.addItem(item(L10n.text("Spaces.1040")) { browser.moveSpace(here.id, to: at + 1) }) }
         }
         let folder = here.downloads.map { URL(fileURLWithPath: $0).lastPathComponent }
-        menu.addItem(item(folder.map { "下载至“\($0)”…" } ?? "下载文件夹…") {
+        menu.addItem(item(folder.map { L10n.text("Spaces.1041", String(describing: $0)) } ?? L10n.text("Spaces.1042")) {
             Ask.folder { browser.setSpaceDownloads(here.id, to: $0) }
         })
         if folder != nil {
-            menu.addItem(item("使用设置中的下载文件夹") { browser.setSpaceDownloads(here.id, to: nil) })
+            menu.addItem(item(L10n.text("Spaces.1043")) { browser.setSpaceDownloads(here.id, to: nil) })
         }
         if !here.isFirst {
             menu.addItem(.separator())
-            menu.addItem(item("删除“\(here.name)”…") {
-                Ask.sure("删除“\(here.name)”？", detail: "关闭该空间的标签页，并清除其 Cookie 和登录状态。历史记录和书签会保留。", confirm: "删除") {
+            menu.addItem(item(L10n.text("Spaces.1044", String(describing: here.name))) {
+                Ask.sure(L10n.text("Spaces.1045", String(describing: here.name)), detail: L10n.text("Spaces.1046"), confirm: L10n.text("Spaces.1047")) {
                     browser.deleteSpace(here.id)
                 }
             })
@@ -508,7 +508,7 @@ enum Ask {
         field.stringValue = initial
         alert.accessoryView = field
         alert.addButton(withTitle: confirm)
-        alert.addButton(withTitle: "取消")
+        alert.addButton(withTitle: L10n.text("Spaces.1048"))
         alert.window.initialFirstResponder = field
         show(alert) { ok in
             let name = field.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -520,18 +520,18 @@ enum Ask {
     /// have — for when the column isn't there to hold the card.
     static func newSpace(then: @escaping (String, Bool) -> Void, cancelled: @escaping () -> Void) {
         let alert = NSAlert()
-        alert.messageText = "新建空间"
-        alert.informativeText = "独立管理标签页。默认与其他空间共享登录状态，也可选择独立登录。"
+        alert.messageText = L10n.text("Spaces.1049")
+        alert.informativeText = L10n.text("Spaces.1050")
         let field = NSTextField(frame: NSRect(x: 0, y: 30, width: 260, height: 24))
-        field.placeholderString = "工作"
-        let fresh = NSButton(checkboxWithTitle: "从未登录状态开始，使用独立的 Cookie", target: nil, action: nil)
+        field.placeholderString = L10n.text("Spaces.1051")
+        let fresh = NSButton(checkboxWithTitle: L10n.text("Spaces.1052"), target: nil, action: nil)
         fresh.frame = NSRect(x: 0, y: 0, width: 260, height: 22)
         let box = NSView(frame: NSRect(x: 0, y: 0, width: 260, height: 56))
         box.addSubview(field)
         box.addSubview(fresh)
         alert.accessoryView = box
-        alert.addButton(withTitle: "创建")
-        alert.addButton(withTitle: "取消")
+        alert.addButton(withTitle: L10n.text("Spaces.1053"))
+        alert.addButton(withTitle: L10n.text("Spaces.1054"))
         alert.window.initialFirstResponder = field
         show(alert) { ok in
             let name = field.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -545,7 +545,7 @@ enum Ask {
         alert.messageText = title
         alert.informativeText = detail
         alert.addButton(withTitle: confirm).hasDestructiveAction = true
-        alert.addButton(withTitle: "取消")
+        alert.addButton(withTitle: L10n.text("Spaces.1055"))
         show(alert) { ok in if ok { then() } }
     }
 
@@ -554,8 +554,8 @@ enum Ask {
         panel.canChooseDirectories = true
         panel.canChooseFiles = false
         panel.canCreateDirectories = true
-        panel.prompt = "用于此空间"
-        panel.message = "此空间的下载保存到此处。取消则保留原文件夹。"
+        panel.prompt = L10n.text("Spaces.1056")
+        panel.message = L10n.text("Spaces.1057")
         guard let window = Links.window else { return }
         panel.beginSheetModal(for: window) { answer in
             if answer == .OK, let url = panel.url { then(url) }

@@ -367,10 +367,10 @@ final class ExtensionCapture: NSObject, WKScriptMessageHandlerWithReply, Observa
         let microphone: Bool
 
         var what: String {
-            if site { return "正在共享屏幕" }
-            if screen { return "正在录制屏幕" }
-            if camera && microphone { return "正在使用摄像头和麦克风" }
-            return camera ? "正在使用摄像头" : "正在使用麦克风"
+            if site { return L10n.text("ExtensionCapture.0396") }
+            if screen { return L10n.text("ExtensionCapture.0397") }
+            if camera && microphone { return L10n.text("ExtensionCapture.0398") }
+            return camera ? L10n.text("ExtensionCapture.0399") : L10n.text("ExtensionCapture.0400")
         }
     }
 

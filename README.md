@@ -1,5 +1,7 @@
 # Search
 
+This fork supports English and Simplified Chinese. Choose **Settings → General → Language** (设置 → 通用 → 界面语言), then restart Search to apply the selection to all windows and menus. **Follow System** is the default; unsupported system languages use English.
+
 A small, fast, quiet web browser for the Mac, by [Office Commun](https://officecommun.com).
 
 ![Search, with its tabs down the left and a page taking the rest of the window](.github/screenshot.png)

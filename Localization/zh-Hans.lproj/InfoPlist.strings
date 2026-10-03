@@ -1,0 +1,4 @@
+"NSCameraUsageDescription" = "你访问的网站可能请求使用摄像头。Search 会在各网站首次请求时询问并保存你的选择，可在“设置 › 隐私”中清除。";
+"NSMicrophoneUsageDescription" = "你访问的网站可能请求使用麦克风。Search 会在各网站首次请求时询问并保存你的选择，可在“设置 › 隐私”中清除。";
+"NSLocationUsageDescription" = "你访问的网站可能请求获取位置。除非选择“始终允许”，Search 会在每次请求时询问。可在“设置 › 隐私”中清除选择。";
+"NSDownloadsFolderUsageDescription" = "下载的文件会保存到你的下载文件夹。";

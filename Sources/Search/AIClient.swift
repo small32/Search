@@ -32,10 +32,10 @@ enum AIError: LocalizedError, Equatable {
 
     var errorDescription: String? {
         switch self {
-        case .noKey: return "未保存此提供商的密钥。"
-        case .refusedHost: return "此地址不属于该提供商。"
-        case .http(let status, let said): return said.isEmpty ? "提供商返回状态码 \(status)。" : "\(said) (\(status))"
-        case .unreadable: return "无法读取提供商的回答。"
+        case .noKey: return L10n.text("AIClient.0082")
+        case .refusedHost: return L10n.text("AIClient.0083")
+        case .http(let status, let said): return said.isEmpty ? L10n.text("AIClient.0084", String(describing: status)) : "\(said) (\(status))"
+        case .unreadable: return L10n.text("AIClient.0085")
         case .unreachable(let why): return why
         }
     }
@@ -300,13 +300,13 @@ final class AIClient: NSObject, URLSessionTaskDelegate, @unchecked Sendable {
 
     private static func reason(_ error: URLError, _ provider: AIProvider) -> String {
         switch error.code {
-        case .cannotConnectToHost where provider.isLocal: return "\(provider.name) 未在此 Mac 上运行。"
-        case .notConnectedToInternet: return "此 Mac 未连接网络。"
-        case .timedOut: return "\(provider.name) 响应超时。"
+        case .cannotConnectToHost where provider.isLocal: return L10n.text("AIClient.0086", String(describing: provider.name))
+        case .notConnectedToInternet: return L10n.text("AIClient.0087")
+        case .timedOut: return L10n.text("AIClient.0088", String(describing: provider.name))
         case .serverCertificateUntrusted, .serverCertificateHasBadDate, .serverCertificateNotYetValid,
              .serverCertificateHasUnknownRoot, .secureConnectionFailed:
-            return "与 \(provider.name) 的连接不安全。"
-        default: return "无法连接 \(provider.name)。"
+            return L10n.text("AIClient.0089", String(describing: provider.name))
+        default: return L10n.text("AIClient.0090", String(describing: provider.name))
         }
     }
 }

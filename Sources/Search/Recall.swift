@@ -33,8 +33,8 @@ enum When {
 
     static func day(_ date: Date) -> String {
         let calendar = Calendar.current
-        if calendar.isDateInToday(date) { return "今天" }
-        if calendar.isDateInYesterday(date) { return "昨天" }
+        if calendar.isDateInToday(date) { return L10n.text("Recall.0640") }
+        if calendar.isDateInYesterday(date) { return L10n.text("Recall.0641") }
         return plain.string(from: date)
     }
 }
@@ -50,12 +50,12 @@ struct HistoryPanel: View {
     private var clearing: Bool { browser.recallMode == .clearing }
 
     var body: some View {
-        Plate("历史记录", width: 600, close: { browser.recalling = false }) {
+        Plate(L10n.text("Recall.0642"), width: 600, close: { browser.recalling = false }) {
             VStack(alignment: .leading, spacing: 14) {
-                Hunt(text: $browser.recallHunt, prompt: "搜索浏览历史", focus: $hunting)
+                Hunt(text: $browser.recallHunt, prompt: L10n.text("Recall.0643"), focus: $hunting)
 
                 if traces.isEmpty {
-                    Card { Nothing(browser.recallHunt.isEmpty ? "暂无记录。" : "没有匹配项。") }
+                    Card { Nothing(browser.recallHunt.isEmpty ? L10n.text("Recall.0644") : L10n.text("Recall.0645")) }
                 } else {
                     // Lazy: only the lines in view are made. Two thousand of
                     // them, each with its icon, took the panel a third of a
@@ -109,11 +109,11 @@ struct HistoryPanel: View {
                 sweeps
             } else {
                 HStack {
-                    Text(traces.count == 1 ? "1 个页面" : "\(traces.count) 个页面")
+                    Text(traces.count == 1 ? L10n.text("Recall.0646") : L10n.text("Recall.0647", String(describing: traces.count)))
                         .font(.system(size: 12))
                         .foregroundStyle(Palette.muted)
                     Spacer()
-                    Pill("清除…") { withAnimation(Motion.settle) { browser.recallMode = .clearing } }
+                    Pill(L10n.text("Recall.0648")) { withAnimation(Motion.settle) { browser.recallMode = .clearing } }
                 }
             }
         }
@@ -130,25 +130,25 @@ struct HistoryPanel: View {
     private var sweeps: some View {
         VStack(alignment: .leading, spacing: 10) {
             Card {
-                Line("历史记录", "所有浏览记录") {
-                    Pill("清除") {
+                Line(L10n.text("Recall.0649"), L10n.text("Recall.0650")) {
+                    Pill(L10n.text("Recall.0651")) {
                         browser.clearHistory()
                         refresh()
                         withAnimation(Motion.settle) { browser.recallMode = .history }
                     }
                 }
                 Rule()
-                Line("Cookie 和登录状态", "退出所有网站的登录") {
-                    Pill("退出所有网站") { browser.clearSites() }
+                Line(L10n.text("Recall.0652"), L10n.text("Recall.0653")) {
+                    Pill(L10n.text("Recall.0654")) { browser.clearSites() }
                 }
                 Rule()
-                Line("缓存", "仅用于显示页面的缓存内容") {
-                    Pill("清除") { browser.clearCache() }
+                Line(L10n.text("Recall.0655"), L10n.text("Recall.0656")) {
+                    Pill(L10n.text("Recall.0657")) { browser.clearCache() }
                 }
             }
             HStack {
                 Spacer()
-                Pill("后退") { withAnimation(Motion.settle) { browser.recallMode = .history } }
+                Pill(L10n.text("Recall.0658")) { withAnimation(Motion.settle) { browser.recallMode = .history } }
             }
         }
         .transition(.opacity)
@@ -226,7 +226,7 @@ struct HistoryPanel: View {
                 }
                 Spacer(minLength: 8)
                 if hovering {
-                    Quick("移除", tint: .red.opacity(0.75), act: forget)
+                    Quick(L10n.text("Recall.0659"), tint: .red.opacity(0.75), act: forget)
                 } else {
                     Text(When.clock(trace.last))
                         .font(.system(size: 11.5))
@@ -257,15 +257,15 @@ struct DownloadsPanel: View {
     }
 
     var body: some View {
-        Plate("下载", width: 560, close: { browser.hoarding = false }) {
+        Plate(L10n.text("Recall.0660"), width: 560, close: { browser.hoarding = false }) {
             if fetches.entries.isEmpty && loot.kept.isEmpty {
-                Card { Nothing("暂无下载。") }
+                Card { Nothing(L10n.text("Recall.0661")) }
             } else {
                 ScrollView(showsIndicators: false) {
                     LazyVStack(alignment: .leading, spacing: 10) {
                         if !fetches.entries.isEmpty {
                             VStack(alignment: .leading, spacing: 6) {
-                                Caption("当前下载")
+                                Caption(L10n.text("Recall.0662"))
                                 Card {
                                     ForEach(Array(fetches.entries.enumerated()), id: \.element.id) { index, entry in
                                         if index > 0 { Rule() }
@@ -283,7 +283,7 @@ struct DownloadsPanel: View {
 
                         if !loot.kept.isEmpty {
                             VStack(alignment: .leading, spacing: 6) {
-                                Caption("已完成")
+                                Caption(L10n.text("Recall.0663"))
                                 Card {
                                     ForEach(Array(loot.kept.enumerated()), id: \.element.id) { index, keep in
                                         if index > 0 { Rule() }
@@ -304,13 +304,13 @@ struct DownloadsPanel: View {
             }
         } foot: {
             HStack {
-                Text(loot.kept.isEmpty ? "文件保存至 \(browser.downloadsFolder.lastPathComponent)"
-                     : "清除列表不会删除已下载的文件")
+                Text(loot.kept.isEmpty ? L10n.text("Recall.0664", String(describing: browser.downloadsFolder.lastPathComponent))
+                     : L10n.text("Recall.0665"))
                     .font(.system(size: 12))
                     .foregroundStyle(Palette.muted)
                 Spacer()
                 if !loot.kept.isEmpty {
-                    Pill("清除列表") { loot.forgetAll() }
+                    Pill(L10n.text("Recall.0666")) { loot.forgetAll() }
                 }
             }
         }
@@ -332,11 +332,11 @@ struct DownloadsPanel: View {
 
         private var stateLabel: String {
             switch entry.state {
-            case .downloading: return "正在下载"
-            case .pausing: return "正在暂停…"
-            case .paused: return "已暂停"
-            case .resuming: return "正在恢复…"
-            case .failed: return "失败"
+            case .downloading: return L10n.text("Recall.0667")
+            case .pausing: return L10n.text("Recall.0668")
+            case .paused: return L10n.text("Recall.0669")
+            case .resuming: return L10n.text("Recall.0670")
+            case .failed: return L10n.text("Recall.0671")
             }
         }
 
@@ -381,7 +381,7 @@ struct DownloadsPanel: View {
                             .truncationMode(.middle)
                     }
                     if case .failed = entry.state {
-                        Text(entry.errorDescription ?? "下载失败。")
+                        Text(entry.errorDescription ?? L10n.text("Recall.0672"))
                             .font(.system(size: 11.5))
                             .foregroundStyle(Palette.muted)
                             .fixedSize(horizontal: false, vertical: true)
@@ -400,39 +400,39 @@ struct DownloadsPanel: View {
             switch entry.state {
             case .downloading:
                 HStack(spacing: 4) {
-                    if entry.canPause { Quick("暂停", act: pause) }
-                    Quick("取消", act: cancel)
+                    if entry.canPause { Quick(L10n.text("Recall.0673"), act: pause) }
+                    Quick(L10n.text("Recall.0674"), act: cancel)
                 }
             case .pausing:
                 HStack(spacing: 4) {
-                    Quick("正在暂停…", act: {})
+                    Quick(L10n.text("Recall.0675"), act: {})
                         .disabled(true)
-                    Quick("取消", act: cancel)
+                    Quick(L10n.text("Recall.0676"), act: cancel)
                 }
             case .paused:
                 HStack(spacing: 4) {
                     if entry.canResume {
-                        Quick("继续", act: resume)
+                        Quick(L10n.text("Recall.0677"), act: resume)
                     } else if entry.canRetry {
-                        Quick("重试", act: retry)
-                            .help("从头重新下载")
+                        Quick(L10n.text("Recall.0678"), act: retry)
+                            .help(L10n.text("Recall.0679"))
                     }
-                    Quick("移除", act: cancel)
+                    Quick(L10n.text("Recall.0680"), act: cancel)
                 }
             case .resuming:
                 HStack(spacing: 4) {
-                    Quick("正在恢复…", act: {})
+                    Quick(L10n.text("Recall.0681"), act: {})
                         .disabled(true)
-                    Quick("取消", act: cancel)
+                    Quick(L10n.text("Recall.0682"), act: cancel)
                 }
             case .failed:
                 HStack(spacing: 4) {
-                    if entry.canResume { Quick("继续", act: resume) }
+                    if entry.canResume { Quick(L10n.text("Recall.0683"), act: resume) }
                     if entry.canRetry {
-                        Quick("重试", act: retry)
-                            .help("从头重新下载")
+                        Quick(L10n.text("Recall.0684"), act: retry)
+                            .help(L10n.text("Recall.0685"))
                     }
-                    Quick("移除", act: cancel)
+                    Quick(L10n.text("Recall.0686"), act: cancel)
                 }
             }
         }
@@ -465,8 +465,8 @@ struct DownloadsPanel: View {
                 }
                 Spacer(minLength: 8)
                 if hovering {
-                    if keep.stillThere { Quick("在访达中显示", act: reveal) }
-                    Quick("移除", tint: .red.opacity(0.75), act: forget)
+                    if keep.stillThere { Quick(L10n.text("Recall.0687"), act: reveal) }
+                    Quick(L10n.text("Recall.0688"), tint: .red.opacity(0.75), act: forget)
                 }
             }
             .padding(.horizontal, 14)

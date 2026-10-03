@@ -149,7 +149,7 @@ final class ImportFileTests: XCTestCase {
         let control = ImportFile.Control()
         var progressThrough = 0
         XCTAssertThrowsError(try BookmarksFile.parse(html, control: control, progress: { stage, completed, _ in
-            if stage == "Parsing bookmarks" {
+            if stage == L10n.text("BookmarksFile.0266") {
                 progressThrough = completed
                 if completed > 1_000 { control.cancel() }
             }
@@ -177,7 +177,7 @@ final class ImportFileTests: XCTestCase {
         let control = ImportFile.Control { updates.append($0) }
         let imported = try ImportFile.read(file, control: control)
         XCTAssertEqual(imported.passwords, [csv])
-        XCTAssertTrue(updates.contains { $0.message == "passwords.csv: 正在读取 CSV" })
+        XCTAssertTrue(updates.contains { $0.message == L10n.text("ImportFile.0547", "passwords.csv") })
         XCTAssertTrue(updates.allSatisfy { !$0.message.contains(secret) })
         XCTAssertTrue(updates.contains { $0.total != nil })
 
@@ -187,7 +187,7 @@ final class ImportFileTests: XCTestCase {
         let result = Vault.take(csv: safeToSkip, control: vaultControl)
         XCTAssertEqual(result.kept, 0)
         XCTAssertEqual(result.skipped, 1)
-        XCTAssertTrue(updates.contains { $0.message == "正在读取密码 CSV…" })
+        XCTAssertTrue(updates.contains { $0.message == L10n.text("Vault.1141") })
         XCTAssertTrue(updates.allSatisfy { !$0.message.contains(secret) })
     }
 

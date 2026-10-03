@@ -504,7 +504,7 @@ final class Bookmarks: ObservableObject {
     /// A folder of your own, its name asked for as a rename's is: inside
     /// `parent`, or at the top level for nil. An empty name makes none.
     func askNewFolder(in parent: Bookmark.ID?, made: @escaping (Bookmark.ID) -> Void = { _ in }) {
-        Ask.name("新建文件夹", placeholder: "文件夹名称", confirm: "创建") { name in
+        Ask.name(L10n.text("Bookmarks.0213"), placeholder: L10n.text("Bookmarks.0214"), confirm: L10n.text("Bookmarks.0215")) { name in
             made(self.insert(.folder(name, []), into: parent).id)
         }
     }
@@ -515,11 +515,11 @@ final class Bookmarks: ObservableObject {
         guard node.isFolder, let kids = node.children, !kids.isEmpty else { return remove(node.id) }
         let count = Bookmarks.count(kids)
         let detail = switch count {
-        case 0: "其中的空文件夹也会被移除。"
-        case 1: "其中的书签也会被移除。"
-        default: "其中的 \(count) 个书签也会被移除。"
+        case 0: L10n.text("Bookmarks.0216")
+        case 1: L10n.text("Bookmarks.0217")
+        default: L10n.text("Bookmarks.0218", String(describing: count))
         }
-        Ask.sure("移除“\(node.title)”？", detail: detail, confirm: "移除") {
+        Ask.sure(L10n.text("Bookmarks.0219", String(describing: node.title)), detail: detail, confirm: L10n.text("Bookmarks.0220")) {
             self.remove(node.id)
         }
     }
@@ -672,7 +672,7 @@ struct BookmarkOutline: View {
                 } else {
                     // Where its first bookmark would be, so a drop here goes
                     // in, shown as the folder's own lower edge shows it.
-                    Text("空")
+                    Text(L10n.text("Bookmarks.0221"))
                         .font(.system(size: 12))
                         .foregroundStyle(Palette.faint)
                         .padding(.leading, indent(depth + 1) + 26)
@@ -699,7 +699,7 @@ struct BookmarkOutline: View {
     /// folder brought in from another browser is called after it. The name
     /// it has arrives in the field; an empty one changes nothing.
     private func rename(_ node: Bookmark) {
-        Ask.name(node.isFolder ? "重命名文件夹" : "重命名书签", placeholder: node.title, initial: node.title, confirm: "重命名") {
+        Ask.name(node.isFolder ? L10n.text("Bookmarks.0222") : L10n.text("Bookmarks.0223"), placeholder: node.title, initial: node.title, confirm: L10n.text("Bookmarks.0224")) {
             bookmarks.update(node.id, title: $0, url: nil)
         }
     }
@@ -887,15 +887,15 @@ struct BookmarkOutline: View {
             .onHover { hovering = $0 }
             .contextMenu {
                 if let open {
-                    Button("打开", action: open)
+                    Button(L10n.text("Bookmarks.0225"), action: open)
                     Divider()
                 }
-                Button("重命名…", action: rename)
+                Button(L10n.text("Bookmarks.0226"), action: rename)
                 if let newFolder {
-                    Button("新建子文件夹…", action: newFolder)
+                    Button(L10n.text("Bookmarks.0227"), action: newFolder)
                 }
-                Menu("移至") {
-                    Button("顶层", action: { moveTo(nil) })
+                Menu(L10n.text("Bookmarks.0228")) {
+                    Button(L10n.text("Bookmarks.0229"), action: { moveTo(nil) })
                     if !moveTargets.isEmpty {
                         Divider()
                         ForEach(moveTargets, id: \.node.id) { target in
@@ -906,7 +906,7 @@ struct BookmarkOutline: View {
                     }
                 }
                 Divider()
-                Button("移除", role: .destructive, action: remove)
+                Button(L10n.text("Bookmarks.0230"), role: .destructive, action: remove)
             }
             .animation(Motion.quick, value: hovering)
             .animation(Motion.quick, value: dragging)
@@ -946,7 +946,7 @@ struct BookmarkDoor: View {
     }
 
     fileprivate static func door(_ browser: Browser, kept: Bool) -> some View {
-        Door(icon: kept ? "bookmark.fill" : "bookmark", help: "书签") { browser.toggleBookmarks() }
+        Door(icon: kept ? "bookmark.fill" : "bookmark", help: L10n.text("Bookmarks.0231")) { browser.toggleBookmarks() }
     }
 
     /// Watches the tab for where it goes and the bookmarks for what is
@@ -975,12 +975,12 @@ struct BookmarkCard: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("已添加书签")
+            Text(L10n.text("Bookmarks.0232"))
                 .font(.system(size: 13, weight: .semibold))
                 .foregroundStyle(Palette.ink)
 
             VStack(spacing: 8) {
-                line("名称") {
+                line(L10n.text("Bookmarks.0233")) {
                     TextField("", text: $title)
                         .textFieldStyle(.plain)
                         .font(.system(size: 12.5))
@@ -992,16 +992,16 @@ struct BookmarkCard: View {
                         .background(Palette.wash, in: RoundedRectangle(cornerRadius: 8, style: .continuous))
                         .onChange(of: title) { _, typed in rename(typed) }
                 }
-                line("文件夹") { folder }
+                line(L10n.text("Bookmarks.0234")) { folder }
             }
 
             HStack(spacing: 8) {
-                Quick("移除", tint: .red.opacity(0.75)) {
+                Quick(L10n.text("Bookmarks.0235"), tint: .red.opacity(0.75)) {
                     close()
                     bookmarks.remove(id)
                 }
                 Spacer(minLength: 0)
-                Pill("完成", filled: true, action: close)
+                Pill(L10n.text("Bookmarks.0236"), filled: true, action: close)
             }
         }
         .padding(14)
@@ -1021,7 +1021,7 @@ struct BookmarkCard: View {
     private var folder: some View {
         let here = bookmarks.path(to: id)?.last
         return Menu {
-            Button("顶层") { bookmarks.move(id, into: nil) }
+            Button(L10n.text("Bookmarks.0237")) { bookmarks.move(id, into: nil) }
             let folders = Bookmarks.folders(bookmarks.roots)
             if !folders.isEmpty {
                 Divider()
@@ -1032,8 +1032,8 @@ struct BookmarkCard: View {
                 }
             }
             Divider()
-            Button("新建文件夹…") {
-                Ask.name("新建文件夹", placeholder: "名称", confirm: "创建") { name in
+            Button(L10n.text("Bookmarks.0238")) {
+                Ask.name(L10n.text("Bookmarks.0239"), placeholder: L10n.text("Bookmarks.0240"), confirm: L10n.text("Bookmarks.0241")) { name in
                     let made = bookmarks.insert(.folder(name, []), into: nil)
                     bookmarks.move(id, into: made.id)
                 }
@@ -1043,7 +1043,7 @@ struct BookmarkCard: View {
                 Image(systemName: "folder")
                     .font(.system(size: 10.5))
                     .foregroundStyle(Palette.muted)
-                Text(here?.title ?? "顶层")
+                Text(here?.title ?? L10n.text("Bookmarks.0242"))
                     .font(.system(size: 12.5))
                     .foregroundStyle(Palette.ink)
                     .lineLimit(1)
@@ -1109,7 +1109,7 @@ struct BookmarksDropdown: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             if bookmarks.isEmpty {
-                Text("暂无书签")
+                Text(L10n.text("Bookmarks.0243"))
                     .font(.system(size: 12.5))
                     .foregroundStyle(Palette.muted)
                     .padding(14)
@@ -1126,10 +1126,10 @@ struct BookmarksDropdown: View {
             }
             Divider().overlay(Palette.hairline)
             VStack(spacing: 1) {
-                Foot(browser.pageKept ? "bookmark.fill" : "bookmark", browser.pageKept ? "编辑此书签…" : "添加此页面") {
+                Foot(browser.pageKept ? "bookmark.fill" : "bookmark", browser.pageKept ? L10n.text("Bookmarks.0244") : L10n.text("Bookmarks.0245")) {
                     browser.bookmarkCurrent()
                 }
-                Foot(nil, "管理书签…") { browser.bookmarking = true }
+                Foot(nil, L10n.text("Bookmarks.0246")) { browser.bookmarking = true }
             }
             .padding(6)
         }
@@ -1210,13 +1210,13 @@ struct BookmarksPanel: View {
     @State private var shown: Bookmark.ID?
 
     var body: some View {
-        Plate("书签", width: 600, close: { browser.bookmarking = false }) {
+        Plate(L10n.text("Bookmarks.0247"), width: 600, close: { browser.bookmarking = false }) {
             VStack(alignment: .leading, spacing: 14) {
-                Hunt(text: $query, prompt: "搜索书签", focus: $hunting)
+                Hunt(text: $query, prompt: L10n.text("Bookmarks.0248"), focus: $hunting)
                     .onSubmit(openFirst)
 
                 if bookmarks.isEmpty {
-                    Card { Nothing("暂无书签。按 ⇧⌘B 添加此页面，或在下方导入书签。") }
+                    Card { Nothing(L10n.text("Bookmarks.0249")) }
                 } else if !query.isEmpty {
                     found
                 } else {
@@ -1249,17 +1249,17 @@ struct BookmarksPanel: View {
             }
         } foot: {
             HStack(spacing: 8) {
-                Text("导入来源")
+                Text(L10n.text("Bookmarks.0250"))
                     .font(.system(size: 12))
                     .foregroundStyle(Palette.muted)
-                Pill("导入…") {
+                Pill(L10n.text("Bookmarks.0251")) {
                     browser.bookmarking = false
                     browser.bringingIn = ""
                 }
-                Pill("文件…") { browser.importFile() }
+                Pill(L10n.text("Bookmarks.0252")) { browser.importFile() }
                 Spacer()
-                Pill("新建文件夹…") { bookmarks.askNewFolder(in: nil) }
-                Text(bookmarks.count == 1 ? "1 个书签" : "\(bookmarks.count) 个书签")
+                Pill(L10n.text("Bookmarks.0253")) { bookmarks.askNewFolder(in: nil) }
+                Text(bookmarks.count == 1 ? L10n.text("Bookmarks.0254") : L10n.text("Bookmarks.0255", String(describing: bookmarks.count)))
                     .font(.system(size: 12))
                     .foregroundStyle(Palette.muted)
             }
@@ -1274,7 +1274,7 @@ struct BookmarksPanel: View {
     private var found: some View {
         let hits = bookmarks.matches(query)
         if hits.isEmpty {
-            Card { Nothing("没有匹配项。") }
+            Card { Nothing(L10n.text("Bookmarks.0256")) }
         } else {
             ScrollView(showsIndicators: false) {
                 Card {
@@ -1344,7 +1344,7 @@ struct BookmarksPanel: View {
                 }
                 Spacer(minLength: 8)
                 if hovering {
-                    Quick("在文件夹中显示", act: show)
+                    Quick(L10n.text("Bookmarks.0257"), act: show)
                 }
             }
             .padding(.horizontal, 14)
@@ -1354,15 +1354,15 @@ struct BookmarksPanel: View {
             .onTapGesture { open?() ?? show() }
             .onHover { hovering = $0 }
             .contextMenu {
-                if let open { Button("打开", action: open) }
-                Button("在文件夹中显示", action: show)
+                if let open { Button(L10n.text("Bookmarks.0258"), action: open) }
+                Button(L10n.text("Bookmarks.0259"), action: show)
             }
             .animation(Motion.quick, value: hovering)
         }
 
         /// The folders it is in, then the site.
         private var whereabouts: String {
-            let folders = path.isEmpty ? "顶层" : path.joined(separator: " \u{203A} ")
+            let folders = path.isEmpty ? L10n.text("Bookmarks.0260") : path.joined(separator: " \u{203A} ")
             guard let host = node.host else { return folders }
             return folders + "  \u{00B7}  " + host
         }
@@ -1417,7 +1417,7 @@ final class BookmarkMenu: NSObject, NSMenuDelegate {
     }
 
     private func wrap() {
-        guard let menu = NSApp.mainMenu?.items.first(where: { $0.title == "书签" })?.submenu,
+        guard let menu = NSApp.mainMenu?.items.first(where: { $0.title == L10n.text("Bookmarks.0261") })?.submenu,
               menu.delegate !== relay
         else { return }
         relay.inner = menu.delegate
@@ -1426,7 +1426,7 @@ final class BookmarkMenu: NSObject, NSMenuDelegate {
 
     /// How many items this has put in the menu, for the bench.
     var count: Int {
-        NSApp.mainMenu?.items.first(where: { $0.title == "书签" })?.submenu?.items.filter { $0.tag == Self.mark }.count ?? 0
+        NSApp.mainMenu?.items.first(where: { $0.title == L10n.text("Bookmarks.0262") })?.submenu?.items.filter { $0.tag == Self.mark }.count ?? 0
     }
 
     /// The top of the list, after SwiftUI's items, in place of any left
@@ -1447,7 +1447,7 @@ final class BookmarkMenu: NSObject, NSMenuDelegate {
         let menu = NSMenu(title: folder.title)
         let made = items(for: folder.children ?? [])
         if made.isEmpty {
-            let empty = NSMenuItem(title: "空", action: nil, keyEquivalent: "")
+            let empty = NSMenuItem(title: L10n.text("Bookmarks.0263"), action: nil, keyEquivalent: "")
             empty.isEnabled = false
             menu.addItem(empty)
         }
@@ -1490,7 +1490,7 @@ final class BookmarkMenu: NSObject, NSMenuDelegate {
         menu.removeAllItems()
         let made = items(for: kids)
         if made.isEmpty {
-            let empty = NSMenuItem(title: "空", action: nil, keyEquivalent: "")
+            let empty = NSMenuItem(title: L10n.text("Bookmarks.0264"), action: nil, keyEquivalent: "")
             empty.isEnabled = false
             menu.addItem(empty)
         }

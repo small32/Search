@@ -59,7 +59,7 @@ final class Assistant: ObservableObject, Identifiable {
             self.addressed = self.read?.addressed ?? false
             self.reading = false
             guard self.read != nil else {
-                self.trouble = "此页面没有可读取的内容。"
+                self.trouble = L10n.text("AIAssist.0002")
                 return
             }
             if summary { self.ask(.summary) }
@@ -70,8 +70,8 @@ final class Assistant: ObservableObject, Identifiable {
 
     /// Where it ran, for the foot of every answer.
     var place: String {
-        provider == .thisMac ? "在此 Mac 上 · \(model)"
-            : provider.isLocal ? "在此 Mac 上 · \(provider.name) · \(model)" : "发送至 \(provider.name) · \(model)"
+        provider == .thisMac ? L10n.text("AIAssist.0003", String(describing: model))
+            : provider.isLocal ? L10n.text("AIAssist.0004", String(describing: provider.name), String(describing: model)) : L10n.text("AIAssist.0005", String(describing: provider.name), String(describing: model))
     }
 
     func submit() {
@@ -165,14 +165,14 @@ enum AIAssist {
     /// What a provider off this Mac is sent, said once, the first time it is
     /// used — and a word on what it does with it where that matters.
     static func notice(for provider: AIProvider) -> String {
-        var text = "提问时，Search 会将页面文本、地址和你的问题发送至 \(provider.host)"
-        text += provider == .openRouter ? "，再由其转交给模型提供商。" : "."
-        text += "适用其服务条款和隐私政策。仅在你提问时发送，无痕标签页不会发送，Search 也不会保留副本。"
+        var text = L10n.text("AIAssist.0006", String(describing: provider.host))
+        text += provider == .openRouter ? L10n.text("AIAssist.0007") : "."
+        text += L10n.text("AIAssist.0008")
         switch provider {
         case .gemini:
-            text += "\n\n在欧洲经济区、瑞士和英国以外使用 Gemini 免费服务时，Google 可能用这些内容改进产品，人工也可能查看。请勿用于含敏感信息的页面。"
+            text += L10n.text("AIAssist.0009")
         case .openRouter:
-            text += "\n\nSearch 要求 OpenRouter 仅使用不保留数据的提供商（零数据保留）。"
+            text += L10n.text("AIAssist.0010")
         default:
             break
         }
@@ -189,37 +189,37 @@ extension Browser {
         guard prefs.ai, let provider = prefs.aiProvider else {
             settingsPage = .ai
             tuning = true
-            announce(prefs.ai ? "选择 AI 运行位置" : "在“设置 › AI”中启用 AI")
+            announce(prefs.ai ? L10n.text("AIAssist.0011") : L10n.text("AIAssist.0012"))
             return
         }
         // A web page, nothing else: not a file, not an extension's page.
         guard let scheme = tab.pageAddress?.scheme?.lowercased(), scheme == "https" || scheme == "http" else {
-            announce("AI 仅适用于网页")
+            announce(L10n.text("AIAssist.0013"))
             return
         }
         // A private tab leaves nothing behind anywhere, a provider included.
         let shy = tab.shy || tab.built.map { !$0.configuration.websiteDataStore.isPersistent } == true
         guard !shy || provider.isLocal else {
-            announce("无痕标签页仅可使用本机 AI")
+            announce(L10n.text("AIAssist.0014"))
             return
         }
         if provider == .thisMac, AIEngine.shared.state != .ready {
             settingsPage = .ai
             tuning = true
-            announce("此 Mac 尚未安装模型")
+            announce(L10n.text("AIAssist.0015"))
             return
         }
         let model = prefs.aiModel(for: provider)
         guard !model.isEmpty else {
             settingsPage = .ai
             tuning = true
-            announce("为 \(provider.name) 选择模型")
+            announce(L10n.text("AIAssist.0016", String(describing: provider.name)))
             return
         }
         guard provider.isLocal || AIKeys.hint(for: provider) != nil else {
             settingsPage = .ai
             tuning = true
-            announce("尚未设置 \(provider.name) 的密钥")
+            announce(L10n.text("AIAssist.0017", String(describing: provider.name)))
             return
         }
         // Asked again on the page the panel is already about: the same
@@ -251,11 +251,11 @@ struct AssistantPanel: View {
                 Image(systemName: "sparkles")
                     .font(.system(size: 11, weight: .medium))
                     .foregroundStyle(Palette.muted)
-                Text(assistant.summary ? "摘要" : "关于此页面")
+                Text(assistant.summary ? L10n.text("AIAssist.0018") : L10n.text("AIAssist.0019"))
                     .font(.system(size: 13, weight: .semibold))
                     .foregroundStyle(Palette.ink)
                 Spacer(minLength: 0)
-                Door(icon: "xmark", help: "关闭   esc") { browser.closeAssistant() }
+                Door(icon: "xmark", help: L10n.text("AIAssist.0020")) { browser.closeAssistant() }
             }
             .padding(.horizontal, 16)
             .padding(.top, 12)
@@ -270,9 +270,9 @@ struct AssistantPanel: View {
             Rectangle().fill(Palette.hairline).frame(height: 1)
             HStack(spacing: 8) {
                 if drawn {
-                    Text("询问此页面…").font(.system(size: 12.5)).foregroundStyle(Palette.faint)
+                    Text(L10n.text("AIAssist.0021")).font(.system(size: 12.5)).foregroundStyle(Palette.faint)
                 } else {
-                    TextField("", text: $assistant.draft, prompt: Text("询问此页面…").foregroundStyle(Palette.faint))
+                    TextField("", text: $assistant.draft, prompt: Text(L10n.text("AIAssist.0022")).foregroundStyle(Palette.faint))
                         .textFieldStyle(.plain)
                         .font(.system(size: 12.5))
                         .foregroundStyle(Palette.ink)
@@ -283,7 +283,7 @@ struct AssistantPanel: View {
             }
             .padding(.horizontal, 16)
             .padding(.vertical, 10)
-            Text("AI 可能出错 · \(assistant.place)")
+            Text(L10n.text("AIAssist.0023", String(describing: assistant.place)))
                 .font(.system(size: 10.5))
                 .foregroundStyle(Palette.faint)
                 .lineLimit(1)
@@ -304,10 +304,10 @@ struct AssistantPanel: View {
             } else if let trouble = assistant.trouble {
                 Text(trouble).font(.system(size: 12.5)).foregroundStyle(Palette.muted)
             } else if assistant.reading {
-                Text("正在读取页面…").font(.system(size: 12.5)).foregroundStyle(Palette.muted)
+                Text(L10n.text("AIAssist.0024")).font(.system(size: 12.5)).foregroundStyle(Palette.muted)
             }
             if assistant.addressed, assistant.notice == nil {
-                caution("此页面包含针对 AI 的指令，回答可能受到这些内容的影响。")
+                caution(L10n.text("AIAssist.0025"))
             }
             ForEach(assistant.turns) { turn in
                 TurnView(turn: turn).id(turn.id)
@@ -342,7 +342,7 @@ struct AssistantPanel: View {
 
     private func noticeCard(_ notice: String) -> some View {
         VStack(alignment: .leading, spacing: 10) {
-            Text("由 \(assistant.provider.name) 回答")
+            Text(L10n.text("AIAssist.0026", String(describing: assistant.provider.name)))
                 .font(.system(size: 12.5, weight: .medium))
                 .foregroundStyle(Palette.ink)
             Text(verbatim: notice)
@@ -350,8 +350,8 @@ struct AssistantPanel: View {
                 .foregroundStyle(Palette.muted)
                 .fixedSize(horizontal: false, vertical: true)
             HStack(spacing: 8) {
-                Pill("继续", filled: true) { assistant.agree() }
-                Pill("取消") { browser.closeAssistant() }
+                Pill(L10n.text("AIAssist.0027"), filled: true) { assistant.agree() }
+                Pill(L10n.text("AIAssist.0028")) { browser.closeAssistant() }
             }
         }
         .padding(12)
@@ -388,7 +388,7 @@ struct AssistantPanel: View {
                     HStack(alignment: .firstTextBaseline, spacing: 6) {
                         Image(systemName: "exclamationmark.triangle")
                             .font(.system(size: 10, weight: .medium))
-                        Text(verbatim: "页面中未提及：" + turn.strays.joined(separator: ", "))
+                        Text(verbatim: L10n.text("AIAssist.0029") + turn.strays.joined(separator: ", "))
                             .font(.system(size: 11.5))
                             .fixedSize(horizontal: false, vertical: true)
                     }
@@ -417,20 +417,20 @@ struct AISettings: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 18) {
             Card {
-                Line("在网页中使用 AI", "通过“显示”菜单总结页面或提问。仅在你发起请求时发送内容") {
+                Line(L10n.text("AIAssist.0030"), L10n.text("AIAssist.0031")) {
                     Switch(on: $prefs.ai)
                 }
             }
             if prefs.ai {
                 Card {
-                    Line("运行位置", place) {
+                    Line(L10n.text("AIAssist.0032"), place) {
                         if drawn {
-                            Stand(prefs.aiProvider.map { $0.isLocal ? "\($0.name)，在此 Mac 上" : $0.name } ?? "选择…", menu: true)
+                            Stand(prefs.aiProvider.map { $0.isLocal ? L10n.text("AIAssist.0033", String(describing: $0.name)) : $0.name } ?? L10n.text("AIAssist.0034"), menu: true)
                         } else {
                         Picker("", selection: Binding(get: { prefs.aiProvider }, set: { prefs.aiProvider = $0 })) {
-                            Text("选择…").tag(AIProvider?.none)
+                            Text(L10n.text("AIAssist.0035")).tag(AIProvider?.none)
                             ForEach(AIProvider.allCases.filter { $0 != .thisMac || engine.available || prefs.aiProvider == .thisMac }) { provider in
-                                Text(provider == .thisMac ? provider.name : provider.isLocal ? "\(provider.name)，在此 Mac 上" : provider.name)
+                                Text(provider == .thisMac ? provider.name : provider.isLocal ? L10n.text("AIAssist.0036", String(describing: provider.name)) : provider.name)
                                     .tag(AIProvider?.some(provider))
                             }
                         }
@@ -451,11 +451,11 @@ struct AISettings: View {
                 }
                 .onAppear(perform: refresh)
                 Card {
-                    Line("清除所有密钥", "从此 Mac 的钥匙串删除密钥。通过 OpenRouter 登录生成的密钥仍有效，需到 openrouter.ai 删除才能撤销") {
-                        Pill("清除") {
+                    Line(L10n.text("AIAssist.0037"), L10n.text("AIAssist.0038")) {
+                        Pill(L10n.text("AIAssist.0039")) {
                             AIKeys.forgetAll()
                             refresh()
-                            browser.announce("密钥已清除")
+                            browser.announce(L10n.text("AIAssist.0040"))
                         }
                     }
                 }
@@ -468,53 +468,53 @@ struct AISettings: View {
     private var onThisMac: some View {
         let size = ByteCountFormatter.string(fromByteCount: engine.downloadSize, countStyle: .file)
         if AIEngine.translated {
-            Line("模型", "需要 Apple 芯片版 Search；当前版本正通过转译运行") { EmptyView() }
+            Line(L10n.text("AIAssist.0041"), L10n.text("AIAssist.0042")) { EmptyView() }
         } else {
             switch engine.state {
             case .absent:
-                Line("模型", "\(AIEngine.model.name)，一次下载并校验（\(size)），数据不会离开此 Mac") {
-                    Pill("下载", filled: true) { engine.install() }
+                Line(L10n.text("AIAssist.0043"), L10n.text("AIAssist.0044", String(describing: AIEngine.model.name), String(describing: size))) {
+                    Pill(L10n.text("AIAssist.0045"), filled: true) { engine.install() }
                 }
             case .downloading(let done):
-                Line("模型", "正在下载… \(Int(done * 100))%") {
-                    Pill("取消") { engine.cancelInstall() }
+                Line(L10n.text("AIAssist.0046"), L10n.text("AIAssist.0047", String(describing: Int(done * 100)))) {
+                    Pill(L10n.text("AIAssist.0048")) { engine.cancelInstall() }
                 }
             case .preparing:
-                Line("模型", "正在为此 Mac 准备模型，首次约需 20 秒") { EmptyView() }
+                Line(L10n.text("AIAssist.0049"), L10n.text("AIAssist.0050")) { EmptyView() }
             case .ready:
-                Line("模型", "\(AIEngine.model.name)，在此 Mac 上运行，数据不会离开本机") {
-                    Pill("移除") { engine.remove() }
+                Line(L10n.text("AIAssist.0051"), L10n.text("AIAssist.0052", String(describing: AIEngine.model.name))) {
+                    Pill(L10n.text("AIAssist.0053")) { engine.remove() }
                 }
             case .failed(let why):
-                Line("模型", why) {
-                    Pill("重试") { engine.install() }
+                Line(L10n.text("AIAssist.0054"), why) {
+                    Pill(L10n.text("AIAssist.0055")) { engine.install() }
                 }
             }
         }
     }
 
     private var place: String {
-        guard let provider = prefs.aiProvider else { return "选择已有密钥的服务提供商，或本机应用" }
+        guard let provider = prefs.aiProvider else { return L10n.text("AIAssist.0056") }
         return provider.isLocal
-            ? "数据不会离开此 Mac，也可用于无痕标签页"
-            : "密钥保存在此 Mac 的钥匙串，仅发送至 \(provider.host)。无痕标签页不会发送"
+            ? L10n.text("AIAssist.0057")
+            : L10n.text("AIAssist.0058", String(describing: provider.host))
     }
 
     @ViewBuilder
     private func key(_ provider: AIProvider) -> some View {
         if let hint {
-            Line("密钥", "\(hint)，保存在此 Mac 的钥匙串中") {
-                Pill("清除") {
+            Line(L10n.text("AIAssist.0059"), L10n.text("AIAssist.0060", String(describing: hint))) {
+                Pill(L10n.text("AIAssist.0061")) {
                     AIKeys.forget(provider)
                     refresh()
                 }
             }
         } else if !AIKeys.available {
-            Line("密钥", "此 Search 版本不是签名发行版，无法安全保存密钥。仍可使用本机应用") { EmptyView() }
+            Line(L10n.text("AIAssist.0062"), L10n.text("AIAssist.0063")) { EmptyView() }
         } else {
-            Line("密钥", provider == .openRouter ? "粘贴密钥，或登录 OpenRouter 自动创建" : "粘贴 API 密钥") {
+            Line(L10n.text("AIAssist.0064"), provider == .openRouter ? L10n.text("AIAssist.0065") : L10n.text("AIAssist.0066")) {
                 HStack(spacing: 6) {
-                    SecureField("", text: $pasted, prompt: Text("密钥").foregroundStyle(Palette.faint))
+                    SecureField("", text: $pasted, prompt: Text(L10n.text("AIAssist.0067")).foregroundStyle(Palette.faint))
                         .textFieldStyle(.plain)
                         .font(.system(size: 12))
                         .frame(width: 130)
@@ -522,9 +522,9 @@ struct AISettings: View {
                         .padding(.vertical, 5)
                         .background(Palette.wash, in: RoundedRectangle(cornerRadius: 7, style: .continuous))
                         .onSubmit { save(provider) }
-                    Pill("保存") { save(provider) }
+                    Pill(L10n.text("AIAssist.0068")) { save(provider) }
                     if provider == .openRouter {
-                        Pill("登录…") {
+                        Pill(L10n.text("AIAssist.0069")) {
                             browser.tuning = false
                             AISignIn.start(in: browser)
                         }
@@ -535,7 +535,7 @@ struct AISettings: View {
     }
 
     private func cloudModel(_ provider: AIProvider) -> some View {
-        Line("模型", "留空则使用 \(provider.defaultModel)") {
+        Line(L10n.text("AIAssist.0070"), L10n.text("AIAssist.0071", String(describing: provider.defaultModel))) {
             if drawn {
                 Stand(prefs.aiModels[provider.rawValue].flatMap { $0.isEmpty ? nil : $0 } ?? provider.defaultModel, width: 170)
             } else {
@@ -574,13 +574,13 @@ struct AISettings: View {
     @ViewBuilder
     private func localModel(_ provider: AIProvider) -> some View {
         if models.isEmpty {
-            Line("模型", looking ? "正在查询 \(provider.name)…" : "\(provider.name) 未运行或尚未安装模型") {
-                Pill("重新检查") { refresh() }
+            Line(L10n.text("AIAssist.0072"), looking ? L10n.text("AIAssist.0073", String(describing: provider.name)) : L10n.text("AIAssist.0074", String(describing: provider.name))) {
+                Pill(L10n.text("AIAssist.0075")) { refresh() }
             }
         } else {
-            Line("模型", "来自此 Mac 上的 \(provider.name)") {
+            Line(L10n.text("AIAssist.0076"), L10n.text("AIAssist.0077", String(describing: provider.name))) {
                 Picker("", selection: Binding(get: { prefs.aiModel(for: provider) }, set: { prefs.setAIModel($0, for: provider) })) {
-                    Text("选择…").tag("")
+                    Text(L10n.text("AIAssist.0078")).tag("")
                     ForEach(models, id: \.self) { Text($0).tag($0) }
                 }
                 .labelsHidden()
@@ -594,9 +594,9 @@ struct AISettings: View {
         let key = pasted
         pasted = ""
         switch AIKeys.save(key, for: provider) {
-        case .kept: browser.announce("密钥已保存到钥匙串")
-        case .unavailable: browser.announce("此 Search 版本无法保存密钥")
-        case .failed: browser.announce("密钥未保存")
+        case .kept: browser.announce(L10n.text("AIAssist.0079"))
+        case .unavailable: browser.announce(L10n.text("AIAssist.0080"))
+        case .failed: browser.announce(L10n.text("AIAssist.0081"))
         }
         refresh()
     }

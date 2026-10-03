@@ -494,7 +494,7 @@ final class Extensions: NSObject, ObservableObject {
             return
         }
         if installed.contains(where: { $0.id == id }) {
-            browser?.announce("已安装")
+            browser?.announce(L10n.text("Extensions.0401"))
             return
         }
         busy = id
@@ -531,15 +531,15 @@ final class Extensions: NSObject, ObservableObject {
         let panel = NSOpenPanel()
         panel.canChooseDirectories = true
         panel.canChooseFiles = false
-        panel.prompt = "加载扩展"
-        panel.message = "选择包含扩展 manifest.json 的文件夹。"
+        panel.prompt = L10n.text("Extensions.0402")
+        panel.message = L10n.text("Extensions.0403")
         guard panel.runModal() == .OK, let source = panel.url else { return }
         installFolder(at: source)
     }
 
     func installFolder(at source: URL, confirm: Bool = true) {
         guard FileManager.default.fileExists(atPath: source.appendingPathComponent("manifest.json").path) else {
-            browser?.announce("此文件夹中没有 manifest.json")
+            browser?.announce(L10n.text("Extensions.0404"))
             return
         }
         let id = "local-" + String(UUID().uuidString.prefix(8)).lowercased()
@@ -552,7 +552,7 @@ final class Extensions: NSObject, ObservableObject {
                 try ExtensionShims.prepare(staged, fresh: true)
                 try await admit(staged, as: id, fromStore: false, finalFolder: Extensions.folder(for: id), confirm: confirm || !Store.testing, source: source)
             } catch {
-                browser?.announce("无法安装扩展：\(error.localizedDescription)")
+                browser?.announce(L10n.text("Extensions.0405", String(describing: error.localizedDescription)))
             }
         }
     }
@@ -574,21 +574,21 @@ final class Extensions: NSObject, ObservableObject {
             if let path = original.source, let staged {
                 let source = URL(fileURLWithPath: path, isDirectory: true)
                 guard FileManager.default.fileExists(atPath: source.appendingPathComponent("manifest.json").path) else {
-                    browser?.announce("找不到 \(original.name) 的原始文件夹")
+                    browser?.announce(L10n.text("Extensions.0406", String(describing: original.name)))
                     return
                 }
                 do {
                     try FileManager.default.copyItem(at: source, to: staged)
                     try ExtensionShims.prepare(staged, fresh: true)
                 } catch {
-                    browser?.announce("无法重新复制 \(original.name)：\(error.localizedDescription)")
+                    browser?.announce(L10n.text("Extensions.0407", String(describing: original.name), String(describing: error.localizedDescription)))
                     return
                 }
             }
             let resource = staged ?? target
             let found = try? await WKWebExtension(resourceBaseURL: resource)
             if found == nil, staged != nil {
-                browser?.announce("\(original.name) 未重新载入，无法读取清单")
+                browser?.announce(L10n.text("Extensions.0408", String(describing: original.name)))
                 return
             }
             var wants: [String]?
@@ -598,7 +598,7 @@ final class Extensions: NSObject, ObservableObject {
                 if !Set(permissions).isSubset(of: Set(original.permissions)) {
                     let name = [found.displayName ?? original.name, found.version].compactMap { $0 }.joined(separator: " ")
                     guard await ask(install: name, wants: Extensions.describe(found, in: resource), icon: found.icon(for: CGSize(width: 64, height: 64))) else {
-                        browser?.announce("\(original.name) 未重新载入，请求的权限比之前更多")
+                        browser?.announce(L10n.text("Extensions.0409", String(describing: original.name)))
                         return
                     }
                 }
@@ -610,7 +610,7 @@ final class Extensions: NSObject, ObservableObject {
                 do {
                     try ExtensionFiles.replace(staged, at: target)
                 } catch {
-                    browser?.announce("无法替换 \(original.name)：\(error.localizedDescription)")
+                    browser?.announce(L10n.text("Extensions.0410", String(describing: original.name), String(describing: error.localizedDescription)))
                     return
                 }
             }
@@ -624,7 +624,7 @@ final class Extensions: NSObject, ObservableObject {
                 save()
             }
             guard let item = installed.first(where: { $0.id == id }), item.enabled else { return }
-            browser?.announce(await load(item) ? "\(item.name) reloaded" : "\(item.name) 无法启动，请查看“设置 › 扩展”")
+            browser?.announce(await load(item) ? "\(item.name) reloaded" : L10n.text("Extensions.0411", String(describing: item.name)))
         }
     }
 
@@ -709,9 +709,9 @@ final class Extensions: NSObject, ObservableObject {
         installed.append(item)
         save()
         if await load(item) {
-            browser?.announce("\(name) 已安装")
+            browser?.announce(L10n.text("Extensions.0412", String(describing: name)))
         } else {
-            browser?.announce("\(name) 已安装，但 WebKit 无法启动它")
+            browser?.announce(L10n.text("Extensions.0413", String(describing: name)))
         }
     }
 
@@ -753,8 +753,8 @@ final class Extensions: NSObject, ObservableObject {
         guard let (id, url) = newTabCandidate, Store.settings.object(forKey: "extensions.newtab.\(id)") == nil,
               let name = installed.first(where: { $0.id == id })?.name else { return }
         Task {
-            let yes = await ask("在新标签页中显示“\(name)”？", detail: "此扩展请求替换新标签页。以后可在“设置 › 扩展”中更改。",
-                                icon: contexts[id]?.webExtension.icon(for: CGSize(width: 64, height: 64)), yes: "保留", no: "不允许")
+            let yes = await ask(L10n.text("Extensions.0414", String(describing: name)), detail: L10n.text("Extensions.0415"),
+                                icon: contexts[id]?.webExtension.icon(for: CGSize(width: 64, height: 64)), yes: L10n.text("Extensions.0416"), no: L10n.text("Extensions.0417"))
             Store.settings.set(yes, forKey: "extensions.newtab.\(id)")
             if yes, tab.isBlank, let browser { browser.replaceBlank(tab, with: url) }
         }
@@ -844,7 +844,7 @@ final class Extensions: NSObject, ObservableObject {
             // allowed when it was added or last asked about.
             let wants = Set(Extensions.grants(found, in: staged))
             if !wants.isSubset(of: Set(current.permissions)) {
-                guard await ask(install: "\(item.name) 的更新", wants: Extensions.describe(found, in: staged), icon: found.icon(for: CGSize(width: 64, height: 64))) else {
+                guard await ask(install: "An update to \(item.name)", wants: Extensions.describe(found, in: staged), icon: found.icon(for: CGSize(width: 64, height: 64))) else {
                     return
                 }
             }
@@ -938,14 +938,14 @@ final class Extensions: NSObject, ObservableObject {
     /// Chrome's own APIs, which Search answers itself, and what each lets an
     /// extension do.
     static let searchAnswered: [(String, String)] = [
-        ("userScripts", "在网站中运行你添加的脚本"), ("history", "读取和修改历史记录"),
-        ("bookmarks", "读取和修改书签"), ("downloads", "管理下载"),
-        ("privacy", "修改隐私设置"), ("browsingData", "清除浏览数据"),
-        ("management", "查看其他扩展"), ("notifications", "显示通知"),
-        ("sessions", "查看最近关闭的标签页"), ("topSites", "查看最常访问的网站"),
-        ("readingList", "读取和修改阅读列表"), ("downloads.open", "打开其下载的文件"),
-        ("desktopCapture", "在你选择共享范围后录制屏幕或窗口"),
-        ("tabCapture", "在你请求时录制标签页"),
+        ("userScripts", L10n.text("Extensions.0418")), ("history", L10n.text("Extensions.0419")),
+        ("bookmarks", L10n.text("Extensions.0420")), ("downloads", L10n.text("Extensions.0421")),
+        ("privacy", L10n.text("Extensions.0422")), ("browsingData", L10n.text("Extensions.0423")),
+        ("management", L10n.text("Extensions.0424")), ("notifications", L10n.text("Extensions.0425")),
+        ("sessions", L10n.text("Extensions.0426")), ("topSites", L10n.text("Extensions.0427")),
+        ("readingList", L10n.text("Extensions.0428")), ("downloads.open", L10n.text("Extensions.0429")),
+        ("desktopCapture", L10n.text("Extensions.0430")),
+        ("tabCapture", L10n.text("Extensions.0431")),
     ]
 
     /// What an extension wants, in words.
@@ -956,20 +956,20 @@ final class Extensions: NSObject, ObservableObject {
         let declared = Set(((try? JSONSerialization.jsonObject(with: Data(contentsOf: folder.appendingPathComponent("manifest.json")))) as? [String: Any])?["permissions"] as? [String] ?? [])
         let patterns = found.allRequestedMatchPatterns
         if patterns.contains(where: { $0.matchesAllHosts || $0.matchesAllURLs }) {
-            out.append("读取和修改所有网站的内容")
+            out.append(L10n.text("Extensions.0432"))
         } else if !patterns.isEmpty {
             let hosts = patterns.compactMap(\.host).filter { !$0.isEmpty }
-            out.append("读取和修改以下网站的内容：" + (hosts.prefix(4).joined(separator: ", ")) + (hosts.count > 4 ? "，以及另外 \(hosts.count - 4) 个网站" : ""))
+            out.append(L10n.text("Extensions.0433") + (hosts.prefix(4).joined(separator: ", ")) + (hosts.count > 4 ? L10n.text("Extensions.0434", String(describing: hosts.count - 4)) : ""))
         }
         let words: [WKWebExtension.Permission: String] = [
-            .tabs: "查看已打开的标签页及其地址",
-            .cookies: "读取和修改 Cookie",
-            .webNavigation: "查看浏览的网站",
-            .webRequest: "查看网页发出的请求",
-            .declarativeNetRequest: "拦截或修改网页请求",
-            .clipboardWrite: "写入剪贴板",
-            .nativeMessaging: "与此 Mac 上的应用通信",
-            .scripting: "在网页中运行脚本",
+            .tabs: L10n.text("Extensions.0435"),
+            .cookies: L10n.text("Extensions.0436"),
+            .webNavigation: L10n.text("Extensions.0437"),
+            .webRequest: L10n.text("Extensions.0438"),
+            .declarativeNetRequest: L10n.text("Extensions.0439"),
+            .clipboardWrite: L10n.text("Extensions.0440"),
+            .nativeMessaging: L10n.text("Extensions.0441"),
+            .scripting: L10n.text("Extensions.0442"),
         ]
         for (permission, sentence) in words where found.requestedPermissions.contains(permission) && !added.contains(permission.rawValue) {
             out.append(sentence)
@@ -981,33 +981,33 @@ final class Extensions: NSObject, ObservableObject {
 
     private func ask(install name: String, wants: [String], icon: NSImage?) async -> Bool {
         await ask(
-            "将“\(name)”添加到 Search？",
-            detail: wants.isEmpty ? "此扩展没有请求特殊权限。" : "此扩展将能够：\n•" + wants.joined(separator: "\n• "),
-            icon: icon, yes: "添加扩展", no: "取消"
+            L10n.text("Extensions.0443", String(describing: name)),
+            detail: wants.isEmpty ? L10n.text("Extensions.0444") : L10n.text("Extensions.0445") + wants.joined(separator: "\n• "),
+            icon: icon, yes: L10n.text("Extensions.0446"), no: L10n.text("Extensions.0447")
         )
     }
 
     /// An extension asking, through permissions.request, for one of the
     /// permissions Search answers itself.
     func ask(more names: String, context: WKWebExtensionContext) async -> Bool {
-        await ask("请求更多权限", detail: names, context: context)
+        await ask(L10n.text("Extensions.0448"), detail: names, context: context)
     }
 
     /// Recording the screen: asked once, naming the extension; the Mac's own
     /// picker still asks what to share, every time.
     func ask(capture context: WKWebExtensionContext) async -> Bool {
-        let name = context.webExtension.displayName ?? "一个扩展"
+        let name = context.webExtension.displayName ?? L10n.text("Extensions.0449")
         return await ask(
-            "“\(name)”请求录制屏幕或窗口。",
-            detail: "macOS 会询问共享范围。Search 会记住你对 \(name) 的选择，可在“设置 › 扩展”中撤销。",
-            icon: context.webExtension.icon(for: CGSize(width: 64, height: 64)), yes: "继续", no: "不允许")
+            L10n.text("Extensions.0450", String(describing: name)),
+            detail: L10n.text("Extensions.0451", String(describing: name)),
+            icon: context.webExtension.icon(for: CGSize(width: 64, height: 64)), yes: L10n.text("Extensions.0452"), no: L10n.text("Extensions.0453"))
     }
 
     func ask(_ question: String, detail: String, context: WKWebExtensionContext) async -> Bool {
         await ask(
-            "\(context.webExtension.displayName ?? "一个扩展") \(question)",
+            L10n.text("Extensions.0454", String(describing: context.webExtension.displayName ?? L10n.text("Extensions.1328")), String(describing: question)),
             detail: detail, icon: context.webExtension.icon(for: CGSize(width: 64, height: 64)),
-            yes: "允许", no: "不允许"
+            yes: L10n.text("Extensions.0455"), no: L10n.text("Extensions.0456")
         )
     }
 
@@ -1289,7 +1289,7 @@ extension Extensions: WKWebExtensionControllerDelegate {
 
     func webExtensionController(_ controller: WKWebExtensionController, promptForPermissions permissions: Set<WKWebExtension.Permission>, in tab: (any WKWebExtensionTab)?, for extensionContext: WKWebExtensionContext) async -> (Set<WKWebExtension.Permission>, Date?) {
         let detail = permissions.map(\.rawValue).sorted().joined(separator: ", ")
-        return await ask("请求更多权限", detail: detail, context: extensionContext) ? (permissions, nil) : ([], nil)
+        return await ask(L10n.text("Extensions.0457"), detail: detail, context: extensionContext) ? (permissions, nil) : ([], nil)
     }
 
     func webExtensionController(_ controller: WKWebExtensionController, promptForPermissionToAccess urls: Set<URL>, in tab: (any WKWebExtensionTab)?, for extensionContext: WKWebExtensionContext) async -> (Set<URL>, Date?) {
@@ -1308,8 +1308,8 @@ extension Extensions: WKWebExtensionControllerDelegate {
         let wanted = matchPatterns.filter { !Extensions.reachesExtensions($0) }
         guard !wanted.isEmpty else { return ([], nil) }
         let all = wanted.contains { $0.matchesAllHosts || $0.matchesAllURLs }
-        let what = all ? "所有网站" : wanted.map(\.string).sorted().joined(separator: ", ")
-        guard await ask("请求读取和修改 \(what)", detail: "权限会持续到你移除扩展为止。", context: extensionContext) else { return ([], nil) }
+        let what = all ? L10n.text("Extensions.0458") : wanted.map(\.string).sorted().joined(separator: ", ")
+        guard await ask(L10n.text("Extensions.0459", String(describing: what)), detail: L10n.text("Extensions.0460"), context: extensionContext) else { return ([], nil) }
         // Given only once this returns: fenced again right after.
         DispatchQueue.main.async { Extensions.fence(extensionContext) }
         return (wanted, nil)
@@ -1551,7 +1551,7 @@ private struct ExtensionButtons: View {
                         .background(Anchor(id: button.id))
                         .contextMenu { ExtensionActions(id: button.id, name: button.name, extensions: extensions) }
                 }
-                Door(icon: "puzzlepiece.extension", on: extensions.menuOpen, help: "扩展") {
+                Door(icon: "puzzlepiece.extension", on: extensions.menuOpen, help: L10n.text("Extensions.0461")) {
                     extensions.menuOpen.toggle()
                 }
                 .background(Anchor(id: Extensions.menuAnchor))
@@ -1643,21 +1643,21 @@ private struct ExtensionActions: View {
 
     var body: some View {
         let pinned = extensions.installed.first { $0.id == id }?.pinned ?? false
-        SwiftUI.Button(pinned ? "取消固定" : "固定到工具栏") { extensions.setPinned(id, !pinned) }
+        SwiftUI.Button(pinned ? L10n.text("Extensions.0462") : L10n.text("Extensions.0463")) { extensions.setPinned(id, !pinned) }
         if extensions.contexts[id]?.optionsPageURL != nil {
-            SwiftUI.Button("选项…") { extensions.openOptions(id) }
+            SwiftUI.Button(L10n.text("Extensions.0464")) { extensions.openOptions(id) }
         }
-        SwiftUI.Button("重新载入") { extensions.reload(id) }
+        SwiftUI.Button(L10n.text("Extensions.0465")) { extensions.reload(id) }
         Divider()
-        SwiftUI.Button("移除“\(name)”…") { ExtensionActions.confirmRemove(id, name: name, extensions) }
+        SwiftUI.Button(L10n.text("Extensions.0466", String(describing: name))) { ExtensionActions.confirmRemove(id, name: name, extensions) }
     }
 
     static func confirmRemove(_ id: String, name: String, _ extensions: Extensions) {
         let alert = NSAlert()
-        alert.messageText = "移除“\(name)”？"
-        alert.informativeText = "其设置和数据也会被删除。"
-        alert.addButton(withTitle: "移除")
-        alert.addButton(withTitle: "取消")
+        alert.messageText = L10n.text("Extensions.0467", String(describing: name))
+        alert.informativeText = L10n.text("Extensions.0468")
+        alert.addButton(withTitle: L10n.text("Extensions.0469"))
+        alert.addButton(withTitle: L10n.text("Extensions.0470"))
         if alert.runModal() == .alertFirstButtonReturn { extensions.remove(id) }
     }
 }
@@ -1688,7 +1688,7 @@ private struct ExtensionMenu: View {
         VStack(alignment: .leading, spacing: 0) {
             let buttons = extensions.buttons
             if buttons.isEmpty {
-                Text("没有已启用的扩展")
+                Text(L10n.text("Extensions.0471"))
                     .font(.system(size: 12.5))
                     .foregroundStyle(Palette.muted)
                     .padding(14)
@@ -1706,15 +1706,15 @@ private struct ExtensionMenu: View {
             }
             Divider().overlay(Palette.hairline)
             VStack(spacing: 1) {
-                Foot("storefront", "Chrome 应用商店…") {
+                Foot("storefront", L10n.text("Extensions.0472")) {
                     extensions.menuOpen = false
                     extensions.browser?.open(Browser.webStore, foreground: true)
                 }
-                Foot("folder", "加载解压后的扩展…") {
+                Foot("folder", L10n.text("Extensions.0473")) {
                     extensions.menuOpen = false
                     DispatchQueue.main.async { extensions.installFolder() }
                 }
-                Foot("gearshape", "管理扩展…") {
+                Foot("gearshape", L10n.text("Extensions.0474")) {
                     extensions.menuOpen = false
                     Store.settings.set("extensions", forKey: "settings.page")
                     extensions.browser?.tuning = true
@@ -1740,10 +1740,10 @@ private struct ExtensionMenu: View {
                     .lineLimit(1)
                 Spacer(minLength: 4)
                 if hovering, extensions.installed.first(where: { $0.id == button.id })?.source != nil {
-                    Tool(symbol: "arrow.clockwise", help: "从文件夹重新载入") { extensions.reload(button.id) }
+                    Tool(symbol: "arrow.clockwise", help: L10n.text("Extensions.0475")) { extensions.reload(button.id) }
                 }
                 if hovering || button.pinned {
-                    Tool(symbol: button.pinned ? "pin.fill" : "pin", help: button.pinned ? "取消固定" : "固定到工具栏", on: button.pinned) {
+                    Tool(symbol: button.pinned ? "pin.fill" : "pin", help: button.pinned ? L10n.text("Extensions.0476") : L10n.text("Extensions.0477"), on: button.pinned) {
                         extensions.setPinned(button.id, !button.pinned)
                     }
                 }

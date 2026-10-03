@@ -47,7 +47,7 @@ struct KeyCombo: Codable, Hashable {
     ]
 
     private static let symbols: [String: String] = [
-        "left": "←", "right": "→", "up": "↑", "down": "↓", "return": "↩", "delete": "⌫", "space": "空格",
+        "left": "←", "right": "→", "up": "↑", "down": "↓", "return": "↩", "delete": "⌫", "space": L10n.text("Shortcuts.0873"),
         "tab": "⇥", "escape": "⎋",
     ]
 
@@ -120,16 +120,15 @@ struct KeyCombo: Codable, Hashable {
 struct Command: Identifiable {
     enum Section: String, CaseIterable {
         case app = "Search", file = "File", edit = "Edit", view = "View", tabs = "Tabs", bookmarks = "Bookmarks", history = "History"
-
         var title: String {
             switch self {
             case .app: return "Search"
-            case .file: return "文件"
-            case .edit: return "编辑"
-            case .view: return "显示"
-            case .tabs: return "标签页"
-            case .bookmarks: return "书签"
-            case .history: return "历史记录"
+            case .file: return L10n.text("section.file")
+            case .edit: return L10n.text("section.edit")
+            case .view: return L10n.text("section.view")
+            case .tabs: return L10n.text("section.tabs")
+            case .bookmarks: return L10n.text("section.bookmarks")
+            case .history: return L10n.text("section.history")
             }
         }
     }
@@ -153,96 +152,96 @@ struct Command: Identifiable {
 
     /// The same commands, keys and order as the menus (see App.swift).
     static let all: [Command] = [
-        Command("app.settings", "设置…", .app, KeyCombo(",")) { $0.tuning.toggle() },
-        Command("app.welcome", "欢迎使用…", .app, nil) { $0.welcoming = true },
-        Command("app.passwords", "密码…", .app, KeyCombo("l", option: true)) { $0.managing = true },
+        Command("app.settings", L10n.text("Shortcuts.0874"), .app, KeyCombo(",")) { $0.tuning.toggle() },
+        Command("app.welcome", L10n.text("Shortcuts.0875"), .app, nil) { $0.welcoming = true },
+        Command("app.passwords", L10n.text("Shortcuts.0876"), .app, KeyCombo("l", option: true)) { $0.managing = true },
 
-        Command("file.newWindow", "新建窗口", .file, KeyCombo("n")) { _ in Browsers.newWindow() },
-        Command("file.newTab", "新建标签页", .file, KeyCombo("t")) { $0.newTab() },
-        Command("file.newPrivateTab", "新建无痕标签页", .file, KeyCombo("n", shift: true)) { $0.newShyTab() },
-        Command("file.reopen", "重新打开关闭的标签页", .file, KeyCombo("t", shift: true)) { $0.reopen() },
-        Command("file.openAddress", "打开地址…", .file, KeyCombo("l")) { $0.edit() },
-        Command("file.closeTab", "关闭标签页", .file, KeyCombo("w")) { $0.closeFront() },
-        Command("file.import", "导入浏览器数据…", .file, nil) { $0.bringingIn = "" },
-        Command("file.share", "共享…", .file, nil) { $0.share() },
-        Command("file.print", "打印…", .file, KeyCombo("p")) { $0.printPage() },
+        Command("file.newWindow", L10n.text("Shortcuts.0877"), .file, KeyCombo("n")) { _ in Browsers.newWindow() },
+        Command("file.newTab", L10n.text("Shortcuts.0878"), .file, KeyCombo("t")) { $0.newTab() },
+        Command("file.newPrivateTab", L10n.text("Shortcuts.0879"), .file, KeyCombo("n", shift: true)) { $0.newShyTab() },
+        Command("file.reopen", L10n.text("Shortcuts.0880"), .file, KeyCombo("t", shift: true)) { $0.reopen() },
+        Command("file.openAddress", L10n.text("Shortcuts.0881"), .file, KeyCombo("l")) { $0.edit() },
+        Command("file.closeTab", L10n.text("Shortcuts.0882"), .file, KeyCombo("w")) { $0.closeFront() },
+        Command("file.import", L10n.text("Shortcuts.0883"), .file, nil) { $0.bringingIn = "" },
+        Command("file.share", L10n.text("Shortcuts.0884"), .file, nil) { $0.share() },
+        Command("file.print", L10n.text("Shortcuts.0885"), .file, KeyCombo("p")) { $0.printPage() },
 
-        Command("edit.find", "在页面中查找…", .edit, KeyCombo("f")) { $0.openFind() },
-        Command("edit.findNext", "查找下一个", .edit, KeyCombo("g")) { $0.look(forward: true) },
-        Command("edit.findPrevious", "查找上一个", .edit, KeyCombo("g", shift: true)) { $0.look(forward: false) },
+        Command("edit.find", L10n.text("Shortcuts.0886"), .edit, KeyCombo("f")) { $0.openFind() },
+        Command("edit.findNext", L10n.text("Shortcuts.0887"), .edit, KeyCombo("g")) { $0.look(forward: true) },
+        Command("edit.findPrevious", L10n.text("Shortcuts.0888"), .edit, KeyCombo("g", shift: true)) { $0.look(forward: false) },
 
-        Command("view.sidebar", "在侧边栏显示标签页", .view, KeyCombo("s", shift: true)) { $0.toggleSidebar() },
-        Command("view.fold", "隐藏侧边栏或标签栏", .view, KeyCombo("s")) { $0.toggleFold() },
-        Command("view.reload", "重新载入页面", .view, KeyCombo("r")) { $0.reload() },
-        Command("view.reloadOrigin", "从源站重新载入页面", .view, KeyCombo("r", option: true)) { $0.reload(fromOrigin: true) },
-        Command("view.reader", "阅读模式", .view, KeyCombo("r", shift: true)) { $0.toggleReader() },
-        Command("view.float", "画中画", .view, KeyCombo("p", shift: true)) { $0.toggleFloat() },
-        Command("view.summarize", "总结页面", .view, nil) { $0.summarizePage() },
-        Command("view.ask", "询问此页面…", .view, nil) { $0.askAboutPage() },
-        Command("view.hide", "隐藏页面元素…", .view, KeyCombo("h", shift: true)) { $0.toggleHiding() },
-        Command("view.hidden", "此网站隐藏的元素…", .view, KeyCombo("u", shift: true)) { $0.reviewing.toggle() },
-        Command("view.zoomIn", "放大", .view, KeyCombo("+")) { $0.zoom(by: 1.1) },
-        Command("view.zoomOut", "缩小", .view, KeyCombo("-")) { $0.zoom(by: 1 / 1.1) },
-        Command("view.actualSize", "实际大小", .view, KeyCombo("0")) { $0.resetZoom() },
-        Command("view.inspector", "网页检查器", .view, KeyCombo("i", option: true)) { $0.toggleInspector() },
-        Command("view.console", "JavaScript 控制台", .view, KeyCombo("j", option: true)) { $0.showConsole() },
-        Command("view.inspect", "检查元素", .view, KeyCombo("c", option: true)) { $0.inspectElement() },
+        Command("view.sidebar", L10n.text("Shortcuts.0889"), .view, KeyCombo("s", shift: true)) { $0.toggleSidebar() },
+        Command("view.fold", L10n.text("Shortcuts.0890"), .view, KeyCombo("s")) { $0.toggleFold() },
+        Command("view.reload", L10n.text("Shortcuts.0891"), .view, KeyCombo("r")) { $0.reload() },
+        Command("view.reloadOrigin", L10n.text("Shortcuts.0892"), .view, KeyCombo("r", option: true)) { $0.reload(fromOrigin: true) },
+        Command("view.reader", L10n.text("Shortcuts.0893"), .view, KeyCombo("r", shift: true)) { $0.toggleReader() },
+        Command("view.float", L10n.text("Shortcuts.0894"), .view, KeyCombo("p", shift: true)) { $0.toggleFloat() },
+        Command("view.summarize", L10n.text("Shortcuts.0895"), .view, nil) { $0.summarizePage() },
+        Command("view.ask", L10n.text("Shortcuts.0896"), .view, nil) { $0.askAboutPage() },
+        Command("view.hide", L10n.text("Shortcuts.0897"), .view, KeyCombo("h", shift: true)) { $0.toggleHiding() },
+        Command("view.hidden", L10n.text("Shortcuts.0898"), .view, KeyCombo("u", shift: true)) { $0.reviewing.toggle() },
+        Command("view.zoomIn", L10n.text("Shortcuts.0899"), .view, KeyCombo("+")) { $0.zoom(by: 1.1) },
+        Command("view.zoomOut", L10n.text("Shortcuts.0900"), .view, KeyCombo("-")) { $0.zoom(by: 1 / 1.1) },
+        Command("view.actualSize", L10n.text("Shortcuts.0901"), .view, KeyCombo("0")) { $0.resetZoom() },
+        Command("view.inspector", L10n.text("Shortcuts.0902"), .view, KeyCombo("i", option: true)) { $0.toggleInspector() },
+        Command("view.console", L10n.text("Shortcuts.0903"), .view, KeyCombo("j", option: true)) { $0.showConsole() },
+        Command("view.inspect", L10n.text("Shortcuts.0904"), .view, KeyCombo("c", option: true)) { $0.inspectElement() },
 
-        Command("tabs.back", "后退", .tabs, KeyCombo("[")) { $0.back() },
-        Command("tabs.forward", "前进", .tabs, KeyCombo("]")) { $0.forward() },
-        Command("tabs.next", "下一个标签页", .tabs, KeyCombo("]", shift: true)) { $0.step(1) },
-        Command("tabs.previous", "上一个标签页", .tabs, KeyCombo("[", shift: true)) { $0.step(-1) },
-        Command("tabs.search", "搜索标签页…", .tabs, KeyCombo("k")) { browser in
+        Command("tabs.back", L10n.text("Shortcuts.0905"), .tabs, KeyCombo("[")) { $0.back() },
+        Command("tabs.forward", L10n.text("Shortcuts.0906"), .tabs, KeyCombo("]")) { $0.forward() },
+        Command("tabs.next", L10n.text("Shortcuts.0907"), .tabs, KeyCombo("]", shift: true)) { $0.step(1) },
+        Command("tabs.previous", L10n.text("Shortcuts.0908"), .tabs, KeyCombo("[", shift: true)) { $0.step(-1) },
+        Command("tabs.search", L10n.text("Shortcuts.0909"), .tabs, KeyCombo("k")) { browser in
             if browser.editing, !browser.offers.isEmpty { browser.stepSummon() } else { browser.summon() }
         },
         // ⌥⌘N, Chrome's on the Mac: ⌃⌘S is the Mac's own Show Sidebar, and
         // sits beside ⌘S, which folds the tabs away.
-        Command("tabs.split", "拆分当前页面", .tabs, KeyCombo("n", option: true)) { browser in
+        Command("tabs.split", L10n.text("Shortcuts.0910"), .tabs, KeyCombo("n", option: true)) { browser in
             guard browser.prefs.splitView else { return }
             browser.startSplit()
         },
-        Command("tabs.focusLeftPane", "切换到左侧页面", .tabs, KeyCombo("left", control: true)) { browser in
+        Command("tabs.focusLeftPane", L10n.text("Shortcuts.0911"), .tabs, KeyCombo("left", control: true)) { browser in
             guard browser.prefs.splitView else { return }
             browser.focusPane(onLeft: true)
         },
-        Command("tabs.focusRightPane", "切换到右侧页面", .tabs, KeyCombo("right", control: true)) { browser in
+        Command("tabs.focusRightPane", L10n.text("Shortcuts.0912"), .tabs, KeyCombo("right", control: true)) { browser in
             guard browser.prefs.splitView else { return }
             browser.focusPane(onLeft: false)
         },
-        Command("tabs.focusOtherPane", "切换到另一侧页面", .tabs, nil) { browser in
+        Command("tabs.focusOtherPane", L10n.text("Shortcuts.0913"), .tabs, nil) { browser in
             guard browser.prefs.splitView else { return }
             browser.focusOtherPane()
         },
-        Command("tabs.swapSplit", "交换页面", .tabs, nil) { browser in
+        Command("tabs.swapSplit", L10n.text("Shortcuts.0914"), .tabs, nil) { browser in
             guard browser.prefs.splitView else { return }
             browser.swapSplit()
         },
-        Command("tabs.separateSplit", "分离分屏标签页", .tabs, nil) { browser in
+        Command("tabs.separateSplit", L10n.text("Shortcuts.0915"), .tabs, nil) { browser in
             guard browser.prefs.splitView, let tab = browser.active else { return }
             browser.detachSplit(tab)
         },
-        Command("tabs.rename", "重命名标签页", .tabs, nil) { browser in
+        Command("tabs.rename", L10n.text("Shortcuts.0916"), .tabs, nil) { browser in
             if let tab = browser.active { browser.beginTabRename(tab) }
         },
-        Command("tabs.duplicate", "复制标签页", .tabs, KeyCombo("d")) { $0.duplicate() },
-        Command("tabs.copyAddress", "复制地址", .tabs, KeyCombo("c", shift: true)) { $0.copyAddress() },
-        Command("tabs.copyMarkdown", "复制为 Markdown 链接", .tabs, nil) { $0.copyMarkdownLink() },
-        Command("tabs.pasteAndGo", "粘贴并前往", .tabs, KeyCombo("v", shift: true)) { $0.pasteAndGo() },
-        Command("tabs.closeOthers", "关闭其他标签页", .tabs, nil) { browser in
+        Command("tabs.duplicate", L10n.text("Shortcuts.0917"), .tabs, KeyCombo("d")) { $0.duplicate() },
+        Command("tabs.copyAddress", L10n.text("Shortcuts.0918"), .tabs, KeyCombo("c", shift: true)) { $0.copyAddress() },
+        Command("tabs.copyMarkdown", L10n.text("Shortcuts.0919"), .tabs, nil) { $0.copyMarkdownLink() },
+        Command("tabs.pasteAndGo", L10n.text("Shortcuts.0920"), .tabs, KeyCombo("v", shift: true)) { $0.pasteAndGo() },
+        Command("tabs.closeOthers", L10n.text("Shortcuts.0921"), .tabs, nil) { browser in
             if let tab = browser.active { browser.closeOthers(but: tab) }
         },
-        Command("tabs.mute", "停止标签页声音", .tabs, KeyCombo("m", shift: true)) { $0.pauseMedia() },
+        Command("tabs.mute", L10n.text("Shortcuts.0922"), .tabs, KeyCombo("m", shift: true)) { $0.pauseMedia() },
 
-        Command("bookmarks.add", "添加此页面", .bookmarks, KeyCombo("b", shift: true)) { $0.bookmarkCurrent() },
-        Command("bookmarks.show", "显示书签…", .bookmarks, nil) { $0.bookmarking = true },
-        Command("bookmarks.bar", "显示书签栏", .bookmarks, nil) { browser in
+        Command("bookmarks.add", L10n.text("Shortcuts.0923"), .bookmarks, KeyCombo("b", shift: true)) { $0.bookmarkCurrent() },
+        Command("bookmarks.show", L10n.text("Shortcuts.0924"), .bookmarks, nil) { $0.bookmarking = true },
+        Command("bookmarks.bar", L10n.text("Shortcuts.0925"), .bookmarks, nil) { browser in
             withAnimation(Motion.glide) { browser.prefs.bookmarksBar.toggle() }
         },
 
-        Command("history.show", "显示历史记录…", .history, KeyCombo("y")) { $0.recalling.toggle() },
-        Command("history.downloads", "下载…", .history, KeyCombo("j", shift: true)) { $0.hoarding.toggle() },
-        Command("history.clearData", "清除浏览数据…", .history, KeyCombo("delete", shift: true)) { $0.recallMode = .clearing },
-        Command("history.clear", "清除历史记录", .history, nil) { $0.clearHistory() },
+        Command("history.show", L10n.text("Shortcuts.0926"), .history, KeyCombo("y")) { $0.recalling.toggle() },
+        Command("history.downloads", L10n.text("Shortcuts.0927"), .history, KeyCombo("j", shift: true)) { $0.hoarding.toggle() },
+        Command("history.clearData", L10n.text("Shortcuts.0928"), .history, KeyCombo("delete", shift: true)) { $0.recallMode = .clearing },
+        Command("history.clear", L10n.text("Shortcuts.0929"), .history, nil) { $0.clearHistory() },
     ]
 }
 

@@ -60,13 +60,13 @@ struct Keyword: Codable, Identifiable, Equatable {
     /// a line Settings can show — or nil when they can.
     static func problem(word: String, template: String, among keywords: [Keyword]) -> String? {
         let word = word.trimmingCharacters(in: .whitespacesAndNewlines)
-        if word.isEmpty { return "输入一个快捷词，例如 yt" }
-        if word.contains(where: \.isWhitespace) { return "快捷词不能包含空格" }
+        if word.isEmpty { return L10n.text("Keyword.0588") }
+        if word.contains(where: \.isWhitespace) { return L10n.text("Keyword.0589") }
         if let taken = keywords.first(where: { $0.keyword.caseInsensitiveCompare(word) == .orderedSame }) {
-            return "\(taken.keyword) 已用于搜索 \(taken.name)"
+            return L10n.text("Keyword.0590", String(describing: taken.keyword), String(describing: taken.name))
         }
         guard accepts(template) else {
-            return "请输入 HTTP 或 HTTPS 地址，并用一个 %s 表示搜索词的位置"
+            return L10n.text("Keyword.0591")
         }
         return nil
     }

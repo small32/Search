@@ -142,7 +142,7 @@ final class FetchEntry: ObservableObject, Identifiable {
     /// only Retry, to a name of its own, is left.
     func lostPartialFile() {
         resumeData = nil
-        errorDescription = "下载暂停期间，文件已发生变化。"
+        errorDescription = L10n.text("Fetching.0512")
         state = .failed
     }
 
@@ -160,7 +160,7 @@ final class FetchEntry: ObservableObject, Identifiable {
         } else {
             // WKDownload explicitly returns nil when its server cannot
             // produce resume data. Retry stays, where it may.
-            errorDescription = "服务器不支持暂停此下载。"
+            errorDescription = L10n.text("Fetching.0513")
             state = .failed
         }
     }
@@ -219,7 +219,7 @@ final class FetchEntry: ObservableObject, Identifiable {
 
     private static func reason(for error: Error) -> String {
         let text = error.localizedDescription.trimmingCharacters(in: .whitespacesAndNewlines)
-        return text.isEmpty ? "下载失败，原因未知。" : text
+        return text.isEmpty ? L10n.text("Fetching.0514") : text
     }
 
     private func trackPartialFile() {
@@ -658,7 +658,7 @@ struct FetchDoor: View {
             }
             .buttonStyle(.plain)
             .onHover { hovering = $0 }
-            .help("下载（⇧⌘J）")
+            .help(L10n.text("Fetching.0515"))
             .transition(.scale(scale: 0.6).combined(with: .opacity))
             .animation(Motion.quick, value: fetches.done)
             .animation(Motion.quick, value: fetches.showing)

@@ -71,7 +71,9 @@ jobs:
         run: |
           set -euo pipefail
           cat > "$RUNNER_TEMP/release-notes.md" <<'NOTES'
-          简体中文界面版本，包含菜单、设置项及说明、弹窗和操作提示。
+          支持英文和简体中文，包含菜单、设置项及说明、弹窗和操作提示。
+
+          在“设置 → 通用 → 界面语言”中选择跟随系统、English 或简体中文，重新启动 Search 后生效。
 
           - 仅提供 ARM64 版本，适用于 Apple 芯片 Mac。
           - 系统要求：macOS 14 或更新版本；Chrome 扩展需要 macOS 15.4 或更新版本。
@@ -84,7 +86,7 @@ jobs:
           else
             gh release create "$RELEASE_TAG" \
               --verify-tag --draft \
-              --title "Search ${RELEASE_VERSION}（ARM64 中文版）" \
+              --title "Search ${RELEASE_VERSION}（ARM64）" \
               --notes-file "$RUNNER_TEMP/release-notes.md" \
               "build/$RELEASE_ARCHIVE" build/SHA256SUMS.txt
           fi

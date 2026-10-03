@@ -33,7 +33,7 @@ final class FetchEntryTests: XCTestCase {
         XCTAssertEqual(entry.state, .failed)
         XCTAssertFalse(entry.canResume)
         XCTAssertTrue(entry.canRetry)
-        XCTAssertTrue(try XCTUnwrap(entry.errorDescription).contains("doesn't let this download pause"))
+        XCTAssertTrue(try XCTUnwrap(entry.errorDescription) == L10n.text("Fetching.0513"))
     }
 
     func testBeginResumeRejectsDuplicateActionWhileWebKitStarts() async throws {

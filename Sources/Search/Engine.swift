@@ -17,7 +17,7 @@ enum Engine: String, CaseIterable, Identifiable {
         case .kagi: return "Kagi"
         case .brave: return "Brave Search"
         case .qwant: return "Qwant"
-        case .custom: return "自定义"
+        case .custom: return L10n.text("Engine.0395")
         }
     }
 

@@ -36,7 +36,7 @@ enum AddressCommand: CaseIterable, Equatable {
         }
     }
 
-    var title: String { aliases[0].localizedCapitalized }
+    var title: String { (L10n.isChinese ? aliases[0] : aliases.first { $0.allSatisfy(\.isASCII) } ?? aliases[0]).localizedCapitalized }
 
     /// Some only mean something once the feature behind them is even on.
     func available(in browser: Browser) -> Bool {

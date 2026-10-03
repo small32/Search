@@ -223,7 +223,7 @@ struct NewSpaceCard: View {
     @FocusState private var typing: Bool
 
     private var saying: String {
-        shared ? "与其他空间共享 Cookie 和登录状态。" : "使用独立的 Cookie 和登录状态，从空白开始。"
+        shared ? L10n.text("SpaceSwipe.0986") : L10n.text("SpaceSwipe.0987")
     }
 
     var body: some View {
@@ -234,21 +234,21 @@ struct NewSpaceCard: View {
                     pick(size: 13, box: CGSize(width: 28, height: 26))
                     field
                         .frame(width: 170)
-                    Segmented(options: [(true, "共享登录"), (false, "独立登录")], selection: $shared)
+                    Segmented(options: [(true, L10n.text("SpaceSwipe.0988")), (false, L10n.text("SpaceSwipe.0989"))], selection: $shared)
                         .fixedSize()
                         .help(saying)
-                    Pill("取消") { cancel() }
-                    Pill("创建", filled: true) { create() }
+                    Pill(L10n.text("SpaceSwipe.0990")) { cancel() }
+                    Pill(L10n.text("SpaceSwipe.0991"), filled: true) { create() }
                 }
                 .frame(height: Metrics.strip)
             } else {
                 VStack(spacing: 12) {
                     pick(size: 20, box: CGSize(width: 44, height: 40))
                     VStack(spacing: 4) {
-                        Text("新建空间")
+                        Text(L10n.text("SpaceSwipe.0992"))
                             .font(.system(size: 13, weight: .semibold))
                             .foregroundStyle(Palette.ink)
-                        Text("使用独立的标签页。")
+                        Text(L10n.text("SpaceSwipe.0993"))
                             .font(.system(size: 11))
                             .foregroundStyle(Palette.muted)
                             .multilineTextAlignment(.center)
@@ -257,7 +257,7 @@ struct NewSpaceCard: View {
                     // Most people want Google and the rest to know them here too;
                     // some want a clean slate.
                     VStack(spacing: 6) {
-                        Segmented(options: [(true, "共享登录"), (false, "独立登录")], selection: $shared, wide: true)
+                        Segmented(options: [(true, L10n.text("SpaceSwipe.0994")), (false, L10n.text("SpaceSwipe.0995"))], selection: $shared, wide: true)
                         Text(saying)
                             .font(.system(size: 11))
                             .foregroundStyle(Palette.muted)
@@ -265,8 +265,8 @@ struct NewSpaceCard: View {
                             .fixedSize(horizontal: false, vertical: true)
                     }
                     HStack(spacing: 8) {
-                        Pill("取消") { cancel() }
-                        Pill("创建", filled: true) { create() }
+                        Pill(L10n.text("SpaceSwipe.0996")) { cancel() }
+                        Pill(L10n.text("SpaceSwipe.0997"), filled: true) { create() }
                     }
                 }
                 .padding(16)
@@ -298,12 +298,12 @@ struct NewSpaceCard: View {
         }
         .buttonStyle(.plain)
         .onHover { hovering = $0 }
-        .help(inline ? "新建空间 — 选择图标" : "选择图标")
+        .help(inline ? L10n.text("SpaceSwipe.0998") : L10n.text("SpaceSwipe.0999"))
         .popover(isPresented: $choosing, arrowEdge: .bottom) { icons }
     }
 
     private var field: some View {
-        TextField(inline ? "新建空间" : "名称", text: $name)
+        TextField(inline ? L10n.text("SpaceSwipe.1000") : L10n.text("SpaceSwipe.1001"), text: $name)
             .textFieldStyle(.plain)
             .font(.system(size: inline ? 12.5 : 13))
             .padding(.horizontal, 10)
