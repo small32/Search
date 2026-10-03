@@ -21,7 +21,15 @@ jobs:
         run: ./build.sh release
       - name: Verify packaged translations and signature
         run: |
-          test -f build/Search.app/Contents/Resources/Search_Search.bundle/Contents/Resources/Translations.json
+          swift -e '
+            import Foundation
+            let app = Bundle(path: "build/Search.app")!
+            let resources = Bundle(url: app.resourceURL!.appendingPathComponent("Search_Search.bundle"))!
+            let file = resources.url(forResource: "Translations", withExtension: "json")!
+            let translations = try! JSONDecoder().decode([String: [String: String]].self, from: Data(contentsOf: file))
+            precondition(translations["language.title"]?["en"] == "Language")
+            precondition(translations["language.title"]?["zh-Hans"] == "界面语言")
+          '
           plutil -lint build/Search.app/Contents/Resources/en.lproj/InfoPlist.strings
           plutil -lint build/Search.app/Contents/Resources/zh-Hans.lproj/InfoPlist.strings
           codesign --verify --deep --strict build/Search.app

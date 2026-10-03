@@ -23,8 +23,16 @@ enum L10n {
         InterfaceLanguage(rawValue: Store.settings.string(forKey: "interface.language") ?? "system") ?? .system
     )
     static var isChinese: Bool { language == "zh-Hans" }
+    static let resourceBundle: Bundle = {
+        // SwiftPM's generated accessor differs across toolchains. An installed
+        // app always keeps the bundle in Contents/Resources; command-line tests
+        // can still use SwiftPM's own locator.
+        if let url = Bundle.main.resourceURL?.appendingPathComponent("Search_Search.bundle"),
+           let bundle = Bundle(url: url) { return bundle }
+        return .module
+    }()
     static let translations: [String: [String: String]] = {
-        guard let url = Bundle.module.url(forResource: "Translations", withExtension: "json"),
+        guard let url = resourceBundle.url(forResource: "Translations", withExtension: "json"),
               let data = try? Data(contentsOf: url),
               let result = try? JSONDecoder().decode([String: [String: String]].self, from: data)
         else { preconditionFailure("Missing interface translations") }
