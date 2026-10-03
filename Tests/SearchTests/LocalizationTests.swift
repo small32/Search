@@ -14,7 +14,9 @@ final class LocalizationTests: XCTestCase {
     func testSelectionPersistsWithoutChangingOtherPreferences() {
         let settings = LanguageSettings.shared
         let previous = settings.selection
-        let oldAppleLanguages = Store.settings.object(forKey: "AppleLanguages")
+        let world = Store.world ?? "test"
+        let domain = world == "test" ? "com.officecommun.search.test" : "com.officecommun.search.test.\(world)"
+        let oldAppleLanguages = Store.settings.persistentDomain(forName: domain)?["AppleLanguages"]
         let oldAppearance = Store.settings.string(forKey: "look")
         defer {
             settings.selection = previous
@@ -27,7 +29,8 @@ final class LocalizationTests: XCTestCase {
         settings.selection = .simplifiedChinese
         XCTAssertEqual(Store.settings.stringArray(forKey: "AppleLanguages"), ["zh-Hans"])
         settings.selection = .system
-        XCTAssertNil(Store.settings.object(forKey: "AppleLanguages"))
+        // object(forKey:) falls back to macOS's global AppleLanguages after removal.
+        XCTAssertNil(Store.settings.persistentDomain(forName: domain)?["AppleLanguages"])
         XCTAssertEqual(Store.settings.string(forKey: "look"), oldAppearance)
     }
 
