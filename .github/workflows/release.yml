@@ -9,7 +9,7 @@ on:
       tag:
         description: Release tag to build
         required: true
-        default: v0.1.2
+        default: v0.1.3
         type: string
 
 permissions:
@@ -75,6 +75,8 @@ jobs:
 
           在“设置 → 通用 → 界面语言”中选择跟随系统、English 或简体中文，重新启动 Search 后生效。
 
+          - 新增自定义起始页面：在“设置 → 通用 → 起始页面”中保存网址，新窗口和普通新标签页会打开该页面；点击“使用空白页”可恢复默认。
+          - 起始页面设置立即生效，恢复会话时保留原有页面，无痕标签页仍为空白页。
           - 仅提供 ARM64 版本，适用于 Apple 芯片 Mac。
           - 系统要求：macOS 14 或更新版本；Chrome 扩展需要 macOS 15.4 或更新版本。
           - 下载 ZIP 后解压，将 Search.app 放入“应用程序”文件夹。
