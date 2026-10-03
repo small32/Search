@@ -15,6 +15,7 @@ final class StartPageTests: XCTestCase {
     }
 
     override func tearDown() async throws {
+        guard Store.testing else { return }
         Shared.prefs.startPage = previousPage
         XCTAssertTrue(NSApp.windows.allSatisfy { !$0.isVisible })
     }
