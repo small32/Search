@@ -122,6 +122,12 @@ enum WhatsNew {
 
     /// Newest first.
     static let notes: [Notes] = [
+        Notes(version: "1.0.0", date: "2026-10-04",
+              headline: L10n.text("release100.headline"),
+              new: [L10n.text("release100.language1"), L10n.text("release100.language2"),
+                    L10n.text("release100.language3"), L10n.text("release100.start1"),
+                    L10n.text("release100.start2"), L10n.text("release100.start3")],
+              better: [], fixed: []),
         Notes(
             version: "1.0.4", date: L10n.text("WhatsNew.1217"),
             headline: L10n.text("WhatsNew.1218"),

@@ -51,10 +51,10 @@ final class LocalizationTests: XCTestCase {
             XCTAssertTrue(L10n.render("store.add", language: language).contains("SearcheXtra"))
             XCTAssertTrue(L10n.render("Welcome.1169", language: language).contains("SearcheXtra"))
         }
-        XCTAssertEqual(L10n.render("Settings.0828", language: "zh-Hans", arguments: ["0.1.3"]),
-                       "基于Office Commun版Search修改 · 版本 0.1.3")
-        XCTAssertEqual(L10n.render("Settings.0828", language: "en", arguments: ["0.1.3"]),
-                       "Based on Office Commun's Search · version 0.1.3")
+        XCTAssertEqual(L10n.render("Settings.0828", language: "zh-Hans", arguments: ["1.0.0"]),
+                       "基于Office Commun版Search修改 · 版本 1.0.0")
+        XCTAssertEqual(L10n.render("Settings.0828", language: "en", arguments: ["1.0.0"]),
+                       "Based on Office Commun's Search · version 1.0.0")
         // Search remains the English verb for finding tabs.
         XCTAssertEqual(L10n.render("App.0150", language: "en"), "Search Tabs…")
     }

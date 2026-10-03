@@ -1,3 +1,23 @@
+# SearcheXtra 1.0.0
+
+SearcheXtra 是基于 Office Commun 开发的 Search 修改。
+
+提供以下功能：
+
+## 中英文界面
+
+- 提供英文和简体中文，覆盖菜单、设置项及说明、弹窗和操作提示。
+- 在“设置 → 通用 → 界面语言”中选择“跟随系统”“English”或“简体中文”，重新启动后生效。
+- 默认跟随系统语言；不支持的系统语言使用英文。
+
+## 自定义起始页面
+
+- 在“设置 → 通用 → 起始页面”中保存网址，新窗口和普通新标签页会打开该页面。
+- 点击“使用空白页”可恢复默认，设置立即生效。
+- 恢复会话时保留原有页面；无痕标签页仍使用空白页。
+
+---
+
 Several windows, and a lot to discover. ⌘N opens another window with tabs of its own, a tab dragged out of the row becomes one, and pinned tabs are the same in every window. ⌃Tab shows your recent tabs as pictures, and your own keyboard shortcuts are in Settings › Shortcuts. Bringing things over works from Firefox, Zen, Helium, Comet, Opera and Arc — its spaces and pinned tabs included — or from an exported file, and remembers what came from where. New, each off until you turn it on, here or in the card after the update: tab groups, the sidebar on the right, videos that wait for a click, and a downloads button that stays. Also: bookmark folders you arrange yourself, site shortcuts like yt cats, a double-click that takes a pin back home, and downloads whose progress shows on the Dock. Scrolling costs half what it did, 1Password, Bitwarden, iCloud Passwords and Figma get their fixes, and a second careful private report brings another round of security hardening.
 
 Security, and the mouse wheel. Search 1.0.3 closes the holes found in this week's reviews — an extension could read files outside its own folder, and a page or an ad could open another app without asking — and copying a saved password now asks for Touch ID. A mouse wheel scrolls smoothly again on x.com and pages like it, Bitwarden signs in to a self-hosted server, and extension popups hear what changes while they are open. Also: History opens at once, music keeps playing when you switch spaces, a link from Mail brings Search to the front, a full-screen video no longer goes black, pop-ups need a click, and the tab bar folded away with ⌘S comes back on a ground of its own. Your extensions may each ask once more for their permissions at their next update.

@@ -5378,5 +5378,33 @@
   "startPage.invalid": {
     "en": "Enter a valid HTTP or HTTPS website, such as example.com.",
     "zh-Hans": "请输入有效的 HTTP 或 HTTPS 网址，例如 example.com。"
+  },
+  "release100.headline": {
+    "en": "SearcheXtra is based on Search, developed by Office Commun. It provides the following features:",
+    "zh-Hans": "SearcheXtra 是基于 Office Commun 开发的 Search 修改。提供以下功能："
+  },
+  "release100.language1": {
+    "en": "English and Simplified Chinese cover menus, settings and descriptions, dialogs and action messages.",
+    "zh-Hans": "提供英文和简体中文，覆盖菜单、设置项及说明、弹窗和操作提示。"
+  },
+  "release100.language2": {
+    "en": "Choose Follow System, English or Simplified Chinese in Settings → General → Language. Restart to apply the change.",
+    "zh-Hans": "在“设置 → 通用 → 界面语言”中选择“跟随系统”“English”或“简体中文”，重新启动后生效。"
+  },
+  "release100.language3": {
+    "en": "The interface follows the system language by default and uses English for unsupported languages.",
+    "zh-Hans": "默认跟随系统语言；不支持的系统语言使用英文。"
+  },
+  "release100.start1": {
+    "en": "Save a website in Settings → General → Start Page. New windows and normal new tabs open that page.",
+    "zh-Hans": "在“设置 → 通用 → 起始页面”中保存网址，新窗口和普通新标签页会打开该页面。"
+  },
+  "release100.start2": {
+    "en": "Choose Use Blank Page to restore the default. Changes take effect immediately.",
+    "zh-Hans": "点击“使用空白页”可恢复默认，设置立即生效。"
+  },
+  "release100.start3": {
+    "en": "Restored sessions keep their original pages; private tabs still use a blank page.",
+    "zh-Hans": "恢复会话时保留原有页面；无痕标签页仍使用空白页。"
   }
 }
