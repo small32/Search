@@ -14,7 +14,7 @@ jobs:
         with:
           persist-credentials: false
       - name: Test language selection and start-page behavior
-        run: swift test --filter 'LocalizationTests|StartPageTests'
+        run: SEARCH_PROBE=interface-tests swift test --filter 'LocalizationTests|StartPageTests'
       - name: Build ARM64 application with both languages
         env:
           SEARCH_ARCH: arm64

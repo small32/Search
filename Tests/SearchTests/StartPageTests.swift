@@ -7,6 +7,7 @@ final class StartPageTests: XCTestCase {
     private var previousPage = ""
 
     override func setUp() async throws {
+        guard Store.testing else { throw XCTSkip("Run browser model tests with SEARCH_PROBE=interface-tests") }
         _ = NSApplication.shared
         NSApp.setActivationPolicy(.prohibited)
         previousPage = Shared.prefs.startPage
