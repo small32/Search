@@ -1514,7 +1514,7 @@ final class Browser: NSObject, ObservableObject {
 
     /// `record`: another window's, from windows.json or ⇧⌘T, or a new
     /// window's, empty.
-    init(record: WindowRecord?) {
+    init(record: WindowRecord?, opensStartPage: Bool = true) {
         super.init()
         let first = !Browser.booted
         Browser.booted = true
@@ -1611,7 +1611,7 @@ final class Browser: NSObject, ObservableObject {
             spaceID = last
             Spaces.current = last
         }
-        restoreSession()
+        restoreSession(useStartPage: opensStartPage)
         if prefs.usesSpaces { preloadSpaces() }
     }
 
@@ -1667,7 +1667,7 @@ final class Browser: NSObject, ObservableObject {
     /// The row of tabs the space on screen had last time, or one empty tab.
     /// The pins are every window's (see Pins.swift): a window new to this
     /// space has them too, before an empty tab.
-    func restoreSession() {
+    func restoreSession(useStartPage: Bool = true) {
         let saved = readRow(spaceID)
         tabGroups = (saved.groups ?? []).filter { group in
             saved.tabs.contains { $0.groupID == group.id }
@@ -1688,6 +1688,7 @@ final class Browser: NSObject, ObservableObject {
             let tab = Tab(configuration: Web.configuration(space: spaceID))
             adopt(tab)
             activeID = tab.id
+            if useStartPage, let page = prefs.startPageURL { tab.go(to: page) }
             DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak tab] in
                 guard let tab, tab.isBlank else { return }
                 _ = tab.web
@@ -2483,6 +2484,13 @@ final class Browser: NSObject, ObservableObject {
         // private search ends up in the history.
         if active?.shy == true {
             newShyTab()
+            return
+        }
+        // An explicitly chosen website takes precedence over extension new-tab pages.
+        if let page = prefs.startPageURL {
+            open(page, foreground: true)
+            summoning = false
+            rememberSession()
             return
         }
         // An extension's new tab page, if one asked and you said yes.

@@ -1227,7 +1227,8 @@ extension Extensions: WKWebExtensionControllerDelegate {
                 }
             }
         }
-        let fresh = Browser(record: WindowRecord(space: browser?.spaceID ?? Space.firstID))
+        let fresh = Browser(record: WindowRecord(space: browser?.spaceID ?? Space.firstID),
+                            opensStartPage: configuration.windowType != .popup && configuration.tabURLs.isEmpty)
         // A popup, as a password manager's vault or a sign-in opens: a small
         // window of the page, not another browser window.
         if configuration.windowType == .popup {

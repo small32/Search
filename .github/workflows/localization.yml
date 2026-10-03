@@ -13,8 +13,8 @@ jobs:
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
         with:
           persist-credentials: false
-      - name: Test language selection and translation formatting
-        run: swift test --filter LocalizationTests
+      - name: Test language selection and start-page behavior
+        run: swift test --filter 'LocalizationTests|StartPageTests'
       - name: Build ARM64 application with both languages
         env:
           SEARCH_ARCH: arm64

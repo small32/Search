@@ -12,6 +12,7 @@ struct SettingsPanel: View {
     @ObservedObject private var language = LanguageSettings.shared
     @ObservedObject private var updater = Updater.shared
     @ObservedObject private var shield = Shield.shared
+    @State private var startPageDraft = ""
     @State private var isDefault = Links.isDefault
     /// A site shortcut being written, kept out of Preferences until it's saved.
     @State private var draft: Keyword?
@@ -66,6 +67,8 @@ struct SettingsPanel: View {
         )
         .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
         .shadow(color: .black.opacity(0.16), radius: 34, y: 12)
+        .onAppear { startPageDraft = prefs.startPage }
+        .onChange(of: prefs.startPage) { _, value in startPageDraft = value }
         .onChange(of: page) { _, page in Store.settings.set(page.rawValue, forKey: "settings.page") }
     }
 
@@ -160,6 +163,17 @@ struct SettingsPanel: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
     }
 
+    private var startPageProblem: String? {
+        let text = startPageDraft.trimmingCharacters(in: .whitespacesAndNewlines)
+        return !text.isEmpty && StartPage.url(from: text) == nil ? L10n.text("startPage.invalid") : nil
+    }
+
+    private func saveStartPage() {
+        guard startPageProblem == nil else { return }
+        prefs.startPage = StartPage.url(from: startPageDraft)?.absoluteString ?? ""
+        startPageDraft = prefs.startPage
+    }
+
     // MARK: - general
 
     private var general: some View {
@@ -178,6 +192,33 @@ struct SettingsPanel: View {
                 Line(L10n.text("language.pending"), L10n.text("language.restartDetail")) {
                     Pill(L10n.text("language.restart"), filled: true) { language.restart() }
                 }
+            }
+            Rule()
+            Line(L10n.text("startPage.title"), L10n.text("startPage.detail")) { EmptyView() }
+            HStack(spacing: 8) {
+                TextField(L10n.text("startPage.placeholder"), text: $startPageDraft)
+                    .textFieldStyle(.plain)
+                    .font(.system(size: 12.5))
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 7)
+                    .background(Palette.wash, in: RoundedRectangle(cornerRadius: 9, style: .continuous))
+                    .onSubmit(saveStartPage)
+                Pill(L10n.text("startPage.save"), filled: true, action: saveStartPage)
+                    .disabled(startPageProblem != nil || startPageDraft == prefs.startPage)
+                Pill(L10n.text("startPage.blank")) {
+                    prefs.startPage = ""
+                    startPageDraft = ""
+                }
+                .disabled(prefs.startPage.isEmpty && startPageDraft.isEmpty)
+            }
+            .padding(.horizontal, 14)
+            .padding(.bottom, 11)
+            if let problem = startPageProblem {
+                Text(problem)
+                    .font(.system(size: 11.5))
+                    .foregroundStyle(.red)
+                    .padding(.horizontal, 14)
+                    .padding(.bottom, 11)
             }
             Rule()
             Line(

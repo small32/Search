@@ -41,6 +41,12 @@ enum SidebarPosition: String, CaseIterable, Identifiable {
 final class Preferences: ObservableObject {
     private let store = Store.settings
 
+    /// Empty uses the built-in blank page; a saved website overrides extension new-tab pages.
+    @Published var startPage: String {
+        didSet { store.set(startPage, forKey: "start.page") }
+    }
+    var startPageURL: URL? { StartPage.url(from: startPage) }
+
     /// Back, forward and reload before the tabs rather than after them, with
     /// the tabs across the top. Off unless asked for.
     @Published var navigationLeft: Bool {
@@ -351,6 +357,7 @@ final class Preferences: ObservableObject {
     }
 
     init() {
+        startPage = store.string(forKey: "start.page") ?? ""
         navigationLeft = store.bool(forKey: "toolbar.left")
         // Carried over from when there were four ways of holding the browser
         // and this was one of them.

@@ -5354,5 +5354,29 @@
   "store.add": {
     "en": "Add to Search",
     "zh-Hans": "添加到 Search"
+  },
+  "startPage.title": {
+    "en": "Start page",
+    "zh-Hans": "起始页面"
+  },
+  "startPage.detail": {
+    "en": "Open this website in fresh windows and ordinary new tabs. Restored sessions keep their pages; private tabs stay blank.",
+    "zh-Hans": "新窗口和普通新标签页打开此网址。恢复会话时保留原有页面，无痕标签页仍为空白页。"
+  },
+  "startPage.placeholder": {
+    "en": "Website address (blank for an empty page)",
+    "zh-Hans": "输入网址，留空使用空白页"
+  },
+  "startPage.save": {
+    "en": "Save",
+    "zh-Hans": "保存"
+  },
+  "startPage.blank": {
+    "en": "Use blank page",
+    "zh-Hans": "使用空白页"
+  },
+  "startPage.invalid": {
+    "en": "Enter a valid HTTP or HTTPS website, such as example.com.",
+    "zh-Hans": "请输入有效的 HTTP 或 HTTPS 网址，例如 example.com。"
   }
 }
