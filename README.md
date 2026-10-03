@@ -1,127 +1,178 @@
-# Search
+# SearcheXtra
 
-This fork supports English and Simplified Chinese. Choose **Settings → General → Language** (设置 → 通用 → 界面语言), then restart Search to apply the selection to all windows and menus. **Follow System** is the default; unsupported system languages use English.
+SearcheXtra 是基于 [Search](https://github.com/driceroland/Search) 的修改版，保留原版轻量、简洁的浏览体验，增加了**简体中文支持和界面语言切换**。原项目由 [Office Commun](https://officecommun.com) 开发，本仓库维护修改版。
 
-A small, fast, quiet web browser for the Mac, by [Office Commun](https://officecommun.com).
+支持英文和简体中文，菜单、设置项及说明、弹窗和操作提示均提供两套文案。在 **设置 → 通用 → 界面语言** 中选择“跟随系统”“English”或“简体中文”，点击“重新启动 Search”后生效。默认跟随系统，不支持的系统语言使用英文。
 
-![Search, with its tabs down the left and a page taking the rest of the window](.github/screenshot.png)
+![Search 浏览器界面，标签页位于左侧，网页占据其余区域](.github/screenshot.png)
 
-**[Download for macOS →](https://officecommun.com/search)** · macOS 14 or later · free · about 6 MB
+**[下载 macOS 版本 →](https://github.com/small32/SearcheXtra/releases/latest)** · macOS 14 或更新版本 · 当前提供 ARM64 安装包，适用于 Apple 芯片 Mac
 
-Or with [Homebrew](https://brew.sh): `brew install --cask driceroland/tap/search`
+安装包由 GitHub Actions 构建。下载 Release 中的 ZIP，解压后将 `Search.app` 放入“应用程序”文件夹；`SHA256SUMS.txt` 提供安装包的 SHA-256 校验值。仓库名称为 SearcheXtra，当前应用及安装包仍使用 Search 名称。
 
 ---
 
-## What it is
+## 项目介绍
 
-Search is a browser with nothing in the way. A row of tabs — across the top or down the left, your choice — and the page. There is no toolbar, no start page, no sidebar of suggestions, no account to sign into, nothing that wants your attention. You type an address or a few words in one field and you are on the page.
+Search 将界面留给标签页和网页。标签页可以横排在顶部，也可以竖排在侧边栏。地址栏同时用于输入网址和搜索词，没有推荐内容、账号登录入口或云同步服务。
 
-It uses **WebKit**, the engine already inside every Mac (it is what Safari runs on). That is why the whole app is about 3 MB on disk and opens instantly: there is no second copy of Chromium to download, update and keep in memory.
+浏览器使用 macOS 内置的 **WebKit** 引擎，与 Safari 使用同一套底层技术，无需附带 Chromium 引擎。
 
-It was built by a design studio that spends its whole day in a browser and was tired of the ones that had become products. This one is a tool.
+本分支将界面文案整理为独立的英文和中文翻译表，便于继续维护中文支持。语言设置保存在本机，切换语言不会修改书签、历史记录或快捷键标识。
 
-## What it does
+## 主要功能
 
-- **One field.** Type an address and you go there; type words and you search. It finishes addresses from your own history and never sends what you type anywhere until you press Return.
-- **Tabs that stay out of the way.** Pin the pages you keep open all day and they shrink to a letter or their icon. Tabs from your last session come back instantly and cost nothing until you click them. `⌘K` lists your open tabs by name.
-- **Two pages side by side.** Turn on Split View in Settings › Tabs, then drag a tab onto a page or choose Tabs › Split Current Page. Drag the divider to resize the panes; the outlined pane receives page commands. Pairs and their widths come back with their Space, including after a restart.
-- **Reading mode.** `⇧⌘R` strips a page down to the article.
-- **Hide anything, for good.** `⇧⌘H`, then click a cookie banner, a newsletter overlay, a rail of "related" nonsense — it goes, and it is still gone on that site next time, before the page has drawn a single frame.
-- **An ad blocker that runs before the page.** Third-party trackers and ad networks are stopped at the network level, so there is nothing to render and nothing to slow down. On by default, off per site if something breaks.
-- **Video that follows you.** `⇧⌘P` lifts the video out of the page into a small window that stays above everything, including other apps.
-- **Passwords, in your keychain.** Search offers to save a sign-in once it has actually worked, and offers your saved accounts, and the Mac's passkeys for the site, under the field when you click it — the way Safari does, never filling anything on its own. Everything lives in the macOS keychain, encrypted by the system, readable only by Search. Bring yours in from Chrome, Arc, Dia, Brave or Edge in one click; nothing leaves the Mac.
-- **Light, dark, or the Mac's own.** The frame and the pages follow.
-- **Bookmarks, history, downloads** — each a panel, each searchable, each one keystroke away.
-- **Chrome extensions, without Chrome.** Paste a Chrome Web Store link in Settings › Extensions, or open the extension's page in Search and press Add. It runs on WebKit's own extension engine — the one Safari uses — and where Chrome has APIs WebKit doesn't (bookmarks, history, downloads, side panel, offscreen documents, fonts, notifications, speech, OAuth sign-in), Search fills them in itself. They live behind the puzzle button; pin the ones you use often. Building your own? Load its folder as an unpacked extension and press Reload after each change, as in Chrome's developer mode. macOS 15.4 or later.
-- **Updates itself, quietly.** Once a day it checks for a newer build, downloads it, verifies it is signed by Office Commun, and swaps it in for the next launch. Nothing restarts on its own.
+- **地址与搜索合一。** 输入网址直接打开，输入文字使用搜索引擎。地址补全来自本机历史记录，按下回车前不会发送输入内容。
+- **标签页与固定标签页。** 常用页面可以固定，显示为字母或网站图标。上次会话的标签页会恢复，切换到对应标签页时才创建网页视图。`⌘K` 按名称查找已打开的标签页。
+- **分屏浏览。** 在“设置 → 标签页”中启用分屏，将标签页拖到页面边缘，或选择“标签页 → 拆分当前页面”。拖动分隔线调整宽度，带边框的页面接收操作指令。分屏组合和宽度随空间保存，重启后可以恢复。
+- **阅读模式。** `⇧⌘R` 提取文章正文，减少页面干扰。
+- **隐藏网页元素。** 按下 `⇧⌘H` 后点击 Cookie 提示、订阅浮层或其他元素。隐藏规则按网站保存，下次访问时在页面绘制前生效。
+- **广告与跟踪拦截。** 在网络请求阶段拦截第三方跟踪器和广告网络。默认启用，也可以按网站关闭。
+- **画中画。** `⇧⌘P` 将视频放入悬浮窗口，切换应用时仍可观看。
+- **密码与钥匙串。** 登录成功后提示保存密码，点击登录字段时显示已保存账号。密码保存在 macOS 钥匙串中，由系统加密；支持从 Chrome、Arc、Dia、Brave 或 Edge 导入。系统通行密钥功能需要相应的签名和授权配置。
+- **浅色、深色与跟随系统。** 浏览器界面和网页可以随外观设置切换。
+- **书签、历史记录与下载。** 各自提供独立面板，支持搜索和快捷键打开。
+- **Chrome 扩展。** 在“设置 → 扩展”中粘贴 Chrome 网上应用店链接，或打开扩展页面后点击添加。扩展运行在 WebKit 的扩展引擎上，浏览器补充部分 Chrome API。常用扩展可以固定，也可以加载本地未打包扩展，修改后点击重新载入。此功能需要 macOS 15.4 或更新版本，兼容情况取决于扩展使用的 API。
+- **多窗口与空间。** 可以创建多个窗口，并使用空间管理不同的标签页集合。
+- **版本更新。** 本分支的安装包从 [GitHub Releases](https://github.com/small32/SearcheXtra/releases) 下载更新。目前代码中的自动更新源仍指向上游，临时签名构建无法完成自动替换；本分支尚未接入自己的自动更新渠道。
 
-## What it doesn't do
+## 功能边界
 
-On purpose:
+广告拦截、隐藏元素、阅读模式、画中画和密码管理均为内置功能，无需另装扩展。扩展用于补充其他需求。
 
-- No extension you have to install to feel at home. Blocking ads, hiding clutter, reading mode, picture-in-picture and passwords are built in; extensions are there for everything else.
-- No sync, no account, no cloud. Your tabs, history and passwords are on your Mac and nowhere else.
-- No telemetry, no analytics, no crash reports sent anywhere. The only things that leave your Mac are the pages you ask for, their icons, and one small request a day to see whether there is a newer version.
-- One window. Tabs are the only kind of "new" there is.
+- 不提供账号、云同步或浏览数据云存储。标签页、历史记录和密码保留在本机。
+- 不收集遥测、使用分析或向服务器发送崩溃报告。网络访问主要来自网页、网站图标、扩展下载及更新检查。
+- 界面语言设置只影响浏览器自身。网页内容、书签名称及第三方扩展的界面保持原有内容。
 
-## Privacy, concretely
+## 隐私与数据存储
 
-| What | Where it is | Who can read it |
+| 数据 | 存储位置 | 访问方式 |
 |---|---|---|
-| Passwords | The macOS login keychain, as ordinary keychain items tagged `Search` | Search, signed by Office Commun. Any other app triggers the system's permission dialog. |
-| History, bookmarks, open tabs, hidden elements | Small JSON files in `~/Library/Application Support/Search/` | You. |
-| Cookies and site data | WebKit's own store for the app | The sites that set them, as in any browser. |
-| Extensions | Unpacked in `~/Library/Application Support/Search/Extensions/`, their data in WebKit's extension store | Each extension, within the permissions you accepted when adding it. |
-| Anything else | Nowhere. There is no server. | — |
+| 密码 | macOS 登录钥匙串，以 `Search` 标记保存 | 由 macOS 钥匙串控制访问。不同签名的应用访问时可能需要系统授权。 |
+| 历史记录、书签、标签页和隐藏元素 | `~/Library/Application Support/Search/` 中的 JSON 文件 | 本机用户。 |
+| Cookie 与网站数据 | WebKit 为应用管理的数据存储 | 对应网站，遵循浏览器权限和隔离规则。 |
+| 扩展 | `~/Library/Application Support/Search/Extensions/`；扩展数据位于 WebKit 的扩展存储中 | 扩展按安装时授予的权限访问。 |
 
-A **private tab** (`⇧⌘N`) has its own cookie jar and leaves nothing behind when it closes.
+**无痕标签页**（`⇧⌘N`）使用独立的 Cookie 存储，关闭后不保留该会话的浏览数据。
 
-Apps you allow in System Settings › Privacy & Security › Automation can read the address and title of your tabs with AppleScript; private tabs are never shown.
+在“系统设置 → 隐私与安全性 → 自动化”中获准访问的应用，可以通过 AppleScript 读取普通标签页的网址和标题；无痕标签页不会列出。
 
-## Keyboard
+## 常用快捷键
 
-| | |
+| 操作 | 快捷键 |
 |---|---|
-| `⌘L` address · `⌘K` switch tab · `⌘T` new tab · `⌘W` close · `⇧⌘T` reopen | `⌘[` `⌘]` back, forward · `⇧⌘[` `⇧⌘]` previous, next tab · `⌘1`–`⌘9` jump |
-| `⇧⌘S` tabs across the top or down the left · `⌘S` fold the sidebar away · `⇧⌘B` bookmark this page | `⇧⌘R` reading mode · `⇧⌘P` float the video · `⇧⌘H` hide something · `⇧⌘U` what is hidden here |
-| `⌘F` find · `⌘D` duplicate tab · `⇧⌘C` copy address · `⇧⌘V` paste and go | `⌘Y` history · `⇧⌘J` downloads · `⌘,` settings · `⌥⌘L` passwords |
+| 输入网址、搜索词 | `⌘L` |
+| 查找已打开的标签页 | `⌘K` |
+| 新建窗口 / 新建标签页 | `⌘N` / `⌘T` |
+| 新建无痕标签页 | `⇧⌘N` |
+| 关闭标签页 / 恢复关闭的标签页或窗口 | `⌘W` / `⇧⌘T` |
+| 后退 / 前进 | `⌘[` / `⌘]` |
+| 上一个 / 下一个标签页 | `⇧⌘[` / `⇧⌘]` |
+| 跳转到指定标签页 | `⌘1`–`⌘9` |
+| 切换顶部标签栏与侧边栏 | `⇧⌘S` |
+| 收起侧边栏 | `⌘S` |
+| 为当前页面添加书签 | `⇧⌘B` |
+| 阅读模式 / 画中画 | `⇧⌘R` / `⇧⌘P` |
+| 隐藏元素 / 查看当前网站的隐藏规则 | `⇧⌘H` / `⇧⌘U` |
+| 页面内查找 / 复制标签页 | `⌘F` / `⌘D` |
+| 复制地址 / 粘贴并打开 | `⇧⌘C` / `⇧⌘V` |
+| 历史记录 / 下载面板 | `⌘Y` / `⇧⌘J` |
+| 设置 / 密码面板 | `⌘,` / `⌥⌘L` |
 
-`⌘R` reloads the page; `⌥⌘R` reloads it from origin, checking everything cached with the site again, as Safari's Reload Page From Origin.
+`⌘R` 重新载入页面；`⌥⌘R` 从源站重新载入，重新检查网站缓存。
 
-`⌃Tab` and `⌃⇧Tab` walk along the row of tabs; `Tab` stays the page's, for moving through a form. `esc` puts away whatever is open.
+`⌃Tab` 和 `⌃⇧Tab` 切换标签页；`Tab` 保留给网页表单中的焦点切换。`Esc` 关闭当前面板或弹层。
 
-With Split View on, `⌥⌘N` splits the current page and `⌃⌘←` / `⌃⌘→` go from one page to the other. `⌘W` closes the focused tab and gives the remaining page the whole area. Tabs › Separate Split Tabs keeps both tabs open separately.
+启用分屏后，`⌥⌘N` 拆分当前页面，`⌃⌘←` / `⌃⌘→` 切换操作焦点。`⌘W` 关闭获得焦点的标签页，另一侧页面恢复占满区域。“标签页 → 分离分屏标签页”将两侧页面保留为独立标签页。
 
 ---
 
-## For developers
+## 开发说明
 
-### Why the source is here
+### 源码与上游
 
-So anyone can read exactly what a browser handling their passwords and history is doing, build it themselves, or fix something that bothers them. The code is small enough to actually read — about 42,000 lines of Swift, no dependencies beyond what Apple ships with macOS, one file per concern.
+上游项目为 [driceroland/Search](https://github.com/driceroland/Search)。本仓库在其基础上维护中文支持、语言切换及 GitHub Actions 发布流程。
 
-### Building it
+界面使用 Swift 编写，主要依赖 macOS 自带框架。源码可用于检查浏览器如何处理密码和历史记录，也可以自行编译或提交修改。
 
-- macOS 14 or later, Xcode 16 / Swift 6 toolchain
-- `swift build` — runs the app straight from the SwiftPM binary
-- `./build.sh` — assembles a real, double-clickable `Search.app` in `build/`, ad-hoc signed so it runs on your own Mac
+### 本地构建
 
-A build you make yourself won't be notarized or carry Office Commun's Developer ID, so the first launch needs a right-click → Open (or an allow in System Settings → Privacy & Security). That's expected — it's the same thing that happens with any app that isn't from the App Store or a notarized DMG. Your own build also keeps its passwords apart from a signed Search's: the keychain tells the two apart by their signatures.
+需要 macOS、Swift 6 工具链及对应的 macOS SDK。建议使用完整 Xcode；运行 XCTest 测试需要其中的测试框架。
 
-`./build.sh release dmg` also makes `Search.dmg` / `Search.zip`. `./build.sh release ship` additionally notarizes and staples — that step needs a Developer ID certificate and Apple credentials, so it only really does anything for Office Commun's own releases.
+```bash
+# 获取本仓库
+git clone https://github.com/small32/SearcheXtra.git
+cd SearcheXtra
 
-### How it's put together
+# 编译 SwiftPM 可执行程序
+swift build
 
-- **SwiftUI** for everything drawn, **AppKit** for the handful of things SwiftUI doesn't reach on macOS (the window's title bar, dragging the window by an empty part of the tab row), **WKWebView** for pages.
-- One `Tab` per page. Its web view is built lazily — a tab restored from last session doesn't cost a process until you switch to it. That's most of why launching with twenty tabs is still instant. Each page runs in WebKit's own content process, as in Safari; a tab you close is really gone.
-- The ad blocker is a `WKContentRuleList` compiled once at launch and enforced inside WebKit's networking, before a request is made — zero cost at run time, unlike a JavaScript blocker.
-- Hidden elements are a per-site list of selectors injected as a stylesheet at document start, so nothing is ever seen appearing and vanishing.
-- Every colour is a light/dark pair in `Design.swift`, resolved by the window's appearance; nothing else in the code knows which mode it is in.
-- Extensions run on `WKWebExtension` (macOS 15.4+). `Crx.swift` fetches an extension from the Chrome Web Store's public update address and checks the CRX3 signature against the extension's id before anything is unpacked. `Extensions.swift` is the browser's side of WebKit's contract — tabs, the window, permissions, popups. `ExtensionShims.swift` adds, at install, a small script to the extension's worker, pages and content scripts: it defines the Chrome APIs WebKit lacks — `userScripts`, `privacy`, `browsingData`, `sessions`, the old FileSystem API and more — as calls answered natively by Search, and mends the places where WebKit behaves differently from Chrome: replies from pages that don't answer, listeners added after a worker starts, workers WebKit loses track of, members and constants it leaves out. Extension pages are served from `chrome-extension://<id>/`, the address they have in Chrome, so servers and sites recognise them. `./bench ext-*` drives all of it from the shell against a test run. `ExtensionNative.swift` speaks Chrome's native messaging to hosts registered in Chrome's `NativeMessagingHosts` folders.
-- `Sources/Search/` is one file per concern: `Vault.swift` is the keychain, `Shield.swift` the ad blocker, `Curtain.swift` the hidden elements, `Session.swift` what comes back at launch, `Updater.swift` the update, `Bench.swift` the test socket, and so on. There's no framework of its own to learn first.
+# 编译并组装可双击运行的应用
+./build.sh
 
-### Testing it without closing it
-
-Turn on **Settings › General › Let a script drive Search** and the running app listens on a Unix socket in its own folder (readable by your user only). `./bench` at the root of the repository speaks it:
-
-```
-./bench open https://example.com     # a tab of its own, at the end of your row, marked with a flask
-./bench wait 2e7e7e89                 # until it has loaded
-./bench text 2e7e7e89                 # the page's text
-./bench shot 2e7e7e89 out.png         # a picture of it
-./bench click 2e7e7e89 "button.go"    # click, type, submit — through the page's own events
-./bench probe                         # the window's state: open panels, a modal, every window
-./bench close all
+# 明确构建 ARM64 版本
+SEARCH_ARCH=arm64 ./build.sh release
 ```
 
-Bench tabs are never selected for you, never enter the session or the history, and go when the script says so. It is how this browser is tested while somebody is using it.
+应用生成在 `build/Search.app`。没有 Developer ID 证书时使用临时签名，构建不会自动获得 Apple 公证。当前 GitHub Release 也采用临时签名，首次打开可能需要在 Finder 中右键选择“打开”，或在“系统设置 → 隐私与安全性”中允许打开。
 
-`python3 Tests/split_view.py`, after `./build.sh`, checks Split View through the app's own model in a hidden test run with its own settings and files, all removed afterwards. It never makes or shows a window; what can only be seen (dragging onto a page's edge, the divider under the pointer, the motion) is checked by hand on a release candidate.
+自行构建的应用与上游正式签名版本使用不同签名，访问已有钥匙串项目时由 macOS 决定是否需要授权。
 
-### Contributing
+`./build.sh release dmg` 额外生成 `Search.dmg` 和 `Search.zip`；`./build.sh release ship` 还会提交公证并附加公证票据，需要 Developer ID 证书及 Apple 公证凭据。
 
-Issues and pull requests are genuinely welcome — see [CONTRIBUTING.md](CONTRIBUTING.md) for how this is reviewed and what tends to get merged. The short version: small changes, no new dependencies, nothing that phones home. Found a security problem? Please report it privately, as [SECURITY.md](SECURITY.md) says.
+### GitHub Actions 发布
 
-### License
+将版本写入 `VERSION`，提交后推送对应的 `v版本号` 标签，即可触发 `ARM64 Release` 工作流。也可以在 Actions 页面手动指定标签构建。
 
-MIT — see [LICENSE](LICENSE). Do what you want with the code. "Search" and the app icon are Office Commun's; please rename a fork before distributing it under another name.
+工作流检查标签与版本是否一致，构建 ARM64 应用，验证架构、版本号和签名，然后发布 ZIP 安装包与 `SHA256SUMS.txt`。
+
+`Bilingual interface checks` 工作流负责语言选择、英文回退、动态文案格式、双语资源打包及 ARM64 构建检查。
+
+### 界面翻译
+
+- `Sources/Search/Resources/Translations.json` 保存英文和简体中文文案，每个翻译键同时提供 `en` 和 `zh-Hans`。
+- `Sources/Search/Localization.swift` 处理语言选择、文案读取、英文回退及动态内容替换。
+- `Localization/en.lproj/InfoPlist.strings` 与 `Localization/zh-Hans.lproj/InfoPlist.strings` 保存系统权限说明。
+- 存储键、协议标识、网址、快捷键 ID 和用户输入保持原值。
+
+维护方式见 [界面语言维护说明](docs/LOCALIZATION.md)。
+
+### 实现结构
+
+- **SwiftUI** 绘制界面，**AppKit** 处理窗口标题栏、拖动等 macOS 原生交互，**WKWebView** 显示网页。
+- 每个页面对应一个 `Tab`。恢复标签页时延迟创建网页视图，切换到对应标签页后才占用网页进程。网页运行在 WebKit 的内容进程中。
+- 广告拦截规则编译为 `WKContentRuleList`，在 WebKit 网络请求阶段执行。
+- 隐藏元素按网站保存为选择器，在文档开始加载时注入样式表，避免元素先出现再消失。
+- `Design.swift` 集中管理浅色与深色配色，由窗口外观决定实际颜色。
+- 扩展基于 `WKWebExtension`（macOS 15.4+）。`Crx.swift` 下载扩展并在解包前校验 CRX3 签名与扩展 ID；`Extensions.swift` 管理标签页、权限和弹出窗口；`ExtensionShims.swift` 补充 WebKit 缺少的部分 Chrome API，并处理两者之间的行为差异。扩展页面使用 `chrome-extension://<id>/` 地址。`ExtensionNative.swift` 支持 Chrome 原生消息通信，可连接 Chrome 的 `NativeMessagingHosts` 目录中注册的宿主。
+- `Sources/Search/` 按功能组织文件，例如 `Vault.swift` 管理钥匙串，`Shield.swift` 处理广告拦截，`Curtain.swift` 管理隐藏元素，`Session.swift` 恢复会话，`Updater.swift` 处理更新，`Bench.swift` 提供测试接口。
+
+### 在独立测试会话中验证
+
+开启 **设置 → 通用 → 允许脚本控制 Search** 后，应用会在自己的数据目录中监听 Unix 套接字，仅当前用户可访问。仓库根目录的 `./bench` 用于发送测试指令：
+
+```bash
+./bench open https://example.com     # 新建带烧瓶标记的测试标签页
+./bench wait 2e7e7e89                # 等待页面加载完成
+./bench text 2e7e7e89                # 获取页面文本
+./bench shot 2e7e7e89 out.png        # 保存页面截图
+./bench click 2e7e7e89 "button.go"   # 通过网页事件点击元素
+./bench probe                       # 查看窗口、面板和弹窗状态
+./bench close all                   # 关闭测试标签页
+```
+
+测试标签页不会自动成为当前标签页，不写入会话或历史记录，由脚本关闭。`./bench ext-*` 用于扩展相关测试。
+
+完成 `./build.sh` 后，可以运行 `python3 Tests/split_view.py`。它在隐藏的独立测试会话中检查分屏模型，使用单独的设置和文件，并在结束后清理。拖动到页面边缘、分隔线反馈及动画等视觉交互需要手动检查。
+
+### 参与维护
+
+问题反馈和修改建议请提交至 [本仓库 Issues](https://github.com/small32/SearcheXtra/issues) 或 Pull Request。修改应尽量保持范围明确，减少新增依赖，延续本地存储和保护隐私的设计。
+
+上游贡献说明见 [CONTRIBUTING.md](CONTRIBUTING.md)，安全报告说明见 [SECURITY.md](SECURITY.md)。这两份文件保留上游的维护流程和联系方式；上游自身的安全问题可按其中说明报告。
+
+### 许可证与归属
+
+项目采用 **MIT 许可证**，详见 [LICENSE](LICENSE)。修改和分发时保留原有版权及许可声明。
+
+Search 的原始代码、名称和应用图标来自 Office Commun。本仓库以 SearcheXtra 名称维护修改版，中文支持和语言切换代码在本分支中提供。
