@@ -2486,13 +2486,7 @@ final class Browser: NSObject, ObservableObject {
             newShyTab()
             return
         }
-        // An explicitly chosen website takes precedence over extension new-tab pages.
-        if let page = prefs.startPageURL {
-            open(page, foreground: true)
-            summoning = false
-            rememberSession()
-            return
-        }
+        // The start page applies to fresh windows, not new tabs.
         // An extension's new tab page, if one asked and you said yes.
         if #available(macOS 15.4, *), let page = Extensions.shared.newTabPage {
             open(page, foreground: true)

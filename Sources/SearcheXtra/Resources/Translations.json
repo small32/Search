@@ -5360,8 +5360,8 @@
     "zh-Hans": "起始页面"
   },
   "startPage.detail": {
-    "en": "Open this website in fresh windows and ordinary new tabs. Restored sessions keep their pages; private tabs stay blank.",
-    "zh-Hans": "新窗口和普通新标签页打开此网址。恢复会话时保留原有页面，无痕标签页仍为空白页。"
+    "en": "Open this website in fresh windows. New tabs are blank unless a new-tab extension is configured. Restored sessions keep their pages; private tabs stay blank.",
+    "zh-Hans": "新窗口打开此网址。未设置新标签页扩展时，新建标签页为空白页。恢复会话时保留原有页面，无痕标签页仍为空白页。"
   },
   "startPage.placeholder": {
     "en": "Website address (blank for an empty page)",

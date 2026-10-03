@@ -36,7 +36,7 @@ final class StartPageTests: XCTestCase {
         XCTAssertNil(Preferences().startPageURL)
     }
 
-    func testFreshWindowAndNormalNewTabUseStartPage() {
+    func testFreshWindowUsesStartPageButNormalNewTabsStayBlank() {
         let url = "http://127.0.0.1:1/start"
         Shared.prefs.startPage = url
         let browser = Browser(record: WindowRecord())
@@ -44,7 +44,23 @@ final class StartPageTests: XCTestCase {
         let first = browser.activeID
         browser.newTab()
         XCTAssertNotEqual(browser.activeID, first)
-        XCTAssertEqual(browser.active?.address?.absoluteString, url)
+        XCTAssertEqual(browser.active?.isBlank, true)
+        XCTAssertNil(browser.active?.address)
+        XCTAssertNil(browser.active?.pending)
+        XCTAssertEqual(Shared.prefs.startPage, url)
+        // The setting still applies to the first tab of another fresh window.
+        let anotherWindow = Browser(record: WindowRecord())
+        XCTAssertEqual(anotherWindow.active?.address?.absoluteString, url)
+    }
+
+    func testUnsetStartPageKeepsFreshWindowsAndNewTabsBlank() {
+        let browser = Browser(record: WindowRecord())
+        XCTAssertEqual(browser.active?.isBlank, true)
+        browser.open(URL(string: "http://127.0.0.1:1/previous")!, foreground: true)
+        browser.newTab()
+        XCTAssertEqual(browser.active?.isBlank, true)
+        XCTAssertNil(browser.active?.address)
+        XCTAssertNil(browser.active?.pending)
     }
 
     func testPrivateTabsStayBlankAndClearingRestoresBlankNewTabs() {
