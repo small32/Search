@@ -6,7 +6,7 @@ import WebKit
 import XCTest
 @testable import SearcheXtra
 
-private typealias BrowserTab = Search.Tab
+private typealias BrowserTab = SearcheXtra.Tab
 
 @MainActor
 final class DownloadLifecycleTests: XCTestCase {
