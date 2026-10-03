@@ -5396,8 +5396,8 @@
     "zh-Hans": "默认跟随系统语言；不支持的系统语言使用英文。"
   },
   "release100.start1": {
-    "en": "Save a website in Settings → General → Start Page. New windows and normal new tabs open that page.",
-    "zh-Hans": "在“设置 → 通用 → 起始页面”中保存网址，新窗口和普通新标签页会打开该页面。"
+    "en": "Save a website in Settings → General → Start Page. New windows open that page; new tabs are blank by default.",
+    "zh-Hans": "在“设置 → 通用 → 起始页面”中保存网址，新窗口会打开该页面；新建标签页默认保持空白。"
   },
   "release100.start2": {
     "en": "Choose Use Blank Page to restore the default. Changes take effect immediately.",
