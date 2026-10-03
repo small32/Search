@@ -23,13 +23,16 @@ jobs:
         run: |
           swift -e '
             import Foundation
-            let app = Bundle(path: "build/Search.app")!
-            let resources = Bundle(url: app.resourceURL!.appendingPathComponent("Search_Search.bundle"))!
+            let app = Bundle(path: "build/SearcheXtra.app")!
+            precondition(app.object(forInfoDictionaryKey: "CFBundleName") as? String == "SearcheXtra")
+            precondition(app.object(forInfoDictionaryKey: "CFBundleDisplayName") as? String == "SearcheXtra")
+            precondition(app.object(forInfoDictionaryKey: "CFBundleExecutable") as? String == "SearcheXtra")
+            let resources = Bundle(url: app.resourceURL!.appendingPathComponent("SearcheXtra_SearcheXtra.bundle"))!
             let file = resources.url(forResource: "Translations", withExtension: "json")!
             let translations = try! JSONDecoder().decode([String: [String: String]].self, from: Data(contentsOf: file))
             precondition(translations["language.title"]?["en"] == "Language")
             precondition(translations["language.title"]?["zh-Hans"] == "界面语言")
           '
-          plutil -lint build/Search.app/Contents/Resources/en.lproj/InfoPlist.strings
-          plutil -lint build/Search.app/Contents/Resources/zh-Hans.lproj/InfoPlist.strings
-          codesign --verify --deep --strict build/Search.app
+          plutil -lint build/SearcheXtra.app/Contents/Resources/en.lproj/InfoPlist.strings
+          plutil -lint build/SearcheXtra.app/Contents/Resources/zh-Hans.lproj/InfoPlist.strings
+          codesign --verify --deep --strict build/SearcheXtra.app

@@ -2,7 +2,7 @@ import Foundation
 import XCTest
 import Darwin
 import AppKit
-@testable import Search
+@testable import SearcheXtra
 
 final class ImportFileTests: XCTestCase {
     private static var probeWorld: String?

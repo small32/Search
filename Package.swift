@@ -2,12 +2,12 @@
 import PackageDescription
 
 let package = Package(
-    name: "Search",
+    name: "SearcheXtra",
     platforms: [.macOS(.v14)],
     targets: [
         .executableTarget(
-            name: "Search",
-            path: "Sources/Search",
+            name: "SearcheXtra",
+            path: "Sources/SearcheXtra",
             resources: [.copy("Resources/Translations.json")],
             // Same reasoning as the canvas app next door: the whole interface is
             // main-thread by nature, and Swift 6's strict isolation buys nothing
@@ -15,9 +15,9 @@ let package = Package(
             swiftSettings: [.swiftLanguageMode(.v5)]
         ),
         .testTarget(
-            name: "SearchTests",
-            dependencies: ["Search"],
-            path: "Tests/SearchTests",
+            name: "SearcheXtraTests",
+            dependencies: ["SearcheXtra"],
+            path: "Tests/SearcheXtraTests",
             swiftSettings: [.swiftLanguageMode(.v5)]
         )
     ]

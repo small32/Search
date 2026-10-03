@@ -1,5 +1,5 @@
 import XCTest
-@testable import Search
+@testable import SearcheXtra
 
 /// A pinned square carried across the grid (Side.swift): the cell it lands
 /// in and how far it sits from it, on rows of different lengths.

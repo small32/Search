@@ -1394,7 +1394,7 @@ enum ExtensionShims {
       // it can't: a rejection, or lastError for a callback.
       const refuse = (what) => (...args) => {
         const callback = args.length && typeof args[args.length - 1] === "function" ? args.pop() : null;
-        const error = new Error(what + " isn't available in Search");
+        const error = new Error(what + " isn't available in SearcheXtra");
         if (!callback) return Promise.reject(error);
         withLastError(error, callback);
       };
@@ -1553,7 +1553,7 @@ enum ExtensionShims {
           // The sound of a screen or a tab alone: WebKit records none.
           if (desktopId(c.video) === null) {
             stream.getTracks().forEach((t) => t.stop());
-            throw new DOMException("Search can't record the sound of a screen or a tab", "NotFoundError");
+            throw new DOMException("SearcheXtra can't record the sound of a screen or a tab", "NotFoundError");
           }
           const [track] = stream.getVideoTracks();
           const want = displayVideo(c.video);
@@ -1967,7 +1967,7 @@ enum ExtensionShims {
 
       // Rules WebKit can't carry out — a header it doesn't know how to set,
       // say — are refused one by one, where Chrome would take them all. The
-      // rest still go in: one rule Search can't honour shouldn't cost an
+      // rest still go in: one rule SearcheXtra can't honour shouldn't cost an
       // extension every other rule, or its startup.
       const dnr = chrome.declarativeNetRequest;
       // Before WebKit sees them, rules are put the way it takes them: a
@@ -2173,7 +2173,7 @@ enum ExtensionShims {
         });
       }
 
-      // Context menu entries for places Search has no menu for — the old
+      // Context menu entries for places SearcheXtra has no menu for — the old
       // toolbar button contexts are the button's menu now, and there is no
       // app launcher at all.
       for (const name of ["contextMenus", "menus"]) {
@@ -3245,7 +3245,7 @@ enum ExtensionShims {
 
     static func answer(_ message: Any, from context: WKWebExtensionContext, owner: Extensions) async throws -> Any? {
         guard let body = message as? [String: Any], let api = body["api"] as? String else {
-            return ["error": "Not a Search message"]
+            return ["error": "Not a SearcheXtra message"]
         }
         let args = body["args"] as? [Any] ?? []
         do {
@@ -3542,7 +3542,7 @@ enum ExtensionShims {
         case "downloads.erase":
             return []
         case "downloads.pause", "downloads.resume", "downloads.cancel", "downloads.removeFile", "downloads.getFileIcon":
-            throw Unsupported(what: "\(api) isn't available in Search yet")
+            throw Unsupported(what: "\(api) isn't available in SearcheXtra yet")
 
         // MARK: side panel — a tab of its own, since this window has one column
         case "sidePanel.setOptions":
@@ -3914,7 +3914,7 @@ enum ExtensionShims {
             if let old = awake[id] { IOPMAssertionRelease(old) }
             var assertion: IOPMAssertionID = 0
             let kind = (display ? kIOPMAssertionTypePreventUserIdleDisplaySleep : kIOPMAssertionTypePreventUserIdleSystemSleep) as CFString
-            if IOPMAssertionCreateWithName(kind, IOPMAssertionLevel(kIOPMAssertionLevelOn), "An extension in Search" as CFString, &assertion) == kIOReturnSuccess {
+            if IOPMAssertionCreateWithName(kind, IOPMAssertionLevel(kIOPMAssertionLevelOn), "An extension in SearcheXtra" as CFString, &assertion) == kIOReturnSuccess {
                 awake[id] = assertion
             }
             return nil
@@ -3923,7 +3923,7 @@ enum ExtensionShims {
             return nil
         case "power.reportActivity":
             var assertion: IOPMAssertionID = 0
-            IOPMAssertionDeclareUserActivity("An extension in Search" as CFString, kIOPMUserActiveLocal, &assertion)
+            IOPMAssertionDeclareUserActivity("An extension in SearcheXtra" as CFString, kIOPMUserActiveLocal, &assertion)
             return nil
 
         // MARK: browsing data
@@ -3977,7 +3977,7 @@ enum ExtensionShims {
         case "readingList.query":
             return []
         case "readingList.addEntry", "readingList.removeEntry", "readingList.updateEntry":
-            throw Unsupported(what: "Search has no reading list")
+            throw Unsupported(what: "SearcheXtra has no reading list")
 
         // MARK: system
         case "system.cpu.getInfo":
@@ -4027,9 +4027,9 @@ enum ExtensionShims {
             if let collapsed = props["collapsed"] as? Bool, collapsed != group.collapsed { browser.toggleTabGroup(group.id) }
             return chromeGroup(browser.tabGroups.first { $0.id == group.id } ?? group)
         case "tabGroups.move":
-            throw Unsupported(what: "Search can't move a tab group for an extension")
+            throw Unsupported(what: "SearcheXtra can't move a tab group for an extension")
         case "tabs.group":
-            guard browser.prefs.usesTabGroups else { throw Unsupported(what: "Tab groups are off in Search's settings") }
+            guard browser.prefs.usesTabGroups else { throw Unsupported(what: "Tab groups are off in SearcheXtra's settings") }
             let places: [Any] = first as? [Any] ?? []
             let tabs = places.compactMap { located($0, owner: owner) }
             guard !tabs.isEmpty else { throw Unsupported(what: "No tabs to group") }
@@ -4072,7 +4072,7 @@ enum ExtensionShims {
             throw Unsupported(what: "getAuthToken needs a Google account signed into Chrome; this extension would need launchWebAuthFlow instead")
 
         default:
-            throw Unsupported(what: "\(api) isn't available in Search")
+            throw Unsupported(what: "\(api) isn't available in SearcheXtra")
         }
     }
 

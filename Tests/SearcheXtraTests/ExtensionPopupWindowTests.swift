@@ -1,7 +1,7 @@
 import AppKit
 import WebKit
 import XCTest
-@testable import Search
+@testable import SearcheXtra
 
 /// An extension's popup window (windows.create with type "popup"), on the
 /// model only: no window is ever made here.

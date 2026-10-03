@@ -1188,7 +1188,7 @@ extension Extensions: WKWebExtensionControllerDelegate {
     static func mayOpen(_ url: URL) throws {
         let scheme = url.scheme?.lowercased() ?? ""
         guard scheme != "javascript", scheme != "file" else {
-            throw NSError(domain: "Search", code: 1, userInfo: [NSLocalizedDescriptionKey: "Cannot navigate to a \(scheme): URL."])
+            throw NSError(domain: "SearcheXtra", code: 1, userInfo: [NSLocalizedDescriptionKey: "Cannot navigate to a \(scheme): URL."])
         }
     }
 
@@ -1211,7 +1211,7 @@ extension Extensions: WKWebExtensionControllerDelegate {
         // and History while the extension believed them private. Refused,
         // as Chrome refuses when incognito isn't allowed (Security).
         if configuration.shouldBePrivate {
-            throw NSError(domain: "Search", code: 2, userInfo: [NSLocalizedDescriptionKey: "Private windows can't be opened by extensions."])
+            throw NSError(domain: "SearcheXtra", code: 2, userInfo: [NSLocalizedDescriptionKey: "Private windows can't be opened by extensions."])
         }
         for url in configuration.tabURLs { try Extensions.mayOpen(url) }
         // A popup has no address bar, only the site over the page: a website,
@@ -1223,7 +1223,7 @@ extension Extensions: WKWebExtensionControllerDelegate {
                 let own = [Extensions.scheme, Extensions.formerScheme].contains(scheme)
                     && url.host()?.lowercased() == extensionContext.uniqueIdentifier.lowercased()
                 guard scheme == "https" || scheme == "http" || own || url.absoluteString == "about:blank" else {
-                    throw NSError(domain: "Search", code: 3, userInfo: [NSLocalizedDescriptionKey: "A popup window shows a website or the extension's own page."])
+                    throw NSError(domain: "SearcheXtra", code: 3, userInfo: [NSLocalizedDescriptionKey: "A popup window shows a website or the extension's own page."])
                 }
             }
         }

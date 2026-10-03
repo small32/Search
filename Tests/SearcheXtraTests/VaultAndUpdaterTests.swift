@@ -1,5 +1,5 @@
 import XCTest
-@testable import Search
+@testable import SearcheXtra
 
 /// The pure parts of the password vault and the updater: which host a login
 /// belongs to, how an export is read, and that an unsigned feed is refused.
@@ -87,8 +87,8 @@ final class VaultAndUpdaterTests: XCTestCase {
     private func release(minimum: String?) -> Updater.Release {
         Updater.Release(
             version: "9.9", build: 9999,
-            archive: URL(string: "https://officecommun.com/search/Search.zip")!,
-            dmg: URL(string: "https://officecommun.com/search/Search.dmg")!,
+            archive: URL(string: "https://officecommun.com/search/SearcheXtra.zip")!,
+            dmg: URL(string: "https://officecommun.com/search/SearcheXtra.dmg")!,
             sha256: nil, notes: nil, minimumSystemVersion: minimum
         )
     }

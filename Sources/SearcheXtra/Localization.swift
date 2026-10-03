@@ -27,7 +27,7 @@ enum L10n {
         // SwiftPM's generated accessor differs across toolchains. An installed
         // app always keeps the bundle in Contents/Resources; command-line tests
         // can still use SwiftPM's own locator.
-        if let url = Bundle.main.resourceURL?.appendingPathComponent("Search_Search.bundle"),
+        if let url = Bundle.main.resourceURL?.appendingPathComponent("SearcheXtra_SearcheXtra.bundle"),
            let bundle = Bundle(url: url) { return bundle }
         return .module
     }()

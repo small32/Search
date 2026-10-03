@@ -44,7 +44,7 @@ jobs:
           version="$(tr -d '[:space:]' < VERSION)"
           test "$RELEASE_TAG" = "v$version"
           echo "RELEASE_VERSION=$version" >> "$GITHUB_ENV"
-          echo "RELEASE_ARCHIVE=Search-$version-arm64.zip" >> "$GITHUB_ENV"
+          echo "RELEASE_ARCHIVE=SearcheXtra-$version-arm64.zip" >> "$GITHUB_ENV"
           xcodebuild -version
           swift --version
 
@@ -55,8 +55,8 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          app="build/Search.app"
-          test "$(lipo -archs "$app/Contents/MacOS/Search")" = arm64
+          app="build/SearcheXtra.app"
+          test "$(lipo -archs "$app/Contents/MacOS/SearcheXtra")" = arm64
           test "$(/usr/libexec/PlistBuddy -c 'Print :CFBundleShortVersionString' "$app/Contents/Info.plist")" = "$RELEASE_VERSION"
           plutil -lint "$app/Contents/Info.plist"
           codesign --verify --deep --strict "$app"
@@ -73,13 +73,13 @@ jobs:
           cat > "$RUNNER_TEMP/release-notes.md" <<'NOTES'
           支持英文和简体中文，包含菜单、设置项及说明、弹窗和操作提示。
 
-          在“设置 → 通用 → 界面语言”中选择跟随系统、English 或简体中文，重新启动 Search 后生效。
+          在“设置 → 通用 → 界面语言”中选择跟随系统、English 或简体中文，重新启动 SearcheXtra 后生效。
 
           - 新增自定义起始页面：在“设置 → 通用 → 起始页面”中保存网址，新窗口和普通新标签页会打开该页面；点击“使用空白页”可恢复默认。
           - 起始页面设置立即生效，恢复会话时保留原有页面，无痕标签页仍为空白页。
           - 仅提供 ARM64 版本，适用于 Apple 芯片 Mac。
           - 系统要求：macOS 14 或更新版本；Chrome 扩展需要 macOS 15.4 或更新版本。
-          - 下载 ZIP 后解压，将 Search.app 放入“应用程序”文件夹。
+          - 下载 ZIP 后解压，将 SearcheXtra.app 放入“应用程序”文件夹。
           - 安装包由 GitHub Actions 构建，采用临时签名，未进行 Apple 公证。
           - SHA256SUMS.txt 提供安装包的 SHA-256 校验值。
           NOTES
@@ -88,7 +88,7 @@ jobs:
           else
             gh release create "$RELEASE_TAG" \
               --verify-tag --draft \
-              --title "Search ${RELEASE_VERSION}（ARM64）" \
+              --title "SearcheXtra ${RELEASE_VERSION}（ARM64）" \
               --notes-file "$RUNNER_TEMP/release-notes.md" \
               "build/$RELEASE_ARCHIVE" build/SHA256SUMS.txt
           fi

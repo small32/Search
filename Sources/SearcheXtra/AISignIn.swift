@@ -51,7 +51,7 @@ enum AISignIn {
             URLQueryItem(name: "callback_url", value: callback.absoluteString),
             URLQueryItem(name: "code_challenge", value: challenge),
             URLQueryItem(name: "code_challenge_method", value: "S256"),
-            URLQueryItem(name: "key_label", value: "Search"),
+            URLQueryItem(name: "key_label", value: "SearcheXtra"),
         ]
         guard let url = parts?.url else { return }
         let tab = browser.open(url, foreground: true)

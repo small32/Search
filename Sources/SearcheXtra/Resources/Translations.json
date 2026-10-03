@@ -20,24 +20,24 @@
     "zh-Hans": "发送至 {0} · {1}"
   },
   "AIAssist.0006": {
-    "en": "When you ask, Search sends this page's text, its address and your question to {0}",
-    "zh-Hans": "提问时，Search 会将页面文本、地址和你的问题发送至 {0}"
+    "en": "When you ask, SearcheXtra sends this page's text, its address and your question to {0}",
+    "zh-Hans": "提问时，SearcheXtra 会将页面文本、地址和你的问题发送至 {0}"
   },
   "AIAssist.0007": {
     "en": ", which passes them to the model's provider.",
     "zh-Hans": "，再由其转交给模型提供商。"
   },
   "AIAssist.0008": {
-    "en": " Their terms and privacy policy apply. Nothing is sent until you ask, never from a private tab, and Search keeps no copy.",
-    "zh-Hans": "适用其服务条款和隐私政策。仅在你提问时发送，无痕标签页不会发送，Search 也不会保留副本。"
+    "en": " Their terms and privacy policy apply. Nothing is sent until you ask, never from a private tab, and SearcheXtra keeps no copy.",
+    "zh-Hans": "适用其服务条款和隐私政策。仅在你提问时发送，无痕标签页不会发送，SearcheXtra 也不会保留副本。"
   },
   "AIAssist.0009": {
     "en": "\n\nOn Gemini's free tier, outside the EEA, Switzerland and the UK, Google may use this to improve its products, and people may read it. Don't use it on sensitive pages.",
     "zh-Hans": "\n\n在欧洲经济区、瑞士和英国以外使用 Gemini 免费服务时，Google 可能用这些内容改进产品，人工也可能查看。请勿用于含敏感信息的页面。"
   },
   "AIAssist.0010": {
-    "en": "\n\nSearch asks OpenRouter to use only providers that keep nothing (zero data retention).",
-    "zh-Hans": "\n\nSearch 要求 OpenRouter 仅使用不保留数据的提供商（零数据保留）。"
+    "en": "\n\nSearcheXtra asks OpenRouter to use only providers that keep nothing (zero data retention).",
+    "zh-Hans": "\n\nSearcheXtra 要求 OpenRouter 仅使用不保留数据的提供商（零数据保留）。"
   },
   "AIAssist.0011": {
     "en": "Choose where the AI runs",
@@ -164,8 +164,8 @@
     "zh-Hans": "模型"
   },
   "AIAssist.0042": {
-    "en": "Needs the Apple Silicon version of Search — this copy runs translated",
-    "zh-Hans": "需要 Apple 芯片版 Search；当前版本正通过转译运行"
+    "en": "Needs the Apple Silicon version of SearcheXtra — this copy runs translated",
+    "zh-Hans": "需要 Apple 芯片版 SearcheXtra；当前版本正通过转译运行"
   },
   "AIAssist.0043": {
     "en": "Model",
@@ -248,8 +248,8 @@
     "zh-Hans": "密钥"
   },
   "AIAssist.0063": {
-    "en": "This copy of Search can't keep keys safely — it isn't the signed release. An app on this Mac still works",
-    "zh-Hans": "此 Search 版本不是签名发行版，无法安全保存密钥。仍可使用本机应用"
+    "en": "This copy of SearcheXtra can't keep keys safely — it isn't the signed release. An app on this Mac still works",
+    "zh-Hans": "此 SearcheXtra 版本不是签名发行版，无法安全保存密钥。仍可使用本机应用"
   },
   "AIAssist.0064": {
     "en": "Key",
@@ -316,8 +316,8 @@
     "zh-Hans": "密钥已保存到钥匙串"
   },
   "AIAssist.0080": {
-    "en": "This copy of Search can't keep keys",
-    "zh-Hans": "此 Search 版本无法保存密钥"
+    "en": "This copy of SearcheXtra can't keep keys",
+    "zh-Hans": "此 SearcheXtra 版本无法保存密钥"
   },
   "AIAssist.0081": {
     "en": "The key wasn't kept",
@@ -372,7 +372,7 @@
     "zh-Hans": "引擎签名验证失败。请在“设置 › AI”中移除后重新下载。"
   },
   "AIEngine.0094": {
-    "en": "The model isn't the one Search expects. Remove it in Settings › AI and download it again.",
+    "en": "The model isn't the one SearcheXtra expects. Remove it in Settings › AI and download it again.",
     "zh-Hans": "模型与预期不符。请在“设置 › AI”中移除后重新下载。"
   },
   "AIEngine.0095": {
@@ -420,8 +420,8 @@
     "zh-Hans": "未收到 OpenRouter 的登录回调。"
   },
   "AISignIn.0106": {
-    "en": "This copy of Search can't keep keys (it isn't the signed release).",
-    "zh-Hans": "此 Search 版本不是签名发行版，无法保存密钥。"
+    "en": "This copy of SearcheXtra can't keep keys (it isn't the signed release).",
+    "zh-Hans": "此 SearcheXtra 版本不是签名发行版，无法保存密钥。"
   },
   "AISignIn.0107": {
     "en": "The keychain refused the key.",
@@ -1308,8 +1308,8 @@
     "zh-Hans": "链接已复制"
   },
   "Browser.0328": {
-    "en": "“Let a script drive Search” was turned on outside Settings, and stays off",
-    "zh-Hans": "“允许脚本控制 Search”在设置之外被启用，已保持关闭"
+    "en": "“Let a script drive SearcheXtra” was turned on outside Settings, and stays off",
+    "zh-Hans": "“允许脚本控制 SearcheXtra”在设置之外被启用，已保持关闭"
   },
   "Browser.0329": {
     "en": "Ads and trackers blocked",
@@ -1320,8 +1320,8 @@
     "zh-Hans": "拦截已关闭，重新载入后生效"
   },
   "Browser.0331": {
-    "en": "Scripts can drive Search — see ./bench",
-    "zh-Hans": "已允许脚本控制 Search，详见 ./bench"
+    "en": "Scripts can drive SearcheXtra — see ./bench",
+    "zh-Hans": "已允许脚本控制 SearcheXtra，详见 ./bench"
   },
   "Browser.0332": {
     "en": "The bench is closed",
@@ -1768,8 +1768,8 @@
     "zh-Hans": "在网页中运行脚本"
   },
   "Extensions.0443": {
-    "en": "Add “{0}” to Search?",
-    "zh-Hans": "将“{0}”添加到 Search？"
+    "en": "Add “{0}” to SearcheXtra?",
+    "zh-Hans": "将“{0}”添加到 SearcheXtra？"
   },
   "Extensions.0444": {
     "en": "It doesn't ask for anything special.",
@@ -1800,8 +1800,8 @@
     "zh-Hans": "“{0}”请求录制屏幕或窗口。"
   },
   "Extensions.0451": {
-    "en": "macOS will ask what to share. Search remembers your answer for {0}; Settings › Extensions takes it back.",
-    "zh-Hans": "macOS 会询问共享范围。Search 会记住你对 {0} 的选择，可在“设置 › 扩展”中撤销。"
+    "en": "macOS will ask what to share. SearcheXtra remembers your answer for {0}; Settings › Extensions takes it back.",
+    "zh-Hans": "macOS 会询问共享范围。SearcheXtra 会记住你对 {0} 的选择，可在“设置 › 扩展”中撤销。"
   },
   "Extensions.0452": {
     "en": "Continue",
@@ -1932,8 +1932,8 @@
     "zh-Hans": "添加"
   },
   "ExtensionsUI.0484": {
-    "en": "Or find it in the store and press Add to Search on its page.",
-    "zh-Hans": "也可在商店中找到扩展，并点击页面上的“添加到 Search”。"
+    "en": "Or find it in the store and press Add to SearcheXtra on its page.",
+    "zh-Hans": "也可在商店中找到扩展，并点击页面上的“添加到 SearcheXtra”。"
   },
   "ExtensionsUI.0485": {
     "en": "From another browser",
@@ -2036,8 +2036,8 @@
     "zh-Hans": "正在添加…"
   },
   "ExtensionsUI.0510": {
-    "en": "Add this extension to Search",
-    "zh-Hans": "将此扩展添加到 Search"
+    "en": "Add this extension to SearcheXtra",
+    "zh-Hans": "将此扩展添加到 SearcheXtra"
   },
   "ExtensionsUI.0511": {
     "en": "Add",
@@ -2368,12 +2368,12 @@
     "zh-Hans": "新建窗口"
   },
   "Little.0593": {
-    "en": "Open in Search",
-    "zh-Hans": "在 Search 中打开"
+    "en": "Open in SearcheXtra",
+    "zh-Hans": "在 SearcheXtra 中打开"
   },
   "Little.0594": {
-    "en": "Open in Search   ⌘O",
-    "zh-Hans": "在 Search 中打开   ⌘O"
+    "en": "Open in SearcheXtra   ⌘O",
+    "zh-Hans": "在 SearcheXtra 中打开   ⌘O"
   },
   "Little.0595": {
     "en": "Not secure — ",
@@ -2472,8 +2472,8 @@
     "zh-Hans": "{0} 个密码"
   },
   "Passwords.0619": {
-    "en": "macOS asks once for that browser's keychain key. Nothing is changed there; everything lands in your own keychain, under Search.",
-    "zh-Hans": "macOS 会请求一次访问原浏览器的钥匙串密钥。原数据不会改变；导入内容保存在你自己的钥匙串中，归属 Search。"
+    "en": "macOS asks once for that browser's keychain key. Nothing is changed there; everything lands in your own keychain, under the legacy Search label.",
+    "zh-Hans": "macOS 会请求一次访问原浏览器的钥匙串密钥。原数据不会改变；导入内容保存在你自己的钥匙串中，沿用旧版 Search 标记。"
   },
   "Passwords.0620": {
     "en": "{0} accounts",
@@ -2808,8 +2808,8 @@
     "zh-Hans": "打开其他应用中的链接"
   },
   "Settings.0703": {
-    "en": "Search is the default browser on this Mac",
-    "zh-Hans": "Search 已是此 Mac 的默认浏览器"
+    "en": "SearcheXtra is the default browser on this Mac",
+    "zh-Hans": "SearcheXtra 已是此 Mac 的默认浏览器"
   },
   "Settings.0704": {
     "en": "Mail, Slack and the rest still send links elsewhere",
@@ -2821,7 +2821,7 @@
   },
   "Settings.0706": {
     "en": "Links now open here",
-    "zh-Hans": "链接现在会在 Search 中打开"
+    "zh-Hans": "链接现在会在 SearcheXtra 中打开"
   },
   "Settings.0707": {
     "en": "macOS didn't change it",
@@ -2896,8 +2896,8 @@
     "zh-Hans": "在小窗口中打开其他应用的链接"
   },
   "Settings.0725": {
-    "en": "To read and close, or keep with Open in Search (⌘O)",
-    "zh-Hans": "阅读后关闭，或选择“在 Search 中打开”（⌘O）保留页面"
+    "en": "To read and close, or keep with Open in SearcheXtra (⌘O)",
+    "zh-Hans": "阅读后关闭，或选择“在 SearcheXtra 中打开”（⌘O）保留页面"
   },
   "Settings.0726": {
     "en": "Address bar commands",
@@ -2972,8 +2972,8 @@
     "zh-Hans": "切换到其他应用时，当前网站正在播放的视频会进入画中画；返回时恢复到标签页"
   },
   "Settings.0744": {
-    "en": "Let a script drive Search",
-    "zh-Hans": "允许脚本控制 Search"
+    "en": "Let a script drive SearcheXtra",
+    "zh-Hans": "允许脚本控制 SearcheXtra"
   },
   "Settings.0745": {
     "en": "A local socket for testing. Its tabs open beside yours with a flask on them and never take over — see ./bench",
@@ -3088,8 +3088,8 @@
     "zh-Hans": "启动时打开全新窗口"
   },
   "Settings.0773": {
-    "en": "Each time Search opens, your pinned tabs are there and last time's other tabs aren't.",
-    "zh-Hans": "每次启动 Search 时保留固定标签页，不恢复上次的其他标签页。"
+    "en": "Each time SearcheXtra opens, your pinned tabs are there and last time's other tabs aren't.",
+    "zh-Hans": "每次启动 SearcheXtra 时保留固定标签页，不恢复上次的其他标签页。"
   },
   "Settings.0774": {
     "en": "Spaces",
@@ -3124,8 +3124,8 @@
     "zh-Hans": "并排显示两个标签页。将标签页拖到页面上即可组合。"
   },
   "Settings.0782": {
-    "en": "{0} does the saving — it asked Search not to offer",
-    "zh-Hans": "{0} 正在管理密码，已要求 Search 停止询问保存"
+    "en": "{0} does the saving — it asked SearcheXtra not to offer",
+    "zh-Hans": "{0} 正在管理密码，已要求 SearcheXtra 停止询问保存"
   },
   "Settings.0783": {
     "en": "Asked once per site, never again for a site you refuse",
@@ -3228,8 +3228,8 @@
     "zh-Hans": "拦截用于跟踪浏览行为的第三方内容"
   },
   "Settings.0808": {
-    "en": "Nothing is being blocked until this clears — try again, or restart Search",
-    "zh-Hans": "问题解决前不会拦截任何内容。请重试或重新启动 Search"
+    "en": "Nothing is being blocked until this clears — try again, or restart SearcheXtra",
+    "zh-Hans": "问题解决前不会拦截任何内容。请重试或重新启动 SearcheXtra"
   },
   "Settings.0809": {
     "en": "Try again",
@@ -3308,16 +3308,16 @@
     "zh-Hans": "清除"
   },
   "Settings.0828": {
-    "en": "by Office Commun · version {0}",
-    "zh-Hans": "Office Commun 出品 · 版本 {0}"
+    "en": "Based on Office Commun's Search · version {0}",
+    "zh-Hans": "基于Office Commun版Search修改 · 版本 {0}"
   },
   "Settings.0829": {
     "en": "Install updates on its own",
     "zh-Hans": "自动安装更新"
   },
   "Settings.0830": {
-    "en": "Off, Search still looks every hour and tells you, and installs only when you press Install",
-    "zh-Hans": "关闭后，Search 仍会每小时检查并通知更新，点击“安装”后才会安装"
+    "en": "Off, SearcheXtra still looks every hour and tells you, and installs only when you press Install",
+    "zh-Hans": "关闭后，SearcheXtra 仍会每小时检查并通知更新，点击“安装”后才会安装"
   },
   "Settings.0831": {
     "en": "Found something wrong?",
@@ -3396,16 +3396,16 @@
     "zh-Hans": "更新"
   },
   "Settings.0850": {
-    "en": "Search {0} is downloading…",
-    "zh-Hans": "正在下载 Search {0}…"
+    "en": "SearcheXtra {0} is downloading…",
+    "zh-Hans": "正在下载 SearcheXtra {0}…"
   },
   "Settings.0851": {
-    "en": "Search {0} is ready",
-    "zh-Hans": "Search {0} 已准备就绪"
+    "en": "SearcheXtra {0} is ready",
+    "zh-Hans": "SearcheXtra {0} 已准备就绪"
   },
   "Settings.0852": {
-    "en": "Search {0} is out",
-    "zh-Hans": "Search {0} 已发布"
+    "en": "SearcheXtra {0} is out",
+    "zh-Hans": "SearcheXtra {0} 已发布"
   },
   "Settings.0853": {
     "en": "Checked {0} — every hour on its own",
@@ -3420,8 +3420,8 @@
     "zh-Hans": "在后台下载，不会更改已有设置"
   },
   "Settings.0856": {
-    "en": "It's there the next time you open Search",
-    "zh-Hans": "下次启动 Search 时生效"
+    "en": "It's there the next time you open SearcheXtra",
+    "zh-Hans": "下次启动 SearcheXtra 时生效"
   },
   "Settings.0857": {
     "en": "Open the disk image, the same as the first time",
@@ -4516,44 +4516,44 @@
     "zh-Hans": "已选中"
   },
   "Updater.1131": {
-    "en": "Search {0} is ready — relaunch to use it",
-    "zh-Hans": "Search {0} 已就绪，重新启动后生效"
+    "en": "SearcheXtra {0} is ready — relaunch to use it",
+    "zh-Hans": "SearcheXtra {0} 已就绪，重新启动后生效"
   },
   "Updater.1132": {
-    "en": "Search {0} is downloading…",
-    "zh-Hans": "正在下载 Search {0}…"
+    "en": "SearcheXtra {0} is downloading…",
+    "zh-Hans": "正在下载 SearcheXtra {0}…"
   },
   "Updater.1133": {
     "en": "Checking for updates…",
     "zh-Hans": "正在检查更新…"
   },
   "Updater.1134": {
-    "en": "Search is up to date",
-    "zh-Hans": "Search 已是最新版本"
+    "en": "SearcheXtra is up to date",
+    "zh-Hans": "SearcheXtra 已是最新版本"
   },
   "Updater.1135": {
-    "en": "Search {0} is out — choose Install Update in the Search menu",
-    "zh-Hans": "Search {0} 已发布，请在 Search 菜单中选择“安装更新”"
+    "en": "SearcheXtra {0} is out — choose Install Update in the SearcheXtra menu",
+    "zh-Hans": "SearcheXtra {0} 已发布，请在 SearcheXtra 菜单中选择“安装更新”"
   },
   "Updater.1136": {
-    "en": "Downloading Search {0}…",
-    "zh-Hans": "正在下载 Search {0}…"
+    "en": "Downloading SearcheXtra {0}…",
+    "zh-Hans": "正在下载 SearcheXtra {0}…"
   },
   "Updater.1137": {
-    "en": "That download didn't check out — get Search from officecommun.com/search",
-    "zh-Hans": "下载校验失败，请从 officecommun.com/search 下载 Search"
+    "en": "That download didn't check out — get SearcheXtra from GitHub Releases",
+    "zh-Hans": "下载校验失败，请从 GitHub Releases 下载 SearcheXtra"
   },
   "Updater.1138": {
-    "en": "Search {0} is downloading…",
-    "zh-Hans": "正在下载 Search {0}…"
+    "en": "SearcheXtra {0} is downloading…",
+    "zh-Hans": "正在下载 SearcheXtra {0}…"
   },
   "Updater.1139": {
-    "en": "Search {0} is ready — it's there the next time you open it",
-    "zh-Hans": "Search {0} 已就绪，下次启动时生效"
+    "en": "SearcheXtra {0} is ready — it's there the next time you open it",
+    "zh-Hans": "SearcheXtra {0} 已就绪，下次启动时生效"
   },
   "Updater.1140": {
-    "en": "Search {0} is out — choose Download Update in the Search menu",
-    "zh-Hans": "Search {0} 已发布，请在 Search 菜单中选择“下载更新”"
+    "en": "SearcheXtra {0} is out — choose Download Update in the SearcheXtra menu",
+    "zh-Hans": "SearcheXtra {0} 已发布，请在 SearcheXtra 菜单中选择“下载更新”"
   },
   "Vault.1141": {
     "en": "Reading password CSV…",
@@ -4661,15 +4661,15 @@
   },
   "Welcome.1167": {
     "en": "A click in Mail, in Slack, in a PDF — macOS sends it to whichever browser is the default. It can be this one.",
-    "zh-Hans": "点击邮件、Slack 或 PDF 中的链接时，macOS 会用默认浏览器打开。你可以将 Search 设为默认浏览器。"
+    "zh-Hans": "点击邮件、Slack 或 PDF 中的链接时，macOS 会用默认浏览器打开。你可以将 SearcheXtra 设为默认浏览器。"
   },
   "Welcome.1168": {
-    "en": "Search is the default browser",
-    "zh-Hans": "Search 已是默认浏览器"
+    "en": "SearcheXtra is the default browser",
+    "zh-Hans": "SearcheXtra 已是默认浏览器"
   },
   "Welcome.1169": {
-    "en": "Make Search the default",
-    "zh-Hans": "将 Search 设为默认浏览器"
+    "en": "Make SearcheXtra the default",
+    "zh-Hans": "将 SearcheXtra 设为默认浏览器"
   },
   "Welcome.1170": {
     "en": "macOS asks in its own dialog",
@@ -4924,7 +4924,7 @@
     "zh-Hans": "标签页管理器等扩展可查看所有窗口中的标签页。"
   },
   "WhatsNew.1233": {
-    "en": "Window › Move & Resize and the Mac's tiling work with Search's window.",
+    "en": "Window › Move & Resize and the Mac's tiling work with SearcheXtra's window.",
     "zh-Hans": "支持“窗口 › 移动与调整大小”和 Mac 的窗口平铺功能。"
   },
   "WhatsNew.1234": {
@@ -4936,8 +4936,8 @@
     "zh-Hans": "恢复 ⌘← 和 ⌘→ 后退、前进功能。"
   },
   "WhatsNew.1236": {
-    "en": "Links from Notion and other apps bring Search to the front.",
-    "zh-Hans": "从 Notion 等应用打开链接时，Search 会切换到前台。"
+    "en": "Links from Notion and other apps bring SearcheXtra to the front.",
+    "zh-Hans": "从 Notion 等应用打开链接时，SearcheXtra 会切换到前台。"
   },
   "WhatsNew.1237": {
     "en": "Addresses a dev server prints, like 0.0.0.0:3000, open.",
@@ -4996,8 +4996,8 @@
     "zh-Hans": "支持 Bitwarden 登录自托管服务器，扩展弹出窗口可在打开期间接收状态变化。"
   },
   "WhatsNew.1251": {
-    "en": "A link from Mail brings Search to the front, and a full-screen video no longer goes black.",
-    "zh-Hans": "邮件中的链接会让 Search 切换到前台，修复全屏视频黑屏问题。"
+    "en": "A link from Mail brings SearcheXtra to the front, and a full-screen video no longer goes black.",
+    "zh-Hans": "邮件中的链接会让 SearcheXtra 切换到前台，修复全屏视频黑屏问题。"
   },
   "WhatsNew.1252": {
     "en": "Your extensions may each ask once more for their permissions at their next update.",
@@ -5016,8 +5016,8 @@
     "zh-Hans": "网站的通行密钥按钮可调起 Mac 的系统面板，支持触控 ID、iPhone 和安全密钥。"
   },
   "WhatsNew.1256": {
-    "en": "Search can be the Mac's default browser.",
-    "zh-Hans": "Search 可设为 Mac 的默认浏览器。"
+    "en": "SearcheXtra can be the Mac's default browser.",
+    "zh-Hans": "SearcheXtra 可设为 Mac 的默认浏览器。"
   },
   "WhatsNew.1257": {
     "en": "Each off until you turn it on in Settings: a bookmarks bar, a peek at a link with a shift-click, the video that follows you to another app, pages at 120 Hz, and where a link goes.",
@@ -5032,7 +5032,7 @@
     "zh-Hans": "加快启动速度，新建标签页约需 10 毫秒。"
   },
   "WhatsNew.1260": {
-    "en": "Pages see nothing of Search that Safari doesn't show them, and a saved password is offered only on its own site.",
+    "en": "Pages see nothing of SearcheXtra that Safari doesn't show them, and a saved password is offered only on its own site.",
     "zh-Hans": "网页能读取的浏览器信息与 Safari 保持一致，已保存密码仅在对应网站上提供。"
   },
   "WhatsNew.1261": {
@@ -5060,7 +5060,7 @@
     "zh-Hans": "⌘S 可收起侧边栏，中键可关闭标签页，支持重命名标签页，并在“显示”菜单中加入网页检查器。"
   },
   "WhatsNew.1267": {
-    "en": "Search opens again on macOS 14.",
+    "en": "SearcheXtra opens again on macOS 14.",
     "zh-Hans": "恢复 macOS 14 上的启动支持。"
   },
   "WhatsNew.1268": {
@@ -5104,8 +5104,8 @@
     "zh-Hans": "使用 macOS 内置引擎，体积仅 2.9 MB。"
   },
   "WhatsNew.1278": {
-    "en": "New in Search {0}",
-    "zh-Hans": "Search {0} 的新功能"
+    "en": "New in SearcheXtra {0}",
+    "zh-Hans": "SearcheXtra {0} 的新功能"
   },
   "WhatsNew.1279": {
     "en": "From earlier versions, in case you missed them",
@@ -5296,20 +5296,20 @@
     "zh-Hans": "界面语言"
   },
   "language.detail": {
-    "en": "Choose the language for windows, menus and settings. Restart Search to apply changes.",
-    "zh-Hans": "选择窗口、菜单和设置的显示语言。更改后需重新启动 Search。"
+    "en": "Choose the language for windows, menus and settings. Restart SearcheXtra to apply changes.",
+    "zh-Hans": "选择窗口、菜单和设置的显示语言。更改后需重新启动 SearcheXtra。"
   },
   "language.pending": {
     "en": "Language change saved",
     "zh-Hans": "语言设置已保存"
   },
   "language.restartDetail": {
-    "en": "The selected language takes effect after restarting Search.",
-    "zh-Hans": "重新启动 Search 后，所选语言会应用到所有窗口和菜单。"
+    "en": "The selected language takes effect after restarting SearcheXtra.",
+    "zh-Hans": "重新启动 SearcheXtra 后，所选语言会应用到所有窗口和菜单。"
   },
   "language.restart": {
-    "en": "Restart Search",
-    "zh-Hans": "重新启动 Search"
+    "en": "Restart SearcheXtra",
+    "zh-Hans": "重新启动 SearcheXtra"
   },
   "section.file": {
     "en": "File",
@@ -5344,16 +5344,16 @@
     "zh-Hans": "个固定项"
   },
   "store.added": {
-    "en": "Added to Search",
-    "zh-Hans": "已添加到 Search"
+    "en": "Added to SearcheXtra",
+    "zh-Hans": "已添加到 SearcheXtra"
   },
   "store.adding": {
     "en": "Adding…",
     "zh-Hans": "正在添加…"
   },
   "store.add": {
-    "en": "Add to Search",
-    "zh-Hans": "添加到 Search"
+    "en": "Add to SearcheXtra",
+    "zh-Hans": "添加到 SearcheXtra"
   },
   "startPage.title": {
     "en": "Start page",

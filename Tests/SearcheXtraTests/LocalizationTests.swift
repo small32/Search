@@ -1,5 +1,5 @@
 import XCTest
-@testable import Search
+@testable import SearcheXtra
 
 final class LocalizationTests: XCTestCase {
     func testSystemLanguageAndExplicitOverrides() {
@@ -43,6 +43,20 @@ final class LocalizationTests: XCTestCase {
             XCTAssertNotNil(entry["en"], key)
             XCTAssertNotNil(entry["zh-Hans"], key)
         }
+    }
+
+    func testProductNameAndUpstreamAttributionInBothLanguages() {
+        for language in ["en", "zh-Hans"] {
+            XCTAssertTrue(L10n.render("language.restart", language: language).contains("SearcheXtra"))
+            XCTAssertTrue(L10n.render("store.add", language: language).contains("SearcheXtra"))
+            XCTAssertTrue(L10n.render("Welcome.1169", language: language).contains("SearcheXtra"))
+        }
+        XCTAssertEqual(L10n.render("Settings.0828", language: "zh-Hans", arguments: ["0.1.3"]),
+                       "基于Office Commun版Search修改 · 版本 0.1.3")
+        XCTAssertEqual(L10n.render("Settings.0828", language: "en", arguments: ["0.1.3"]),
+                       "Based on Office Commun's Search · version 0.1.3")
+        // Search remains the English verb for finding tabs.
+        XCTAssertEqual(L10n.render("App.0150", language: "en"), "Search Tabs…")
     }
 
     func testUserContentIsNotReinterpretedAsTranslationPlaceholders() {

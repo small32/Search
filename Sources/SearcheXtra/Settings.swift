@@ -659,7 +659,7 @@ struct SettingsPanel: View {
                     .aspectRatio(Logomark.canvas.width / Logomark.canvas.height, contentMode: .fit)
                     .frame(height: 34)
                 VStack(alignment: .leading, spacing: 3) {
-                    Text("Search")
+                    Text("SearcheXtra")
                         .font(.system(size: 15, weight: .semibold))
                         .foregroundStyle(Palette.ink)
                     Text(L10n.text("Settings.0828", String(describing: Updater.version)))

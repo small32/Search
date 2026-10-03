@@ -4,7 +4,7 @@ import Foundation
 import SwiftUI
 import WebKit
 import XCTest
-@testable import Search
+@testable import SearcheXtra
 
 private typealias BrowserTab = Search.Tab
 

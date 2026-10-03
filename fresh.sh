@@ -36,7 +36,7 @@ if [ "${1:-}" != "again" ]; then
   echo "world \"$WORLD\" wiped"
 fi
 
-[ -d "build/Search.app" ] || ./build.sh release
+[ -d "build/SearcheXtra.app" ] || ./build.sh release
 
 # A world the bench is going to drive opens hidden. A test run that comes to
 # the front trips the probe's own guard, which hides the app and then refuses
@@ -47,4 +47,4 @@ HIDDEN=""
 if [ "$(defaults read "$SUITE" bench 2>/dev/null || true)" = 1 ]; then
   HIDDEN="-g -j"
 fi
-open -n $HIDDEN --env SEARCH_PROBE="$WORLD" "build/Search.app"
+open -n $HIDDEN --env SEARCH_PROBE="$WORLD" "build/SearcheXtra.app"

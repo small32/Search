@@ -119,10 +119,10 @@ struct KeyCombo: Codable, Hashable {
 /// A menu command, and the key it has unless you give it another.
 struct Command: Identifiable {
     enum Section: String, CaseIterable {
-        case app = "Search", file = "File", edit = "Edit", view = "View", tabs = "Tabs", bookmarks = "Bookmarks", history = "History"
+        case app = "SearcheXtra", file = "File", edit = "Edit", view = "View", tabs = "Tabs", bookmarks = "Bookmarks", history = "History"
         var title: String {
             switch self {
-            case .app: return "Search"
+            case .app: return "SearcheXtra"
             case .file: return L10n.text("section.file")
             case .edit: return L10n.text("section.edit")
             case .view: return L10n.text("section.view")

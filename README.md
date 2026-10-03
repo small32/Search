@@ -2,19 +2,21 @@
 
 SearcheXtra 是基于 [Search](https://github.com/driceroland/Search) 的修改版，保留原版轻量、简洁的浏览体验，增加了**简体中文支持和界面语言切换**。原项目由 [Office Commun](https://officecommun.com) 开发，本仓库维护修改版。
 
-支持英文和简体中文，菜单、设置项及说明、弹窗和操作提示均提供两套文案。在 **设置 → 通用 → 界面语言** 中选择“跟随系统”“English”或“简体中文”，点击“重新启动 Search”后生效。默认跟随系统，不支持的系统语言使用英文。
+支持英文和简体中文，菜单、设置项及说明、弹窗和操作提示均提供两套文案。在 **设置 → 通用 → 界面语言** 中选择“跟随系统”“English”或“简体中文”，点击“重新启动 SearcheXtra”后生效。默认跟随系统，不支持的系统语言使用英文。
 
-![Search 浏览器界面，标签页位于左侧，网页占据其余区域](.github/screenshot.png)
+![SearcheXtra 浏览器界面，标签页位于左侧，网页占据其余区域](.github/screenshot.png)
 
 **[下载 macOS 版本 →](https://github.com/small32/SearcheXtra/releases/latest)** · macOS 14 或更新版本 · 当前提供 ARM64 安装包，适用于 Apple 芯片 Mac
 
-安装包由 GitHub Actions 构建。下载 Release 中的 ZIP，解压后将 `Search.app` 放入“应用程序”文件夹；`SHA256SUMS.txt` 提供安装包的 SHA-256 校验值。仓库名称为 SearcheXtra，当前应用及安装包仍使用 Search 名称。
+安装包由 GitHub Actions 构建。下载 Release 中的 ZIP，解压后将 `SearcheXtra.app` 放入“应用程序”文件夹；`SHA256SUMS.txt` 提供安装包的 SHA-256 校验值。应用、安装包和界面均使用 SearcheXtra 名称。
 
 ---
 
+为兼容旧版本，数据目录、偏好设置域和密码钥匙串仍沿用 Search 的内部标识；重命名不会清空这些数据。
+
 ## 项目介绍
 
-Search 将界面留给标签页和网页。标签页可以横排在顶部，也可以竖排在侧边栏。地址栏同时用于输入网址和搜索词，没有推荐内容、账号登录入口或云同步服务。
+SearcheXtra 将界面留给标签页和网页。标签页可以横排在顶部，也可以竖排在侧边栏。地址栏同时用于输入网址和搜索词，没有推荐内容、账号登录入口或云同步服务。
 
 浏览器使用 macOS 内置的 **WebKit** 引擎，与 Safari 使用同一套底层技术，无需附带 Chromium 引擎。
 
@@ -50,7 +52,7 @@ Search 将界面留给标签页和网页。标签页可以横排在顶部，也�
 
 | 数据 | 存储位置 | 访问方式 |
 |---|---|---|
-| 密码 | macOS 登录钥匙串，以 `Search` 标记保存 | 由 macOS 钥匙串控制访问。不同签名的应用访问时可能需要系统授权。 |
+| 密码 | macOS 登录钥匙串，沿用 `Search` 标记保存，兼容旧版数据 | 由 macOS 钥匙串控制访问。不同签名的应用访问时可能需要系统授权。 |
 | 历史记录、书签、标签页和隐藏元素 | `~/Library/Application Support/Search/` 中的 JSON 文件 | 本机用户。 |
 | Cookie 与网站数据 | WebKit 为应用管理的数据存储 | 对应网站，遵循浏览器权限和隔离规则。 |
 | 扩展 | `~/Library/Application Support/Search/Extensions/`；扩展数据位于 WebKit 的扩展存储中 | 扩展按安装时授予的权限访问。 |
@@ -116,11 +118,11 @@ swift build
 SEARCH_ARCH=arm64 ./build.sh release
 ```
 
-应用生成在 `build/Search.app`。没有 Developer ID 证书时使用临时签名，构建不会自动获得 Apple 公证。当前 GitHub Release 也采用临时签名，首次打开可能需要在 Finder 中右键选择“打开”，或在“系统设置 → 隐私与安全性”中允许打开。
+应用生成在 `build/SearcheXtra.app`。没有 Developer ID 证书时使用临时签名，构建不会自动获得 Apple 公证。当前 GitHub Release 也采用临时签名，首次打开可能需要在 Finder 中右键选择“打开”，或在“系统设置 → 隐私与安全性”中允许打开。
 
 自行构建的应用与上游正式签名版本使用不同签名，访问已有钥匙串项目时由 macOS 决定是否需要授权。
 
-`./build.sh release dmg` 额外生成 `Search.dmg` 和 `Search.zip`；`./build.sh release ship` 还会提交公证并附加公证票据，需要 Developer ID 证书及 Apple 公证凭据。
+`./build.sh release dmg` 额外生成 `SearcheXtra.dmg` 和 `SearcheXtra.zip`；`./build.sh release ship` 还会提交公证并附加公证票据，需要 Developer ID 证书及 Apple 公证凭据。
 
 ### GitHub Actions 发布
 
@@ -132,8 +134,8 @@ SEARCH_ARCH=arm64 ./build.sh release
 
 ### 界面翻译
 
-- `Sources/Search/Resources/Translations.json` 保存英文和简体中文文案，每个翻译键同时提供 `en` 和 `zh-Hans`。
-- `Sources/Search/Localization.swift` 处理语言选择、文案读取、英文回退及动态内容替换。
+- `Sources/SearcheXtra/Resources/Translations.json` 保存英文和简体中文文案，每个翻译键同时提供 `en` 和 `zh-Hans`。
+- `Sources/SearcheXtra/Localization.swift` 处理语言选择、文案读取、英文回退及动态内容替换。
 - `Localization/en.lproj/InfoPlist.strings` 与 `Localization/zh-Hans.lproj/InfoPlist.strings` 保存系统权限说明。
 - 存储键、协议标识、网址、快捷键 ID 和用户输入保持原值。
 
@@ -147,11 +149,11 @@ SEARCH_ARCH=arm64 ./build.sh release
 - 隐藏元素按网站保存为选择器，在文档开始加载时注入样式表，避免元素先出现再消失。
 - `Design.swift` 集中管理浅色与深色配色，由窗口外观决定实际颜色。
 - 扩展基于 `WKWebExtension`（macOS 15.4+）。`Crx.swift` 下载扩展并在解包前校验 CRX3 签名与扩展 ID；`Extensions.swift` 管理标签页、权限和弹出窗口；`ExtensionShims.swift` 补充 WebKit 缺少的部分 Chrome API，并处理两者之间的行为差异。扩展页面使用 `chrome-extension://<id>/` 地址。`ExtensionNative.swift` 支持 Chrome 原生消息通信，可连接 Chrome 的 `NativeMessagingHosts` 目录中注册的宿主。
-- `Sources/Search/` 按功能组织文件，例如 `Vault.swift` 管理钥匙串，`Shield.swift` 处理广告拦截，`Curtain.swift` 管理隐藏元素，`Session.swift` 恢复会话，`Updater.swift` 处理更新，`Bench.swift` 提供测试接口。
+- `Sources/SearcheXtra/` 按功能组织文件，例如 `Vault.swift` 管理钥匙串，`Shield.swift` 处理广告拦截，`Curtain.swift` 管理隐藏元素，`Session.swift` 恢复会话，`Updater.swift` 处理更新，`Bench.swift` 提供测试接口。
 
 ### 在独立测试会话中验证
 
-开启 **设置 → 通用 → 允许脚本控制 Search** 后，应用会在自己的数据目录中监听 Unix 套接字，仅当前用户可访问。仓库根目录的 `./bench` 用于发送测试指令：
+开启 **设置 → 通用 → 允许脚本控制 SearcheXtra** 后，应用会在自己的数据目录中监听 Unix 套接字，仅当前用户可访问。仓库根目录的 `./bench` 用于发送测试指令：
 
 ```bash
 ./bench open https://example.com     # 新建带烧瓶标记的测试标签页
