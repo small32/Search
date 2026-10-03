@@ -17,8 +17,8 @@ enum Glyph: String, CaseIterable, Identifiable {
 
     var title: String {
         switch self {
-        case .letters: return "Letters"
-        case .icons: return "Site icons"
+        case .letters: return "字母"
+        case .icons: return "网站图标"
         }
     }
 }
@@ -31,8 +31,8 @@ enum SidebarPosition: String, CaseIterable, Identifiable {
 
     var title: String {
         switch self {
-        case .left: return "Left"
-        case .right: return "Right"
+        case .left: return "左侧"
+        case .right: return "右侧"
         }
     }
 }

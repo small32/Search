@@ -181,7 +181,7 @@ enum ImportFile {
         }
 
         if isZIP { found.fromSafari = found.safariHistory }
-        control.reportFinal(Progress(message: "\(url.lastPathComponent): Files read", completed: counter.value))
+        control.reportFinal(Progress(message: "\(url.lastPathComponent): 文件读取完成", completed: counter.value))
         try control.checkCancellation()
         return found
     }
@@ -196,7 +196,7 @@ enum ImportFile {
               rootValues.isDirectory == true, rootValues.isSymbolicLink != true
         else { return }
 
-        control.report(Progress(message: "\(root.lastPathComponent): Scanning folders", completed: counter.value))
+        control.report(Progress(message: "\(root.lastPathComponent): 正在扫描文件夹", completed: counter.value))
         var files: [URL] = []
         let rootItems = (try? FileManager.default.contentsOfDirectory(at: root, includingPropertiesForKeys: Array(keys), options: [.skipsHiddenFiles])) ?? []
         try control.checkCancellation()
@@ -265,7 +265,7 @@ enum ImportFile {
             }
         case "csv":
             let data = try readData(file, control: control) { completed, total in
-                control.report(Progress(message: "\(label): Reading CSV", completed: completed, total: total))
+                control.report(Progress(message: "\(label): 正在读取 CSV", completed: completed, total: total))
             }
             try control.checkCancellation()
             if let text = String(data: data, encoding: .utf8) { found.passwords.append(text) }
@@ -278,7 +278,7 @@ enum ImportFile {
             break
         }
         counter.advance()
-        control.report(Progress(message: "\(label): File complete", completed: counter.value))
+        control.report(Progress(message: "\(label): 文件处理完成", completed: counter.value))
     }
 
     /// Safari's history file: an object with "metadata" (its "data_type"
@@ -289,7 +289,7 @@ enum ImportFile {
     /// Nil for a file that isn't Safari's history at all.
     private static func history(in file: URL, control: Control, counter: ProgressCounter, label: String) throws -> [Chromium.Place]? {
         let data = try readData(file, control: control) { completed, total in
-            control.report(Progress(message: "\(label): Reading history", completed: completed, total: total))
+            control.report(Progress(message: "\(label): 正在读取历史记录", completed: completed, total: total))
         }
         try control.checkCancellation()
         guard let top = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
@@ -300,7 +300,7 @@ enum ImportFile {
 
         var places: [Chromium.Place] = []
         places.reserveCapacity(entries.count)
-        control.report(Progress(message: "\(label): Parsing history", completed: 0, total: entries.count))
+        control.report(Progress(message: "\(label): 正在解析历史记录", completed: 0, total: entries.count))
         for (index, entry) in entries.enumerated() {
             try control.checkCancellation()
             if entry["destination_url"] == nil,
@@ -313,7 +313,7 @@ enum ImportFile {
                 places.append(Chromium.Place(url: url, title: entry["title"] as? String ?? "", count: max(1, count), last: last))
             }
             if index % 64 == 63 || index == entries.count - 1 {
-                control.report(Progress(message: "\(label): Parsing history", completed: index + 1, total: entries.count))
+                control.report(Progress(message: "\(label): 正在解析历史记录", completed: index + 1, total: entries.count))
             }
         }
         try control.checkCancellation()
@@ -367,7 +367,7 @@ enum ImportFile {
         do {
             while process.isRunning {
                 try control.checkCancellation()
-                control.report(Progress(message: "\(zip.lastPathComponent): Extracting ZIP", completed: counter.value))
+                control.report(Progress(message: "\(zip.lastPathComponent): 正在解压 ZIP", completed: counter.value))
                 Thread.sleep(forTimeInterval: 0.025)
             }
             process.waitUntilExit()
@@ -378,7 +378,7 @@ enum ImportFile {
         }
         guard process.terminationStatus == 0 else { return nil }
         keepFolder = true
-        control.report(Progress(message: "\(zip.lastPathComponent): ZIP extracted", completed: counter.value))
+        control.report(Progress(message: "\(zip.lastPathComponent): ZIP 解压完成", completed: counter.value))
         return folder
     }
 

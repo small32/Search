@@ -24,15 +24,15 @@ enum AddressCommand: CaseIterable, Equatable {
     /// What you'd type to reach it. The first is what the list shows.
     var aliases: [String] {
         switch self {
-        case .settings: return ["settings", "preferences"]
-        case .newTab: return ["new tab"]
-        case .newPrivateTab: return ["new private tab", "private tab"]
-        case .newSpace: return ["new space"]
-        case .bookmarks: return ["bookmarks"]
-        case .history: return ["history"]
-        case .downloads: return ["downloads"]
-        case .passwords: return ["passwords"]
-        case .toggleSidebar: return ["toggle sidebar", "sidebar"]
+        case .settings: return ["设置", "偏好设置", "settings", "preferences"]
+        case .newTab: return ["新建标签页", "new tab"]
+        case .newPrivateTab: return ["新建无痕标签页", "无痕标签页", "new private tab", "private tab"]
+        case .newSpace: return ["新建空间", "new space"]
+        case .bookmarks: return ["书签", "bookmarks"]
+        case .history: return ["历史记录", "history"]
+        case .downloads: return ["下载", "downloads"]
+        case .passwords: return ["密码", "passwords"]
+        case .toggleSidebar: return ["切换侧边栏", "侧边栏", "toggle sidebar", "sidebar"]
         }
     }
 

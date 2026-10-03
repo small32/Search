@@ -131,6 +131,8 @@ cat > "$APP/Contents/Info.plist" <<PLIST
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+  <key>CFBundleDevelopmentRegion</key><string>zh-Hans</string>
+  <key>CFBundleLocalizations</key><array><string>zh-Hans</string></array>
   <key>CFBundleName</key><string>$NAME</string>
   <key>CFBundleDisplayName</key><string>$NAME</string>
   <key>CFBundleExecutable</key><string>$NAME</string>
@@ -152,7 +154,7 @@ cat > "$APP/Contents/Info.plist" <<PLIST
   <key>CFBundleURLTypes</key>
   <array>
     <dict>
-      <key>CFBundleURLName</key><string>Web address</string>
+      <key>CFBundleURLName</key><string>网页地址</string>
       <key>CFBundleURLSchemes</key>
       <array><string>http</string><string>https</string></array>
     </dict>
@@ -160,7 +162,7 @@ cat > "$APP/Contents/Info.plist" <<PLIST
   <key>CFBundleDocumentTypes</key>
   <array>
     <dict>
-      <key>CFBundleTypeName</key><string>Web page</string>
+      <key>CFBundleTypeName</key><string>网页</string>
       <key>CFBundleTypeRole</key><string>Viewer</string>
       <key>LSItemContentTypes</key>
       <array><string>public.html</string><string>com.apple.web-internet-location</string></array>
@@ -169,7 +171,7 @@ cat > "$APP/Contents/Info.plist" <<PLIST
          when it claims public.xhtml as well as public.html. http and https
          alone, which Search already had, are not enough. -->
     <dict>
-      <key>CFBundleTypeName</key><string>XHTML page</string>
+      <key>CFBundleTypeName</key><string>XHTML 网页</string>
       <key>CFBundleTypeRole</key><string>Viewer</string>
       <key>LSItemContentTypes</key>
       <array><string>public.xhtml</string></array>
@@ -183,13 +185,13 @@ cat > "$APP/Contents/Info.plist" <<PLIST
        still wants a sentence to put in its own prompt, and touching the APIs
        without one is a crash rather than a refusal. -->
   <key>NSCameraUsageDescription</key>
-  <string>Websites you visit can ask to use your camera. Search asks you the first time each site does and keeps your answer; Settings › Privacy forgets them.</string>
+  <string>你访问的网站可能请求使用摄像头。Search 会在各网站首次请求时询问并保存你的选择，可在“设置 › 隐私”中清除。</string>
   <key>NSMicrophoneUsageDescription</key>
-  <string>Websites you visit can ask to use your microphone. Search asks you the first time each site does and keeps your answer; Settings › Privacy forgets them.</string>
+  <string>你访问的网站可能请求使用麦克风。Search 会在各网站首次请求时询问并保存你的选择，可在“设置 › 隐私”中清除。</string>
   <key>NSLocationUsageDescription</key>
-  <string>Websites you visit can ask for your location. Search asks you each time a site does, unless you choose Always allow for it; Settings › Privacy forgets those choices.</string>
+  <string>你访问的网站可能请求获取位置。除非选择“始终允许”，Search 会在每次请求时询问。可在“设置 › 隐私”中清除选择。</string>
   <key>NSDownloadsFolderUsageDescription</key>
-  <string>Files you download are saved to your Downloads folder.</string>
+  <string>下载的文件会保存到你的下载文件夹。</string>
 </dict>
 </plist>
 PLIST

@@ -177,7 +177,7 @@ final class ImportFileTests: XCTestCase {
         let control = ImportFile.Control { updates.append($0) }
         let imported = try ImportFile.read(file, control: control)
         XCTAssertEqual(imported.passwords, [csv])
-        XCTAssertTrue(updates.contains { $0.message == "passwords.csv: Reading CSV" })
+        XCTAssertTrue(updates.contains { $0.message == "passwords.csv: 正在读取 CSV" })
         XCTAssertTrue(updates.allSatisfy { !$0.message.contains(secret) })
         XCTAssertTrue(updates.contains { $0.total != nil })
 
@@ -187,7 +187,7 @@ final class ImportFileTests: XCTestCase {
         let result = Vault.take(csv: safeToSkip, control: vaultControl)
         XCTAssertEqual(result.kept, 0)
         XCTAssertEqual(result.skipped, 1)
-        XCTAssertTrue(updates.contains { $0.message == "Reading password CSV…" })
+        XCTAssertTrue(updates.contains { $0.message == "正在读取密码 CSV…" })
         XCTAssertTrue(updates.allSatisfy { !$0.message.contains(secret) })
     }
 

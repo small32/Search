@@ -153,7 +153,7 @@ final class AIEngine: ObservableObject {
                     try FileManager.default.setAttributes([.posixPermissions: 0o755], ofItemAtPath: engine.path)
                     guard AIEngine.trusted(engine) else {
                         try? FileManager.default.removeItem(at: place)
-                        throw AIDownload.Failure("The engine's signature doesn't hold up.")
+                        throw AIDownload.Failure("引擎签名验证失败。")
                     }
                     // Older ones go.
                     for old in (try? FileManager.default.contentsOfDirectory(atPath: AIEngine.engines.path)) ?? []
@@ -294,7 +294,7 @@ final class AIEngine: ObservableObject {
 
     private func launch() async throws {
         if pid == 0 {
-            guard let engine = engineFile else { throw Stopped(why: "The engine isn't installed.") }
+            guard let engine = engineFile else { throw Stopped(why: "尚未安装引擎。") }
             let modelURL = AIEngine.modelFile
             // Checked off the main thread: the model is a gigabyte.
             let checked: (Bool, Int32?) = await Task.detached(priority: .userInitiated) {
@@ -302,10 +302,10 @@ final class AIEngine: ObservableObject {
             }.value
             guard checked.0 else {
                 if let fd = checked.1 { close(fd) }
-                throw Stopped(why: "The engine's signature doesn't hold up. Remove it in Settings › AI and download it again.")
+                throw Stopped(why: "引擎签名验证失败。请在“设置 › AI”中移除后重新下载。")
             }
             guard let modelFD = checked.1 else {
-                throw Stopped(why: "The model isn't the one Search expects. Remove it in Settings › AI and download it again.")
+                throw Stopped(why: "模型与预期不符。请在“设置 › AI”中移除后重新下载。")
             }
             defer { close(modelFD) }
             try spawn(engine, modelFD: modelFD)
@@ -314,7 +314,7 @@ final class AIEngine: ObservableObject {
         let run = generation
         DispatchQueue.main.asyncAfter(deadline: .now() + 120) { [weak self] in
             guard let self, self.generation == run, self.pid != 0, !self.ready else { return }
-            self.ended("The engine didn't start.")
+            self.ended("引擎未能启动。")
         }
         try await withCheckedThrowingContinuation { (waiter: CheckedContinuation<Void, Error>) in
             if ready { waiter.resume() } else { readyWaiters.append(waiter) }
@@ -350,13 +350,13 @@ final class AIEngine: ObservableObject {
         let status = posix_spawn(&child, engine.path, &actions, &attributes, &argv, &environment)
         toEngine.fileHandleForReading.closeFile()
         fromEngine.fileHandleForWriting.closeFile()
-        guard status == 0 else { throw Stopped(why: "The engine couldn't be started.") }
+        guard status == 0 else { throw Stopped(why: "无法启动引擎。") }
         // The process as the system loaded it, before it runs a thing.
         guard AIEngine.trustedRunning(child) else {
             kill(child, SIGKILL)
             var reaped: Int32 = 0
             waitpid(child, &reaped, 0)
-            throw Stopped(why: "The engine's signature doesn't hold up. Remove it in Settings › AI and download it again.")
+            throw Stopped(why: "引擎签名验证失败。请在“设置 › AI”中移除后重新下载。")
         }
         kill(child, SIGCONT)
         pid = child
@@ -407,7 +407,7 @@ final class AIEngine: ObservableObject {
 
     private func heard(_ data: Data, run: Int) {
         guard run == generation else { return }
-        guard !data.isEmpty else { return ended("The engine stopped.") }
+        guard !data.isEmpty else { return ended("引擎已停止。") }
         carry.append(data)
         while let end = carry.firstIndex(of: 0x0A) {
             let line = carry[carry.startIndex..<end]
@@ -454,7 +454,7 @@ final class AIEngine: ObservableObject {
     func stop() {
         idle?.invalidate()
         guard pid != 0 else { return }
-        ended("Stopped.")
+        ended("已停止。")
     }
 
     /// An answer from the model here, a piece at a time.
@@ -515,12 +515,12 @@ enum AIDownload {
 
     @MainActor
     static func fetch(_ url: URL, size: Int64, sha256: String, progress: @escaping @MainActor (Double) -> Void) async throws -> URL {
-        guard url.scheme?.lowercased() == "https" else { throw Failure("Not a secure address.") }
+        guard url.scheme?.lowercased() == "https" else { throw Failure("此地址不安全。") }
         let folder = Store.folder.appendingPathComponent("AI/Downloads", isDirectory: true)
         try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
         if let free = try? folder.resourceValues(forKeys: [.volumeAvailableCapacityForImportantUsageKey]).volumeAvailableCapacityForImportantUsage,
            free < size + size / 10 {
-            throw Failure("There isn't enough free space on this Mac (\(ByteCountFormatter.string(fromByteCount: size, countStyle: .file)) needed).")
+            throw Failure("此 Mac 的可用空间不足（需要 \(ByteCountFormatter.string(fromByteCount: size, countStyle: .file))）。")
         }
         let watcher = Watcher(progress: progress, size: size)
         let configuration = URLSessionConfiguration.ephemeral
@@ -531,7 +531,7 @@ enum AIDownload {
         let (temporary, response) = try await session.download(from: url, delegate: watcher)
         guard (response as? HTTPURLResponse).map({ (200..<300).contains($0.statusCode) }) ?? false else {
             try? FileManager.default.removeItem(at: temporary)
-            throw Failure("The download was refused.")
+            throw Failure("下载被拒绝。")
         }
         let file = folder.appendingPathComponent(UUID().uuidString)
         try FileManager.default.moveItem(at: temporary, to: file)
@@ -548,7 +548,7 @@ enum AIDownload {
         }.value
         guard matches else {
             try? FileManager.default.removeItem(at: file)
-            throw Failure("What arrived isn't what was expected, so it was deleted.")
+            throw Failure("下载内容与预期不符，已删除。")
         }
         return file
     }

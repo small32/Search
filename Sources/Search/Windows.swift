@@ -406,7 +406,7 @@ extension Browser {
     /// How a menu names this window: the page in front, as the Window menu
     /// does, and the space when there are spaces.
     var windowName: String {
-        let page = active.map { $0.isBlank ? "New Tab" : $0.label } ?? "Window"
+        let page = active.map { $0.isBlank ? "新建标签页" : $0.label } ?? "窗口"
         return prefs.usesSpaces ? "\(page) — \(space.name)" : page
     }
 }

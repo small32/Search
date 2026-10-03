@@ -139,9 +139,9 @@ private struct PaneLayers: View {
         .animation(Motion.quick, value: hovered)
         .background { SplitDropZone(browser: browser, tab: tab, kind: .stage) }
         .accessibilityElement(children: .contain)
-        .accessibilityLabel(tab.label.isEmpty ? "New Tab" : tab.label)
-        .accessibilityHint(paired && !focused ? "Click to focus this page" : "")
-        .accessibilityAction(named: "Focus page") {
+        .accessibilityLabel(tab.label.isEmpty ? "新建标签页" : tab.label)
+        .accessibilityHint(paired && !focused ? "点击切换到此页面" : "")
+        .accessibilityAction(named: "切换到此页面") {
             if paired { browser.focusPane(tab) }
         }
         .clipped()
@@ -156,13 +156,13 @@ private struct SplitDropPreview: View {
     private var target: Tab? { tabs.first { $0.id == preview.targetID } }
     private var carried: String {
         let label = tabs.first { $0.id == preview.sourceID }?.label ?? ""
-        return label.isEmpty ? "New Tab" : label
+        return label.isEmpty ? "新建标签页" : label
     }
 
     var body: some View {
         HStack(spacing: 2) {
-            half(title: preview.side == .left ? carried : target?.label ?? "Page", proposed: preview.side == .left)
-            half(title: preview.side == .right ? carried : target?.label ?? "Page", proposed: preview.side == .right)
+            half(title: preview.side == .left ? carried : target?.label ?? "页面", proposed: preview.side == .left)
+            half(title: preview.side == .right ? carried : target?.label ?? "页面", proposed: preview.side == .right)
         }
         .padding(10)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -175,7 +175,7 @@ private struct SplitDropPreview: View {
             RoundedRectangle(cornerRadius: 10, style: .continuous)
                 .strokeBorder(proposed ? Palette.ink.opacity(0.3) : Palette.ink.opacity(0.12), lineWidth: 1)
                 .padding(6)
-            Text(title.isEmpty ? "New Tab" : title)
+            Text(title.isEmpty ? "新建标签页" : title)
                 .font(.system(size: 13, weight: proposed ? .medium : .regular))
                 .foregroundStyle(Palette.ink.opacity(proposed ? 0.78 : 0.48))
                 .lineLimit(1)
@@ -208,7 +208,7 @@ private struct OpenTabs: View {
         GeometryReader { geo in
             if !list.isEmpty {
                 VStack(alignment: .leading, spacing: 2) {
-                    Text("Or bring in an open tab")
+                    Text("或选择已打开的标签页")
                         .font(.system(size: 11.5))
                         .foregroundStyle(Palette.muted)
                         .padding(.horizontal, 10)
@@ -237,7 +237,7 @@ private struct OpenTabRow: View {
         HStack(spacing: 8) {
             Mark(icon: tab.icon, letter: tab.monogram, size: 15)
                 .frame(width: 15, height: 15)
-            Text(tab.label.isEmpty ? "New Tab" : tab.label)
+            Text(tab.label.isEmpty ? "新建标签页" : tab.label)
                 .font(.system(size: 12.5))
                 .lineLimit(1)
                 .truncationMode(.tail)
@@ -253,7 +253,7 @@ private struct OpenTabRow: View {
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(tab.label)
         .accessibilityAddTraits(.isButton)
-        .accessibilityHint("Bring this tab into the split")
+        .accessibilityHint("将此标签页加入分屏")
     }
 }
 
@@ -283,7 +283,7 @@ private struct PaneQuestionCard: View {
                 .contentShape(Rectangle())
                 .onTapGesture { browser.focusPane(tab) }
             VStack(alignment: .leading, spacing: 10) {
-                Text(question.host.isEmpty ? "This page says" : question.host)
+                Text(question.host.isEmpty ? "此页面提示" : question.host)
                     .font(.system(size: 13, weight: .semibold))
                     .foregroundStyle(Palette.ink)
                     .lineLimit(1)
@@ -306,9 +306,9 @@ private struct PaneQuestionCard: View {
                 HStack(spacing: 8) {
                     Spacer(minLength: 0)
                     if question.kind != .alert {
-                        choice("Cancel", strong: false) { answer(false) }
+                        choice("取消", strong: false) { answer(false) }
                     }
-                    choice("OK", strong: true) { answer(true) }
+                    choice("好", strong: true) { answer(true) }
                 }
                 .padding(.top, 2)
             }
@@ -326,7 +326,7 @@ private struct PaneQuestionCard: View {
             DispatchQueue.main.asyncAfter(deadline: .now() + wait) { ready = true }
         }
         .accessibilityElement(children: .contain)
-        .accessibilityLabel("\(question.host.isEmpty ? "This page" : question.host) asks")
+        .accessibilityLabel("\(question.host.isEmpty ? "此页面" : question.host) 请求确认")
     }
 
     private func answer(_ ok: Bool) {

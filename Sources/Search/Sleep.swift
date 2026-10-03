@@ -64,28 +64,28 @@ extension Browser {
     /// Why a tab has to stay awake — nil when nothing keeps it. The clock is
     /// the caller's business; this is everything else.
     func awake(because tab: Tab) -> String? {
-        if visibleTabIDs.contains(tab.id) { return "on screen" }
+        if visibleTabIDs.contains(tab.id) { return "正在显示" }
         if tab.pin != nil { return "pinned" }
-        if tab.bench { return "a bench tab" }
+        if tab.bench { return "测试标签页" }
         if tab.isBlank { return "blank" }
-        if tab.asleep { return "already asleep" }
-        guard let web = tab.built else { return "no page" }
-        if tab.loading { return "still loading" }
-        if tab.noisy { return "playing sound" }
-        if tab.floating || floating == tab.id { return "its video is out" }
-        if web.cameraCaptureState != .none || web.microphoneCaptureState != .none { return "on a call" }
-        if #available(macOS 15.4, *), ExtensionCapture.screen(web) { return "recording the screen" }
+        if tab.asleep { return "已休眠" }
+        guard let web = tab.built else { return "没有页面" }
+        if tab.loading { return "仍在加载" }
+        if tab.noisy { return "正在播放声音" }
+        if tab.floating || floating == tab.id { return "正在画中画播放" }
+        if web.cameraCaptureState != .none || web.microphoneCaptureState != .none { return "正在通话" }
+        if #available(macOS 15.4, *), ExtensionCapture.screen(web) { return "正在录制屏幕" }
         if downloading.contains(where: { $0.webView === web }) { return "downloading" }
         if heldDialogs[tab.id]?.isEmpty == false || paneQuestions.contains(where: { $0.tab == tab.id }) {
-            return "a question waiting"
+            return "有待处理的请求"
         }
         // A sign-in window hands its answer back to the page that opened it.
         if let pair = activeSplit {
             if tabs.contains(where: { pair.contains($0.id) && $0.opener == tab.id }) {
-                return "the page on screen came from it"
+                return "当前页面由此标签页打开"
             }
         } else if active?.opener == tab.id {
-            return "the page on screen came from it"
+            return "当前页面由此标签页打开"
         }
         return nil
     }
@@ -101,7 +101,7 @@ extension Browser {
         tab.unsaved { [weak self, weak tab] typed in
             guard let self, let tab else { return }
             if typed {
-                done?("holding something typed")
+                done?("包含已输入的内容")
                 return
             }
             if let reason = self.awake(because: tab) {

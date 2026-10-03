@@ -47,7 +47,7 @@ struct KeyCombo: Codable, Hashable {
     ]
 
     private static let symbols: [String: String] = [
-        "left": "←", "right": "→", "up": "↑", "down": "↓", "return": "↩", "delete": "⌫", "space": "Space",
+        "left": "←", "right": "→", "up": "↑", "down": "↓", "return": "↩", "delete": "⌫", "space": "空格",
         "tab": "⇥", "escape": "⎋",
     ]
 
@@ -120,6 +120,18 @@ struct KeyCombo: Codable, Hashable {
 struct Command: Identifiable {
     enum Section: String, CaseIterable {
         case app = "Search", file = "File", edit = "Edit", view = "View", tabs = "Tabs", bookmarks = "Bookmarks", history = "History"
+
+        var title: String {
+            switch self {
+            case .app: return "Search"
+            case .file: return "文件"
+            case .edit: return "编辑"
+            case .view: return "显示"
+            case .tabs: return "标签页"
+            case .bookmarks: return "书签"
+            case .history: return "历史记录"
+            }
+        }
     }
 
     let id: String
@@ -141,96 +153,96 @@ struct Command: Identifiable {
 
     /// The same commands, keys and order as the menus (see App.swift).
     static let all: [Command] = [
-        Command("app.settings", "Settings…", .app, KeyCombo(",")) { $0.tuning.toggle() },
-        Command("app.welcome", "Welcome…", .app, nil) { $0.welcoming = true },
-        Command("app.passwords", "Passwords…", .app, KeyCombo("l", option: true)) { $0.managing = true },
+        Command("app.settings", "设置…", .app, KeyCombo(",")) { $0.tuning.toggle() },
+        Command("app.welcome", "欢迎使用…", .app, nil) { $0.welcoming = true },
+        Command("app.passwords", "密码…", .app, KeyCombo("l", option: true)) { $0.managing = true },
 
-        Command("file.newWindow", "New Window", .file, KeyCombo("n")) { _ in Browsers.newWindow() },
-        Command("file.newTab", "New Tab", .file, KeyCombo("t")) { $0.newTab() },
-        Command("file.newPrivateTab", "New Private Tab", .file, KeyCombo("n", shift: true)) { $0.newShyTab() },
-        Command("file.reopen", "Reopen Closed Tab", .file, KeyCombo("t", shift: true)) { $0.reopen() },
-        Command("file.openAddress", "Open Address…", .file, KeyCombo("l")) { $0.edit() },
-        Command("file.closeTab", "Close Tab", .file, KeyCombo("w")) { $0.closeFront() },
-        Command("file.import", "Bring Things Over…", .file, nil) { $0.bringingIn = "" },
-        Command("file.share", "Share…", .file, nil) { $0.share() },
-        Command("file.print", "Print…", .file, KeyCombo("p")) { $0.printPage() },
+        Command("file.newWindow", "新建窗口", .file, KeyCombo("n")) { _ in Browsers.newWindow() },
+        Command("file.newTab", "新建标签页", .file, KeyCombo("t")) { $0.newTab() },
+        Command("file.newPrivateTab", "新建无痕标签页", .file, KeyCombo("n", shift: true)) { $0.newShyTab() },
+        Command("file.reopen", "重新打开关闭的标签页", .file, KeyCombo("t", shift: true)) { $0.reopen() },
+        Command("file.openAddress", "打开地址…", .file, KeyCombo("l")) { $0.edit() },
+        Command("file.closeTab", "关闭标签页", .file, KeyCombo("w")) { $0.closeFront() },
+        Command("file.import", "导入浏览器数据…", .file, nil) { $0.bringingIn = "" },
+        Command("file.share", "共享…", .file, nil) { $0.share() },
+        Command("file.print", "打印…", .file, KeyCombo("p")) { $0.printPage() },
 
-        Command("edit.find", "Find on Page…", .edit, KeyCombo("f")) { $0.openFind() },
-        Command("edit.findNext", "Find Next", .edit, KeyCombo("g")) { $0.look(forward: true) },
-        Command("edit.findPrevious", "Find Previous", .edit, KeyCombo("g", shift: true)) { $0.look(forward: false) },
+        Command("edit.find", "在页面中查找…", .edit, KeyCombo("f")) { $0.openFind() },
+        Command("edit.findNext", "查找下一个", .edit, KeyCombo("g")) { $0.look(forward: true) },
+        Command("edit.findPrevious", "查找上一个", .edit, KeyCombo("g", shift: true)) { $0.look(forward: false) },
 
-        Command("view.sidebar", "Show Tabs in Sidebar", .view, KeyCombo("s", shift: true)) { $0.toggleSidebar() },
-        Command("view.fold", "Hide Sidebar or Tab Bar", .view, KeyCombo("s")) { $0.toggleFold() },
-        Command("view.reload", "Reload Page", .view, KeyCombo("r")) { $0.reload() },
-        Command("view.reloadOrigin", "Reload Page From Origin", .view, KeyCombo("r", option: true)) { $0.reload(fromOrigin: true) },
-        Command("view.reader", "Reading Mode", .view, KeyCombo("r", shift: true)) { $0.toggleReader() },
-        Command("view.float", "Float Video", .view, KeyCombo("p", shift: true)) { $0.toggleFloat() },
-        Command("view.summarize", "Summarize Page", .view, nil) { $0.summarizePage() },
-        Command("view.ask", "Ask About This Page…", .view, nil) { $0.askAboutPage() },
-        Command("view.hide", "Hide Elements…", .view, KeyCombo("h", shift: true)) { $0.toggleHiding() },
-        Command("view.hidden", "Hidden on This Site…", .view, KeyCombo("u", shift: true)) { $0.reviewing.toggle() },
-        Command("view.zoomIn", "Zoom In", .view, KeyCombo("+")) { $0.zoom(by: 1.1) },
-        Command("view.zoomOut", "Zoom Out", .view, KeyCombo("-")) { $0.zoom(by: 1 / 1.1) },
-        Command("view.actualSize", "Actual Size", .view, KeyCombo("0")) { $0.resetZoom() },
-        Command("view.inspector", "Web Inspector", .view, KeyCombo("i", option: true)) { $0.toggleInspector() },
-        Command("view.console", "JavaScript Console", .view, KeyCombo("j", option: true)) { $0.showConsole() },
-        Command("view.inspect", "Inspect Element", .view, KeyCombo("c", option: true)) { $0.inspectElement() },
+        Command("view.sidebar", "在侧边栏显示标签页", .view, KeyCombo("s", shift: true)) { $0.toggleSidebar() },
+        Command("view.fold", "隐藏侧边栏或标签栏", .view, KeyCombo("s")) { $0.toggleFold() },
+        Command("view.reload", "重新载入页面", .view, KeyCombo("r")) { $0.reload() },
+        Command("view.reloadOrigin", "从源站重新载入页面", .view, KeyCombo("r", option: true)) { $0.reload(fromOrigin: true) },
+        Command("view.reader", "阅读模式", .view, KeyCombo("r", shift: true)) { $0.toggleReader() },
+        Command("view.float", "画中画", .view, KeyCombo("p", shift: true)) { $0.toggleFloat() },
+        Command("view.summarize", "总结页面", .view, nil) { $0.summarizePage() },
+        Command("view.ask", "询问此页面…", .view, nil) { $0.askAboutPage() },
+        Command("view.hide", "隐藏页面元素…", .view, KeyCombo("h", shift: true)) { $0.toggleHiding() },
+        Command("view.hidden", "此网站隐藏的元素…", .view, KeyCombo("u", shift: true)) { $0.reviewing.toggle() },
+        Command("view.zoomIn", "放大", .view, KeyCombo("+")) { $0.zoom(by: 1.1) },
+        Command("view.zoomOut", "缩小", .view, KeyCombo("-")) { $0.zoom(by: 1 / 1.1) },
+        Command("view.actualSize", "实际大小", .view, KeyCombo("0")) { $0.resetZoom() },
+        Command("view.inspector", "网页检查器", .view, KeyCombo("i", option: true)) { $0.toggleInspector() },
+        Command("view.console", "JavaScript 控制台", .view, KeyCombo("j", option: true)) { $0.showConsole() },
+        Command("view.inspect", "检查元素", .view, KeyCombo("c", option: true)) { $0.inspectElement() },
 
-        Command("tabs.back", "Back", .tabs, KeyCombo("[")) { $0.back() },
-        Command("tabs.forward", "Forward", .tabs, KeyCombo("]")) { $0.forward() },
-        Command("tabs.next", "Next Tab", .tabs, KeyCombo("]", shift: true)) { $0.step(1) },
-        Command("tabs.previous", "Previous Tab", .tabs, KeyCombo("[", shift: true)) { $0.step(-1) },
-        Command("tabs.search", "Search Tabs…", .tabs, KeyCombo("k")) { browser in
+        Command("tabs.back", "后退", .tabs, KeyCombo("[")) { $0.back() },
+        Command("tabs.forward", "前进", .tabs, KeyCombo("]")) { $0.forward() },
+        Command("tabs.next", "下一个标签页", .tabs, KeyCombo("]", shift: true)) { $0.step(1) },
+        Command("tabs.previous", "上一个标签页", .tabs, KeyCombo("[", shift: true)) { $0.step(-1) },
+        Command("tabs.search", "搜索标签页…", .tabs, KeyCombo("k")) { browser in
             if browser.editing, !browser.offers.isEmpty { browser.stepSummon() } else { browser.summon() }
         },
         // ⌥⌘N, Chrome's on the Mac: ⌃⌘S is the Mac's own Show Sidebar, and
         // sits beside ⌘S, which folds the tabs away.
-        Command("tabs.split", "Split Current Page", .tabs, KeyCombo("n", option: true)) { browser in
+        Command("tabs.split", "拆分当前页面", .tabs, KeyCombo("n", option: true)) { browser in
             guard browser.prefs.splitView else { return }
             browser.startSplit()
         },
-        Command("tabs.focusLeftPane", "Focus Left Page", .tabs, KeyCombo("left", control: true)) { browser in
+        Command("tabs.focusLeftPane", "切换到左侧页面", .tabs, KeyCombo("left", control: true)) { browser in
             guard browser.prefs.splitView else { return }
             browser.focusPane(onLeft: true)
         },
-        Command("tabs.focusRightPane", "Focus Right Page", .tabs, KeyCombo("right", control: true)) { browser in
+        Command("tabs.focusRightPane", "切换到右侧页面", .tabs, KeyCombo("right", control: true)) { browser in
             guard browser.prefs.splitView else { return }
             browser.focusPane(onLeft: false)
         },
-        Command("tabs.focusOtherPane", "Focus Other Page", .tabs, nil) { browser in
+        Command("tabs.focusOtherPane", "切换到另一侧页面", .tabs, nil) { browser in
             guard browser.prefs.splitView else { return }
             browser.focusOtherPane()
         },
-        Command("tabs.swapSplit", "Swap Pages", .tabs, nil) { browser in
+        Command("tabs.swapSplit", "交换页面", .tabs, nil) { browser in
             guard browser.prefs.splitView else { return }
             browser.swapSplit()
         },
-        Command("tabs.separateSplit", "Separate Split Tabs", .tabs, nil) { browser in
+        Command("tabs.separateSplit", "分离分屏标签页", .tabs, nil) { browser in
             guard browser.prefs.splitView, let tab = browser.active else { return }
             browser.detachSplit(tab)
         },
-        Command("tabs.rename", "Rename Tab", .tabs, nil) { browser in
+        Command("tabs.rename", "重命名标签页", .tabs, nil) { browser in
             if let tab = browser.active { browser.beginTabRename(tab) }
         },
-        Command("tabs.duplicate", "Duplicate Tab", .tabs, KeyCombo("d")) { $0.duplicate() },
-        Command("tabs.copyAddress", "Copy Address", .tabs, KeyCombo("c", shift: true)) { $0.copyAddress() },
-        Command("tabs.copyMarkdown", "Copy as Markdown Link", .tabs, nil) { $0.copyMarkdownLink() },
-        Command("tabs.pasteAndGo", "Paste and Go", .tabs, KeyCombo("v", shift: true)) { $0.pasteAndGo() },
-        Command("tabs.closeOthers", "Close Other Tabs", .tabs, nil) { browser in
+        Command("tabs.duplicate", "复制标签页", .tabs, KeyCombo("d")) { $0.duplicate() },
+        Command("tabs.copyAddress", "复制地址", .tabs, KeyCombo("c", shift: true)) { $0.copyAddress() },
+        Command("tabs.copyMarkdown", "复制为 Markdown 链接", .tabs, nil) { $0.copyMarkdownLink() },
+        Command("tabs.pasteAndGo", "粘贴并前往", .tabs, KeyCombo("v", shift: true)) { $0.pasteAndGo() },
+        Command("tabs.closeOthers", "关闭其他标签页", .tabs, nil) { browser in
             if let tab = browser.active { browser.closeOthers(but: tab) }
         },
-        Command("tabs.mute", "Stop Sound in Tab", .tabs, KeyCombo("m", shift: true)) { $0.pauseMedia() },
+        Command("tabs.mute", "停止标签页声音", .tabs, KeyCombo("m", shift: true)) { $0.pauseMedia() },
 
-        Command("bookmarks.add", "Add This Page", .bookmarks, KeyCombo("b", shift: true)) { $0.bookmarkCurrent() },
-        Command("bookmarks.show", "Show Bookmarks…", .bookmarks, nil) { $0.bookmarking = true },
-        Command("bookmarks.bar", "Show Bookmarks Bar", .bookmarks, nil) { browser in
+        Command("bookmarks.add", "添加此页面", .bookmarks, KeyCombo("b", shift: true)) { $0.bookmarkCurrent() },
+        Command("bookmarks.show", "显示书签…", .bookmarks, nil) { $0.bookmarking = true },
+        Command("bookmarks.bar", "显示书签栏", .bookmarks, nil) { browser in
             withAnimation(Motion.glide) { browser.prefs.bookmarksBar.toggle() }
         },
 
-        Command("history.show", "Show History…", .history, KeyCombo("y")) { $0.recalling.toggle() },
-        Command("history.downloads", "Downloads…", .history, KeyCombo("j", shift: true)) { $0.hoarding.toggle() },
-        Command("history.clearData", "Clear Browsing Data…", .history, KeyCombo("delete", shift: true)) { $0.recallMode = .clearing },
-        Command("history.clear", "Clear History", .history, nil) { $0.clearHistory() },
+        Command("history.show", "显示历史记录…", .history, KeyCombo("y")) { $0.recalling.toggle() },
+        Command("history.downloads", "下载…", .history, KeyCombo("j", shift: true)) { $0.hoarding.toggle() },
+        Command("history.clearData", "清除浏览数据…", .history, KeyCombo("delete", shift: true)) { $0.recallMode = .clearing },
+        Command("history.clear", "清除历史记录", .history, nil) { $0.clearHistory() },
     ]
 }
 

@@ -125,12 +125,12 @@ final class Shield: ObservableObject {
         guard let data = try? JSONSerialization.data(withJSONObject: rules),
               let json = String(data: data, encoding: .utf8)
         else {
-            trouble = "Couldn't build the block list"
+            trouble = "无法生成拦截列表"
             return
         }
 
         guard let store = WKContentRuleListStore.default() else {
-            trouble = "WebKit has nowhere to compile it"
+            trouble = "WebKit 无法编译拦截列表"
             return
         }
         store.compileContentRuleList(
@@ -140,7 +140,7 @@ final class Shield: ObservableObject {
             MainActor.assumeIsolated {
                 guard let self else { return }
                 guard let compiled else {
-                    self.trouble = error?.localizedDescription ?? "Compiling the block list failed"
+                    self.trouble = error?.localizedDescription ?? "编译拦截列表失败"
                     return
                 }
                 self.list = compiled

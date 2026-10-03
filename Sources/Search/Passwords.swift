@@ -11,11 +11,11 @@ struct PasswordsPanel: View {
     @State private var adding = false
 
     var body: some View {
-        Plate("Passwords", width: 620, close: { browser.managing = false }) {
+        Plate("密码", width: 620, close: { browser.managing = false }) {
             VStack(alignment: .leading, spacing: 14) {
                 HStack(spacing: 10) {
-                    Hunt(text: $browser.hunting, prompt: "Search sites and accounts", focus: $hunting)
-                    Pill(adding ? "Cancel" : "Add", filled: !adding) { adding.toggle() }
+                    Hunt(text: $browser.hunting, prompt: "搜索网站和账户", focus: $hunting)
+                    Pill(adding ? "取消" : "添加", filled: !adding) { adding.toggle() }
                 }
 
                 if adding {
@@ -26,8 +26,8 @@ struct PasswordsPanel: View {
                 if browser.shownSites.isEmpty {
                     Card {
                         Nothing(browser.saved.isEmpty
-                                ? "Nothing kept yet. Sign in somewhere and say yes, or bring yours in below."
-                                : "Nothing matches.")
+                                ? "暂无密码。登录网站时允许保存密码，或在下方导入。"
+                                : "没有匹配项。")
                     }
                 } else {
                     ScrollView(showsIndicators: false) {
@@ -52,21 +52,21 @@ struct PasswordsPanel: View {
         } foot: {
             VStack(alignment: .leading, spacing: 10) {
                 HStack(spacing: 8) {
-                    Text("Bring in from")
+                    Text("导入来源")
                         .font(.system(size: 12))
                         .foregroundStyle(Palette.muted)
                     // Which browser, which profile and what of it: the sheet.
-                    Pill("Bring in…") {
+                    Pill("导入…") {
                         browser.managing = false
                         browser.bringingIn = ""
                     }
-                    Pill("File…") { browser.importFile() }
+                    Pill("文件…") { browser.importFile() }
                     Spacer(minLength: 0)
-                    Text(browser.saved.count == 1 ? "1 password" : "\(browser.saved.count) passwords")
+                    Text(browser.saved.count == 1 ? "1 个密码" : "\(browser.saved.count) 个密码")
                         .font(.system(size: 12))
                         .foregroundStyle(Palette.muted)
                 }
-                Text("macOS asks once for that browser's keychain key. Nothing is changed there; everything lands in your own keychain, under Search.")
+                Text("macOS 会请求一次访问原浏览器的钥匙串密钥。原数据不会改变；导入内容保存在你自己的钥匙串中，归属 Search。")
                     .font(.system(size: 11.5))
                     .foregroundStyle(Palette.muted)
                     .fixedSize(horizontal: false, vertical: true)
@@ -97,7 +97,7 @@ struct PasswordsPanel: View {
                         .foregroundStyle(Palette.ink)
                         .lineLimit(1)
                     if logins.count > 1 {
-                        Text("\(logins.count) accounts")
+                        Text("\(logins.count) 个账户")
                             .font(.system(size: 11.5))
                             .foregroundStyle(Palette.muted)
                     } else if let only = logins.first, !only.user.isEmpty, !open {
@@ -152,7 +152,7 @@ struct PasswordsPanel: View {
 
         var body: some View {
             HStack(spacing: 10) {
-                Text(login.user.isEmpty ? "No username" : login.user)
+                Text(login.user.isEmpty ? "无用户名" : login.user)
                     .font(.system(size: 12))
                     .foregroundStyle(login.user.isEmpty ? Palette.faint : Palette.ink)
                     .lineLimit(1)
@@ -171,9 +171,9 @@ struct PasswordsPanel: View {
                 Spacer(minLength: 8)
 
                 if hovering || shown {
-                    Quick(shown ? "Hide" : "Show") { shown ? conceal() : reveal() }
-                    Quick("Copy", act: copy)
-                    Quick("Remove", tint: .red.opacity(0.75), act: forget)
+                    Quick(shown ? "隐藏" : "显示") { shown ? conceal() : reveal() }
+                    Quick("复制", act: copy)
+                    Quick("移除", tint: .red.opacity(0.75), act: forget)
                 }
             }
             .padding(.horizontal, 10)
@@ -187,7 +187,7 @@ struct PasswordsPanel: View {
         }
 
         private func reveal() {
-            Vault.prove("show the password for \(login.host)") { ok in
+            Vault.prove("显示 \(login.host) 的密码") { ok in
                 // Read after the Mac has said who this is, not before: the
                 // secret is asked for here and let go with the row.
                 guard ok, let password = Vault.secret(of: login) else { return }
@@ -223,13 +223,13 @@ struct PasswordsPanel: View {
         var body: some View {
             VStack(alignment: .leading, spacing: 8) {
                 HStack(spacing: 8) {
-                    field("Site", text: $site, tag: 0)
-                    field("Username", text: $user, tag: 1)
+                    field("网站", text: $site, tag: 0)
+                    field("用户名", text: $user, tag: 1)
                 }
                 HStack(spacing: 8) {
                     ZStack(alignment: .leading) {
                         if password.isEmpty {
-                            Text("Password").foregroundStyle(Palette.ink.opacity(0.3))
+                            Text("密码").foregroundStyle(Palette.ink.opacity(0.3))
                                 .padding(.leading, 10)
                         }
                         SecureField("", text: $password)
@@ -242,7 +242,7 @@ struct PasswordsPanel: View {
                             .padding(.vertical, 7)
                     }
                     .background(Palette.wash, in: RoundedRectangle(cornerRadius: 9, style: .continuous))
-                    Pill("Save", filled: true, action: keep)
+                    Pill("保存", filled: true, action: keep)
                         .disabled(Vault.host(of: site).isEmpty || password.isEmpty)
                 }
             }

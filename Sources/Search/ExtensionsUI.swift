@@ -11,7 +11,7 @@ struct ExtensionsPage: View {
             Installer(browser: browser, extensions: .shared)
         } else {
             Card {
-                Line("Chrome extensions", "Need macOS 15.4 or later — the version whose WebKit can run them.") { EmptyView() }
+                Line("Chrome 扩展", "需要 macOS 15.4 或更新版本，其 WebKit 才能运行扩展。") { EmptyView() }
             }
         }
     }
@@ -27,11 +27,11 @@ struct ExtensionsPage: View {
                 Card {
                     VStack(alignment: .leading, spacing: 10) {
                         HStack(spacing: 8) {
-                            Text("Add from the Chrome Web Store")
+                            Text("从 Chrome 应用商店添加")
                                 .font(.system(size: 13))
                                 .foregroundStyle(Palette.ink)
                             Spacer(minLength: 8)
-                            Pill("Open the Store") {
+                            Pill("打开应用商店") {
                                 browser.tuning = false
                                 browser.open(Browser.webStore, foreground: true)
                             }
@@ -39,7 +39,7 @@ struct ExtensionsPage: View {
                         HStack(spacing: 8) {
                             ZStack(alignment: .leading) {
                                 if link.isEmpty {
-                                    Text("Paste a link to an extension, or its id")
+                                    Text("粘贴扩展链接或扩展 ID")
                                         .foregroundStyle(Palette.muted.opacity(0.8))
                                 }
                                 TextField("", text: $link)
@@ -54,11 +54,11 @@ struct ExtensionsPage: View {
                             if extensions.busy != nil {
                                 Ring(size: 12)
                             } else {
-                                Pill("Add", filled: true, action: add)
+                                Pill("添加", filled: true, action: add)
                                     .disabled(Crx.id(in: link) == nil)
                             }
                         }
-                        Text("Or find it in the store and press Add to Search on its page.")
+                        Text("也可在商店中找到扩展，并点击页面上的“添加到 Search”。")
                             .font(.system(size: 11.5))
                             .foregroundStyle(Palette.muted)
                             .fixedSize(horizontal: false, vertical: true)
@@ -67,8 +67,8 @@ struct ExtensionsPage: View {
                 }
 
                 Card {
-                    Line("From another browser", "What Chrome, Arc, Brave and the others added from the Chrome Web Store — installed fresh from the store, you say yes to each one") {
-                        Pill("Bring them over…") {
+                    Line("从其他浏览器导入", "导入 Chrome、Arc、Brave 等浏览器中的商店扩展。会从商店重新安装，每个扩展都需要你确认") {
+                        Pill("导入扩展…") {
                             browser.tuning = false
                             browser.bringingExtensions = true
                             browser.bringingIn = ""
@@ -77,7 +77,7 @@ struct ExtensionsPage: View {
                 }
 
                 Card {
-                    Line("Allow on private tabs", "Off by default - a private tab keeps nothing, extensions included") {
+                    Line("允许在无痕标签页中使用", "默认关闭。无痕标签页不会保留数据，扩展也不例外") {
                         Switch(on: Binding(
                             get: { browser.prefs.extensionsInPrivate },
                             set: { browser.prefs.extensionsInPrivate = $0 }
@@ -86,7 +86,7 @@ struct ExtensionsPage: View {
                 }
 
                 if extensions.installed.isEmpty {
-                    Card { Nothing("No extensions yet.") }
+                    Card { Nothing("暂无扩展。") }
                 } else {
                     Card {
                         ForEach(Array(extensions.installed.enumerated()), id: \.element.id) { index, item in
@@ -99,8 +99,8 @@ struct ExtensionsPage: View {
                 Recorders()
 
                 Card {
-                    Line("Load an unpacked extension", "A folder with a manifest.json — your own, or one exported from another browser. Reload picks up what you've changed in it since.") {
-                        Pill("Choose…") { extensions.installFolder() }
+                    Line("加载解压后的扩展", "选择包含 manifest.json 的文件夹，可以是自己开发或从其他浏览器导出的扩展。重新载入后应用文件更改") {
+                        Pill("选择…") { extensions.installFolder() }
                     }
                 }
             }
@@ -125,8 +125,8 @@ struct ExtensionsPage: View {
                     VStack(spacing: 0) {
                         ForEach(Array(ids.enumerated()), id: \.element) { index, id in
                             if index > 0 { Rule() }
-                            Line(Browser.extensionName(id), "Can record your screen — macOS asks what to share each time") {
-                                Pill("Remove") { ExtensionCapture.forget(id) }
+                            Line(Browser.extensionName(id), "可录制屏幕；macOS 每次都会询问共享范围") {
+                                Pill("移除") { ExtensionCapture.forget(id) }
                             }
                         }
                     }
@@ -165,23 +165,23 @@ struct ExtensionsPage: View {
                 }
                 Spacer(minLength: 8)
                 if hovering {
-                    Quick(item.pinned == true ? "Unpin" : "Pin to Toolbar") {
+                    Quick(item.pinned == true ? "取消固定" : "固定到工具栏") {
                         extensions.setPinned(item.id, !(item.pinned ?? false))
                     }
                     if context?.overrideNewTabPageURL != nil {
                         let on = Store.settings.object(forKey: "extensions.newtab.\(item.id)") as? Bool == true
-                        Quick(on ? "Stop in New Tabs" : "Show in New Tabs") {
+                        Quick(on ? "不在新标签页中显示" : "在新标签页中显示") {
                             Store.settings.set(!on, forKey: "extensions.newtab.\(item.id)")
                             extensions.objectWillChange.send()
                         }
                     }
                     if item.source != nil || !item.fromStore {
-                        Quick("Reload") { extensions.reload(item.id) }
+                        Quick("重新载入") { extensions.reload(item.id) }
                     }
                     if context?.optionsPageURL != nil {
-                        Quick("Options") { extensions.openOptions(item.id) }
+                        Quick("选项") { extensions.openOptions(item.id) }
                     }
-                    Quick("Remove", tint: .red.opacity(0.75)) { extensions.remove(item.id) }
+                    Quick("移除", tint: .red.opacity(0.75)) { extensions.remove(item.id) }
                 }
                 Switch(on: Binding(get: { item.enabled }, set: { extensions.setEnabled(item.id, $0) }))
             }
@@ -194,16 +194,16 @@ struct ExtensionsPage: View {
         /// Where it was loaded from, by the folder's name — the whole path
         /// is in the tooltip.
         private var folder: String {
-            item.source.map { "From “\(URL(fileURLWithPath: $0).lastPathComponent)”" } ?? "From a folder"
+            item.source.map { "来自“\(URL(fileURLWithPath: $0).lastPathComponent)”" } ?? "来自文件夹"
         }
 
         private func detail(_ context: WKWebExtensionContext?) -> String {
-            var parts = ["Version \(item.version)", item.fromStore ? "Chrome Web Store" : folder]
-            if item.enabled, context == nil { parts.append("couldn't start") }
+            var parts = ["版本 \(item.version)", item.fromStore ? "Chrome 应用商店" : folder]
+            if item.enabled, context == nil { parts.append("无法启动") }
             if context?.overrideNewTabPageURL != nil, Store.settings.object(forKey: "extensions.newtab.\(item.id)") as? Bool == true {
-                parts.append("shows in new tabs")
+                parts.append("显示在新标签页中")
             }
-            if let errors = context?.errors, !errors.isEmpty { parts.append("\(errors.count) warning\(errors.count == 1 ? "" : "s")") }
+            if let errors = context?.errors, !errors.isEmpty { parts.append("\(errors.count) 条警告") }
             return parts.joined(separator: " · ")
         }
     }
@@ -234,13 +234,13 @@ struct StoreOffer: View {
                     Image(systemName: "puzzlepiece.extension")
                         .font(.system(size: 11, weight: .medium))
                         .foregroundStyle(Palette.muted)
-                    Text(extensions.busy == id ? "Adding…" : "Add this extension to Search")
+                    Text(extensions.busy == id ? "正在添加…" : "将此扩展添加到 Search")
                         .font(.system(size: 12.5))
                         .foregroundStyle(Palette.ink)
                     if extensions.busy == id {
                         Ring(size: 10)
                     } else {
-                        Button("Add") { extensions.install(from: id) }
+                        Button("添加") { extensions.install(from: id) }
                             .buttonStyle(.plain)
                             .font(.system(size: 12))
                             .foregroundStyle(Palette.ground)

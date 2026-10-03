@@ -49,19 +49,19 @@ struct ImportPanel: View {
 
     private var content: some View {
         VStack(alignment: .leading, spacing: 14) {
-            Text("Nothing in the other browser changes. Passwords go into your keychain.")
+            Text("原浏览器的数据不会改变。密码会保存在你的钥匙串中。")
                 .font(.system(size: 12.5))
                 .foregroundStyle(Palette.muted)
 
             if looking {
                 HStack(spacing: 8) {
                     Ring(size: 10)
-                    Text("Looking on this Mac…").font(.system(size: 12)).foregroundStyle(Palette.muted)
+                    Text("正在查找此 Mac 上的浏览器…").font(.system(size: 12)).foregroundStyle(Palette.muted)
                 }
             } else if sources.isEmpty {
-                Card { Nothing("No other browser found on this Mac.") }
+                Card { Nothing("此 Mac 上未找到其他浏览器。") }
             } else {
-                Caption("On this Mac")
+                Caption("在此 Mac 上")
                 Card {
                     ForEach(Array(sources.enumerated()), id: \.element.id) { index, source in
                         if index > 0 { Rule() }
@@ -85,7 +85,7 @@ struct ImportPanel: View {
     }
 
     var body: some View {
-        Plate("Bring things over", width: 580, close: { browser.bringingIn = nil }) {
+        Plate("导入浏览器数据", width: 580, close: { browser.bringingIn = nil }) {
             // As tall as it needs to be, and scrolling past what the window
             // can hold: many browsers, or a small window.
             ViewThatFits(in: .vertical) {
@@ -114,22 +114,22 @@ struct ImportPanel: View {
                 }
                 HStack(spacing: 8) {
                     if brought != nil {
-                        Pill("Show bookmarks") {
+                        Pill("显示书签") {
                             browser.bringingIn = nil
                             browser.bookmarking = true
                         }
-                        Pill("Show passwords") {
+                        Pill("显示密码") {
                             browser.bringingIn = nil
                             browser.managing = true
                         }
                     } else if let source = pick {
-                        Pill(bringing ? "Bringing…" : "Bring them in", filled: true) { bring(from: source) }
+                        Pill(bringing ? "正在导入…" : "导入", filled: true) { bring(from: source) }
                             .disabled(bringing || !(wantsPasswords || wantsBookmarks || wantsHistory || (wantsExtensions && !fresh(source).isEmpty)
                                                      || (wantsArc && arcCounts[key(source, profile(of: source))] != nil)))
                         if bringing { Ring(size: 10) }
                     }
                     Spacer(minLength: 8)
-                    Pill("Or from a file another browser exported…") { browser.importFile() }
+                    Pill("或从其他浏览器导出的文件导入…") { browser.importFile() }
                         .disabled(bringing)
                 }
             }
@@ -165,7 +165,7 @@ struct ImportPanel: View {
     @ViewBuilder
     private var notes: some View {
         let lines = (ImportSource.safari
-                     ? ["Safari — macOS keeps its data from other apps: in Safari, File › Export Browsing Data, then bring the file in below."]
+                     ? ["Safari — macOS 不允许其他应用直接读取其数据。请在 Safari 中选择“文件 › 导出浏览数据”，再在下方导入文件。"]
                      : []) + unreadable
         if !lines.isEmpty {
             VStack(alignment: .leading, spacing: 4) {
@@ -185,11 +185,11 @@ struct ImportPanel: View {
         let extensions = fresh(source)
         return Card {
             if let record = ImportRecords.of(source.name) {
-                Line("Brought before", broughtBefore(record)) { EmptyView() }
+                Line("此前导入", broughtBefore(record)) { EmptyView() }
                 Rule()
             }
             if let choices = profiles[source.id], choices.count > 1 {
-                Line("Profile") {
+                Line("配置文件") {
                     Picker("", selection: Binding(
                         get: { chosen[source.id] ?? usual[source.id] ?? "" },
                         set: { value in
@@ -199,10 +199,10 @@ struct ImportPanel: View {
                         }
                     )) {
                         ForEach(choices) { profile in
-                            Text(profile.id == usual[source.id] ? "Most recent: \(profile.name)" : profile.name).tag(profile.id)
+                            Text(profile.id == usual[source.id] ? "最近使用：\(profile.name)" : profile.name).tag(profile.id)
                         }
                         Divider()
-                        Text("All profiles").tag("")
+                        Text("所有配置文件").tag("")
                     }
                     .labelsHidden()
                     .pickerStyle(.menu)
@@ -211,13 +211,13 @@ struct ImportPanel: View {
                 Rule()
             }
             // A kind the browser has none of is said so, and can't be picked.
-            Line("Passwords", preview?.passwords == 0 ? "None in \(source.name)" : source.asksForKey
-                 ? "macOS asks once for \(source.name)'s keychain key"
-                 : "Read from \(source.name)'s own files, unless it has a primary password") {
+            Line("密码", preview?.passwords == 0 ? "\(source.name) 中没有此类数据" : source.asksForKey
+                 ? "macOS 会请求一次访问 \(source.name) 的钥匙串密钥"
+                 : "从 \(source.name) 的文件读取，设置了主密码时除外") {
                 option($wantsPasswords, none: preview?.passwords == 0)
             }
             Rule()
-            Line("Bookmarks", preview?.bookmarks == 0 ? "None in \(source.name)" : "In a “\(source.name)” folder, or at the top if you have none yet") {
+            Line("书签", preview?.bookmarks == 0 ? "\(source.name) 中没有此类数据" : "保存到“\(source.name)”文件夹；若尚无书签，则保存到顶层") {
                 option($wantsBookmarks, none: preview?.bookmarks == 0)
             }
             // Brought before: only what is new comes, unless what came from
@@ -226,27 +226,27 @@ struct ImportPanel: View {
             if wantsBookmarks, preview?.bookmarks != 0, let record = ImportRecords.of(source.name) {
                 Rule()
                 let recorded = !record.bookmarkIDs.isEmpty
-                Line("Replace what came from \(source.name) before",
-                     recorded ? "Its bookmarks from \(record.date.formatted(.dateTime.day().month())) go, and these come fresh; passwords only ever add"
-                              : "Nothing recorded from \(source.name) yet — only what is new comes") {
+                Line("替换此前从 \(source.name) 导入的书签",
+                     recorded ? "替换 \(record.date.formatted(.dateTime.day().month())) 导入的书签；密码只会新增"
+                              : "尚无从 \(source.name) 导入的记录，仅添加新内容") {
                     option($replaceBookmarks, none: !recorded)
                 }
             }
             Rule()
-            Line("History", preview?.places == 0 ? "None in \(source.name)" : "The last \((preview.map { $0.places } ?? 3000).formatted()) places") {
+            Line("历史记录", preview?.places == 0 ? "\(source.name) 中没有此类数据" : "最近 \((preview.map { $0.places } ?? 3000).formatted()) 条浏览记录") {
                 option($wantsHistory, none: preview?.places == 0)
             }
             // Arc's own: its spaces, what is pinned in them, its favourites.
             if let arc = arcCounts[key(source, profile(of: source))], arc.spaces + arc.pinned > 0 {
                 Rule()
-                Line("Spaces and pinned tabs",
-                     "\(arc.spaces == 1 ? "1 space" : "\(arc.spaces) spaces"), \(arc.pinned) pinned — each a space here, its pinned tabs asleep in it, the favourites as pins") {
+                Line("空间和固定标签页",
+                     "\(arc.spaces) 个空间、\(arc.pinned) 个固定标签页；导入后各空间独立保留，固定标签页处于休眠状态，收藏夹作为固定项") {
                     Switch(on: $wantsArc)
                 }
             }
             if !extensions.isEmpty {
                 Rule()
-                Line("Extensions", "\(extensions.count) found — installed fresh from the Chrome Web Store, you say yes to each one") {
+                Line("扩展", "找到 \(extensions.count) 个扩展，将从 Chrome 应用商店重新安装，每个都需确认") {
                     Switch(on: $wantsExtensions)
                 }
             }
@@ -267,31 +267,31 @@ struct ImportPanel: View {
     }
 
     private func detail(of source: ImportSource) -> String {
-        guard let preview = previews[key(source, profile(of: source))] else { return "Counting…" }
-        func count(_ n: Int, _ one: String) -> String { n == 1 ? "1 \(one)" : "\(n.formatted()) \(one)s" }
+        guard let preview = previews[key(source, profile(of: source))] else { return "正在统计…" }
+        func count(_ n: Int, _ one: String) -> String { "\(n.formatted()) \(one)" }
         var parts: [String] = []
-        if let choices = profiles[source.id], choices.count > 1 { parts.append("\(choices.count) profiles") }
+        if let choices = profiles[source.id], choices.count > 1 { parts.append("\(choices.count) 个配置文件") }
         // What it has; a kind it has none of isn't worth a word.
-        for (n, one) in [(preview.bookmarks, "bookmark"), (preview.places, "place"), (preview.passwords, "password")] where n > 0 {
+        for (n, one) in [(preview.bookmarks, "个书签"), (preview.places, "条浏览记录"), (preview.passwords, "个密码")] where n > 0 {
             parts.append(count(n, one))
         }
         if let arc = arcCounts[key(source, profile(of: source))], arc.spaces > 0 {
-            parts.append(count(arc.spaces, "space"))
+            parts.append(count(arc.spaces, "个空间"))
         }
         if let record = ImportRecords.of(source.name) {
-            parts.append("brought \(record.date.formatted(.dateTime.day().month()))")
+            parts.append("导入于 \(record.date.formatted(.dateTime.day().month()))")
         }
-        return parts.isEmpty ? "Nothing to bring in" : parts.joined(separator: " · ")
+        return parts.isEmpty ? "没有可导入的数据" : parts.joined(separator: " · ")
     }
 
     /// What was brought from it before, in a line: "312 bookmarks, 1,204
     /// places and 58 passwords, 27 Sep".
     private func broughtBefore(_ record: ImportRecord) -> String {
-        func count(_ n: Int, _ one: String) -> String { n == 1 ? "1 \(one)" : "\(n.formatted()) \(one)s" }
-        let parts = [(record.bookmarks, "bookmark"), (record.places, "place"), (record.passwords, "password"),
-                     (record.spaces ?? 0, "space"), (record.pinned ?? 0, "pinned tab")]
+        func count(_ n: Int, _ one: String) -> String { "\(n.formatted()) \(one)" }
+        let parts = [(record.bookmarks, "个书签"), (record.places, "条浏览记录"), (record.passwords, "个密码"),
+                     (record.spaces ?? 0, "个空间"), (record.pinned ?? 0, "个固定标签页")]
             .filter { $0.0 > 0 }.map { count($0.0, $0.1) }
-        let what = parts.isEmpty ? "Nothing new" : ListFormatter.localizedString(byJoining: parts)
+        let what = parts.isEmpty ? "没有新内容" : ListFormatter.localizedString(byJoining: parts)
         return "\(what), \(record.date.formatted(.dateTime.day().month()))"
     }
 
@@ -318,7 +318,7 @@ struct ImportPanel: View {
         let wanted = browser.bringingIn ?? ""
         DispatchQueue.global(qos: .userInitiated).async {
             let found = ImportSource.installed()
-            let missing = Chromium.unreadable().map { "\($0.source.name) is on this Mac, but nothing of it was found in \($0.looked)." }
+            let missing = Chromium.unreadable().map { "此 Mac 上有 \($0.source.name)，但在 \($0.looked) 中未找到可导入的数据。" }
             let lists = found.map { ($0.id, $0.profiles, $0.usual) }
             DispatchQueue.main.async {
                 sources = found
@@ -374,14 +374,14 @@ struct ImportPanel: View {
                     case .success(let found):
                         let kept = browser.keep(found)
                         ImportRecords.note(source.name, passwords: kept)
-                        let skipped = found.skipped > 0 ? " (\(found.skipped.formatted()) skipped: no address)" : ""
-                        said[0] = Said(ok: true, text: (kept == 1 ? "1 password" : "\(kept.formatted()) passwords") + skipped)
+                        let skipped = found.skipped > 0 ? "（跳过 \(found.skipped.formatted()) 项：缺少地址）" : ""
+                        said[0] = Said(ok: true, text: (kept == 1 ? "1 个密码" : "\(kept.formatted()) 个密码") + skipped)
                     case .failure(Chromium.Trouble.noPassphrase):
-                        said[0] = Said(ok: false, text: "macOS didn't hand over \(source.name)'s key — allow it and try again")
+                        said[0] = Said(ok: false, text: "macOS 未提供 \(source.name) 的密钥，请允许访问后重试")
                     case .failure(Mozilla.Trouble.primaryPassword):
-                        said[0] = Said(ok: false, text: "\(source.name) has a primary password: export your passwords from it and bring in the CSV file")
+                        said[0] = Said(ok: false, text: "\(source.name) 设置了主密码，请先导出密码，再导入 CSV 文件")
                     case .failure:
-                        said[0] = Said(ok: false, text: "No passwords readable in \(source.name)")
+                        said[0] = Said(ok: false, text: "\(source.name) 中没有可读取的密码")
                     }
                     group.leave()
                 }
@@ -390,29 +390,29 @@ struct ImportPanel: View {
         if marks {
             let (added, already, kept) = browser.takeBookmarks(from: source, profile: profile, replacing: replaceBookmarks)
             said[1] = kept
-                ? Said(ok: false, text: "Couldn't read all of \(source.name)'s bookmarks: what came from it before was kept, \(added.formatted()) new")
-                : Said(ok: true, text: added == 0 && already == 0 ? "No bookmarks in \(source.name)"
-                           : already == 0 ? "\(added.formatted()) bookmarks"
-                           : "\(added.formatted()) new bookmarks, \(already.formatted()) already here")
+                ? Said(ok: false, text: "无法读取 \(source.name) 的全部书签；此前导入的已保留，新增 \(added.formatted()) 个")
+                : Said(ok: true, text: added == 0 && already == 0 ? "\(source.name) 中没有书签"
+                           : already == 0 ? "\(added.formatted()) 个书签"
+                           : "新增 \(added.formatted()) 个书签，\(already.formatted()) 个已存在")
         }
         if places {
             group.enter()
             browser.takePlaces(from: source, profile: profile) { count in
-                said[2] = Said(ok: true, text: "\(count.formatted()) places")
+                said[2] = Said(ok: true, text: "\(count.formatted()) 条浏览记录")
                 group.leave()
             }
         }
         if #available(macOS 15.4, *), !extensions.isEmpty {
             // Each from the store, fresh and checked, one question at a time.
             Task { for id in extensions { await Extensions.shared.install(id: id) } }
-            said[3] = Said(ok: true, text: extensions.count == 1 ? "1 extension to confirm" : "\(extensions.count) extensions to confirm")
+            said[3] = Said(ok: true, text: extensions.count == 1 ? "1 个扩展待确认" : "\(extensions.count) 个扩展待确认")
         }
         if wantsArc, arcCounts[key(source, profile)] != nil, let sidebar = source.arcSidebar(profile: profile) {
             let (spaces, pins, tabs) = browser.takeArc(sidebar, from: source, profile: profile)
             ImportRecords.note(source.name, spaces: spaces, pinned: pins + tabs)
-            func count(_ n: Int, _ one: String) -> String { n == 1 ? "1 \(one)" : "\(n.formatted()) \(one)s" }
-            said[4] = Said(ok: true, text: spaces + pins + tabs == 0 ? "Arc's spaces and pins were all here already"
-                           : "\(count(spaces, "new space")), \(count(pins, "pin")), \(count(tabs, "pinned tab"))")
+            func count(_ n: Int, _ one: String) -> String { "\(n.formatted()) \(one)" }
+            said[4] = Said(ok: true, text: spaces + pins + tabs == 0 ? "Arc 的空间和固定标签页已全部导入过"
+                           : "\(count(spaces, "个新空间")), \(count(pins, "个固定项")), \(count(tabs, "个固定标签页"))")
         }
         group.notify(queue: .main) {
             bringing = false

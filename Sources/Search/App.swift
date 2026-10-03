@@ -46,50 +46,50 @@ struct SearchApp: App {
         .commands {
             CommandGroup(replacing: .newItem) {
                 // Another window, with tabs of its own (see Windows.swift).
-                Button("New Window") { Browsers.newWindow() }
+                Button("新建窗口") { Browsers.newWindow() }
                     .shortcut("file.newWindow")
-                Button("New Tab") { browser.newTab() }
+                Button("新建标签页") { browser.newTab() }
                     .shortcut("file.newTab")
-                Button("New Private Tab") { browser.newShyTab() }
+                Button("新建无痕标签页") { browser.newShyTab() }
                     .shortcut("file.newPrivateTab")
                 Button(browser.reopenTitle) { browser.reopen() }
                     .shortcut("file.reopen")
                     .disabled(browser.ghosts.isEmpty && Browsers.lastClosedAt == nil)
                 Divider()
-                Button("Open Address…") { browser.edit() }
+                Button("打开地址…") { browser.edit() }
                     .shortcut("file.openAddress")
                 Divider()
                 // Another browser's bookmarks, history, passwords and the
                 // rest, as Safari's File › Import From: the one sheet every
                 // other way in opens too.
-                Button("Bring Things Over…") { browser.bringingIn = "" }
+                Button("导入浏览器数据…") { browser.bringingIn = "" }
                     .shortcut("file.import")
                 Divider()
-                Button("Close Tab") { browser.closeFront() }
+                Button("关闭标签页") { browser.closeFront() }
                     .shortcut("file.closeTab")
             }
             CommandGroup(replacing: .printItem) {
-                Button("Share…") { browser.share() }
+                Button("共享…") { browser.share() }
                     .shortcut("file.share")
                     .disabled(browser.active?.isBlank ?? true)
-                Button("Print…") { browser.printPage() }
+                Button("打印…") { browser.printPage() }
                     .shortcut("file.print")
                     .disabled(browser.active?.isBlank ?? true)
             }
             CommandGroup(after: .pasteboard) {
                 Divider()
-                Button("Find on Page…") { browser.openFind() }
+                Button("在页面中查找…") { browser.openFind() }
                     .shortcut("edit.find")
                     .disabled(browser.active?.isBlank ?? true)
-                Button("Find Next") { browser.look(forward: true) }
+                Button("查找下一个") { browser.look(forward: true) }
                     .shortcut("edit.findNext")
                     .disabled(!browser.finding)
-                Button("Find Previous") { browser.look(forward: false) }
+                Button("查找上一个") { browser.look(forward: false) }
                     .shortcut("edit.findPrevious")
                     .disabled(!browser.finding)
             }
             CommandGroup(replacing: .toolbar) {
-                Toggle("Show Tabs in Sidebar", isOn: Binding(
+                Toggle("在侧边栏显示标签页", isOn: Binding(
                     get: { browser.prefs.sidebar },
                     set: { _ in browser.toggleSidebar() }
                 ))
@@ -97,10 +97,10 @@ struct SearchApp: App {
                 // Folded away, not moved (see Fold.swift) — the column, or the
                 // strip across the top.
                 Button(browser.prefs.sidebar
-                       ? (browser.folded ? "Show Sidebar" : "Hide Sidebar")
-                       : (browser.folded ? "Show Tab Bar" : "Hide Tab Bar")) { browser.toggleFold() }
+                       ? (browser.folded ? "显示侧边栏" : "隐藏侧边栏")
+                       : (browser.folded ? "显示标签栏" : "隐藏标签栏")) { browser.toggleFold() }
                     .shortcut("view.fold")
-                Picker("Tabs Wear", selection: Binding(
+                Picker("标签页图标", selection: Binding(
                     get: { browser.prefs.glyph },
                     set: { browser.prefs.glyph = $0 }
                 )) {
@@ -109,129 +109,129 @@ struct SearchApp: App {
                     }
                 }
                 Divider()
-                Button("Reload Page") { browser.reload() }
+                Button("重新载入页面") { browser.reload() }
                     .shortcut("view.reload")
-                Button("Reload Page From Origin") { browser.reload(fromOrigin: true) }
+                Button("从源站重新载入页面") { browser.reload(fromOrigin: true) }
                     .shortcut("view.reloadOrigin")
-                Button("Reading Mode") { browser.toggleReader() }
+                Button("阅读模式") { browser.toggleReader() }
                     .shortcut("view.reader")
-                Button("Float Video") { browser.toggleFloat() }
+                Button("画中画") { browser.toggleFloat() }
                     .shortcut("view.float")
                 // The AI add-on's, only once it is on (Settings › AI).
                 if browser.prefs.ai {
                     Divider()
-                    Button("Summarize Page") { browser.summarizePage() }
+                    Button("总结页面") { browser.summarizePage() }
                         .shortcut("view.summarize")
                         .disabled(browser.active?.isBlank ?? true)
-                    Button("Ask About This Page…") { browser.askAboutPage() }
+                    Button("询问此页面…") { browser.askAboutPage() }
                         .shortcut("view.ask")
                         .disabled(browser.active?.isBlank ?? true)
                 }
                 Divider()
-                Button("Hide Elements…") { browser.toggleHiding() }
+                Button("隐藏页面元素…") { browser.toggleHiding() }
                     .shortcut("view.hide")
-                Button("Hidden on This Site…") { browser.reviewing.toggle() }
+                Button("此网站隐藏的元素…") { browser.reviewing.toggle() }
                     .shortcut("view.hidden")
                 Divider()
-                Button("Zoom In") { browser.zoom(by: 1.1) }
+                Button("放大") { browser.zoom(by: 1.1) }
                     .shortcut("view.zoomIn")
-                Button("Zoom Out") { browser.zoom(by: 1 / 1.1) }
+                Button("缩小") { browser.zoom(by: 1 / 1.1) }
                     .shortcut("view.zoomOut")
-                Button("Actual Size") { browser.resetZoom() }
+                Button("实际大小") { browser.resetZoom() }
                     .shortcut("view.actualSize")
                 Divider()
                 // The Web Inspector, on the keys Chrome and Arc use (see Inspector.swift).
-                Button("Web Inspector") { browser.toggleInspector() }
+                Button("网页检查器") { browser.toggleInspector() }
                     .shortcut("view.inspector")
-                Button("JavaScript Console") { browser.showConsole() }
+                Button("JavaScript 控制台") { browser.showConsole() }
                     .shortcut("view.console")
-                Button("Inspect Element") { browser.inspectElement() }
+                Button("检查元素") { browser.inspectElement() }
                     .shortcut("view.inspect")
             }
-            CommandMenu("Tabs") {
-                Button("Back") { browser.back() }
+            CommandMenu("标签页") {
+                Button("后退") { browser.back() }
                     .shortcut("tabs.back")
                     .disabled(browser.active?.canGoBack != true)
-                Button("Forward") { browser.forward() }
+                Button("前进") { browser.forward() }
                     .shortcut("tabs.forward")
                     .disabled(browser.active?.canGoForward != true)
                 Divider()
-                Button("Next Tab") { browser.step(1) }
+                Button("下一个标签页") { browser.step(1) }
                     .shortcut("tabs.next")
-                Button("Previous Tab") { browser.step(-1) }
+                Button("上一个标签页") { browser.step(-1) }
                     .shortcut("tabs.previous")
-                Button("Search Tabs…") { browser.summon() }
+                Button("搜索标签页…") { browser.summon() }
                     .shortcut("tabs.search")
                 Divider()
                 if browser.prefs.splitView {
-                    Button("Split Current Page") { browser.startSplit() }
+                    Button("拆分当前页面") { browser.startSplit() }
                         .shortcut("tabs.split")
                         .disabled(browser.active == nil || browser.active?.bench == true)
-                    Button("Focus Left Page") { browser.focusPane(onLeft: true) }
+                    Button("切换到左侧页面") { browser.focusPane(onLeft: true) }
                         .shortcut("tabs.focusLeftPane")
                         .disabled(browser.activeSplit == nil)
-                    Button("Focus Right Page") { browser.focusPane(onLeft: false) }
+                    Button("切换到右侧页面") { browser.focusPane(onLeft: false) }
                         .shortcut("tabs.focusRightPane")
                         .disabled(browser.activeSplit == nil)
-                    Button("Swap Pages") { browser.swapSplit() }
+                    Button("交换页面") { browser.swapSplit() }
                         .shortcut("tabs.swapSplit")
                         .disabled(browser.activeSplit == nil)
-                    Button("Separate Split Tabs") {
+                    Button("分离分屏标签页") {
                         if let tab = browser.active { browser.detachSplit(tab) }
                     }
                     .shortcut("tabs.separateSplit")
                     .disabled(browser.activeSplit == nil)
-                    Button("Close Both Pages") { browser.closeSplit() }
+                    Button("关闭两个页面") { browser.closeSplit() }
                         .disabled(browser.activeSplit == nil)
                     Divider()
                 }
                 if let tab = browser.active {
                     let rows = browser.prefs.showsPinRows
                     if tab.pin == nil {
-                        Button("Pin Tab") { browser.pin(tab) }
+                        Button("固定标签页") { browser.pin(tab) }
                             .disabled(tab.isBlank || tab.shy)
                         if rows {
-                            Button("Pin Tab as Row") { browser.pin(tab, listed: true) }
+                            Button("以列表形式固定标签页") { browser.pin(tab, listed: true) }
                                 .disabled(tab.isBlank || tab.shy)
                         }
                     } else {
                         if rows {
-                            Button(tab.listed ? "Show Pin as Square" : "Show Pin as Row") { browser.setListed(tab, !tab.listed) }
+                            Button(tab.listed ? "以方块显示固定标签页" : "以列表显示固定标签页") { browser.setListed(tab, !tab.listed) }
                         }
                         if !(rows && tab.listed) {
-                            Button("Change Letter") { browser.editLetter(tab) }
+                            Button("更改字母") { browser.editLetter(tab) }
                         }
-                        Button("Unpin Tab") { browser.unpin(tab) }
+                        Button("取消固定标签页") { browser.unpin(tab) }
                     }
                 }
-                Button("Rename Tab") { if let tab = browser.active { browser.beginTabRename(tab) } }
+                Button("重命名标签页") { if let tab = browser.active { browser.beginTabRename(tab) } }
                     .shortcut("tabs.rename")
                     .disabled(browser.active == nil)
-                Button("Duplicate Tab") { browser.duplicate() }
+                Button("复制标签页") { browser.duplicate() }
                     .shortcut("tabs.duplicate")
                     .disabled(browser.active?.isBlank ?? true)
-                Button("Copy Address") { browser.copyAddress() }
+                Button("复制地址") { browser.copyAddress() }
                     .shortcut("tabs.copyAddress")
                     .disabled(browser.active?.isBlank ?? true)
-                Button("Copy as Markdown Link") { browser.copyMarkdownLink() }
+                Button("复制为 Markdown 链接") { browser.copyMarkdownLink() }
                     .shortcut("tabs.copyMarkdown")
                     .disabled(browser.active?.isBlank ?? true)
-                Button("Paste and Go") { browser.pasteAndGo() }
+                Button("粘贴并前往") { browser.pasteAndGo() }
                     .shortcut("tabs.pasteAndGo")
                 Divider()
-                Button("Close Other Tabs") { if let tab = browser.active { browser.closeOthers(but: tab) } }
+                Button("关闭其他标签页") { if let tab = browser.active { browser.closeOthers(but: tab) } }
                     .shortcut("tabs.closeOthers")
                     .disabled(browser.tabs.count < 2)
-                Button("Stop Sound in Tab") { browser.pauseMedia() }
+                Button("停止标签页声音") { browser.pauseMedia() }
                     .shortcut("tabs.mute")
             }
-            CommandMenu("Bookmarks") {
-                Button(browser.pageKept ? "Edit Bookmark\u{2026}" : "Add This Page") { browser.bookmarkCurrent() }
+            CommandMenu("书签") {
+                Button(browser.pageKept ? "编辑书签…" : "添加此页面") { browser.bookmarkCurrent() }
                     .shortcut("bookmarks.add")
                     .disabled(browser.active?.isBlank ?? true)
-                Button("Show Bookmarks…") { browser.bookmarking = true }
+                Button("显示书签…") { browser.bookmarking = true }
                     .shortcut("bookmarks.show")
-                Toggle("Show Bookmarks Bar", isOn: Binding(
+                Toggle("显示书签栏", isOn: Binding(
                     get: { browser.prefs.bookmarksBar },
                     set: { on in withAnimation(Motion.glide) { browser.prefs.bookmarksBar = on } }
                 ))
@@ -239,8 +239,8 @@ struct SearchApp: App {
                 // The bookmarks themselves follow, put in by AppKit (see
                 // BookmarkMenu in Bookmarks.swift).
             }
-            CommandMenu("History") {
-                Section("Recently Visited") {
+            CommandMenu("历史记录") {
+                Section("最近访问") {
                     ForEach(browser.recentlyVisited) { trace in
                         Button {
                             browser.open(trace.url, foreground: true)
@@ -250,7 +250,7 @@ struct SearchApp: App {
                     }
                 }
                 if !browser.ghosts.isEmpty {
-                    Section("Recently Closed") {
+                    Section("最近关闭") {
                         ForEach(browser.ghosts.reversed().prefix(10)) { ghost in
                             Button {
                                 browser.reopen(ghost)
@@ -261,28 +261,28 @@ struct SearchApp: App {
                     }
                 }
                 Divider()
-                Button("Show History…") { browser.recalling = true }
+                Button("显示历史记录…") { browser.recalling = true }
                     .shortcut("history.show")
-                Button("Downloads…") { browser.hoarding = true }
+                Button("下载…") { browser.hoarding = true }
                     .shortcut("history.downloads")
                 Divider()
-                Button("Clear Browsing Data…") { browser.recallMode = .clearing }
+                Button("清除浏览数据…") { browser.recallMode = .clearing }
                     .shortcut("history.clearData")
-                Button("Clear History") { browser.clearHistory() }
+                Button("清除历史记录") { browser.clearHistory() }
                     .shortcut("history.clear")
             }
             // Search › Check for Updates…, under About, as in any Mac app.
             CommandGroup(after: .appInfo) { UpdateMenuItem() }
             CommandGroup(after: .appSettings) {
-                Button("Settings…") { browser.tuning = true }
+                Button("设置…") { browser.tuning = true }
                     .shortcut("app.settings")
-                Button("Welcome…") { browser.welcoming = true }
+                Button("欢迎使用…") { browser.welcoming = true }
                     .shortcut("app.welcome")
-                Button("Passwords…") { browser.managing = true }
+                Button("密码…") { browser.managing = true }
                     .shortcut("app.passwords")
             }
             CommandGroup(replacing: .help) {
-                Button("Send Feedback…") { Links.writeFeedback() }
+                Button("发送反馈…") { Links.writeFeedback() }
             }
         }
     }
@@ -511,7 +511,7 @@ struct ContentView: View {
             }
             StoreOffer(browser: browser)
             if browser.veiling {
-                hint("Click anything to hide it   ⌘Z undo   esc done")
+                hint("点击元素以隐藏   ⌘Z 撤销   esc 完成")
                     .transition(.move(edge: .bottom).combined(with: .opacity))
             }
         }
@@ -718,7 +718,7 @@ struct ContentView: View {
                     .foregroundStyle(Palette.ink)
                 // A file just saved: the line shows it in the Finder.
                 if browser.announcedFile != nil {
-                    Text("Show in Finder")
+                    Text("在访达中显示")
                         .foregroundStyle(Palette.muted)
                 }
             }
@@ -741,16 +741,16 @@ struct ContentView: View {
     /// with the answer remembered so it is asked once and not every call.
     private func captureAsking(_ ask: Browser.CaptureAsk) -> some View {
         HStack(spacing: 12) {
-            Image(systemName: ask.wants == "location" ? "location" : ask.wants == "microphone" ? "mic" : ask.wants == "notifications" ? "bell" : "video")
+            Image(systemName: ask.wants == "location" ? "location" : ask.wants == "麦克风" ? "mic" : ask.wants == "notifications" ? "bell" : "video")
                 .font(.system(size: 11, weight: .medium))
                 .foregroundStyle(Palette.muted)
-            Text(ask.wants == "location" ? "\(ask.host) wants to know your location"
-                 : ask.wants == "notifications" ? "\(ask.host) wants to send you notifications"
-                 : "\(ask.host) wants to use your \(ask.wants)")
+            Text(ask.wants == "location" ? "\(ask.host) 请求获取你的位置"
+                 : ask.wants == "notifications" ? "\(ask.host) 请求发送通知"
+                 : "\(ask.host) 请求使用你的\(ask.wants)")
                 .font(.system(size: 12.5))
                 .foregroundStyle(Palette.ink)
             Button { ask.once ? browser.allowCaptureOnce() : browser.allowCapture() } label: {
-                Text(ask.once ? "Allow once" : "Allow")
+                Text(ask.once ? "允许一次" : "允许")
                     .font(.system(size: 12))
                     .foregroundStyle(Palette.ground)
                     .padding(.horizontal, 11)
@@ -760,14 +760,14 @@ struct ContentView: View {
             .buttonStyle(.plain)
             if ask.once, ask.keeps {
                 Button { browser.allowCapture() } label: {
-                    Text("Always allow")
+                    Text("始终允许")
                         .font(.system(size: 12))
                         .foregroundStyle(Palette.ink)
                 }
                 .buttonStyle(.plain)
             }
             Button { browser.denyCapture() } label: {
-                Text("Don't allow")
+                Text("不允许")
                     .font(.system(size: 12))
                     .foregroundStyle(Palette.muted)
             }
@@ -787,26 +787,26 @@ struct ContentView: View {
         let login = offer.login
         return HStack(spacing: 12) {
             Text(offer.changed
-                 ? "Update the password for \(login.user) on \(login.host)?"
+                 ? "更新 \(login.host) 上 \(login.user) 的密码？"
                  : (login.user.isEmpty
-                    ? "Save this password for \(login.host)?"
-                    : "Save the password for \(login.user) on \(login.host)?"))
+                    ? "保存 \(login.host) 的密码？"
+                    : "保存 \(login.host) 上 \(login.user) 的密码？"))
                 .font(.system(size: 12.5))
                 .foregroundStyle(Palette.ink)
                 .lineLimit(1)
-            Button(offer.changed ? "Update" : "Save") { browser.keepOffer() }
+            Button(offer.changed ? "更新" : "保存") { browser.keepOffer() }
                 .buttonStyle(.plain)
                 .font(.system(size: 12))
                 .foregroundStyle(Palette.ground)
                 .padding(.horizontal, 11)
                 .padding(.vertical, 5)
                 .background(Palette.ink, in: Capsule())
-            Button("Not now") { browser.dropOffer() }
+            Button("暂不") { browser.dropOffer() }
                 .buttonStyle(.plain)
                 .font(.system(size: 12))
                 .foregroundStyle(Palette.muted)
             if !offer.changed {
-                Button("Never here") { browser.neverOffer() }
+                Button("此网站不再询问") { browser.neverOffer() }
                     .buttonStyle(.plain)
                     .font(.system(size: 12))
                     .foregroundStyle(Palette.muted)
@@ -1442,17 +1442,17 @@ private struct UpdateMenuItem: View {
     var body: some View {
         switch updater.stage {
         case .none:
-            Button(updater.checking ? "Checking for Updates…" : "Check for Updates…") { updater.checkByHand() }
+            Button(updater.checking ? "正在检查更新…" : "检查更新…") { updater.checkByHand() }
                 .disabled(updater.checking)
         case .waiting:
-            Button("Install Update") { updater.install() }
+            Button("安装更新") { updater.install() }
         case .fetching:
-            Button("Downloading Update…") {}
+            Button("正在下载更新…") {}
                 .disabled(true)
         case .ready:
-            Button("Restart to Update") { updater.relaunch() }
+            Button("重新启动以更新") { updater.relaunch() }
         case .offered:
-            Button(updater.fetchingDisk ? "Downloading Update…" : "Download Update…") { updater.openDisk() }
+            Button(updater.fetchingDisk ? "正在下载更新…" : "下载更新…") { updater.openDisk() }
                 .disabled(updater.fetchingDisk)
         }
     }
@@ -1504,7 +1504,7 @@ private struct ImportProgress: View {
         .padding(20)
         .transition(.opacity)
         .accessibilityElement(children: .combine)
-        .accessibilityLabel("Importing \(job.filename), \(job.message)")
+        .accessibilityLabel("正在导入 \(job.filename)，\(job.message)")
     }
 
     private var bar: some View {
@@ -1522,13 +1522,13 @@ private struct ImportProgress: View {
     private var footer: some View {
         HStack {
             if let total = job.total, total > 0 {
-                Text("\(job.completed.formatted()) of \(total.formatted())")
+                Text("\(job.completed.formatted()) / \(total.formatted())")
                     .font(.system(size: 11))
                     .foregroundStyle(Palette.muted)
             }
             Spacer(minLength: 0)
             Button { browser.cancelFileImport() } label: {
-                Text(job.cancelling ? "Cancelling…" : "Cancel")
+                Text(job.cancelling ? "正在取消…" : "取消")
                     .font(.system(size: 12))
                     .foregroundStyle(Palette.ink)
                     .padding(.horizontal, 10)

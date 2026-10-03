@@ -24,7 +24,7 @@ enum AIProvider: String, CaseIterable, Identifiable {
 
     var name: String {
         switch self {
-        case .thisMac: return "On this Mac"
+        case .thisMac: return "在此 Mac 上"
         case .anthropic: return "Anthropic"
         case .openAI: return "OpenAI"
         case .gemini: return "Google Gemini"

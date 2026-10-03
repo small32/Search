@@ -208,7 +208,7 @@ struct SiteCard: View {
         if let host = url.host(), !host.isEmpty {
             return host.hasPrefix("www.") ? String(host.dropFirst(4)) : host
         }
-        if url.isFileURL { return "File" }
+        if url.isFileURL { return "文件" }
         return url.scheme ?? url.absoluteString
     }
 
@@ -222,9 +222,9 @@ struct SiteCard: View {
             if let safety {
                 Row(safety.title, submenu: true) { deeper = true }
             }
-            Row("Copy Address", keys: "⇧⌘C") { after { browser.copyAddress() } }
+            Row("复制地址", keys: "⇧⌘C") { after { browser.copyAddress() } }
             Separator()
-            Row("Print…", keys: "⌘P") { after { browser.printPage() } }
+            Row("打印…", keys: "⌘P") { after { browser.printPage() } }
             zoom
             sound
             grounded
@@ -258,11 +258,11 @@ struct SiteCard: View {
     /// its end. The number puts it back to the size every site starts at.
     private var zoom: some View {
         HStack(spacing: 0) {
-            Text("Zoom")
+            Text("缩放")
                 .font(MenuMetrics.font)
                 .foregroundStyle(Color(nsColor: .labelColor))
             Spacer(minLength: 24)
-            Step(symbol: "minus", help: "Zoom Out   ⌘-") { browser.zoom(by: 1 / 1.1) }
+            Step(symbol: "minus", help: "缩小   ⌘-") { browser.zoom(by: 1 / 1.1) }
             Button { browser.resetZoom() } label: {
                 Text("\(Int((tab.zoom * 100).rounded()))%")
                     .font(MenuMetrics.font)
@@ -272,8 +272,8 @@ struct SiteCard: View {
                     .contentShape(Rectangle())
             }
             .buttonStyle(.plain)
-            .help("Actual Size   ⌘0")
-            Step(symbol: "plus", help: "Zoom In   ⌘+") { browser.zoom(by: 1.1) }
+            .help("实际大小   ⌘0")
+            Step(symbol: "plus", help: "放大   ⌘+") { browser.zoom(by: 1.1) }
         }
         .padding(.leading, MenuMetrics.text)
         .padding(.trailing, MenuMetrics.inset + 4)
@@ -295,13 +295,13 @@ struct SiteCard: View {
 
         var body: some View {
             HStack(spacing: 0) {
-                Text("Play Sound by Itself")
+                Text("允许自动播放声音")
                     .font(MenuMetrics.font)
                     .foregroundStyle(Color(nsColor: .labelColor))
                     .fixedSize()
                 Spacer(minLength: 24)
                 if on != was {
-                    Text("from the next page")
+                    Text("下次加载页面时生效")
                         .font(.system(size: 11))
                         .foregroundStyle(Color(nsColor: .secondaryLabelColor))
                         .fixedSize()
@@ -329,7 +329,7 @@ struct SiteCard: View {
 
         var body: some View {
             HStack(spacing: 0) {
-                Text("Don't Float Videos Here")
+                Text("此网站禁用画中画")
                     .font(MenuMetrics.font)
                     .foregroundStyle(Color(nsColor: .labelColor))
                     .fixedSize()
@@ -365,11 +365,11 @@ struct SiteCard: View {
                 .padding(.bottom, 6)
             Separator()
             if let trust = safety.trust {
-                Row(certified == false ? "Show Certificate (Not Valid)…" : "Show Certificate…") {
+                Row(certified == false ? "显示证书（无效）…" : "显示证书…") {
                     after { SiteCard.show(trust) }
                 }
             }
-            Row("Back") { deeper = false }
+            Row("后退") { deeper = false }
         }
     }
 
@@ -396,27 +396,27 @@ struct SiteCard: View {
             // (see Dialogs.trust) gets this far untrusted.
             if certified == false {
                 return Safety(
-                    symbol: "lock.open", title: "Connection is not secure",
-                    detail: "This site's certificate isn't trusted by this Mac. Someone could be reading what you send.",
+                    symbol: "lock.open", title: "连接不安全",
+                    detail: "此 Mac 不信任该网站的证书，你发送的信息可能被他人读取。",
                     tint: Palette.unsafe, trust: trust
                 )
             }
             if tab.built?.hasOnlySecureContent == false {
                 return Safety(
-                    symbol: "lock.trianglebadge.exclamationmark", title: "Parts of this page are not secure",
-                    detail: "The page came privately, but some of what it shows was fetched over plain http, where anyone on the network could read or change it.",
+                    symbol: "lock.trianglebadge.exclamationmark", title: "此页面的部分内容不安全",
+                    detail: "页面通过加密连接加载，但部分内容使用明文 HTTP，网络上的其他人可能读取或修改这些内容。",
                     tint: Palette.unsafe, trust: trust
                 )
             }
             return Safety(
-                symbol: "lock", title: "Connection is secure",
-                detail: "Your information (for example, passwords or credit card numbers) is private when it is sent to this site.",
+                symbol: "lock", title: "连接安全",
+                detail: "你的信息（如密码或信用卡号）在发送到此网站时会受到加密保护。",
                 tint: Palette.safe, trust: trust
             )
         case "http":
             return Safety(
-                symbol: "lock.open", title: "Connection is not secure",
-                detail: "Don't enter passwords or credit card numbers here: anything sent to this site can be read on the way.",
+                symbol: "lock.open", title: "连接不安全",
+                detail: "请勿在此输入密码或信用卡号，发送到此网站的信息可能在传输途中被读取。",
                 tint: Palette.unsafe, trust: nil
             )
         default:

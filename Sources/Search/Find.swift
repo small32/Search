@@ -18,14 +18,14 @@ struct FindBar: View {
         HStack(spacing: 6) {
             ZStack(alignment: .leading) {
                 if browser.needle.isEmpty {
-                    Text("Find on page")
+                    Text("在页面中查找")
                         .foregroundStyle(Palette.ink.opacity(0.3))
                 }
                 TextField("", text: $browser.needle)
                     .textFieldStyle(.plain)
                     .foregroundStyle(Palette.ink)
-                    .accessibilityLabel("Find on page")
-                    .accessibilityHint("Type text to search this page. Press Return to find the next match.")
+                    .accessibilityLabel("在页面中查找")
+                    .accessibilityHint("输入文字搜索此页面。按回车查找下一个匹配项。")
                     .focused($focused)
                     .onSubmit { browser.look(forward: true) }
             }
@@ -41,25 +41,25 @@ struct FindBar: View {
                     .lineLimit(1)
                     .fixedSize()
                     .accessibilityLabel(status)
-                    .accessibilityIdentifier("Find result status")
+                    .accessibilityIdentifier("查找结果状态")
             }
 
             // A pane too narrow for them keeps Return and ⇧Return instead.
             if !narrow {
-                step("chevron.up", label: "Previous match", help: "Find the previous match.") {
+                step("chevron.up", label: "上一个匹配项", help: "查找上一个匹配项。") {
                     browser.look(forward: false)
                 }
-                step("chevron.down", label: "Next match", help: "Find the next match.") {
+                step("chevron.down", label: "下一个匹配项", help: "查找下一个匹配项。") {
                     browser.look(forward: true)
                 }
             }
 
             Menu {
-                Toggle("Match case", isOn: $browser.matchCase)
-                    .help("Match uppercase and lowercase letters exactly.")
-                Toggle("Whole words", isOn: $browser.wholeWords)
+                Toggle("区分大小写", isOn: $browser.matchCase)
+                    .help("精确匹配字母的大小写。")
+                Toggle("全字匹配", isOn: $browser.wholeWords)
                     .disabled(browser.findResult?.nativeFallback == true && !browser.wholeWords)
-                    .help("Match complete words. This option is unavailable for PDF pages.")
+                    .help("仅匹配完整单词。PDF 页面不支持此选项。")
             } label: {
                 Image(systemName: "ellipsis")
                     .font(.system(size: 10, weight: .semibold))
@@ -70,11 +70,11 @@ struct FindBar: View {
             .menuStyle(.borderlessButton)
             .menuIndicator(.hidden)
             .fixedSize()
-            .accessibilityLabel("Search options")
-            .accessibilityHint("Choose whether to match case or whole words.")
-            .help("Search options")
+            .accessibilityLabel("查找选项")
+            .accessibilityHint("选择是否区分大小写或匹配完整单词。")
+            .help("查找选项")
 
-            step("xmark", label: "Close Find on Page", help: "Close the find field and clear its selection.") {
+            step("xmark", label: "关闭页面查找", help: "关闭查找框并清除选中内容。") {
                 browser.closeFind()
             }
         }

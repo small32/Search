@@ -574,7 +574,7 @@ final class Tab: ObservableObject, Identifiable {
         }
         if !title.isEmpty { return title }
         if let address { return Address.pretty(address) }
-        return "New Tab"
+        return "新建标签页"
     }
 
     init(shy: Bool = false, bench: Bool = false, configuration: WKWebViewConfiguration? = nil) {
@@ -1460,7 +1460,7 @@ final class PageView: WKWebView {
         // WebKit names it for a window, but a new window's page arrives here
         // as a new tab (Browser's createWebViewWith), so it says so.
         if let item = menu.items.first(where: { $0.identifier?.rawValue == "WKMenuItemIdentifierOpenLinkInNewWindow" }) {
-            item.title = "Open Link in New Tab"
+            item.title = "在新标签页中打开链接"
         }
         if let item = menu.items.first(where: { $0.identifier?.rawValue == "WKMenuItemIdentifierSearchWeb" }),
            let name = searchName?() {
@@ -1469,7 +1469,7 @@ final class PageView: WKWebView {
             evaluateJavaScript(PageView.selected, in: nil, in: .defaultClient) { [weak self] result in
                 self?.selection = (try? result.get()) as? String ?? ""
             }
-            item.title = "Search with \(name)"
+            item.title = "使用 \(name) 搜索"
             item.target = self
             item.action = #selector(searchSelection(_:))
         }

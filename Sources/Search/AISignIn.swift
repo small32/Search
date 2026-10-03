@@ -69,17 +69,17 @@ enum AISignIn {
         let code = URLComponents(url: url, resolvingAgainstBaseURL: false)?.queryItems?.first { $0.name == "code" }?.value ?? ""
         // Sent here by openrouter.ai, and not by a page the tab wandered to.
         let from = (tab.built?.url ?? tab.pageAddress)?.host()?.lowercased()
-        guard Date().timeIntervalSince(flow.started) < 600 else { return finish(false, "The sign-in took too long — try again.", tab, browser) }
+        guard Date().timeIntervalSince(flow.started) < 600 else { return finish(false, "登录超时，请重试。", tab, browser) }
         guard from == site.host()?.lowercased(), !code.isEmpty, code.count < 1024 else {
-            return finish(false, "The sign-in didn't come back from OpenRouter.", tab, browser)
+            return finish(false, "未收到 OpenRouter 的登录回调。", tab, browser)
         }
         Task { @MainActor in
             do {
                 let key = try await AIClient.shared.exchange(code: code, verifier: flow.verifier)
                 switch AIKeys.save(key, for: .openRouter) {
                 case .kept: _ = finish(true, nil, tab, browser)
-                case .unavailable: _ = finish(false, "This copy of Search can't keep keys (it isn't the signed release).", tab, browser)
-                case .failed: _ = finish(false, "The keychain refused the key.", tab, browser)
+                case .unavailable: _ = finish(false, "此 Search 版本不是签名发行版，无法保存密钥。", tab, browser)
+                case .failed: _ = finish(false, "钥匙串拒绝保存密钥。", tab, browser)
                 }
             } catch {
                 _ = finish(false, error.localizedDescription, tab, browser)
@@ -91,7 +91,7 @@ enum AISignIn {
     @discardableResult
     private static func finish(_ kept: Bool, _ why: String?, _ tab: Tab, _ browser: Browser) -> Bool {
         if kept { browser.close(tab) }
-        browser.announce(kept ? "Signed in with OpenRouter" : (why ?? "The sign-in didn't work"))
+        browser.announce(kept ? "已登录 OpenRouter" : (why ?? "登录失败"))
         ended?(kept, why)
         return true
     }

@@ -33,8 +33,8 @@ enum When {
 
     static func day(_ date: Date) -> String {
         let calendar = Calendar.current
-        if calendar.isDateInToday(date) { return "Today" }
-        if calendar.isDateInYesterday(date) { return "Yesterday" }
+        if calendar.isDateInToday(date) { return "今天" }
+        if calendar.isDateInYesterday(date) { return "昨天" }
         return plain.string(from: date)
     }
 }
@@ -50,12 +50,12 @@ struct HistoryPanel: View {
     private var clearing: Bool { browser.recallMode == .clearing }
 
     var body: some View {
-        Plate("History", width: 600, close: { browser.recalling = false }) {
+        Plate("历史记录", width: 600, close: { browser.recalling = false }) {
             VStack(alignment: .leading, spacing: 14) {
-                Hunt(text: $browser.recallHunt, prompt: "Search everywhere you have been", focus: $hunting)
+                Hunt(text: $browser.recallHunt, prompt: "搜索浏览历史", focus: $hunting)
 
                 if traces.isEmpty {
-                    Card { Nothing(browser.recallHunt.isEmpty ? "Nothing yet." : "Nothing matches.") }
+                    Card { Nothing(browser.recallHunt.isEmpty ? "暂无记录。" : "没有匹配项。") }
                 } else {
                     // Lazy: only the lines in view are made. Two thousand of
                     // them, each with its icon, took the panel a third of a
@@ -109,11 +109,11 @@ struct HistoryPanel: View {
                 sweeps
             } else {
                 HStack {
-                    Text(traces.count == 1 ? "1 page" : "\(traces.count) pages")
+                    Text(traces.count == 1 ? "1 个页面" : "\(traces.count) 个页面")
                         .font(.system(size: 12))
                         .foregroundStyle(Palette.muted)
                     Spacer()
-                    Pill("Clear…") { withAnimation(Motion.settle) { browser.recallMode = .clearing } }
+                    Pill("清除…") { withAnimation(Motion.settle) { browser.recallMode = .clearing } }
                 }
             }
         }
@@ -130,25 +130,25 @@ struct HistoryPanel: View {
     private var sweeps: some View {
         VStack(alignment: .leading, spacing: 10) {
             Card {
-                Line("History", "Everywhere you have been") {
-                    Pill("Clear") {
+                Line("历史记录", "所有浏览记录") {
+                    Pill("清除") {
                         browser.clearHistory()
                         refresh()
                         withAnimation(Motion.settle) { browser.recallMode = .history }
                     }
                 }
                 Rule()
-                Line("Cookies and sign-ins", "Signs you out of every site") {
-                    Pill("Sign out of everything") { browser.clearSites() }
+                Line("Cookie 和登录状态", "退出所有网站的登录") {
+                    Pill("退出所有网站") { browser.clearSites() }
                 }
                 Rule()
-                Line("Cache", "Only what was fetched to draw pages") {
-                    Pill("Clear") { browser.clearCache() }
+                Line("缓存", "仅用于显示页面的缓存内容") {
+                    Pill("清除") { browser.clearCache() }
                 }
             }
             HStack {
                 Spacer()
-                Pill("Back") { withAnimation(Motion.settle) { browser.recallMode = .history } }
+                Pill("后退") { withAnimation(Motion.settle) { browser.recallMode = .history } }
             }
         }
         .transition(.opacity)
@@ -226,7 +226,7 @@ struct HistoryPanel: View {
                 }
                 Spacer(minLength: 8)
                 if hovering {
-                    Quick("Remove", tint: .red.opacity(0.75), act: forget)
+                    Quick("移除", tint: .red.opacity(0.75), act: forget)
                 } else {
                     Text(When.clock(trace.last))
                         .font(.system(size: 11.5))
@@ -257,15 +257,15 @@ struct DownloadsPanel: View {
     }
 
     var body: some View {
-        Plate("Downloads", width: 560, close: { browser.hoarding = false }) {
+        Plate("下载", width: 560, close: { browser.hoarding = false }) {
             if fetches.entries.isEmpty && loot.kept.isEmpty {
-                Card { Nothing("Nothing downloaded yet.") }
+                Card { Nothing("暂无下载。") }
             } else {
                 ScrollView(showsIndicators: false) {
                     LazyVStack(alignment: .leading, spacing: 10) {
                         if !fetches.entries.isEmpty {
                             VStack(alignment: .leading, spacing: 6) {
-                                Caption("Current downloads")
+                                Caption("当前下载")
                                 Card {
                                     ForEach(Array(fetches.entries.enumerated()), id: \.element.id) { index, entry in
                                         if index > 0 { Rule() }
@@ -283,7 +283,7 @@ struct DownloadsPanel: View {
 
                         if !loot.kept.isEmpty {
                             VStack(alignment: .leading, spacing: 6) {
-                                Caption("Completed")
+                                Caption("已完成")
                                 Card {
                                     ForEach(Array(loot.kept.enumerated()), id: \.element.id) { index, keep in
                                         if index > 0 { Rule() }
@@ -304,13 +304,13 @@ struct DownloadsPanel: View {
             }
         } foot: {
             HStack {
-                Text(loot.kept.isEmpty ? "Files land in \(browser.downloadsFolder.lastPathComponent)"
-                     : "Clearing the list leaves the files where they are")
+                Text(loot.kept.isEmpty ? "文件保存至 \(browser.downloadsFolder.lastPathComponent)"
+                     : "清除列表不会删除已下载的文件")
                     .font(.system(size: 12))
                     .foregroundStyle(Palette.muted)
                 Spacer()
                 if !loot.kept.isEmpty {
-                    Pill("Clear list") { loot.forgetAll() }
+                    Pill("清除列表") { loot.forgetAll() }
                 }
             }
         }
@@ -332,11 +332,11 @@ struct DownloadsPanel: View {
 
         private var stateLabel: String {
             switch entry.state {
-            case .downloading: return "Downloading"
-            case .pausing: return "Pausing…"
-            case .paused: return "Paused"
-            case .resuming: return "Resuming…"
-            case .failed: return "Failed"
+            case .downloading: return "正在下载"
+            case .pausing: return "正在暂停…"
+            case .paused: return "已暂停"
+            case .resuming: return "正在恢复…"
+            case .failed: return "失败"
             }
         }
 
@@ -381,7 +381,7 @@ struct DownloadsPanel: View {
                             .truncationMode(.middle)
                     }
                     if case .failed = entry.state {
-                        Text(entry.errorDescription ?? "The download failed.")
+                        Text(entry.errorDescription ?? "下载失败。")
                             .font(.system(size: 11.5))
                             .foregroundStyle(Palette.muted)
                             .fixedSize(horizontal: false, vertical: true)
@@ -400,39 +400,39 @@ struct DownloadsPanel: View {
             switch entry.state {
             case .downloading:
                 HStack(spacing: 4) {
-                    if entry.canPause { Quick("Pause", act: pause) }
-                    Quick("Cancel", act: cancel)
+                    if entry.canPause { Quick("暂停", act: pause) }
+                    Quick("取消", act: cancel)
                 }
             case .pausing:
                 HStack(spacing: 4) {
-                    Quick("Pausing…", act: {})
+                    Quick("正在暂停…", act: {})
                         .disabled(true)
-                    Quick("Cancel", act: cancel)
+                    Quick("取消", act: cancel)
                 }
             case .paused:
                 HStack(spacing: 4) {
                     if entry.canResume {
-                        Quick("Resume", act: resume)
+                        Quick("继续", act: resume)
                     } else if entry.canRetry {
-                        Quick("Retry", act: retry)
-                            .help("Start the download again from the beginning")
+                        Quick("重试", act: retry)
+                            .help("从头重新下载")
                     }
-                    Quick("Remove", act: cancel)
+                    Quick("移除", act: cancel)
                 }
             case .resuming:
                 HStack(spacing: 4) {
-                    Quick("Resuming…", act: {})
+                    Quick("正在恢复…", act: {})
                         .disabled(true)
-                    Quick("Cancel", act: cancel)
+                    Quick("取消", act: cancel)
                 }
             case .failed:
                 HStack(spacing: 4) {
-                    if entry.canResume { Quick("Resume", act: resume) }
+                    if entry.canResume { Quick("继续", act: resume) }
                     if entry.canRetry {
-                        Quick("Retry", act: retry)
-                            .help("Start the download again from the beginning")
+                        Quick("重试", act: retry)
+                            .help("从头重新下载")
                     }
-                    Quick("Remove", act: cancel)
+                    Quick("移除", act: cancel)
                 }
             }
         }
@@ -465,8 +465,8 @@ struct DownloadsPanel: View {
                 }
                 Spacer(minLength: 8)
                 if hovering {
-                    if keep.stillThere { Quick("Show in Finder", act: reveal) }
-                    Quick("Remove", tint: .red.opacity(0.75), act: forget)
+                    if keep.stillThere { Quick("在访达中显示", act: reveal) }
+                    Quick("移除", tint: .red.opacity(0.75), act: forget)
                 }
             }
             .padding(.horizontal, 14)

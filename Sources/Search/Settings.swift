@@ -21,15 +21,15 @@ struct SettingsPanel: View {
         var id: String { rawValue }
         var title: String {
             switch self {
-            case .general: return "General"
-            case .tabs: return "Tabs"
-            case .shortcuts: return "Shortcuts"
-            case .extensions: return "Extensions"
-            case .passwords: return "Passwords"
-            case .downloads: return "Downloads"
-            case .privacy: return "Privacy"
+            case .general: return "通用"
+            case .tabs: return "标签页"
+            case .shortcuts: return "快捷键"
+            case .extensions: return "扩展"
+            case .passwords: return "密码"
+            case .downloads: return "下载"
+            case .privacy: return "隐私"
             case .ai: return "AI"
-            case .about: return "About"
+            case .about: return "关于"
             }
         }
         var icon: String {
@@ -72,7 +72,7 @@ struct SettingsPanel: View {
 
     private var pages: some View {
         VStack(alignment: .leading, spacing: 2) {
-            Text("Settings")
+            Text("设置")
                 .font(.system(size: 13, weight: .semibold))
                 .foregroundStyle(Palette.ink)
                 .padding(.horizontal, 10)
@@ -130,7 +130,7 @@ struct SettingsPanel: View {
                     .font(.system(size: 17, weight: .semibold))
                     .foregroundStyle(Palette.ink)
                 Spacer()
-                Door(icon: "xmark", help: "Done   esc") { browser.tuning = false }
+                Door(icon: "xmark", help: "完成   esc") { browser.tuning = false }
             }
             .padding(.bottom, 16)
 
@@ -164,8 +164,8 @@ struct SettingsPanel: View {
     private var general: some View {
         Card {
             Line(
-                "Open links from other apps",
-                isDefault ? "Search is the default browser on this Mac" : "Mail, Slack and the rest still send links elsewhere"
+                "打开其他应用中的链接",
+                isDefault ? "Search 已是此 Mac 的默认浏览器" : "邮件、Slack 等应用的链接仍在其他浏览器中打开"
             ) {
                 if isDefault {
                     Image(systemName: "checkmark")
@@ -173,10 +173,10 @@ struct SettingsPanel: View {
                         .foregroundStyle(Palette.ink)
                         .frame(width: 24)
                 } else {
-                    Pill("Make default", filled: true) {
+                    Pill("设为默认", filled: true) {
                         Links.becomeDefault { worked in
                             isDefault = Links.isDefault
-                            browser.announce(worked && isDefault ? "Links now open here" : "macOS didn't change it")
+                            browser.announce(worked && isDefault ? "链接现在会在 Search 中打开" : "macOS 未更改默认浏览器")
                         }
                     }
                 }
@@ -184,14 +184,14 @@ struct SettingsPanel: View {
             Rule()
             // Coming from another browser, now or any time later: the same
             // sheet as File › Bring Things Over… and the Welcome's.
-            Line("Bring things over", "Bookmarks, history, passwords and extensions from another browser on this Mac, or from a file it exported") {
-                Pill("Bring Things Over…") {
+            Line("导入浏览器数据", "从此 Mac 上的其他浏览器或其导出的文件中导入书签、历史记录、密码和扩展") {
+                Pill("导入浏览器数据…") {
                     browser.tuning = false
                     browser.bringingIn = ""
                 }
             }
             Rule()
-            Line("Search with", searchDetail) {
+            Line("搜索引擎", searchDetail) {
                 Picker("", selection: $prefs.engine) {
                     ForEach(Engine.allCases) { engine in
                         Text(engine.title).tag(engine)
@@ -219,13 +219,13 @@ struct SettingsPanel: View {
                 .padding(.bottom, 11)
             }
             Rule()
-            Line("Site shortcuts", keywordDetail) {
+            Line("网站搜索快捷词", keywordDetail) {
                 if draft == nil {
-                    Pill("Add") { draft = Keyword() }
+                    Pill("添加") { draft = Keyword() }
                 } else {
                     HStack(spacing: 6) {
-                        Pill("Cancel") { draft = nil }
-                        Pill("Save", filled: true) { saveDraft() }
+                        Pill("取消") { draft = nil }
+                        Pill("保存", filled: true) { saveDraft() }
                             .disabled(draftProblem != nil)
                             .opacity(draftProblem == nil ? 1 : 0.4)
                     }
@@ -281,64 +281,64 @@ struct SettingsPanel: View {
                 .padding(.bottom, 6)
             }
             Rule()
-            Line("Appearance", "Light, dark, or whatever the Mac is doing — pages follow it too") {
+            Line("外观", "选择浅色、深色或跟随系统，网页也会采用相同外观") {
                 Segmented(options: Look.allCases.map { ($0, $0.title) }, selection: $prefs.look)
             }
             Rule()
-            Line("Page zoom", "Where every site starts. ⌘+ and ⌘− are still remembered for each site.") {
+            Line("页面缩放", "网站的默认缩放比例。通过 ⌘+ 和 ⌘− 设置的比例仍会按网站单独保存。") {
                 // The number itself takes it back to 100%.
                 Steps(stops: Preferences.zooms, value: $prefs.pageZoom, home: 1) { "\(Int(($0 * 100).rounded()))%" }
             }
             Rule()
-            Line("Correct spelling as you type", "macOS's autocorrect inside pages — the one that capitalises for you") {
+            Line("输入时自动纠正拼写", "在网页中使用 macOS 的自动纠正功能，包括自动大写") {
                 Switch(on: $prefs.autocorrect)
             }
             Rule()
-            Line("Peek at a link with a shift-click", "Its page opens in a panel over the one you're reading. Escape puts it away; the other button keeps it as a tab") {
+            Line("按住 Shift 单击预览链接", "在当前页面上方打开预览面板。按 Esc 关闭，也可将预览保留为标签页") {
                 Switch(on: $prefs.peeksLinks)
             }
             Rule()
-            Line("Open links from other apps in a small window", "To read and close, or keep with Open in Search (⌘O)") {
+            Line("在小窗口中打开其他应用的链接", "阅读后关闭，或选择“在 Search 中打开”（⌘O）保留页面") {
                 Switch(on: $prefs.littleLinks)
             }
             Rule()
-            Line("Address bar commands", "A word like \"settings\" or \"new tab\", typed alone in the address field, goes there instead of searching for it") {
+            Line("地址栏命令", "在地址栏单独输入“设置”或“新建标签页”等命令即可执行") {
                 Switch(on: $prefs.commandBar)
             }
             Rule()
-            Line("Show where links go", "Point at a link and its address shows at the bottom of the page") {
+            Line("显示链接地址", "将指针移到链接上时，在页面底部显示目标地址") {
                 Switch(on: $prefs.showsLinks)
             }
             Rule()
-            Line("Scroll with the middle button", "Click the wheel on a page, then move the mouse up or down to scroll, as on Windows. Click again to stop") {
+            Line("使用鼠标中键滚动", "在页面中单击滚轮，再上下移动鼠标即可滚动。再次单击停止") {
                 Switch(on: $prefs.autoScroll)
             }
             Rule()
-            Line("Pages at 120 Hz", "Animations and scrolling in pages at up to 120 frames a second on a screen that can, instead of 60 as in Safari. Uses more battery. Open tabs follow when reloaded") {
+            Line("以 120 Hz 刷新页面", "在支持的屏幕上，网页动画和滚动最高可达每秒 120 帧，会增加耗电。已打开的标签页重新载入后生效") {
                 Switch(on: $prefs.fastPages)
             }
             Rule()
-            Line("Hold a swipe to pick from history", "Swipe back or forward and keep your fingers down: the pages that way appear, and moving up or down picks one to go to") {
+            Line("滑动后按住以选择历史页面", "向后或向前滑动后保持手指按住，显示该方向的历史页面；上下移动选择要打开的页面") {
                 Switch(on: $prefs.holdsHistory)
             }
             Rule()
-            Line("Flick the floating video to a corner", "Two fingers on it send it to the corner or edge they point at, instead of pushing it along; a strong swipe at the side of the screen it is against tucks it in there, a sliver left to bring it back by. Dragging still puts it anywhere") {
+            Line("滑动画中画窗口使其贴边", "在画中画窗口上用双指滑动，可将其移至对应的屏幕边缘或角落。向贴近的边缘快速滑动可收起窗口，点击露出的边缘可恢复。仍可自由拖动") {
                 Switch(on: $prefs.floatFlicks)
             }
             Rule()
-            Line("Videos wait for a click", "Videos don't start by themselves, even without sound; they play when you press play. Tabs already open follow once closed and opened again, or after they've slept") {
+            Line("点击后才播放视频", "视频不会自动播放，即使已静音。点击播放才开始。已打开的标签页关闭重开或休眠后生效") {
                 Switch(on: $prefs.waitsForPlay)
             }
             Rule()
-            Line("Float the video when you switch tabs", "A video playing on YouTube and the like comes out into its floating window when you go to another tab, and back when you return. ⇧⌘P still floats one by hand") {
+            Line("切换标签页时自动开启画中画", "切换标签页时，YouTube 等网站正在播放的视频会进入画中画；返回时恢复。也可按 ⇧⌘P 手动开启") {
                 Switch(on: $prefs.floatsOnLeave)
             }
             Rule()
-            Line("Float the video when you switch apps", "A video playing on the site you're on comes out into its floating window as another app comes to the front, and goes back into its tab when you return") {
+            Line("切换应用时自动开启画中画", "切换到其他应用时，当前网站正在播放的视频会进入画中画；返回时恢复到标签页") {
                 Switch(on: $prefs.floatsAway)
             }
             Rule()
-            Line("Let a script drive Search", "A local socket for testing. Its tabs open beside yours with a flask on them and never take over — see ./bench") {
+            Line("允许脚本控制 Search", "启用用于测试的本地套接字。脚本标签页带有烧瓶图标，与普通标签页并列显示。详见 ./bench") {
                 Switch(on: $prefs.bench)
             }
         }
@@ -353,12 +353,12 @@ struct SettingsPanel: View {
 
     private var keywordDetail: String {
         guard let draft else {
-            return "A word before your search goes straight to that site, whatever engine you've picked — \"yt cats\" to YouTube"
+            return "在搜索词前加上快捷词即可搜索指定网站，例如“yt cats”会在 YouTube 搜索"
         }
         if draft.keyword.isEmpty, draft.template.isEmpty {
-            return "A word, then the site's search address with %s where the words go"
+            return "输入快捷词及网站搜索地址，用 %s 表示搜索词的位置"
         }
-        return draftProblem ?? "\(draft.keyword.trimmingCharacters(in: .whitespacesAndNewlines)) will search \(draft.name)"
+        return draftProblem ?? "\(draft.keyword.trimmingCharacters(in: .whitespacesAndNewlines)) 将在 \(draft.name) 搜索"
     }
 
     private func saveDraft() {
@@ -371,11 +371,11 @@ struct SettingsPanel: View {
     }
 
     private var searchDetail: String {
-        guard prefs.engine == .custom else { return "Where words that aren't an address go" }
+        guard prefs.engine == .custom else { return "非网址的内容会通过此引擎搜索" }
         guard Engine.accepts(prefs.customEngine) else {
-            return "An http or https address with %s where the words go. Until then, Google"
+            return "请输入含 %s 的 HTTP 或 HTTPS 搜索地址。设置有效前使用 Google"
         }
-        return "Words go to \(prefs.engine.name(custom: prefs.customEngine))"
+        return "搜索词将发送至 \(prefs.engine.name(custom: prefs.customEngine))"
     }
 
     // MARK: - tabs
@@ -385,7 +385,7 @@ struct SettingsPanel: View {
     /// move, and the line isn't shown.
     private var toolbar: some View {
         Card {
-            Line("Back, forward and reload on the left", "Beside the window's buttons, before the tabs") {
+            Line("在左侧显示后退、前进和重新载入按钮", "位于窗口按钮旁、标签页之前") {
                 Switch(on: $prefs.navigationLeft)
             }
         }
@@ -393,7 +393,7 @@ struct SettingsPanel: View {
 
     private var tabs: some View {
         Card {
-            Line("Tabs in a sidebar", "Down the \(prefs.sidePosition.rawValue) instead of across the top. Pull its edge to make it wider; double-click the edge to reset.") {
+            Line("在侧边栏显示标签页", "在\(prefs.sidePosition.title)竖排显示标签页。拖动边缘调整宽度，双击边缘恢复默认。") {
                 Switch(on: Binding(
                     get: { prefs.sidebar },
                     set: { on in withAnimation(Motion.glide) { prefs.sidebar = on } }
@@ -401,58 +401,58 @@ struct SettingsPanel: View {
             }
             if prefs.sidebar {
                 Rule()
-                Line("Sidebar position", "Tabs down the \(prefs.sidePosition.rawValue) edge of the window") {
+                Line("侧边栏位置", "标签页显示在窗口\(prefs.sidePosition.title)") {
                     Segmented(options: SidebarPosition.allCases.map { ($0, $0.title) }, selection: $prefs.sidePosition)
                 }
                 Rule()
-                Line("Hide the sidebar until the pointer reaches the edge", "The page takes the whole window; push against its \(prefs.sidePosition.rawValue) edge for the tabs. ⌘S keeps them out.") {
+                Line("指针移至边缘时才显示侧边栏", "页面占满窗口；将指针移至\(prefs.sidePosition.title)边缘显示标签页。按 ⌘S 保持侧边栏展开。") {
                     Switch(on: $prefs.sideHides)
                 }
             }
             Rule()
-            Line("Tabs show", "Beside the title, and on a pinned square") {
+            Line("标签页显示", "用于标题旁的图标和固定标签页方块") {
                 Segmented(options: Glyph.allCases.map { ($0, $0.title) }, selection: $prefs.glyph)
             }
             Rule()
-            Line("Show the bookmarks bar", "Your bookmarks in a row above the page, folders opening as menus. It folds away with the tabs") {
+            Line("显示书签栏", "在页面上方显示书签，文件夹以菜单展开。书签栏会随标签栏一起收起") {
                 Switch(on: $prefs.bookmarksBar)
             }
             Rule()
-            Line("Show how far you've read", "The tab you're on fills with grey as you scroll down the page") {
+            Line("显示阅读进度", "向下滚动时，当前标签页逐渐填充灰色以显示进度") {
                 Switch(on: $prefs.showsReading)
             }
             Rule()
-            Line("Sleep tabs you aren't using", "After half an hour away they come back where you left them. Pinned tabs, sound, calls and anything typed stay awake.") {
+            Line("休眠闲置标签页", "闲置半小时后休眠，再次打开时恢复原位置。固定标签页、音频、通话和有输入内容的页面保持活跃。") {
                 Switch(on: $prefs.sleepsTabs)
             }
             Rule()
-            Line("Load background tabs when you go to them", "A link opened behind the page, with ⌘-click or the middle button, or a batch of links from another app, waits until you go to its tab. ⇧⌘-click still takes you there at once.") {
+            Line("切换到后台标签页时才加载", "通过 ⌘ 单击、鼠标中键或其他应用批量打开的后台链接，会等到切换到对应标签页时才加载。⇧⌘ 单击仍会立即打开。") {
                 Switch(on: $prefs.lazyTabs)
             }
             Rule()
-            Line("Search a site from the address field", "Type the start of a site's name, like red or yout, then Tab, and what you type next searches that site. Sites you visit that offer a search join the list.") {
+            Line("在地址栏搜索网站", "输入网站名称的开头，如 red 或 yout，再按 Tab，即可在该网站搜索。访问过且支持搜索的网站会加入列表。") {
                 Switch(on: $prefs.searchesSites)
             }
             Rule()
-            Line("Start with a fresh window", "Each time Search opens, your pinned tabs are there and last time's other tabs aren't.") {
+            Line("启动时打开全新窗口", "每次启动 Search 时保留固定标签页，不恢复上次的其他标签页。") {
                 Switch(on: $prefs.startsFresh)
             }
             Rule()
-            Line("Spaces", "Separate sets of tabs, signed in where the others are or starting afresh, switched with ⌃1–⌃9, two fingers sideways over the column, or the space's icon. Mission Control's own ⌃1–⌃9, if you turned them on, take those keys first.") {
+            Line("空间", "将标签页分为不同空间，可共享登录状态或独立登录。用 ⌃1–⌃9、在侧边栏双指横向滑动或点击空间图标切换。若启用了调度中心的同名快捷键，系统会优先处理。") {
                 Switch(on: $prefs.usesSpaces)
             }
             Rule()
-            Line("Tab groups", "Named sections in the sidebar. Right-click a tab to start a group; click its heading to hide or show its tabs.") {
+            Line("标签页分组", "在侧边栏中按名称分组。右键点击标签页创建分组，点击组标题展开或收起。") {
                 Switch(on: $prefs.usesTabGroups)
             }
             if prefs.sidebar {
                 Rule()
-                Line("Pinned rows", "As in Arc: pins as squares for the sites you live in, pins as rows under them for pages you keep, and a line over the rest with Clear. Right-click a tab to pin it as a row.") {
+                Line("以列表显示固定标签页", "类似 Arc：常用网站固定为方块，保留页面固定为下方列表，其余标签页上方显示“清除”。右键点击标签页可将其固定为列表项。") {
                     Switch(on: $prefs.listsPins)
                 }
             }
             Rule()
-            Line("Split View", "Show two tabs side by side. Drag a tab onto a page to pair them.") {
+            Line("分屏浏览", "并排显示两个标签页。将标签页拖到页面上即可组合。") {
                 Switch(on: $prefs.splitView)
             }
         }
@@ -463,52 +463,52 @@ struct SettingsPanel: View {
     /// Says so when a password manager extension has taken the saving over.
     private var savingDetail: String {
         if #available(macOS 15.4, *), let name = Extensions.shared.passwordSavingTakenBy {
-            return "\(name) does the saving — it asked Search not to offer"
+            return "\(name) 正在管理密码，已要求 Search 停止询问保存"
         }
-        return "Asked once per site, never again for a site you refuse"
+        return "每个网站询问一次；拒绝后不再询问"
     }
 
     private var passwords: some View {
         VStack(alignment: .leading, spacing: 18) {
             Card {
-                Line("Your passwords", "In the macOS keychain, shown with Touch ID") {
-                    Pill("Open…") {
+                Line("已保存的密码", "保存在 macOS 钥匙串中，通过触控 ID 查看") {
+                    Pill("打开…") {
                         browser.tuning = false
                         browser.managing = true
                     }
                 }
                 Rule()
-                Line("Offer to save passwords", savingDetail) {
+                Line("询问是否保存密码", savingDetail) {
                     Switch(on: $prefs.savesPasswords)
                 }
                 Rule()
-                Line("Fill in sign-ins", "Click a sign-in box and the accounts kept for the site hang from it") {
+                Line("自动填充登录信息", "点击登录输入框时，显示此网站已保存的账户") {
                     Switch(on: $prefs.fillsPasswords)
                 }
                 Rule()
                 Line(
-                    "Offer passkeys",
+                    "启用通行密钥",
                     !prefs.passkeysPossible
-                        ? "Needs an Apple entitlement this build doesn't have — off keeps sites to the password"
+                        ? "当前构建缺少 Apple 所需的授权；关闭后网站仍使用密码登录"
                         : Passkeys.access == .denied
-                        ? "macOS was told no — System Settings › Privacy & Security › Passkeys Access for Web Browsers"
-                        : "Touch ID or an iCloud passkey, on sites that offer one"
+                        ? "macOS 已拒绝访问；可在“系统设置 › 隐私与安全性 › 网页浏览器的通行密钥访问”中更改"
+                        : "在支持的网站上使用触控 ID 或 iCloud 通行密钥"
                 ) {
                     Switch(on: $prefs.passkeys)
                 }
                 if !Vault.never.isEmpty {
                     Rule()
-                    Line("Sites never asked", "\(Vault.never.count) sites told to stop offering") {
-                        Pill("Forget") {
+                    Line("不再询问的网站", "已在 \(Vault.never.count) 个网站上停止询问") {
+                        Pill("清除") {
                             Vault.never = []
-                            browser.announce("Every site can ask again")
+                            browser.announce("所有网站均可再次询问")
                         }
                     }
                 }
             }
             Card {
-                Line("Bring yours in", "From another browser on this Mac — nothing leaves it") {
-                    Pill("Import…") {
+                Line("导入密码", "从此 Mac 上的其他浏览器导入，数据不会离开本机") {
+                    Pill("导入…") {
                         browser.tuning = false
                         browser.bringingIn = ""
                     }
@@ -521,15 +521,15 @@ struct SettingsPanel: View {
 
     private var downloads: some View {
         Card {
-            Line("Save to", prefs.downloads.path.replacingOccurrences(of: NSHomeDirectory(), with: "~")) {
-                Pill("Change…") { chooseFolder() }
+            Line("保存位置", prefs.downloads.path.replacingOccurrences(of: NSHomeDirectory(), with: "~")) {
+                Pill("更改…") { chooseFolder() }
             }
             Rule()
-            Line("Ask where to save each file") {
+            Line("每次下载时询问保存位置") {
                 Switch(on: $prefs.asksWhereToSave)
             }
             Rule()
-            Line("Always show the downloads button", "Beside the other buttons, even with nothing downloading. Off, it shows only while a file comes in") {
+            Line("始终显示下载按钮", "没有正在下载的文件时也显示下载按钮。关闭后仅在下载过程中显示") {
                 Switch(on: $prefs.alwaysShowsDownloads)
             }
         }
@@ -540,18 +540,18 @@ struct SettingsPanel: View {
     private var privacy: some View {
         VStack(alignment: .leading, spacing: 18) {
             Card {
-                Line("Block ads and trackers", shield.trouble ?? "Third parties whose only job is to watch") {
+                Line("拦截广告和跟踪器", shield.trouble ?? "拦截用于跟踪浏览行为的第三方内容") {
                     Switch(on: $prefs.shielded)
                 }
                 if let trouble = shield.trouble {
                     Rule()
-                    Line(trouble, "Nothing is being blocked until this clears — try again, or restart Search") {
-                        Pill("Try again") { shield.compile() }
+                    Line(trouble, "问题解决前不会拦截任何内容。请重试或重新启动 Search") {
+                        Pill("重试") { shield.compile() }
                     }
                 }
                 if let host = browser.hereHost, prefs.shielded, shield.trouble == nil {
                     Rule()
-                    Line("Block on \(host)", "Turn off here if the site breaks — the page reloads") {
+                    Line("在 \(host) 上拦截", "若网站异常，可在此关闭拦截；页面会重新载入") {
                         Switch(on: Binding(
                             get: { !Shield.shared.isPaused(on: host) },
                             set: { on in
@@ -562,30 +562,30 @@ struct SettingsPanel: View {
                     }
                 }
                 Rule()
-                Line("Prevent cross-site tracking", "As in Safari. Off, sites you rarely open keep their sign-ins, and trackers inside other sites can follow you across them again, as in Chrome. Private tabs keep it on") {
+                Line("阻止跨网站跟踪", "与 Safari 类似。关闭后，较少访问的网站会保留登录状态，第三方跟踪器也能跨网站跟踪。无痕标签页始终开启此功能") {
                     Switch(on: Binding(get: { !prefs.keepsSignIns }, set: { prefs.keepsSignIns = !$0 }))
                 }
                 Rule()
-                Line("Camera, microphone, location and notifications", "What each site was allowed or refused, and the sites whose videos don't float") {
-                    Pill("Forget choices") { browser.forgetCaptureChoices() }
+                Line("摄像头、麦克风、位置和通知", "各网站的允许或拒绝记录，以及禁用画中画的网站") {
+                    Pill("清除权限记录") { browser.forgetCaptureChoices() }
                 }
                 Rule()
-                Line("Let sites ask to send notifications", "A site asks on a card over its page, and only one you allow reaches your Mac's notifications. Private tabs are never asked") {
+                Line("允许网站请求发送通知", "网站会在页面上方请求权限，只有获准的网站才能发送 Mac 通知。无痕标签页不会询问") {
                     Switch(on: $prefs.siteNotifications)
                 }
                 NotificationSites()
             }
             Card {
-                Line("History", "Every address you have been to") {
-                    Pill("Clear") { browser.clearHistory() }
+                Line("历史记录", "访问过的所有地址") {
+                    Pill("清除") { browser.clearHistory() }
                 }
                 Rule()
-                Line("Cookies and sign-ins", "Signs you out of every site") {
-                    Pill("Sign out of everything") { browser.clearSites() }
+                Line("Cookie 和登录状态", "退出所有网站的登录") {
+                    Pill("退出所有网站") { browser.clearSites() }
                 }
                 Rule()
-                Line("Cache", "Only what was fetched to draw pages") {
-                    Pill("Clear") { browser.clearCache() }
+                Line("缓存", "仅用于显示页面的缓存内容") {
+                    Pill("清除") { browser.clearCache() }
                 }
             }
         }
@@ -604,7 +604,7 @@ struct SettingsPanel: View {
                     Text("Search")
                         .font(.system(size: 15, weight: .semibold))
                         .foregroundStyle(Palette.ink)
-                    Text("by Office Commun · version \(Updater.version)")
+                    Text("Office Commun 出品 · 版本 \(Updater.version)")
                         .font(.system(size: 12))
                         .foregroundStyle(Palette.muted)
                 }
@@ -614,43 +614,43 @@ struct SettingsPanel: View {
             Card {
                 Line(versionTitle, versionDetail) { versionControl }
                 Rule()
-                Line("Install updates on its own", "Off, Search still looks every hour and tells you, and installs only when you press Install") {
+                Line("自动安装更新", "关闭后，Search 仍会每小时检查并通知更新，点击“安装”后才会安装") {
                     Switch(on: $prefs.installsUpdates)
                 }
                 Rule()
-                Line("Found something wrong?", "Opens a draft with the version already in it") {
-                    Pill("Send Feedback") { Links.writeFeedback() }
+                Line("发现问题？", "打开已填写版本信息的反馈草稿") {
+                    Pill("发送反馈") { Links.writeFeedback() }
                 }
                 Rule()
-                Line("What's new", "Every version's notes, newest first") {
-                    Pill("What's New…") { browser.notesShowing = true }
+                Line("更新内容", "各版本更新说明，最新版本在前") {
+                    Pill("更新内容…") { browser.notesShowing = true }
                 }
             }
 
             Card {
-                Shortcut("⌘L", "Address")
+                Shortcut("⌘L", "地址栏")
                 Rule()
-                Shortcut("⌘K", "Switch tab")
+                Shortcut("⌘K", "切换标签页")
                 Rule()
-                Shortcut("⌘T  ⌘W  ⇧⌘T", "New, close, reopen tab")
+                Shortcut("⌘T  ⌘W  ⇧⌘T", "新建、关闭、重新打开标签页")
                 Rule()
-                Shortcut("⇧⌘V", "Paste and go")
+                Shortcut("⇧⌘V", "粘贴并前往")
                 Rule()
-                Shortcut("⇧⌘C", "Copy address")
+                Shortcut("⇧⌘C", "复制地址")
                 Rule()
-                Shortcut("⌃⇥  ⌘1–9", "Next tab, a tab by its place")
+                Shortcut("⌃⇥  ⌘1–9", "切换到下一个标签页，或按位置切换")
                 Rule()
-                Shortcut("⇧⌘S", "Tabs in a sidebar")
+                Shortcut("⇧⌘S", "在侧边栏显示标签页")
                 Rule()
-                Shortcut("⌘S", "Fold the sidebar away")
+                Shortcut("⌘S", "收起侧边栏")
                 Rule()
-                Shortcut("⇧⌘R", "Reading mode")
+                Shortcut("⇧⌘R", "阅读模式")
                 Rule()
-                Shortcut("⇧⌘H", "Hide something on this site")
+                Shortcut("⇧⌘H", "隐藏网站元素")
                 Rule()
-                Shortcut("⇧⌘P", "Float the video")
+                Shortcut("⇧⌘P", "画中画")
                 Rule()
-                Shortcut("⇧⌘⌫", "Clear browsing data")
+                Shortcut("⇧⌘⌫", "清除浏览数据")
             }
         }
     }
@@ -659,26 +659,26 @@ struct SettingsPanel: View {
     /// in place; with none, it is simply this one.
     private var versionTitle: String {
         switch updater.stage {
-        case .none: return "Updates"
-        case .fetching(let next): return "Search \(next.version) is downloading…"
-        case .ready(let next): return "Search \(next.version) is ready"
-        case .offered(let next), .waiting(let next): return "Search \(next.version) is out"
+        case .none: return "更新"
+        case .fetching(let next): return "正在下载 Search \(next.version)…"
+        case .ready(let next): return "Search \(next.version) 已准备就绪"
+        case .offered(let next), .waiting(let next): return "Search \(next.version) 已发布"
         }
     }
 
     private var versionDetail: String {
         switch updater.stage {
         case .none:
-            return updater.lastChecked.map { "Checked \($0.formatted(.relative(presentation: .named))) — every hour on its own" }
-                ?? "Checked every hour on its own"
+            return updater.lastChecked.map { "检查时间：\($0.formatted(.relative(presentation: .named)))；每小时自动检查" }
+                ?? "每小时自动检查"
         case .fetching(let next):
-            return next.notes ?? "Quietly, in the background — nothing you have set is touched"
+            return WhatsNew.notes.first(where: { $0.version == next.version })?.headline ?? "在后台下载，不会更改已有设置"
         case .ready(let next):
-            return next.notes ?? "It's there the next time you open Search"
+            return WhatsNew.notes.first(where: { $0.version == next.version })?.headline ?? "下次启动 Search 时生效"
         case .offered(let next):
-            return next.notes ?? "Open the disk image, the same as the first time"
+            return WhatsNew.notes.first(where: { $0.version == next.version })?.headline ?? "打开磁盘映像，按首次安装的方式安装"
         case .waiting(let next):
-            return next.notes ?? "Checked and put in place when you press Install"
+            return WhatsNew.notes.first(where: { $0.version == next.version })?.headline ?? "点击“安装”后校验并安装"
         }
     }
 
@@ -686,21 +686,21 @@ struct SettingsPanel: View {
     private var versionControl: some View {
         switch updater.stage {
         case .none:
-            Pill(updater.checking ? "Checking…" : "Check now") {
+            Pill(updater.checking ? "正在检查…" : "立即检查") {
                 updater.check { found in
-                    if found == nil { browser.announce("This is the latest one") }
+                    if found == nil { browser.announce("已是最新版本") }
                 }
             }
             .disabled(updater.checking)
         case .fetching:
             Ring(size: 12)
         case .ready:
-            Pill("Relaunch now", filled: true) { updater.relaunch() }
+            Pill("立即重新启动", filled: true) { updater.relaunch() }
         case .offered:
-            Pill(updater.fetchingDisk ? "Downloading…" : "Download", filled: true) { updater.openDisk() }
+            Pill(updater.fetchingDisk ? "正在下载…" : "下载", filled: true) { updater.openDisk() }
                 .disabled(updater.fetchingDisk)
         case .waiting:
-            Pill("Install", filled: true) { updater.install() }
+            Pill("安装", filled: true) { updater.install() }
         }
     }
 
@@ -712,7 +712,7 @@ struct SettingsPanel: View {
         panel.canChooseFiles = false
         panel.canCreateDirectories = true
         panel.directoryURL = prefs.downloads
-        panel.prompt = "Use this folder"
+        panel.prompt = "使用此文件夹"
         guard panel.runModal() == .OK, let url = panel.url else { return }
         prefs.downloads = url
     }
@@ -828,7 +828,7 @@ struct Steps: View {
                     .contentShape(Rectangle())
             }
             .buttonStyle(.plain)
-            .help("Back to \(label(home))")
+            .help("恢复为 \(label(home))")
             Step(icon: "plus", to: above) { value = $0 }
         }
         .padding(.horizontal, 2)
@@ -904,8 +904,8 @@ private struct NotificationSites: View {
         if !sites.isEmpty {
             ForEach(sites, id: \.self) { site in
                 Rule()
-                Line(URL(string: site).map(SiteCard.site) ?? site, "Can send notifications") {
-                    Pill("Remove") { SiteNotifications.forget(site) }
+                Line(URL(string: site).map(SiteCard.site) ?? site, "允许发送通知") {
+                    Pill("移除") { SiteNotifications.forget(site) }
                 }
             }
         }
