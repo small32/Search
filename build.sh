@@ -93,31 +93,20 @@ if [ "$CONFIG" = "release" ]; then
   strip -x "$APP/Contents/MacOS/$NAME"
 fi
 
-# The icon, drawn fresh each time — it is thirty lines of Swift, not an asset
-# to keep in step with anything.
+# Build Finder/Dock icons from the supplied artwork shared with the app UI.
 ICONSET="build/AppIcon.iconset"
-ICONDOC="build/AppIcon.icon"
+ICONDOC="build/AppIcon.xcassets"
 rm -rf "$ICONSET" "$ICONDOC"
 swift Icon/icon.swift "$ICONSET" "$ICONDOC" > /dev/null
 iconutil -c icns "$ICONSET" -o "$APP/Contents/Resources/AppIcon.icns"
 rm -rf "$ICONSET"
-# macOS 26's Dark, Clear and Tinted Dock styles read the icon from an asset
-# catalog compiled from the Icon Composer document; without one the Dock
-# darkens the flat image and the mark goes black on black (#337). actool
-# comes with Xcode 26 — with anything older, or only the command-line tools,
-# the app keeps the .icns alone, as before. Only Assets.car is kept, not
-# actool's own .icns: the one above goes on being the disk image's icon and
-# the fallback. (macOS 14 and 15 show the flat pictures actool puts in
-# Assets.car, drawn from the same document: the same mark, to within a
-# pixel, on a plate with Apple's own corners.) --optimization space keeps
-# those pictures zipped rather than lzfse'd: 666 KB of catalog instead of
-# 800, every style still in it.
+# Xcode can also compile the raster asset catalog. The .icns remains the
+# fallback for machines with only Command Line Tools and for disk images.
 ICONNAME=""
 ICONCAR="build/AppIcon.car"
 rm -rf "$ICONCAR"
 mkdir -p "$ICONCAR"
-# Full paths: actool hands the document to a helper that runs elsewhere, and
-# with "build/…" it finds nothing ("Icon export exited with status 255").
+# Use an absolute path because actool runs helpers outside the checkout.
 if xcrun actool "$PWD/$ICONDOC" --compile "$PWD/$ICONCAR" --platform macosx \
      --minimum-deployment-target "$MINIMUM" --app-icon AppIcon --optimization space \
      --output-partial-info-plist "$PWD/$ICONCAR/partial.plist" > /dev/null 2>&1 \
@@ -125,7 +114,7 @@ if xcrun actool "$PWD/$ICONDOC" --compile "$PWD/$ICONCAR" --platform macosx \
   cp "$ICONCAR/Assets.car" "$APP/Contents/Resources/Assets.car"
   ICONNAME="<key>CFBundleIconName</key><string>AppIcon</string>"
 else
-  echo "note: actool from Xcode 26 didn't compile the icon — no Dark or Tinted style this time" >&2
+  echo "note: actool did not compile the icon catalog — using AppIcon.icns" >&2
 fi
 rm -rf "$ICONCAR" "$ICONDOC"
 

@@ -654,10 +654,8 @@ struct SettingsPanel: View {
     private var about: some View {
         VStack(alignment: .leading, spacing: 18) {
             HStack(spacing: 14) {
-                Logomark()
-                    .fill(Palette.ink, style: FillStyle(eoFill: true))
-                    .aspectRatio(Logomark.canvas.width / Logomark.canvas.height, contentMode: .fit)
-                    .frame(height: 34)
+                AppLogo()
+                    .frame(width: 52, height: 52)
                 VStack(alignment: .leading, spacing: 3) {
                     Text("SearcheXtra")
                         .font(.system(size: 15, weight: .semibold))

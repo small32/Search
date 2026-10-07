@@ -179,4 +179,4 @@ SEARCH_ARCH=arm64 ./build.sh release
 
 项目采用 **MIT 许可证**，详见 [LICENSE](LICENSE)。修改和分发时保留原有版权及许可声明。
 
-Search 的原始代码、名称和应用图标来自 Office Commun。本仓库以 SearcheXtra 名称维护修改版，中文支持和语言切换代码在本分支中提供。
+Search 的原始代码和名称来自 Office Commun。本仓库以 SearcheXtra 名称维护修改版，使用新的应用图标，并提供中文支持和语言切换。

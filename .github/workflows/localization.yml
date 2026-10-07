@@ -28,6 +28,10 @@ jobs:
             precondition(app.object(forInfoDictionaryKey: "CFBundleDisplayName") as? String == "SearcheXtra")
             precondition(app.object(forInfoDictionaryKey: "CFBundleExecutable") as? String == "SearcheXtra")
             let resources = Bundle(url: app.resourceURL!.appendingPathComponent("SearcheXtra_SearcheXtra.bundle"))!
+            let artwork = resources.url(forResource: "AppIcon", withExtension: "png")!
+            let packagedIcon = try! Data(contentsOf: artwork)
+            let sourceIcon = try! Data(contentsOf: URL(fileURLWithPath: "Sources/SearcheXtra/Resources/AppIcon.png"))
+            precondition(packagedIcon == sourceIcon)
             let file = resources.url(forResource: "Translations", withExtension: "json")!
             let translations = try! JSONDecoder().decode([String: [String: String]].self, from: Data(contentsOf: file))
             precondition(translations["language.title"]?["en"] == "Language")
@@ -35,4 +39,5 @@ jobs:
           '
           plutil -lint build/SearcheXtra.app/Contents/Resources/en.lproj/InfoPlist.strings
           plutil -lint build/SearcheXtra.app/Contents/Resources/zh-Hans.lproj/InfoPlist.strings
+          test -s build/SearcheXtra.app/Contents/Resources/AppIcon.icns
           codesign --verify --deep --strict build/SearcheXtra.app
