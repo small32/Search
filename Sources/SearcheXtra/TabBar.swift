@@ -520,7 +520,7 @@ private struct HistoryDoor: View {
                 if !browser.recentlyVisited.isEmpty {
                     Section(L10n.text("App.0176")) {
                         ForEach(browser.recentlyVisited) { trace in
-                            Button { browser.fresh(trace.url, foreground: true) } label: {
+                            Button { browser.open(trace.url, foreground: true) } label: {
                                 MenuLine(title: trace.title.isEmpty ? Address.withoutWWW(trace.address) : trace.title, url: trace.url)
                             }
                         }
