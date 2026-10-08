@@ -39,7 +39,7 @@ public sealed partial class MainWindow : Window
         SetupSidebar();
         SetupGlyphs();
         AppWindow.Resize(new global::Windows.Graphics.SizeInt32(1200, 820));
-        ((OverlappedPresenter)AppWindow.Presenter).SetBorderAndTitleBar(true, false);
+        ((OverlappedPresenter)AppWindow.Presenter).SetBorderAndTitleBar(true, true);
         AppWindow.SetIcon(Path.Combine(AppContext.BaseDirectory, "AppIcon.ico"));
         saveTimer = DispatcherQueue.CreateTimer();
         saveTimer.Interval = TimeSpan.FromMilliseconds(650);

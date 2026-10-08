@@ -3,8 +3,6 @@ using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Windowing;
-using System.Runtime.InteropServices;
-using WinRT.Interop;
 
 namespace SearcheXtra.Windows;
 
@@ -49,22 +47,21 @@ public sealed partial class MainWindow
         Toolbar.Visibility = Settings.Sidebar ? Visibility.Collapsed : Visibility.Visible;
         TopStrip.Visibility = Settings.Sidebar ? Visibility.Collapsed : Visibility.Visible;
         TopSettings.Visibility = Settings.Sidebar ? Visibility.Collapsed : Visibility.Visible;
-        Toolbar.Children.Remove(Lights); Toolbar.Children.Remove(Helm);
-        SidebarHeader.Children.Remove(Lights); SidebarHeader.Children.Remove(Helm);
+        Toolbar.Children.Remove(Helm);
+        SidebarHeader.Children.Remove(Helm);
         if (Settings.Sidebar)
         {
-            SidebarHeader.Children.Add(Lights); SidebarHeader.Children.Add(Helm);
-            Grid.SetColumn(Lights, 0); Grid.SetColumn(Helm, 0);
-            Lights.Margin = new(8, 0, 0, 0); Lights.HorizontalAlignment = HorizontalAlignment.Left;
-            Helm.Margin = new(72, 0, 0, 0); Helm.HorizontalAlignment = HorizontalAlignment.Left;
+            SidebarHeader.Children.Add(Helm);
+            Grid.SetColumn(Helm, 0);
+            Helm.Margin = new(4, 0, 0, 0); Helm.HorizontalAlignment = HorizontalAlignment.Left;
         }
         else
         {
-            Toolbar.Children.Add(Lights); Toolbar.Children.Add(Helm);
+            Toolbar.Children.Add(Helm);
             Toolbar.ColumnDefinitions[1].Width = Settings.NavigationLeft ? new(90) : new(1, GridUnitType.Star);
             Toolbar.ColumnDefinitions[2].Width = Settings.NavigationLeft ? new(1, GridUnitType.Star) : GridLength.Auto;
-            Grid.SetColumn(Lights, 0); Grid.SetColumn(Helm, Settings.NavigationLeft ? 1 : 2); Grid.SetColumn(TopStrip, Settings.NavigationLeft ? 2 : 1);
-            Lights.Margin = new(18, 0, 0, 0); Helm.Margin = new(8, 0, 10, 0);
+            Grid.SetColumn(Helm, Settings.NavigationLeft ? 1 : 2); Grid.SetColumn(TopStrip, Settings.NavigationLeft ? 2 : 1);
+            Helm.Margin = new(8, 0, 10, 0);
         }
         SpacesButton.Visibility = Settings.UsesSpaces ? Visibility.Visible : Visibility.Collapsed;
         UpdateSidebarFold();
@@ -99,21 +96,6 @@ public sealed partial class MainWindow
         if (sender == TopTabs) args.ItemContainer.Width = tab.Pinned ? 54 : 186;
     }
     private void TabCross_Click(object sender, RoutedEventArgs e) { if (sender is Button { Tag: BrowserTab tab }) CloseTab(tab); }
-    private void CloseWindow_Click(object sender, RoutedEventArgs e) => Close();
-    private void MinimizeWindow_Click(object sender, RoutedEventArgs e) => (AppWindow.Presenter as OverlappedPresenter)?.Minimize();
-    private void MaximizeWindow_Click(object sender, RoutedEventArgs e)
-    {
-        if (AppWindow.Presenter is OverlappedPresenter presenter)
-            if (presenter.State == OverlappedPresenterState.Maximized) presenter.Restore(); else presenter.Maximize();
-    }
-    [DllImport("user32.dll")] private static extern bool ReleaseCapture();
-    [DllImport("user32.dll")] private static extern nint SendMessage(nint window, uint message, nint wParam, nint lParam);
-    private void DragHeader_Pressed(object sender, PointerRoutedEventArgs e)
-    {
-        if (e.OriginalSource is not Grid && e.OriginalSource is not Microsoft.UI.Xaml.Shapes.Rectangle) return;
-        if (!e.GetCurrentPoint(Root).Properties.IsLeftButtonPressed) return;
-        ReleaseCapture(); SendMessage(WindowNative.GetWindowHandle(this), 0xA1, 2, 0);
-    }
     private async void Settings_Click(object sender, RoutedEventArgs e) => await ShowSettingsAsync();
     private void Card_Tapped(object sender, TappedRoutedEventArgs e) => e.Handled = true;
     private void OverlayBackdrop_Tapped(object sender, TappedRoutedEventArgs e) { if (DateTimeOffset.Now - overlayOpened > TimeSpan.FromMilliseconds(250)) DismissOverlay(); }

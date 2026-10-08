@@ -174,7 +174,8 @@ public sealed partial class MainWindow
             var firstCore = views[first.Id].Control.CoreWebView2;
             Settings.SidebarRight = true; ApplySettings(); Check(Microsoft.UI.Xaml.Controls.Grid.GetColumn(Sidebar) == 2 && RightSidebarColumn.Width.Value == 232, "Right sidebar uses macOS width");
             Settings.NavigationLeft = true; Settings.Sidebar = false; ApplySettings(); Check(Microsoft.UI.Xaml.Controls.Grid.GetColumn(Helm) == 1, "Navigation buttons move before horizontal tabs");
-            Check(Toolbar.Height == 52 && OmniboxLayer.Visibility == Visibility.Collapsed, "macOS shell has 52 point strip and no permanent address bar");
+            Check(AppWindow.Presenter is Microsoft.UI.Windowing.OverlappedPresenter { HasTitleBar: true, HasBorder: true, IsMinimizable: true, IsMaximizable: true }, "Windows owns native caption buttons and title bar dragging");
+            Check(Toolbar.Height == 52 && OmniboxLayer.Visibility == Visibility.Collapsed, "Browser toolbar has 52 point strip and no permanent address bar");
             FocusAddress(); Check(OmniboxLayer.Visibility == Visibility.Visible, "Address shortcut raises floating omnibox"); DismissOverlay();
             foreach (var page in new[] { "general", "tabs", "shortcuts", "extensions", "passwords", "downloads", "privacy", "ai", "about" })
             {
