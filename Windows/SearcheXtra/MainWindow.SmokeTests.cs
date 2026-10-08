@@ -70,6 +70,34 @@ public sealed partial class MainWindow
                 Check(Math.Abs(plus - end) < 2, "New tab button sits beside the last rendered tab without an empty gap");
             }
             else throw new Exception("Horizontal tab containers not realized");
+            Check(!ReopenButton.IsEnabled, "Reopen button starts disabled without closed tabs");
+            Check(Helm.Children.IndexOf(HomeButton) == Helm.Children.IndexOf(ReloadButton) + 1 &&
+                Helm.Children.IndexOf(ReopenButton) == Helm.Children.IndexOf(HomeButton) + 1, "Home and reopen buttons follow reload in order");
+            var previousStart = Settings.StartPage;
+            var homeTabCount = tabs.Count;
+            Settings.StartPage = fixture + "home";
+            await GoHomeAsync();
+            await Wait(() => !first.Loading && views[first.Id].Control.CoreWebView2.Source == fixture + "home");
+            Check(active == first && tabs.Count == homeTabCount, "Home navigates the current tab to the configured start page");
+            Settings.StartPage = "";
+            await GoHomeAsync();
+            await Wait(() => views[first.Id].Control.CoreWebView2.Source == "about:blank");
+            Check(Welcome.Visibility == Visibility.Visible && tabs.Count == homeTabCount, "Home without a configured page restores the default welcome page");
+            Settings.StartPage = previousStart;
+            await NavigateAsync(fixture);
+            await Wait(() => !first.Loading && first.Title == "SearcheXtra fixture");
+            var olderClosed = AddTab(fixture + "older-closed", false);
+            var lastClosed = AddTab(fixture + "last-closed", false, title: "Restored title", pinned: true, group: "Restored group");
+            CloseTab(olderClosed); CloseTab(lastClosed);
+            Check(ReopenButton.IsEnabled, "Closing a normal tab enables reopen");
+            Reopen_Click(ReopenButton, new());
+            await Wait(() => active?.Url == fixture + "last-closed");
+            Check(active is { Pinned: true, Group: "Restored group" } && tabs.All(t => t.Url != fixture + "older-closed"), "Reopen restores the most recently closed tab and its metadata");
+            var restoredClosed = active!;
+            Reopen(); await Wait(() => active?.Url == fixture + "older-closed");
+            Check(!ReopenButton.IsEnabled, "Reopen becomes disabled after the closed-tab stack is exhausted");
+            CloseTab(active!); CloseTab(restoredClosed); closedTabs.Clear(); ReopenButton.IsEnabled = false;
+            await SelectAsync(first);
             var firstView = views[first.Id];
             await firstView.Control.CoreWebView2.ExecuteScriptAsync("window.testMarker=42");
             var blank = AddTab("", false); await SelectAsync(blank);
@@ -183,11 +211,18 @@ public sealed partial class MainWindow
             Settings.SidebarRight = true; ApplySettings(); Check(Microsoft.UI.Xaml.Controls.Grid.GetColumn(Sidebar) == 2 && RightSidebarColumn.Width.Value == 232, "Right sidebar uses macOS width");
             Settings.NavigationLeft = true; Settings.Sidebar = false; ApplySettings(); Check(Microsoft.UI.Xaml.Controls.Grid.GetColumn(Helm) == 1, "Navigation buttons move before horizontal tabs");
             Check(AppWindow.Presenter is Microsoft.UI.Windowing.OverlappedPresenter { HasTitleBar: true, HasBorder: true, IsMinimizable: true, IsMaximizable: true }, "Windows owns native caption buttons and title bar dragging");
-            Check(ExtendsContentIntoTitleBar && Toolbar.Height == 48 && OmniboxLayer.Visibility == Visibility.Collapsed, "Tabs occupy the 48 point Windows title bar with no permanent address bar");
+            Check(ExtendsContentIntoTitleBar && Toolbar.Height == 48 && editingAddressTab == null, "Tabs occupy the 48 point Windows title bar with no permanent address bar");
             Root.UpdateLayout(); UpdateTitleBarRegions(); Root.UpdateLayout();
             var plusX = TopNew.TransformToVisual(TopStrip).TransformPoint(new global::Windows.Foundation.Point()).X;
             Check(Math.Abs(plusX - TopTabs.ActualWidth) < 1, "New tab button directly follows the horizontal tab list");
-            Check(TopSettings.Visibility == Visibility.Visible && ExtensionsButton.Visibility == Visibility.Visible && Helm.Parent == Toolbar, "Settings and extensions remain in the title bar");
+            Check(TopSettings.Visibility == Visibility.Visible && ExtensionsButton.Visibility == Visibility.Visible && TitleActions.Parent == Toolbar, "Settings and extensions remain in the title bar");
+            foreach (var navigationLeft in new[] { false, true })
+            {
+                Settings.NavigationLeft = navigationLeft; ApplySettings(); Root.UpdateLayout(); UpdateTitleBarRegions(); Root.UpdateLayout();
+                var actionsEnd = TitleActions.TransformToVisual(Toolbar).TransformPoint(new global::Windows.Foundation.Point(TitleActions.ActualWidth, 0)).X;
+                Check(Math.Abs(actionsEnd + 4 + CaptionInset.Width.Value - Toolbar.ActualWidth) < 1,
+                    "Settings and extensions stay immediately left of native caption buttons, navigationLeft=" + navigationLeft);
+            }
             foreach (var theme in new[] { ElementTheme.Light, ElementTheme.Dark })
             {
                 Root.RequestedTheme = theme; SetupGlyphs();
@@ -195,8 +230,8 @@ public sealed partial class MainWindow
                 Check(((Microsoft.UI.Xaml.Media.SolidColorBrush)glyph.Stroke).Color == Brush("Ink").Color, "Toolbar glyph contrast follows " + theme);
             }
             Root.RequestedTheme = ElementTheme.Default; SetupGlyphs();
-            FocusAddress(); Check(OmniboxLayer.Visibility == Visibility.Visible, "Address shortcut raises floating omnibox"); DismissOverlay();
-            foreach (var page in new[] { "general", "tabs", "shortcuts", "extensions", "passwords", "downloads", "privacy", "ai", "about" })
+            FocusAddress(); Check(editingAddressTab == active && Address.Parent != AddressParking, "Address shortcut edits the active tab inline"); DismissOverlay();
+            foreach (var page in new[] { "general", "tabs", "shortcuts", "extensions", "passwords", "downloads", "privacy", "about" })
             {
                 Settings.SettingsPage = page; var panelTask = ShowSettingsAsync(); await Task.Delay(20);
                 Check(OverlayLayer.Visibility == Visibility.Visible && OverlayLayer.Children[0] is Microsoft.UI.Xaml.Controls.Border { Child: Microsoft.UI.Xaml.Controls.Grid { Width: 660, Height: 500 } }, "Settings page renders: " + page);

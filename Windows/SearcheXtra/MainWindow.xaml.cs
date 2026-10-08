@@ -15,7 +15,7 @@ public sealed partial class MainWindow : Window
     private readonly DataStore store;
     private readonly Strings strings;
     private readonly ObservableCollection<BrowserTab> tabs = [];
-    private readonly Dictionary<Guid, TabViewItem> tabItems = [];
+    private readonly Dictionary<Guid, MenuFlyout> tabMenus = [];
     private readonly Dictionary<Guid, PageView> views = [];
     private readonly Stack<SavedTab> closedTabs = [];
     private readonly Microsoft.UI.Dispatching.DispatcherQueueTimer saveTimer, sleepTimer;
@@ -23,7 +23,7 @@ public sealed partial class MainWindow : Window
     private double splitRatio = .5;
     private Thumb? divider;
     private string space;
-    private bool selecting, closing, saving, saveAgain, addressEditing;
+    private bool selecting, closing, saving, saveAgain;
     private long selectionVersion;
     private readonly List<DownloadItem> downloads = [];
     private BrowserSettings Settings => store.Settings;
@@ -42,7 +42,7 @@ public sealed partial class MainWindow : Window
         ((OverlappedPresenter)AppWindow.Presenter).SetBorderAndTitleBar(true, true);
         SetupTitleBar();
         Root.ActualThemeChanged += (_, _) => { SetupGlyphs(); UpdateTitleBarColors(); };
-        AppWindow.SetIcon(Path.Combine(AppContext.BaseDirectory, "AppIcon.ico"));
+        WindowsIntegration.SetWindowIcon(this);
         saveTimer = DispatcherQueue.CreateTimer();
         saveTimer.Interval = TimeSpan.FromMilliseconds(650);
         saveTimer.IsRepeating = false;
@@ -70,6 +70,8 @@ public sealed partial class MainWindow : Window
         if (Environment.GetEnvironmentVariable("SEARCHEXTRA_SMOKE_TEST") is { Length: > 0 } report)
             Root.Loaded += async (_, _) => await RunSmokeTestsAsync(report);
         Address.KeyDown += SiteSearch_KeyDown;
+        Root.AddHandler(UIElement.PointerPressedEvent, new PointerEventHandler(AddressOutside_PointerPressed), true);
+        Root.Loaded += (_, _) => { if (active?.Url is "" or "about:blank") FocusAddress(); };
         ApplySettings();
         if (restore)
             foreach (var saved in restored.Tabs.Where(t => Settings.RestoreSession || t.Pinned))
@@ -111,23 +113,39 @@ public sealed partial class MainWindow : Window
         UpdateBench();
     }
 
+    private string HomeUrl(bool isPrivate = false)
+    {
+        if (Settings.StartPage.Length > 0) return Settings.StartPage;
+        if ((!isPrivate || Settings.ExtensionsInPrivate) && Settings.Extensions.FirstOrDefault(e => e.Enabled && e.NewTab.Length > 0) is { } newtab)
+            return $"chrome-extension://{newtab.Id}/{newtab.NewTab}";
+        return "";
+    }
+    private async Task GoHomeAsync()
+    {
+        var url = HomeUrl(active?.IsPrivate ?? false);
+        if (active == null) { AddTab(url); return; }
+        if (url.Length > 0) { await NavigateAsync(url); return; }
+        ActiveView?.Navigate("about:blank");
+        active.Url = ""; active.Title = ""; active.Loading = false; active.Reading = 0;
+        await SelectAsync(active);
+        FocusAddress();
+    }
+
     private BrowserTab AddTab(string? url = null, bool foreground = true, bool isPrivate = false, string title = "", bool pinned = false, string? inSpace = null, bool loadBackground = true, string group = "")
     {
-        if (url == null) { url = Settings.StartPage; if (url.Length == 0 && (!isPrivate || Settings.ExtensionsInPrivate) && Settings.Extensions.FirstOrDefault(e => e.Enabled && e.NewTab.Length > 0) is { } newtab) url = $"chrome-extension://{newtab.Id}/{newtab.NewTab}"; }
+        url ??= HomeUrl(isPrivate);
         var tab = new BrowserTab { Url = url, Title = title, Pinned = pinned, IsPrivate = isPrivate, Space = inSpace ?? space, Group = group, UseIcons = Settings.IconGlyphs };
         tabs.Add(tab);
-        var item = new TabViewItem { Header = tab.DisplayTitle, Tag = tab, IsClosable = !pinned };
         var menu = new MenuFlyout();
-        AddMenu(menu, T("Pin / unpin", "固定 / 取消固定"), () => { tab.Pinned = !tab.Pinned; item.IsClosable = !tab.Pinned; RefreshTabLists(); ScheduleSave(); });
+        AddMenu(menu, T("Pin / unpin", "固定 / 取消固定"), () => { tab.Pinned = !tab.Pinned; RefreshTabLists(); ScheduleSave(); });
         AddMenu(menu, T("Duplicate", "复制标签页"), () => AddTab(tab.Url, true, tab.IsPrivate));
         AddMenu(menu, T("Split beside current", "与当前页分屏"), () => { if (active != null && active != tab) { splitOwner = active; split = tab; _ = SelectAsync(active); } });
         AddMenu(menu, T("Move to space…", "移至空间…"), async () => await MoveTabAsync(tab));
         AddMenu(menu, T("Set tab group…", "设置标签组…"), async () => { var name = await PromptAsync(T("Tab group (empty to remove)", "标签组（留空移出分组）"), T("Group name", "组名"), tab.Group); if (name != null) { tab.Group = name; RefreshTabLists(); ScheduleSave(); } });
         AddMenu(menu, T("Close group", "关闭标签组"), () => { if (tab.Group.Length > 0) foreach (var member in tabs.Where(t => t.Group == tab.Group && t.Space == tab.Space).ToArray()) CloseTab(member); });
         AddMenu(menu, T("Close", "关闭"), () => CloseTab(tab));
-        item.ContextFlyout = menu;
-        tab.PropertyChanged += (_, _) => { item.Header = tab.DisplayTitle; if (active == tab) UpdateChrome(); };
-        tabItems[tab.Id] = item;
+        tab.PropertyChanged += (_, _) => { if (active == tab) UpdateChrome(); };
+        tabMenus[tab.Id] = menu;
         RefreshTabLists();
         if (foreground) _ = SelectAsync(tab);
         else if (loadBackground && !Settings.LazyBackgroundTabs && url.Length > 0) _ = LoadBackgroundAsync(tab);
@@ -137,10 +155,11 @@ public sealed partial class MainWindow : Window
 
     private void RefreshTabLists()
     {
+        ParkAddress();
         selecting = true;
         var visible = tabs.Where(t => t.Space == space).OrderByDescending(t => t.Pinned).ThenBy(t => t.Group).ToList();
         TopTabs.ItemsSource = new System.Collections.ObjectModel.ObservableCollection<BrowserTab>(visible);
-        SideTabs.ItemsSource = new System.Collections.ObjectModel.ObservableCollection<BrowserTab>(Settings.ListsPins ? visible : visible.Where(t => !t.Pinned));
+        SideTabs.ItemsSource = new System.Collections.ObjectModel.ObservableCollection<BrowserTab>(Settings.ListsPins ? visible : visible.Where(t => !t.Pinned || t == editingAddressTab));
         RefreshPins(visible);
         if (active != null) { TopTabs.SelectedItem = active; SideTabs.SelectedItem = active; }
         selecting = false;
@@ -154,7 +173,6 @@ public sealed partial class MainWindow : Window
             view = new PageView(tab, store, () => ScheduleSave(), url => AddTab(url, true, tab.IsPrivate));
             view.DownloadStarted += download => { downloads.Add(download); RefreshPinnedExtensions(); Status.Text = T("Downloading: ", "正在下载：") + download.Name; download.Operation.StateChanged += (_, _) => { if (download.Operation.State == Microsoft.Web.WebView2.Core.CoreWebView2DownloadState.Completed && !tab.IsPrivate) { store.Downloads.RemoveAll(d => d.Path == download.Path); store.Downloads.Insert(0, new(download.Path, download.Operation.Uri, DateTimeOffset.Now)); ScheduleSave(); } }; };
             view.NewWindowTarget += async _ => { var child = AddTab("", true, tab.IsPrivate); return (await GetViewAsync(child)).Control.CoreWebView2; };
-            view.InterceptNavigation += (url, source) => InterceptAISignIn(tab, url, source);
             view.HoveredLink += url => { if (active == tab) Status.Text = url; };
             view.PreviewRequested += async url => await PreviewLinkAsync(url);
             view.PermissionRequested += async args =>
@@ -181,6 +199,7 @@ public sealed partial class MainWindow : Window
             views.Add(tab.Id, view);
             view.Control.GotFocus += (_, _) =>
             {
+                EndAddressEdit();
                 if (active == tab || tab != split && tab != splitOwner) return;
                 active = tab; tab.LastUsed = DateTimeOffset.Now;
                 selecting = true; TopTabs.SelectedItem = tab; SideTabs.SelectedItem = tab; selecting = false;
@@ -201,11 +220,11 @@ public sealed partial class MainWindow : Window
     private async Task SelectAsync(BrowserTab tab)
     {
         if (closing || !tabs.Contains(tab)) return;
+        if (active != tab) EndAddressEdit();
         if (active != tab && Settings.FloatsOnLeave && ActiveView is { FloatingWindow: null } previous && await previous.Control.CoreWebView2.ExecuteScriptAsync("[...document.querySelectorAll('video')].some(v=>!v.paused)") == "true") await TogglePictureInPictureAsync(false);
         var version = ++selectionVersion;
         if (active != null) active.LastUsed = DateTimeOffset.Now;
         active = tab;
-        addressEditing = false;
         tab.LastUsed = DateTimeOffset.Now;
         if (space != tab.Space) { space = tab.Space; ApplySettings(); RefreshTabLists(); }
         selecting = true;
@@ -231,8 +250,6 @@ public sealed partial class MainWindow : Window
             divider.DragCompleted += (_, _) => ScheduleSave();
         }
         Welcome.Visibility = tab.Url.Length == 0 || tab.Url == "about:blank" ? Visibility.Visible : Visibility.Collapsed;
-        OmniboxLayer.Visibility = Welcome.Visibility;
-        OmniboxLayer.Background = new Microsoft.UI.Xaml.Media.SolidColorBrush(Microsoft.UI.Colors.Transparent);
         UpdateChrome();
         try
         {
@@ -261,8 +278,8 @@ public sealed partial class MainWindow : Window
     private void UpdateChrome()
     {
         if (active == null) return;
-        if (active.Url.Length > 0 && active.Url != "about:blank" && Welcome.Visibility == Visibility.Visible) { Welcome.Visibility = Visibility.Collapsed; OmniboxLayer.Visibility = Visibility.Collapsed; }
-        if (!addressEditing) Address.Text = active.Url == "about:blank" ? "" : active.Url;
+        if (active.Url.Length > 0 && active.Url != "about:blank" && Welcome.Visibility == Visibility.Visible) { Welcome.Visibility = Visibility.Collapsed; }
+        if (editingAddressTab == null) Address.Text = active.Url == "about:blank" ? "" : active.Url;
         Title = (active.Title.Length > 0 ? active.Title + " — " : "") + "SearcheXtra" + (active.IsPrivate ? T(" · Private", " · 无痕") : "");
         LoadingBar.Visibility = active.Loading ? Visibility.Visible : Visibility.Collapsed;
         var core = ActiveView?.Control.CoreWebView2;
@@ -275,10 +292,10 @@ public sealed partial class MainWindow : Window
 
     private async Task NavigateAsync(string text)
     {
-        addressEditing = false;
         if (await RunAddressCommandAsync(text)) return;
-        OmniboxLayer.Visibility = Visibility.Collapsed;
+
         var uri = ResolveAddress(text);
+        EndAddressEdit();
         if (active == null) { AddTab(uri.AbsoluteUri); return; }
         active.Url = uri.AbsoluteUri;
         await SelectAsync(active);
@@ -287,10 +304,12 @@ public sealed partial class MainWindow : Window
 
     private void CloseTab(BrowserTab tab)
     {
+        if (editingAddressTab == tab) EndAddressEdit();
         if (!tabs.Contains(tab)) return;
         if (!tab.IsPrivate) closedTabs.Push(new(tab.Url, tab.Title, tab.Pinned, tab.Space, tab.Group));
+        ReopenButton.IsEnabled = closedTabs.Count > 0;
         if (views.Remove(tab.Id, out var view)) { Pages.Children.Remove(view.Control); view.Dispose(); }
-        tabs.Remove(tab); tabItems.Remove(tab.Id);
+        tabs.Remove(tab); tabMenus.Remove(tab.Id);
         if (split == tab || splitOwner == tab) { split = null; splitOwner = null; }
         if (active == tab) active = null;
         RefreshTabLists();
@@ -300,7 +319,9 @@ public sealed partial class MainWindow : Window
     }
     private void Reopen()
     {
-        if (closedTabs.TryPop(out var saved)) AddTab(saved.Url, true, false, saved.Title, saved.Pinned, saved.Space, group: saved.Group);
+        if (!closedTabs.TryPop(out var saved)) return;
+        ReopenButton.IsEnabled = closedTabs.Count > 0;
+        AddTab(saved.Url, true, false, saved.Title, saved.Pinned, saved.Space, group: saved.Group);
     }
     private void ScheduleSave() { if (!closing) { saveTimer.Stop(); saveTimer.Start(); } }
     private async Task SaveStateAsync()
@@ -351,9 +372,9 @@ public sealed partial class MainWindow : Window
     private void Back_Click(object sender, RoutedEventArgs e) { if (ActiveView?.Control.CoreWebView2?.CanGoBack == true) ActiveView.Control.CoreWebView2.GoBack(); }
     private void Forward_Click(object sender, RoutedEventArgs e) { if (ActiveView?.Control.CoreWebView2?.CanGoForward == true) ActiveView.Control.CoreWebView2.GoForward(); }
     private void Reload_Click(object sender, RoutedEventArgs e) => ActiveView?.Control.CoreWebView2?.Reload();
+    private async void Home_Click(object sender, RoutedEventArgs e) => await GoHomeAsync();
+    private void Reopen_Click(object sender, RoutedEventArgs e) => Reopen();
     private void NewTab_Click(object sender, RoutedEventArgs e) { AddTab(); FocusAddress(); }
-    private void AddTab_Click(TabView sender, object args) => NewTab_Click(sender, new());
-    private void Tab_CloseRequested(TabView sender, TabViewTabCloseRequestedEventArgs args) { if (args.Tab.Tag is BrowserTab tab) CloseTab(tab); }
     private void Tabs_DragCompleted(ListViewBase sender, DragItemsCompletedEventArgs args)
     {
         var order = sender.Items.Cast<BrowserTab>().ToList(); var positions = tabs.Select((tab, index) => (tab, index)).Where(x => order.Contains(x.tab)).Select(x => x.index).ToList();
@@ -366,7 +387,6 @@ public sealed partial class MainWindow : Window
     private void Address_Changed(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
     {
         if (args.Reason != AutoSuggestionBoxTextChangeReason.UserInput) return;
-        addressEditing = true;
         var query = sender.Text.Trim();
         siteOffer = Settings.SearchesSites && searchSite == null ? SiteSearch.Match(Settings, query) : null;
         Address.PlaceholderText = searchSite != null ? T("Search ", "搜索 ") + searchSite.Name : siteOffer != null ? T("Tab to search ", "按 Tab 搜索 ") + siteOffer.Name : T("Address or search", "网址或搜索");
@@ -386,7 +406,6 @@ public sealed partial class MainWindow : Window
             Root.KeyboardAccelerators.Add(accelerator);
         }
         Key(VirtualKey.L, VirtualKeyModifiers.Control, FocusAddress);
-        Key(VirtualKey.Escape, VirtualKeyModifiers.None, () => { addressEditing = false; UpdateChrome(); });
         Key(VirtualKey.T, VirtualKeyModifiers.Control, () => NewTab_Click(this, new()));
         Key(VirtualKey.W, VirtualKeyModifiers.Control, () => { if (active != null) CloseTab(active); });
         Key(VirtualKey.T, VirtualKeyModifiers.Control | VirtualKeyModifiers.Shift, Reopen);
@@ -407,25 +426,8 @@ public sealed partial class MainWindow : Window
         Key(VirtualKey.H, VirtualKeyModifiers.Control | VirtualKeyModifiers.Shift, async () => await ShowHiddenAsync());
         Key(VirtualKey.P, VirtualKeyModifiers.Control | VirtualKeyModifiers.Shift, async () => await TogglePictureInPictureAsync());
         Key(VirtualKey.F11, VirtualKeyModifiers.None, ToggleFullscreen);
-        Key(VirtualKey.Escape, VirtualKeyModifiers.None, DismissOverlay);
+        Key(VirtualKey.Escape, VirtualKeyModifiers.None, () => { DismissOverlay(); UpdateChrome(); });
         Key((VirtualKey)188, VirtualKeyModifiers.Control, async () => await ShowSettingsAsync());
-    }
-    private void FocusAddress()
-    {
-        OmniboxLayer.Visibility = Visibility.Visible;
-        OmniboxLayer.Background = Brush("Ground", .74);
-        Address.Focus(FocusState.Programmatic);
-        static TextBox? Find(DependencyObject parent)
-        {
-            for (var index = 0; index < Microsoft.UI.Xaml.Media.VisualTreeHelper.GetChildrenCount(parent); index++)
-            {
-                var child = Microsoft.UI.Xaml.Media.VisualTreeHelper.GetChild(parent, index);
-                if (child is TextBox text) return text;
-                if (Find(child) is { } nested) return nested;
-            }
-            return null;
-        }
-        Find(Address)?.SelectAll();
     }
     private void CycleTab(int delta)
     {
@@ -461,7 +463,6 @@ public sealed partial class MainWindow : Window
         AddMenu(menu, T("Developer tools", "开发者工具"), () => ActiveView?.Control.CoreWebView2?.OpenDevToolsWindow());
         menu.Items.Add(new MenuFlyoutSeparator());
         AddMenu(menu, T("Site settings", "网站设置"), async () => await ShowSiteCardAsync());
-        AddMenu(menu, T("AI assistant", "AI 助手"), async () => await ShowAIAsync());
         AddMenu(menu, T("Extensions", "扩展"), ExtensionsMenu);
         AddMenu(menu, T("Settings", "设置"), async () => await ShowSettingsAsync());
         AddMenu(menu, T("Check releases", "查看最新版本"), () => AddTab("https://github.com/small32/SearcheXtra/releases"));

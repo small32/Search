@@ -25,7 +25,6 @@ public sealed class PageView : IDisposable
     public event Action<string>? HoveredLink;
     public event Func<Login, Task>? PasswordOffered;
     public event Func<string, Task<CoreWebView2>>? NewWindowTarget;
-    public event Func<string, string, bool>? InterceptNavigation;
 
     public PageView(BrowserTab tab, DataStore store, Action changed, Action<string> open)
     { this.tab = tab; this.store = store; this.changed = changed; this.open = open; }
@@ -97,7 +96,7 @@ public sealed class PageView : IDisposable
         _ = core.ExecuteScriptAsync("if(document.documentElement)document.documentElement.style.zoom=" + JsonSerializer.Serialize(site?.Zoom ?? store.Settings.PageZoom));
         _ = core.ExecuteScriptAsync("window.__searchPrefs=" + JsonSerializer.Serialize(ScriptOptions()));
     }
-    private void NavigationStarting(CoreWebView2 sender, CoreWebView2NavigationStartingEventArgs args) { if (InterceptNavigation?.Invoke(args.Uri, sender.Source) == true) { args.Cancel = true; return; } tab.Loading = true; tab.Url = args.Uri; tab.Reading = 0; }
+    private void NavigationStarting(CoreWebView2 sender, CoreWebView2NavigationStartingEventArgs args) { tab.Loading = true; tab.Url = args.Uri; tab.Reading = 0; }
     private async void NavigationCompleted(CoreWebView2 sender, CoreWebView2NavigationCompletedEventArgs args)
     {
         tab.Loading = false;

@@ -8,8 +8,11 @@ namespace SearcheXtra.Windows;
 
 public sealed partial class MainWindow
 {
+    private static readonly (string, string, string)[] SettingsPages = { ("general", "General", "通用"), ("tabs", "Tabs", "标签页"), ("shortcuts", "Shortcuts", "快捷键"), ("extensions", "Extensions", "扩展"), ("passwords", "Passwords", "密码"), ("downloads", "Downloads", "下载"), ("privacy", "Privacy", "隐私"), ("about", "About", "关于") };
+
     private async Task ShowSettingsAsync()
     {
+        var pages = SettingsPages;
         if (OverlayLayer.Visibility == Visibility.Visible) return;
         var done = new TaskCompletionSource();
         var shell = new Grid { Width = 660, Height = 500 };
@@ -22,11 +25,10 @@ public sealed partial class MainWindow
         var header = new Grid(); var title = new TextBlock { FontSize = 17, FontWeight = Microsoft.UI.Text.FontWeights.SemiBold };
         header.Children.Add(title); var close = QuietButton("×"); close.HorizontalAlignment = HorizontalAlignment.Right; close.Click += (_, _) => DismissOverlay(); header.Children.Add(close); main.Children.Add(header);
         var body = new StackPanel { Spacing = 18 }; var scroll = new ScrollViewer { Content = body, VerticalScrollBarVisibility = ScrollBarVisibility.Hidden }; Grid.SetRow(scroll, 1); main.Children.Add(scroll);
-        var pages = new[] { ("general", "General", "通用", "⚙"), ("tabs", "Tabs", "标签页", "▤"), ("shortcuts", "Shortcuts", "快捷键", "⌘"), ("extensions", "Extensions", "扩展", "◇"), ("passwords", "Passwords", "密码", "⚿"), ("downloads", "Downloads", "下载", "↓"), ("privacy", "Privacy", "隐私", "♧"), ("ai", "AI", "AI", "✧"), ("about", "About", "关于", "ⓘ") };
         var buttons = new Dictionary<string, Button>();
         foreach (var page in pages)
         {
-            var button = new Button { Content = page.Item4 + "   " + T(page.Item2, page.Item3), Height = 30, Padding = new(10, 0, 10, 0), FontSize = 13, BorderThickness = new(0), CornerRadius = new(8), HorizontalAlignment = HorizontalAlignment.Stretch, HorizontalContentAlignment = HorizontalAlignment.Left };
+            var button = new Button { Height = 30, Padding = new(10, 0, 10, 0), FontSize = 13, BorderThickness = new(0), CornerRadius = new(8), HorizontalAlignment = HorizontalAlignment.Stretch, HorizontalContentAlignment = HorizontalAlignment.Left };
             var content = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 9 }; content.Children.Add(Glyph(page.Item1)); content.Children.Add(new TextBlock { Text = T(page.Item2, page.Item3), FontSize = 13, VerticalAlignment = VerticalAlignment.Center }); button.Content = content;
             button.Click += (_, _) => Render(page.Item1); rail.Children.Add(button); buttons[page.Item1] = button;
         }
@@ -163,23 +165,8 @@ public sealed partial class MainWindow
                 ActionRow("Cookies and website data", "Cookie 与网站数据", T("Clear", "清除"), async () => await (await CurrentProfileAsync()).ClearBrowsingDataAsync(CoreWebView2BrowsingDataKinds.Cookies | CoreWebView2BrowsingDataKinds.AllDomStorage));
                 ActionRow("Cache", "缓存", T("Clear", "清除"), async () => await (await CurrentProfileAsync()).ClearBrowsingDataAsync(CoreWebView2BrowsingDataKinds.DiskCache));
                 break;
-            case "ai":
-                Toggle("Page assistant", "网页 AI 助手", Settings.AIEnabled, value => Settings.AIEnabled = value);
-                var providers = new[] { "thisPC", "ollama", "lmStudio", "openAI", "anthropic", "gemini", "openRouter" };
-                Choice("Provider", "提供商", [T("On this PC", "在本机运行"), "Ollama", "LM Studio", "OpenAI", "Anthropic", "Google Gemini", "OpenRouter"], Array.IndexOf(providers, Settings.AIProvider), i => { Settings.AIModels[Settings.AIProvider] = Settings.AIModel; Settings.AIProvider = providers[i]; Settings.AIModel = Settings.AIModels.GetValueOrDefault(Settings.AIProvider, ""); render(page); });
-                if (Settings.AIProvider == "thisPC") ActionRow("Qwen3 1.7B", "Qwen3 1.7B", File.Exists(LocalAI.ModelPath) ? T("Remove", "移除") : T("Download", "下载"), async () => { if (File.Exists(LocalAI.ModelPath)) { LocalAI.Stop(); File.Delete(LocalAI.ModelPath); } else { try { await LocalAI.InstallAsync(new Progress<double>(p => Status.Text = $"Qwen3: {p:P0}")); } catch (Exception ex) { Status.Text = ex.Message; } } render(page); }, T("1.1 GB · runs offline in a separate process", "1.1 GB · 独立进程离线推理"));
-                if (Settings.AIProvider == "thisPC") ActionRow("Import downloaded model", "导入已下载模型", T("Choose…", "选择…"), async () => { var picker = new FileOpenPicker(); picker.FileTypeFilter.Add(".gguf"); InitializeWithWindow.Initialize(picker, WindowNative.GetWindowHandle(this)); var file = await picker.PickSingleFileAsync(); if (file != null) { try { await LocalAI.ImportAsync(file.Path); render(page); } catch (Exception ex) { Status.Text = ex.Message; } } }, T("The model's SHA-256 is verified before import.", "导入前校验模型 SHA-256。"));
-                else Input("Model", "模型", Settings.AIModel, value => Settings.AIModel = value);
-                if (Settings.AIProvider == "openRouter") ActionRow("OpenRouter account", "OpenRouter 账户", T("Sign in", "登录"), StartAISignIn);
-                if (Settings.AIProvider is "openAI" or "anthropic" or "gemini" or "openRouter")
-                {
-                var key = new PasswordBox { PlaceholderText = "API key", Margin = new(14), FontSize = 12 }; card.Children.Add(key);
-                ActionRow("Provider key", "提供商密钥", T("Save", "保存"), async () => { await AIClient.SaveKeyAsync(Settings.AIProvider, key.Password); key.Password = ""; });
-                }
-                ActionRow("Summary and questions", "摘要与提问", T("Open", "打开"), async () => { DismissOverlay(); await ShowAIAsync(); }, T("Only the current page is sent, when you ask.", "仅在你请求时发送当前网页内容。"));
-                break;
             case "about":
-                Line("SearcheXtra", "1.0.1 · Windows x86_64\nWinUI 3 · WebView2");
+                Line("SearcheXtra", ReleaseUpdates.Version + " · Windows x86_64\nWinUI 3 · WebView2");
                 ActionRow("Updates", "更新", T("Check", "检查"), async () => { var result = await ReleaseUpdates.LatestAsync(); DismissOverlay(); if (await ShowCardAsync(T("Updates", "更新"), new TextBlock { Text = result, TextWrapping = TextWrapping.Wrap }, T("Open releases", "打开发布页")) == ContentDialogResult.Primary) AddTab("https://github.com/small32/SearcheXtra/releases"); });
                 ActionRow("Source code", "源代码", "GitHub", () => { DismissOverlay(); AddTab("https://github.com/small32/SearcheXtra"); });
                 Line(T("License", "许可证"), "GPL-3.0"); break;

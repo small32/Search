@@ -72,7 +72,7 @@ public sealed partial class MainWindow
             case "sidebar": case "toggle sidebar": case "切换侧边栏": case "侧边栏": Settings.Sidebar = !Settings.Sidebar; store.Notify(); ScheduleSave(); break;
             default: return false;
         }
-        OmniboxLayer.Visibility = Microsoft.UI.Xaml.Visibility.Collapsed; return true;
+        EndAddressEdit(); return true;
     }
     private async Task CreateSpaceAsync()
     {

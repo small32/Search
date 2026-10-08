@@ -2,10 +2,7 @@ namespace SearcheXtra.Windows;
 
 public sealed partial class MainWindow
 {
-    // Reuse macOS's translations and descriptions, including its exact labels.
-    private (string, string) SettingsRowText(string label, string detail)
-    {
-        var rows = new[]
+    private static readonly (string, string, int)[] SettingsRows =
         {
             ("Default browser", "默认浏览器", 702), ("Bring things over", "导入数据", 708), ("Search keywords", "搜索关键词", 712),
             ("Appearance", "外观", 716), ("Default page zoom", "默认网页缩放", 718), ("Correct spelling as you type", "输入时自动纠正拼写", 720),
@@ -21,7 +18,11 @@ public sealed partial class MainWindow
             ("Always show downloads button", "始终显示下载按钮", 804), ("Block ads and trackers", "拦截广告与跟踪器", 806), ("Prevent cross-site tracking", "防止跨站跟踪", 812),
             ("Let sites ask to send notifications", "允许网站请求通知", 817), ("History", "历史记录", 819), ("Cookies and website data", "Cookie 与网站数据", 822), ("Cache", "缓存", 825)
         };
-        var row = rows.FirstOrDefault(r => label == r.Item1 || label == r.Item2);
+
+    // Reuse macOS's translations and descriptions, including its exact labels.
+    private (string, string) SettingsRowText(string label, string detail)
+    {
+        var row = SettingsRows.FirstOrDefault(r => label == r.Item1 || label == r.Item2);
         if (row.Item3 != 0)
         {
             label = strings.Key($"Settings.{row.Item3:0000}");

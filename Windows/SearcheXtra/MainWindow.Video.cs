@@ -25,6 +25,7 @@ public sealed partial class MainWindow
         Pages.Children.Remove(view.Control);
         var host = new Grid(); host.Children.Add(view.Control); view.Control.Visibility = Visibility.Visible;
         var window = new Window { Title = tab.Title, Content = host };
+        WindowsIntegration.SetWindowIcon(window);
         view.FloatingWindow = window;
         window.AppWindow.SetPresenter(AppWindowPresenterKind.CompactOverlay);
         window.AppWindow.Resize(new global::Windows.Graphics.SizeInt32(480, 300));

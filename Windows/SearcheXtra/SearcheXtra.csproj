@@ -9,13 +9,12 @@
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
     <UseWinUI>true</UseWinUI>
     <WindowsPackageType>None</WindowsPackageType>
-    <WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
-    <SelfContained>true</SelfContained>
+    <WindowsAppSDKSelfContained>false</WindowsAppSDKSelfContained>
+    <SelfContained>false</SelfContained>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <ApplicationIcon>AppIcon.ico</ApplicationIcon>
-    <Version>1.0.1</Version>
     <PublishReadyToRun>true</PublishReadyToRun>
     <PublishTrimmed>false</PublishTrimmed>
   </PropertyGroup>
@@ -23,13 +22,17 @@
     <Content Update="Assets/reader.js" CopyToOutputDirectory="PreserveNewest" />
     <Content Include="../../Sources/SearcheXtra/Resources/Translations.json" Link="Assets/Translations.json" CopyToOutputDirectory="PreserveNewest" />
     <Content Include="AppIcon.ico" CopyToOutputDirectory="PreserveNewest" />
-    <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.8.260921001" />
+    <PackageReference Include="Microsoft.WindowsAppSDK.WinUI" Version="1.8.260803003" />
+    <PackageReference Include="Microsoft.WindowsAppSDK.Runtime" Version="1.8.260921001" />
     <PackageReference Include="System.Security.Cryptography.ProtectedData" Version="8.0.0" />
     <PackageReference Include="Microsoft.Data.Sqlite" Version="8.0.31" />
-    <Content Include="../../Sources/SearcheXtra/Resources/AppIcon.png" Link="Assets/AppIcon.png" CopyToOutputDirectory="PreserveNewest" />
+    <Content Update="Assets/AppIcon.png" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
   <Target Name="RequireX64" BeforeTargets="PrepareForBuild">
     <Error Condition="'$(PlatformTarget)' != 'x64' or '$(RuntimeIdentifier)' != 'win-x64'" Text="SearcheXtra Windows supports x86_64 only." />
+  </Target>
+  <Target Name="GenerateApplicationIcons" BeforeTargets="PrepareForBuild">
+    <Exec Command="powershell -NoProfile -ExecutionPolicy Bypass -File &quot;$(MSBuildThisFileDirectory)..\generate-icon.ps1&quot;" />
   </Target>
   <Target Name="PublishXamlResources" AfterTargets="Publish">
     <ItemGroup>

@@ -53,6 +53,7 @@ public sealed partial class MainWindow
         Grid.SetColumn(Helm, Settings.NavigationLeft ? 1 : 2);
         Grid.SetColumn(TopStrip, Settings.NavigationLeft ? 2 : 1);
         Helm.Margin = new(8, 0, 10, 0);
+        Helm.HorizontalAlignment = Settings.NavigationLeft ? HorizontalAlignment.Left : HorizontalAlignment.Right;
         SidebarHeader.Visibility = Visibility.Collapsed;
         Sidebar.RowDefinitions[0].Height = new(0);
         UpdateTitleBarRegions();
@@ -65,11 +66,12 @@ public sealed partial class MainWindow
         var columnCount = Math.Max(1, (int)((Settings.SidebarWidth - 16) / 38)); for (var i = 0; i < columnCount; i++) PinRow.ColumnDefinitions.Add(new() { Width = new(38) });
         var pinIndex = 0;
         if (Settings.ListsPins) return;
-        foreach (var tab in visible.Where(t => t.Pinned))
+        foreach (var tab in visible.Where(t => t.Pinned && t != editingAddressTab))
         {
-            var button = new Button { Content = tab.Letter, Width = 34, Height = 34, Padding = new(0), CornerRadius = new(7), BorderThickness = new(0), Background = Brush(active == tab ? "Hairline" : "Wash"), FontSize = 12 };
-            button.Click += (_, _) => _ = SelectAsync(tab);
-            button.ContextFlyout = tabItems[tab.Id].ContextFlyout;
+            var button = new Button { Content = tab.Letter, Tag = tab, Width = 34, Height = 34, Padding = new(0), CornerRadius = new(7), BorderThickness = new(0), Background = Brush(active == tab ? "Hairline" : "Wash"), FontSize = 12 };
+            button.Click += (_, _) => { if (active == tab) FocusAddress(); else _ = SelectAsync(tab); };
+            button.AddHandler(UIElement.PointerPressedEvent, new PointerEventHandler(Tab_PointerPressed), true);
+            button.ContextFlyout = tabMenus[tab.Id];
             if (Settings.IconGlyphs && Icon(tab.Favicon) is { } icon) button.Content = new Image { Source = icon, Width = 16, Height = 16 };
             if (pinIndex % columnCount == 0) PinRow.RowDefinitions.Add(new() { Height = new(38) }); Grid.SetColumn(button, pinIndex % columnCount); Grid.SetRow(button, pinIndex / columnCount); pinIndex++;
             ToolTipService.SetToolTip(button, tab.Label); PinRow.Children.Add(button);
@@ -78,26 +80,33 @@ public sealed partial class MainWindow
     private void TabContainer_Changed(ListViewBase sender, ContainerContentChangingEventArgs args)
     {
         if (args.Item is not BrowserTab tab) return;
-        args.ItemContainer.ContextFlyout = tabItems.GetValueOrDefault(tab.Id)?.ContextFlyout;
+        args.ItemContainer.ContextFlyout = tabMenus.GetValueOrDefault(tab.Id);
         if (args.ItemContainer.Tag == null)
         {
             args.ItemContainer.Tag = true;
-            static void ShowCross(DependencyObject root, double opacity) { for (var i = 0; i < VisualTreeHelper.GetChildrenCount(root); i++) { var child = VisualTreeHelper.GetChild(root, i); if (child is Button button && button.Tag is BrowserTab) button.Opacity = opacity; else ShowCross(child, opacity); } }
+            args.ItemContainer.AddHandler(UIElement.PointerPressedEvent, new PointerEventHandler(Tab_PointerPressed), true);
+            static void ShowCross(DependencyObject root, double opacity) { if (FindAddressPart<Button>(root, "TabClose") is { } cross) cross.Opacity = opacity; }
             args.ItemContainer.PointerEntered += (source, _) => ShowCross((DependencyObject)source, .55);
             args.ItemContainer.PointerExited += (source, _) => ShowCross((DependencyObject)source, 0);
         }
-        if (sender == TopTabs) args.ItemContainer.Width = tab.Pinned ? 54 : 186;
+        if (sender == TopTabs) args.ItemContainer.Width = TabWidth(tab);
+        if (tab == editingAddressTab && sender == AddressList) DispatcherQueue.TryEnqueue(() => AttachAddressEditor(false));
+    }
+    private void Tab_PointerPressed(object sender, PointerRoutedEventArgs e)
+    {
+        if (sender is not FrameworkElement element ||
+            e.GetCurrentPoint(element).Properties.PointerUpdateKind != Microsoft.UI.Input.PointerUpdateKind.MiddleButtonPressed) return;
+        // Read the current item: WinUI recycles list containers when tabs move or close.
+        var tab = sender switch { ListViewItem { Content: BrowserTab item } => item, Button { Tag: BrowserTab item } => item, _ => null };
+        if (tab == null) return;
+        e.Handled = true;
+        CloseTab(tab);
     }
     private void TabCross_Click(object sender, RoutedEventArgs e) { if (sender is Button { Tag: BrowserTab tab }) CloseTab(tab); }
     private async void Settings_Click(object sender, RoutedEventArgs e) => await ShowSettingsAsync();
     private void Card_Tapped(object sender, TappedRoutedEventArgs e) => e.Handled = true;
     private void OverlayBackdrop_Tapped(object sender, TappedRoutedEventArgs e) { if (DateTimeOffset.Now - overlayOpened > TimeSpan.FromMilliseconds(250)) DismissOverlay(); }
-    private void OmniboxBackdrop_Tapped(object sender, TappedRoutedEventArgs e) { if (active?.Url.Length > 0) OmniboxLayer.Visibility = Visibility.Collapsed; }
-    private void DismissOverlay()
-    {
-        overlayClose?.Invoke();
-        if (active?.Url.Length > 0) OmniboxLayer.Visibility = Visibility.Collapsed;
-    }
+    private void DismissOverlay() { overlayClose?.Invoke(); EndAddressEdit(); }
     private SearchSite? searchSite;
     private SearchSite? siteOffer;
     private void SiteSearch_KeyDown(object sender, KeyRoutedEventArgs e)

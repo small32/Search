@@ -53,10 +53,6 @@ public sealed class BrowserSettings
     public Dictionary<string, string> SpaceProfiles { get; set; } = [];
     public List<InstalledExtension> Extensions { get; set; } = [];
     public bool ExtensionsInPrivate { get; set; }
-    public bool AIEnabled { get; set; }
-    public string AIProvider { get; set; } = "ollama";
-    public string AIModel { get; set; } = "";
-    public Dictionary<string, string> AIModels { get; set; } = [];
     public bool CompactBookmarksBar { get; set; }
     public BookmarkOpening BookmarkOpening { get; set; }
     public bool LazyBackgroundTabs { get; set; } = true;

@@ -6,8 +6,9 @@ Windows 版使用 C# / .NET 8、WinUI 3 和 WebView2，与 macOS 的 Swift 源�
 
 - **仅支持 Windows 10 1809（build 17763）及更新版本，包含 Windows 11。**
 - **仅支持 x86_64 / x64 系统。** 不提供 x86 或 ARM64 构建；启动时检查系统架构。
-- 解压整个 `SearcheXtra-1.0.1-win-x64.zip`，运行目录内的 `SearcheXtra.exe`，不要单独移动 EXE。
-- 发布包包含 .NET 与 Windows App SDK 运行时；仍需安装 **Microsoft Edge WebView2 Evergreen Runtime**。Windows 11 通常已有，Windows 10 可从 [微软官网下载](https://developer.microsoft.com/microsoft-edge/webview2/#download-section)。
+- 推荐运行 `SearcheXtra-2.0.0-win-x64-setup.exe` 安装。安装器检测 .NET 8 x64、Windows App SDK 1.8 x64 和 WebView2；缺失时从微软下载并安装，已有兼容版本会跳过。补装 .NET 时需要管理员权限和网络。
+- ZIP 为依赖系统运行库的便携包，需先安装上述运行库；解压整个目录后运行 `SearcheXtra.exe`。
+- 应用目录不携带 .NET 或 Windows App SDK 运行库，只保留必要的托管接口、部署引导库与应用依赖。共享运行库不会随卸载应用而删除。
 - 此本地构建未作代码签名。
 
 ## 已实现
@@ -38,7 +39,7 @@ Windows 版使用 C# / .NET 8、WinUI 3 和 WebView2，与 macOS 的 Swift 源�
 - 阅读模式是基于文档结构的提取，不保证每个网站都能正确识别文章。
 - 画中画适用于主文档视频；跨来源 iframe 播放器与 DRM 网站需单独验证。
 - 已移植 macOS 的跟踪域名表与逐网站开关。网页 CSS 广告规则与 WebKit 的拦截行为仍有差异。
-- 通行密钥使用 WebView2 / Windows Hello；密码与 API 密钥使用 Windows DPAPI。Apple 钥匙串和 AppleScript 是 macOS 专属功能。脚本控制在 Windows 使用当前用户命名管道；本地 AI 使用独立 CPU 进程。
+- 通行密钥使用 WebView2 / Windows Hello；密码使用 Windows DPAPI。Apple 钥匙串和 AppleScript 是 macOS 专属功能。脚本控制在 Windows 使用当前用户命名管道。
 - 不提供后台自动更新；“查看最新版本”打开仓库 Release 页面。
 - 快捷键按 Windows 习惯使用 Ctrl，支持编辑；关键词和 Tab 网站搜索已接通。Chrome / Edge / Brave / Firefox 的本机配置目录可导入书签和历史，密码通过 CSV 导入。
 
@@ -75,7 +76,7 @@ Remove-Item Env:SEARCHEXTRA_TEST_MV2_PACKAGE
 
 ## 构建
 
-需要 Windows x64、.NET 8 SDK。项目通过 NuGet 引入 WinUI 和 Windows SDK 引用，建议安装 Visual Studio 的 Windows 应用开发工具与 Windows SDK。
+需要 Windows x64、.NET 8 SDK 与 Inno Setup 6.7+（或通过 `-InnoSetupCompiler` 指定 ISCC.exe）。项目通过 NuGet 引入 WinUI 和 Windows SDK 引用，建议安装 Visual Studio 的 Windows 应用开发工具与 Windows SDK。
 
 ```powershell
 ./Windows/build.ps1
@@ -85,15 +86,16 @@ Remove-Item Env:SEARCHEXTRA_TEST_MV2_PACKAGE
 ./Windows/build.ps1 -RunUiTests
 ```
 
-构建先运行模型测试，再发布自包含 x64 目录并生成 ZIP / SHA-256：
+构建先运行模型测试，再发布依赖共享运行库的 x64 目录，并生成安装 EXE、ZIP / SHA-256：
 
 ```text
 Windows/artifacts/win-x64/SearcheXtra.exe
-Windows/artifacts/SearcheXtra-1.0.1-win-x64.zip
+Windows/artifacts/SearcheXtra-2.0.0-win-x64.zip
+Windows/artifacts/SearcheXtra-2.0.0-win-x64-setup.exe
 Windows/artifacts/SHA256SUMS.txt
 ```
 
-`.github/workflows/windows.yml` 在 GitHub Actions 上执行相同流程并上传构建附件；当前不会自动修改 macOS Release。
+`.github/workflows/windows.yml` 在 GitHub Actions 上执行相同流程并上传构建附件；Release 流程同时构建 macOS ARM64 与 Windows x64，并在两端构建成功后统一发布安装包和校验文件。
 
 ## 测试和数据
 
@@ -104,3 +106,5 @@ Windows/artifacts/SHA256SUMS.txt
 真实 WebView2 集成测试：设置 `SEARCHEXTRA_DATA_DIR` 为独立测试目录，`SEARCHEXTRA_SMOKE_TEST` 为 JSON 报告路径，再启动应用。测试使用本机临时 HTTP 服务器，检查导航、三种书签打开方式、按需加载、状态保留、分屏、挂起与无痕隔离，完成后自动关闭。不要把该环境变量用于普通浏览。
 
 Win10 最低版本及不同 Runtime 的兼容性仍需对应机器验证；本机成功构建和运行不等于已经完成所有支持系统的验收。
+
+macOS 与 Windows 均已移除 AI 功能、模型下载及推理进程。Windows 只引用所需的 WinUI / Runtime 组件，不再引入未使用的 AI、ML、Widgets 和 DWrite SDK 组件。版本号统一读取仓库根目录的 `VERSION`。

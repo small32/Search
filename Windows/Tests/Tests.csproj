@@ -7,7 +7,6 @@
   <Compile Include="../SearcheXtra/BookmarkImport.cs" Link="BookmarkImport.cs"/>
   <Compile Include="../SearcheXtra/CrxInstaller.cs" Link="CrxInstaller.cs"/>
   <Compile Include="../SearcheXtra/CsvPasswords.cs" Link="CsvPasswords.cs"/>
-  <Compile Include="../SearcheXtra/LocalAI.cs" Link="LocalAI.cs"/>
   <Compile Include="../SearcheXtra/BrowserImport.cs" Link="BrowserImport.cs"/>
   <PackageReference Include="Microsoft.Data.Sqlite" Version="8.0.31"/>
  </ItemGroup>

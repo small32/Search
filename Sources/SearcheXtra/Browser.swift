@@ -326,7 +326,7 @@ final class Browser: NSObject, ObservableObject {
     var cycling = false
 
     var active: Tab? { tabs.first { $0.id == activeID } }
-    var fieldShowing: Bool { editing || active?.isBlank ?? true }
+    var fieldShowing: Bool { summoning }
 
     /// Typed plus whatever the field is quietly finishing for you.
     var completed: String {
@@ -337,8 +337,6 @@ final class Browser: NSObject, ObservableObject {
     // MARK: - looking for something on the page
 
     @Published var finding = false
-    /// The AI panel's conversation about the page, while it is open.
-    @Published var assisting: Assistant?
     /// The Settings page it opens on next.
     var settingsPage: SettingsPanel.Page {
         get { SettingsPanel.Page(rawValue: Store.settings.string(forKey: "settings.page") ?? "") ?? .general }
@@ -1150,10 +1148,10 @@ final class Browser: NSObject, ObservableObject {
     /// The pins drawn as squares: those not kept as rows, and every pin
     /// while the rows are off. They come first among the pins, so a
     /// square's place in the grid is its place in the row.
-    var squarePins: [Tab] { tabs.filter { $0.pin != nil && !($0.listed && prefs.showsPinRows) } }
+    var squarePins: [Tab] { tabs.filter { $0.pin != nil && $0.id != editingTab && !($0.listed && prefs.showsPinRows) } }
     /// The pins kept as rows, under the squares (see Tab.listed). None
     /// while the rows are off: they are drawn as squares then.
-    var listedPins: [Tab] { prefs.showsPinRows ? tabs.filter { $0.pin != nil && $0.listed } : [] }
+    var listedPins: [Tab] { tabs.filter { $0.pin != nil && ($0.id == editingTab || ($0.listed && prefs.showsPinRows)) } }
 
     /// `listed`: as a row under the squares rather than as a square.
     func pin(_ tab: Tab, listed: Bool = false) {
@@ -1295,13 +1293,12 @@ final class Browser: NSObject, ObservableObject {
     @Published private(set) var renamingTab = false
 
     func beginTabEdit(_ tab: Tab) {
-        guard let url = tab.address else {
-            edit()
-            return
-        }
+        summoning = false
+        editing = false
         renamingTab = false
-        tabDraft = Address.editable(url)
+        tabDraft = tab.address.map(Address.editable) ?? tab.draft
         editingTab = tab.id
+        focusRequest += 1
     }
 
     /// Rename. The name the tab is wearing arrives selected, so typing
@@ -2478,6 +2475,13 @@ final class Browser: NSObject, ObservableObject {
         rememberSession()
     }
 
+    private func editBlankTab(_ tab: Tab) {
+        activeID = tab.id
+        typed = ""
+        tab.draft = ""
+        beginTabEdit(tab)
+    }
+
     func newTab() {
         // On a private tab, a new one is private too: ⌘T from a page that
         // keeps nothing and landing on one that keeps everything is how a
@@ -2503,23 +2507,14 @@ final class Browser: NSObject, ObservableObject {
                 move(blank, to: end)
             }
             if activeID != blank.id { leaving() }
-            activeID = blank.id
-            summoning = false
-            typed = ""
-            blank.draft = ""
-            editing = false
-            focusRequest += 1
+            editBlankTab(blank)
             rememberSession()
             return
         }
         let tab = Tab(configuration: Web.configuration(space: spaceID))
         adopt(tab)
         leaving()
-        activeID = tab.id
-        summoning = false
-        typed = ""
-        editing = false
-        focusRequest += 1
+        editBlankTab(tab)
         rememberSession()
         if #available(macOS 15.4, *) { Extensions.shared.offerNewTabPage(into: tab) }
     }
@@ -2562,8 +2557,6 @@ final class Browser: NSObject, ObservableObject {
         // Back on a tab with the caret still in a box, the list may come again.
         looked = nil
         guard tab.id != activeID else { return }
-        // The AI panel is about the page it was opened on.
-        if assisting != nil { closeAssistant() }
         // Coming back to the tab whose video is out brings it home first, so
         // it is never lifted and landed in the same breath.
         if floating == tab.id { land() }
@@ -3401,22 +3394,13 @@ final class Browser: NSObject, ObservableObject {
                 move(blank, to: end)
             }
             if activeID != blank.id { leaving() }
-            activeID = blank.id
-            summoning = false
-            typed = ""
-            blank.draft = ""
-            editing = false
-            focusRequest += 1
+            editBlankTab(blank)
             return
         }
         let tab = Tab(shy: true)
         adopt(tab)
         leaving()
-        activeID = tab.id
-        summoning = false
-        typed = ""
-        editing = false
-        focusRequest += 1
+        editBlankTab(tab)
         announce(L10n.text("Browser.0345"))
     }
 
@@ -3932,18 +3916,9 @@ final class Browser: NSObject, ObservableObject {
     /// ⌘L. The current address comes up selected, so typing over it replaces it
     /// and Escape puts it back.
     func edit() {
-        summoning = false
-        // Never a name and password written into the address: they would be
-        // on screen, and in whatever you copy from here.
-        typed = active?.address.map { url -> String in
-            guard var parts = URLComponents(url: url, resolvingAgainstBaseURL: false), parts.user != nil || parts.password != nil
-            else { return url.absoluteString }
-            parts.user = nil
-            parts.password = nil
-            return parts.string ?? ""
-        } ?? ""
-        editing = true
-        focusRequest += 1
+        guard let tab = active else { return }
+        folded = false
+        beginTabEdit(tab)
     }
 
     func dismiss() {
@@ -4108,8 +4083,7 @@ extension Browser: WKNavigationDelegate, WKUIDelegate {
         // An extension's OAuth sign-in coming back: the address is the
         // answer, handed to the extension, and never loaded.
         if ExtensionAuth.intercept(url, browser: self, from: webView)
-            || ExtensionAuth.handOver(url, mainFrame: action.targetFrame?.isMainFrame == true, browser: self, from: webView)
-            || AISignIn.intercept(url, mainFrame: action.targetFrame?.isMainFrame == true, in: tab(for: webView), browser: self) {
+            || ExtensionAuth.handOver(url, mainFrame: action.targetFrame?.isMainFrame == true, browser: self, from: webView) {
             decisionHandler(.cancel)
             return
         }

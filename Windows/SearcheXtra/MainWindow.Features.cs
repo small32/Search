@@ -101,23 +101,4 @@ public sealed partial class MainWindow
     {
         "Ctrl+L" => T("Address", "地址"), "Ctrl+T" => T("New tab", "新标签页"), "Ctrl+W" => T("Close tab", "关闭标签页"), "Ctrl+N" => T("New window", "新窗口"), "Ctrl+Shift+N" => T("Private tab", "无痕标签页"), "Ctrl+Shift+T" => T("Reopen tab", "恢复标签页"), "Ctrl+R" => T("Reload", "刷新"), "Ctrl+D" => T("Bookmark", "书签"), "Ctrl+H" => T("History", "历史"), "Ctrl+J" => T("Downloads", "下载"), "Ctrl+F" => T("Find", "查找"), "Ctrl+K" => T("Search tabs", "搜索标签页"), "Ctrl+OemComma" => T("Settings", "设置"), _ => key
     };
-    private async Task ShowAIAsync()
-    {
-        if (!Settings.AIEnabled || ActiveView?.Control.CoreWebView2 is not { } core || active == null) { Status.Text = T("Enable AI in Settings first.", "请先在设置中启用 AI。"); return; }
-        var result = new TextBox { IsReadOnly = true, AcceptsReturn = true, TextWrapping = TextWrapping.Wrap, Height = 260 };
-        var question = new TextBox { PlaceholderText = T("Ask about this page", "针对本页提问") };
-        var buttons = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 8 }; var summary = QuietButton(T("Summarize", "摘要")); var ask = QuietButton(T("Ask", "提问")); buttons.Children.Add(summary); buttons.Children.Add(ask);
-        var panel = new StackPanel { Spacing = 10 }; panel.Children.Add(result); panel.Children.Add(question); panel.Children.Add(buttons);
-        using var cancel = new CancellationTokenSource();
-        async Task Request(string prompt)
-        {
-            summary.IsEnabled = ask.IsEnabled = false;
-            try { result.Text = T("Reading…", "正在读取…"); var text = JsonSerializer.Deserialize<string>(await core.ExecuteScriptAsync(AIClient.PageTextScript)) ?? ""; result.Text = await AIClient.AskAsync(Settings, text, prompt, cancel.Token); }
-            catch (OperationCanceledException) { }
-            catch (Exception ex) { result.Text = ex.Message; }
-            finally { summary.IsEnabled = ask.IsEnabled = true; }
-        }
-        summary.Click += async (_, _) => await Request(T("Summarize this page in a few sentences.", "用几句话概括本页。")); ask.Click += async (_, _) => { if (question.Text.Trim().Length > 0) await Request(question.Text.Trim()); };
-        await ShowCardAsync(T("Page assistant", "网页助手"), panel); cancel.Cancel();
-    }
 }

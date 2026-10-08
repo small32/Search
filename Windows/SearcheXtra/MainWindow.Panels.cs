@@ -10,14 +10,10 @@ namespace SearcheXtra.Windows;
 
 public sealed partial class MainWindow
 {
-    private async Task<ContentDialogResult> DialogAsync(string title, UIElement content, string? primary = null)
-    {
-        return await ShowCardAsync(title, content, primary);
-    }
     private async Task<string?> PromptAsync(string title, string placeholder, string value = "")
     {
         var box = new TextBox { PlaceholderText = placeholder, Text = value, MinWidth = 320 };
-        return await DialogAsync(title, box, T("Save", "保存")) == ContentDialogResult.Primary ? box.Text.Trim() : null;
+        return await ShowCardAsync(title, box, T("Save", "保存")) == ContentDialogResult.Primary ? box.Text.Trim() : null;
     }
 
     private void RefreshBookmarkBar()
@@ -82,7 +78,6 @@ public sealed partial class MainWindow
             default: _ = NavigateAsync(url); break;
         }
     }
-    private async void Bookmark_Click(object sender, RoutedEventArgs e) => await AddBookmarkAsync();
     private async Task AddBookmarkAsync()
     {
         if (active == null || !AddressParser.IsWeb(active.Url)) return;
@@ -159,7 +154,7 @@ public sealed partial class MainWindow
         };
         foreach (var button in new[] { open, edit, create, remove, import, export }) buttons.Children.Add(button);
         panel.Children.Add(search); panel.Children.Add(list); panel.Children.Add(buttons);
-        await DialogAsync(T("Bookmarks", "书签"), panel);
+        await ShowCardAsync(T("Bookmarks", "书签"), panel);
     }
     private async Task ShowHistoryAsync()
     {
@@ -174,7 +169,7 @@ public sealed partial class MainWindow
         var clear = new Button { Content = T("Clear history", "清空历史记录") };
         clear.Click += (_, _) => { store.History.Clear(); ScheduleSave(); Refresh(); };
         panel.Children.Add(search); panel.Children.Add(list); panel.Children.Add(open); panel.Children.Add(clear);
-        await DialogAsync(T("History", "历史记录"), panel);
+        await ShowCardAsync(T("History", "历史记录"), panel);
     }
     private async Task ShowTabSearchAsync()
     {
@@ -183,12 +178,12 @@ public sealed partial class MainWindow
         var list = new ListView { Height = 320 }; List<BrowserTab> filtered = [];
         void Refresh() { filtered = tabs.Where(t => t.Title.Contains(search.Text, StringComparison.OrdinalIgnoreCase) || t.Url.Contains(search.Text, StringComparison.OrdinalIgnoreCase)).ToList(); list.ItemsSource = filtered.Select(t => t.DisplayTitle).ToList(); }
         search.TextChanged += (_, _) => Refresh(); Refresh(); panel.Children.Add(search); panel.Children.Add(list);
-        if (await DialogAsync(T("Open tabs", "已打开的标签页"), panel, T("Switch", "切换")) == ContentDialogResult.Primary && list.SelectedIndex >= 0) await SelectAsync(filtered[list.SelectedIndex]);
+        if (await ShowCardAsync(T("Open tabs", "已打开的标签页"), panel, T("Switch", "切换")) == ContentDialogResult.Primary && list.SelectedIndex >= 0) await SelectAsync(filtered[list.SelectedIndex]);
     }
     private async Task FindAsync()
     {
         var input = new TextBox { PlaceholderText = T("Text", "文字"), MinWidth = 320 };
-        if (await DialogAsync(T("Find in page", "页面内查找"), input, T("Find next", "查找下一个")) != ContentDialogResult.Primary || ActiveView?.Control.CoreWebView2 is not { } core) return;
+        if (await ShowCardAsync(T("Find in page", "页面内查找"), input, T("Find next", "查找下一个")) != ContentDialogResult.Primary || ActiveView?.Control.CoreWebView2 is not { } core) return;
         await core.ExecuteScriptAsync("window.find(" + JsonSerializer.Serialize(input.Text) + ",false,false,true,false,false,false)");
     }
     private async Task ShowDownloadsAsync()
@@ -210,7 +205,7 @@ public sealed partial class MainWindow
         var openFile = QuietButton(T("Open saved file", "打开已保存文件")); openFile.Click += (_, _) => { if (kept.SelectedIndex >= 0 && File.Exists(store.Downloads[kept.SelectedIndex].Path)) Process.Start(new ProcessStartInfo(store.Downloads[kept.SelectedIndex].Path) { UseShellExecute = true }); };
         var forget = QuietButton(T("Forget record", "删除记录")); forget.Click += (_, _) => { if (kept.SelectedIndex >= 0) { store.Downloads.RemoveAt(kept.SelectedIndex); kept.ItemsSource = store.Downloads.Select(d => Path.GetFileName(d.Path) + " · " + d.Date.ToLocalTime().ToString("g")).ToList(); ScheduleSave(); } };
         keptControls.Children.Add(openFile); keptControls.Children.Add(forget); panel.Children.Add(keptControls);
-        try { await DialogAsync(T("Downloads", "下载"), panel); } finally { timer.Stop(); }
+        try { await ShowCardAsync(T("Downloads", "下载"), panel); } finally { timer.Stop(); }
     }
     private void Spaces_Click(object sender, RoutedEventArgs e)
     {
@@ -250,7 +245,7 @@ public sealed partial class MainWindow
     private async Task MoveTabAsync(BrowserTab tab)
     {
         var choices = new ComboBox { ItemsSource = store.Spaces, SelectedItem = tab.Space, MinWidth = 320 };
-        if (await DialogAsync(T("Move to space", "移至空间"), choices, T("Move", "移动")) != ContentDialogResult.Primary) return;
+        if (await ShowCardAsync(T("Move to space", "移至空间"), choices, T("Move", "移动")) != ContentDialogResult.Primary) return;
         if (views.Remove(tab.Id, out var oldView)) { Pages.Children.Remove(oldView.Control); oldView.Dispose(); }
         tab.Space = (string)choices.SelectedItem; split = null; RefreshTabLists();
         if (active == tab) { var next = tabs.FirstOrDefault(t => t.Space == space); if (next != null) await SelectAsync(next); else AddTab(); }
@@ -278,7 +273,7 @@ public sealed partial class MainWindow
         var delete = new Button { Content = T("Delete selected", "删除选中项") };
         delete.Click += async (_, _) => { if (list.SelectedIndex >= 0) { logins.RemoveAt(list.SelectedIndex); await PasswordStore.WriteAsync(logins); list.ItemsSource = logins.Select(l => l.Origin + " · " + l.Username).ToList(); } };
         foreach (var element in new UIElement[] { list, origin, username, password, fill, delete }) panel.Children.Add(element);
-        if (await DialogAsync(T("Passwords · encrypted for your Windows account", "密码 · 使用 Windows 账户加密"), panel, T("Save login", "保存账号")) == ContentDialogResult.Primary && AddressParser.IsWeb(origin.Text) && password.Password.Length > 0)
+        if (await ShowCardAsync(T("Passwords · encrypted for your Windows account", "密码 · 使用 Windows 账户加密"), panel, T("Save login", "保存账号")) == ContentDialogResult.Primary && AddressParser.IsWeb(origin.Text) && password.Password.Length > 0)
         {
             var site = new Uri(origin.Text).GetLeftPart(UriPartial.Authority);
             logins.RemoveAll(l => l.Origin == site && l.Username == username.Text); logins.Add(new(site, username.Text, password.Password)); await PasswordStore.WriteAsync(logins);

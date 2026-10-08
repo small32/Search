@@ -4,14 +4,7 @@ using System.Text;
 using System.Security.Cryptography;
 using System.IO.Compression;
 
-Environment.SetEnvironmentVariable("SEARCHEXTRA_DATA_DIR", Path.Combine(Path.GetTempPath(), args.Length > 0 && args[0] == "--local-ai-probe" ? "SearcheXtra-local-model-probe" : "SearcheXtra-tests-" + Guid.NewGuid().ToString("N")));
-if (args.Length == 2 && args[0] == "--local-ai-probe")
-{
-    if (!File.Exists(LocalAI.ModelPath)) { Console.WriteLine("Downloading pinned Qwen3 model for isolated inference test…"); await LocalAI.InstallAsync(null); }
-    Console.WriteLine("Model verified; starting isolated CPU worker…"); using var cancellation = new CancellationTokenSource(TimeSpan.FromMinutes(5));
-    var answer = await LocalAI.AskAsync("Reply using one short sentence.", "What is two plus two? /no_think", cancellation.Token, Path.GetFullPath(args[1]));
-    if (!(answer.Contains('4') || answer.Contains("four", StringComparison.OrdinalIgnoreCase))) throw new Exception("Local inference answer: " + answer); LocalAI.Stop(); Console.WriteLine("PASS: verified local CPU inference: " + answer); return;
-}
+Environment.SetEnvironmentVariable("SEARCHEXTRA_DATA_DIR", Path.Combine(Path.GetTempPath(), "SearcheXtra-tests-" + Guid.NewGuid().ToString("N")));
 var count = 0;
 void Check(bool condition, string message) { if (!condition) throw new Exception(message); count++; }
 const string search = "https://www.bing.com/search?q={0}";

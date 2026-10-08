@@ -1,10 +1,12 @@
 name: Windows x64
 on:
   push:
+    branches: ['**']
     paths: ['Windows/**', '.github/workflows/windows.yml', 'VERSION', 'Sources/SearcheXtra/Resources/AppIcon.png']
   pull_request:
-    paths: ['Windows/**', '.github/workflows/windows.yml', 'VERSION']
+    paths: ['Windows/**', '.github/workflows/windows.yml', 'VERSION', 'Sources/SearcheXtra/Resources/AppIcon.png']
   workflow_dispatch:
+  workflow_call:
 permissions:
   contents: read
 jobs:
@@ -16,6 +18,15 @@ jobs:
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.0.x'
+      - name: Prepare installer compiler
+        shell: pwsh
+        run: |
+          $package = Join-Path $env:RUNNER_TEMP 'innosetup.zip'
+          Invoke-WebRequest 'https://api.nuget.org/v3-flatcontainer/tools.innosetup/6.7.3/tools.innosetup.6.7.3.nupkg' -OutFile $package
+          if ((Get-FileHash $package -Algorithm SHA256).Hash -ne 'F780898E402FF80612CC8D9FCB8C6E02932BD1CB4C900FFDAA31F9341CFB49F4') { throw 'Installer compiler package checksum mismatch' }
+          $compiler = Join-Path $env:RUNNER_TEMP 'innosetup'
+          Expand-Archive $package -DestinationPath $compiler
+          Add-Content $env:GITHUB_PATH (Join-Path $compiler 'tools')
       - name: Test and publish Windows x64
         shell: pwsh
         run: ./Windows/build.ps1
@@ -24,4 +35,5 @@ jobs:
           name: SearcheXtra-win-x64
           path: |
             Windows/artifacts/*.zip
+            Windows/artifacts/*-setup.exe
             Windows/artifacts/SHA256SUMS.txt

@@ -41,7 +41,7 @@ public partial class App : Application
     {
         var window = new MainWindow(Store, restore, session);
         Windows.Add(window);
-        window.Closed += (_, _) => { Windows.Remove(window); if (Windows.Count == 0) LocalAI.Stop(); };
+        window.Closed += (_, _) => { Windows.Remove(window); };
         if (initialUrl != null) window.OpenExternal(initialUrl);
         if (small) window.AppWindow.Resize(new global::Windows.Graphics.SizeInt32(720, 540));
         window.Activate();
