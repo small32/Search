@@ -64,6 +64,7 @@ public sealed partial class MainWindow : Window
         Closed += Window_Closed;
         BackButton.RightTapped += async (_, e) => { e.Handled = true; await ShowNavigationHistoryAsync(true, BackButton); };
         ForwardButton.RightTapped += async (_, e) => { e.Handled = true; await ShowNavigationHistoryAsync(false, ForwardButton); };
+        ReopenButton.RightTapped += (_, e) => { e.Handled = true; ShowRecentHistory(); };
         TopSettings.RightTapped += (_, e) => { e.Handled = true; Menu_Click(this, new()); };
         ExtensionsButton.RightTapped += async (_, e) => { e.Handled = true; await ShowExtensionManagerAsync(); };
         InstallShortcuts();
@@ -306,7 +307,6 @@ public sealed partial class MainWindow : Window
         if (editingAddressTab == tab) EndAddressEdit();
         if (!tabs.Contains(tab)) return;
         if (!tab.IsPrivate) closedTabs.Push(new(tab.Url, tab.Title, tab.Pinned, tab.Space, tab.Group));
-        ReopenButton.IsEnabled = closedTabs.Count > 0;
         if (views.Remove(tab.Id, out var view)) { Pages.Children.Remove(view.Control); view.Dispose(); }
         tabs.Remove(tab); tabMenus.Remove(tab.Id);
         if (split == tab || splitOwner == tab) { split = null; splitOwner = null; }
@@ -318,8 +318,15 @@ public sealed partial class MainWindow : Window
     }
     private void Reopen()
     {
-        if (!closedTabs.TryPop(out var saved)) return;
-        ReopenButton.IsEnabled = closedTabs.Count > 0;
+        if (closedTabs.TryPeek(out var saved)) RestoreClosedTab(saved);
+    }
+    private void RestoreClosedTab(SavedTab saved)
+    {
+        var remaining = closedTabs.ToArray();
+        if (!remaining.Any(tab => ReferenceEquals(tab, saved))) return;
+        closedTabs.Clear();
+        foreach (var tab in remaining.Reverse())
+            if (!ReferenceEquals(tab, saved)) closedTabs.Push(tab);
         AddTab(saved.Url, true, false, saved.Title, saved.Pinned, saved.Space, group: saved.Group);
     }
     private void ScheduleSave() { if (!closing) { saveTimer.Stop(); saveTimer.Start(); } }

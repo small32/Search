@@ -32,6 +32,7 @@ public sealed class PageView : IDisposable
 
     private static Task<CoreWebView2Environment> EnvironmentAsync() => environment ??= CoreWebView2Environment.CreateWithOptionsAsync("", Path.Combine(DataStore.Root, "WebView2"), new CoreWebView2EnvironmentOptions { AreBrowserExtensionsEnabled = true, EnableTrackingPrevention = true }).AsTask();
     public Task InitializeAsync() => initialization ??= InitializeCoreAsync();
+    public string ConnectionSecurityState { get; private set; } = "unknown";
     private async Task InitializeCoreAsync()
     {
         var env = await EnvironmentAsync();
@@ -42,6 +43,12 @@ public sealed class PageView : IDisposable
         await Control.EnsureCoreWebView2Async(env, options);
         if (disposed) return;
         var core = Control.CoreWebView2;
+        core.GetDevToolsProtocolEventReceiver("Security.visibleSecurityStateChanged").DevToolsProtocolEventReceived += (_, e) =>
+        {
+            using var data = JsonDocument.Parse(e.ParameterObjectAsJson);
+            ConnectionSecurityState = data.RootElement.GetProperty("visibleSecurityState").GetProperty("securityState").GetString() ?? "unknown";
+        };
+        await core.CallDevToolsProtocolMethodAsync("Security.enable", "{}");
         core.Settings.IsStatusBarEnabled = false;
         core.Settings.IsPasswordAutosaveEnabled = !tab.IsPrivate && store.Settings.SavesPasswords;
         core.Settings.IsGeneralAutofillEnabled = !tab.IsPrivate && store.Settings.FillsPasswords;

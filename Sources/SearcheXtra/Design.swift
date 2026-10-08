@@ -109,10 +109,9 @@ enum Metrics {
     /// measured, not guessed — so this leaves them the same air on their right
     /// that the window gives them on their left.
     static let lights: CGFloat = 100
-    /// Back, forward and reload, at the far end of the row beside the
-    /// bookmarks: three doors and the air before the next one.
-    static let helm: CGFloat = 3 * 26 + 2 * 2 + 8
-    /// The same three doors again, in the sidebar, where they sit right of
+    /// Back, forward, reload and history: four doors with four-point gaps.
+    static let helm: CGFloat = 4 * 26 + 3 * 4 + 8
+    /// The same doors again, in the sidebar, where they sit right of
     /// the lights instead. The column already has 10 of horizontal padding
     /// of its own before this even starts, so this is the lights' own edge
     /// (79) less that padding, plus a sliver of air — not the full breathing

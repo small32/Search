@@ -440,7 +440,7 @@ struct TabBar: View {
     }
 }
 
-/// Back, forward, reload. They watch the live tab, not the window: whether
+/// Back, forward, reload and history. They watch the live tab: whether
 /// there is anywhere to go back to is the tab's to say, and it changes with
 /// every page. Used here and, beside the traffic lights instead of at the
 /// far end of the row, in the sidebar.
@@ -454,12 +454,15 @@ struct Helm: View {
             // Nowhere to go and nothing to reload: the doors stay in place,
             // greyed, so the row doesn't shift when a tab arrives.
             HStack(spacing: 4) {
-                Door(icon: "chevron.left") {}
-                Door(icon: "chevron.right") {}
-                Door(icon: "arrow.clockwise") {}
+                HStack(spacing: 4) {
+                    Door(icon: "chevron.left") {}
+                    Door(icon: "chevron.right") {}
+                    Door(icon: "arrow.clockwise") {}
+                }
+                .opacity(0.3)
+                .allowsHitTesting(false)
+                HistoryDoor(browser: browser)
             }
-            .opacity(0.3)
-            .allowsHitTesting(false)
         }
     }
 
@@ -486,11 +489,44 @@ struct Helm: View {
                 }
                 .disabled(tab.isBlank)
                 .opacity(tab.isBlank ? 0.3 : 1)
+                HistoryDoor(browser: browser)
             }
             .animation(Motion.quick, value: back)
             .animation(Motion.quick, value: forward)
             .animation(Motion.quick, value: tab.loading)
         }
+    }
+}
+
+private struct HistoryDoor: View {
+    @ObservedObject var browser: Browser
+
+    var body: some View {
+        Door(icon: "arrow.uturn.backward", help: browser.reopenTitle) { browser.reopen() }
+            .contextMenu {
+                Button(L10n.text("history.open")) { browser.recalling = true }
+                Divider()
+                Section(L10n.text("history.closed")) {
+                    if browser.ghosts.isEmpty {
+                        Text(L10n.text("history.empty"))
+                    } else {
+                        ForEach(browser.ghosts.reversed().prefix(10)) { ghost in
+                            Button { browser.reopen(ghost) } label: {
+                                MenuLine(title: ghost.label, url: ghost.url)
+                            }
+                        }
+                    }
+                }
+                if !browser.recentlyVisited.isEmpty {
+                    Section(L10n.text("App.0176")) {
+                        ForEach(browser.recentlyVisited) { trace in
+                            Button { browser.fresh(trace.url, foreground: true) } label: {
+                                MenuLine(title: trace.title.isEmpty ? Address.withoutWWW(trace.address) : trace.title, url: trace.url)
+                            }
+                        }
+                    }
+                }
+            }
     }
 }
 
@@ -601,7 +637,7 @@ private struct TabPill: View {
     private var titled: some View {
         HStack(spacing: 6) {
             if editing {
-                TabAddressField(browser: browser)
+                TabAddressEditor(browser: browser, tab: tab)
                     .frame(height: 16)
             } else {
                 if prefs.glyph == .icons, !tab.isBlank {
@@ -922,6 +958,7 @@ struct TabAddressField: NSViewRepresentable {
 
         /// Clicking anywhere else keeps what was typed, as Return does.
         func controlTextDidEndEditing(_ note: Notification) {
+            guard !SiteCardPanel.isShown else { return }
             let browser = browser
             DispatchQueue.main.async { browser.finishTabEdit() }
         }
@@ -939,6 +976,13 @@ struct TabAddressField: NSViewRepresentable {
                 guard let self, let field, event.window === field.window,
                       !field.bounds.contains(field.convert(event.locationInWindow, from: nil))
                 else { return event }
+                if let content = field.window?.contentView {
+                    var hit = content.hitTest(content.convert(event.locationInWindow, from: nil))
+                    while let view = hit {
+                        if view.identifier?.rawValue == "TabSiteInfo" { return event }
+                        hit = view.superview
+                    }
+                }
                 let browser = self.browser
                 DispatchQueue.main.async { browser.finishTabEdit() }
                 return event

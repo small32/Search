@@ -645,7 +645,7 @@ private struct SideRow: View {
     var body: some View {
         HStack(spacing: 8) {
             if editing {
-                TabAddressField(browser: browser)
+                TabAddressEditor(browser: browser, tab: tab)
                     .frame(height: 16)
             } else {
                 if prefs.glyph == .icons, !tab.isBlank {

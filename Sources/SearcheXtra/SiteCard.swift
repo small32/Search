@@ -111,7 +111,7 @@ enum SiteCardPanel {
     }
 
     private final class Panel: NSPanel {
-        override var canBecomeKey: Bool { false }
+        override var canBecomeKey: Bool { true }
         override var canBecomeMain: Bool { false }
     }
 
@@ -144,6 +144,7 @@ struct SiteCard: View {
     @State private var deeper: Bool
     /// Whether this Mac trusts the site's certificate. Unknown until it has
     /// been asked, off the main thread: asking can go to the network.
+    @State private var section = 0
     @State private var certified: Bool?
 
     init(browser: Browser, tab: Tab, deeper: Bool = false, close: @escaping () -> Void) {
@@ -155,7 +156,16 @@ struct SiteCard: View {
 
     var body: some View {
         Group {
-            if deeper, let safety {
+            if section == 2 {
+                VStack(alignment: .leading, spacing: 0) {
+                    SiteDetails(browser: browser, tab: tab, cookiesPage: false) { section = 0 }
+                    zoom
+                    sound
+                    grounded
+                }
+            } else if section == 1 {
+                SiteDetails(browser: browser, tab: tab, cookiesPage: section == 1) { section = 0 }
+            } else if deeper, let safety {
                 security(safety)
             } else {
                 front
@@ -189,12 +199,9 @@ struct SiteCard: View {
             if let safety {
                 Row(safety.title, submenu: true) { deeper = true }
             }
-            Row(L10n.text("SiteCard.0953"), keys: "⇧⌘C") { after { browser.copyAddress() } }
-            Separator()
-            Row(L10n.text("SiteCard.0954"), keys: "⌘P") { after { browser.printPage() } }
-            zoom
-            sound
-            grounded
+            Row(L10n.text("site.data"), submenu: true) { section = 1 }
+            Row(L10n.text("site.settings"), submenu: true) { section = 2 }
+            Row(L10n.text("site.close")) { close() }
         }
     }
 

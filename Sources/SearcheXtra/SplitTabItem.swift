@@ -196,7 +196,7 @@ private struct SplitTabHalf: View {
     @ViewBuilder
     private var titleContent: some View {
         if editing {
-            TabAddressField(browser: browser)
+            TabAddressEditor(browser: browser, tab: tab)
                 .frame(height: 16)
         } else {
             HStack(spacing: stacked ? 8 : 5) {

@@ -61,7 +61,7 @@ public sealed partial class MainWindow
             options.SelectionChanged += async (_, _) => { if (options.SelectedIndex < 0) return; site.Permissions[permission] = new[] { "ask", "allow", "deny" }[options.SelectedIndex]; if (ActiveView?.Control.CoreWebView2 is { } core && Enum.TryParse<CoreWebView2PermissionKind>(permission, out var kind)) await core.Profile.SetPermissionStateAsync(kind, uri.GetLeftPart(UriPartial.Authority), options.SelectedIndex switch { 1 => CoreWebView2PermissionState.Allow, 2 => CoreWebView2PermissionState.Deny, _ => CoreWebView2PermissionState.Default }); ScheduleSave(); }; panel.Children.Add(options);
         }
         var clear = QuietButton(T("Clear this site's data", "清除此网站数据"));
-        clear.Click += async (_, _) => { if (ActiveView?.Control.CoreWebView2 is { } core) { foreach (var cookie in await core.CookieManager.GetCookiesAsync(uri.GetLeftPart(UriPartial.Authority))) core.CookieManager.DeleteCookie(cookie); await core.ExecuteScriptAsync("localStorage.clear();sessionStorage.clear()"); } }; panel.Children.Add(clear);
+        clear.Click += async (_, _) => { if (ActiveView?.Control.CoreWebView2 is { } core) { await ClearSiteDataAsync(core, uri); clear.Content = T("Site data cleared", "网站数据已清除"); } }; panel.Children.Add(clear);
         await ShowCardAsync(uri.Host, panel);
     }
     private async Task ShowImportAsync()

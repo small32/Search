@@ -35,7 +35,7 @@ public sealed partial class MainWindow
         BackButton.Content = Glyph("back"); ForwardButton.Content = Glyph("forward");
         ReloadButton.Content = Glyph("reload"); HomeButton.Content = Glyph("home"); ReopenButton.Content = Glyph("reopen");
         ToolTipService.SetToolTip(HomeButton, T("Home", "主页"));
-        ToolTipService.SetToolTip(ReopenButton, T("Reopen last closed tab (Ctrl+Shift+T)", "恢复上一个关闭的标签页（Ctrl+Shift+T）"));
+        ToolTipService.SetToolTip(ReopenButton, T("Reopen last closed tab (Ctrl+Shift+T) · Right-click for history", "恢复上一个关闭的标签页（Ctrl+Shift+T）· 右键查看历史记录"));
         Microsoft.UI.Xaml.Automation.AutomationProperties.SetName(HomeButton, T("Home", "主页"));
         Microsoft.UI.Xaml.Automation.AutomationProperties.SetName(ReopenButton, T("Reopen last closed tab", "恢复上一个关闭的标签页")); SettingsButton.Content = Glyph("sliders"); TopSettings.Content = Glyph("sliders"); ExtensionsButton.Content = Glyph("extensions");
     }

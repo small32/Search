@@ -280,7 +280,7 @@ struct SearcheXtraApp: App {
 }
 
 /// A page, as a line in a menu: its icon if one is known, and its name.
-private struct MenuLine: View {
+struct MenuLine: View {
     let title: String
     let url: URL
 

@@ -5066,5 +5066,101 @@
   "extensions.cancel": {
     "en": "Cancel",
     "zh-Hans": "取消"
+  },
+  "site.info": {
+    "en": "Site information",
+    "zh-Hans": "网站信息"
+  },
+  "site.back": {
+    "en": "‹ Site information",
+    "zh-Hans": "‹ 网站信息"
+  },
+  "site.data": {
+    "en": "Cookies and site data",
+    "zh-Hans": "Cookie 和网站数据"
+  },
+  "site.settings": {
+    "en": "Site settings",
+    "zh-Hans": "网站设置"
+  },
+  "site.cookieCount": {
+    "en": "Cookies: {0}",
+    "zh-Hans": "Cookie 数量：{0}"
+  },
+  "site.value": {
+    "en": "Value",
+    "zh-Hans": "值"
+  },
+  "site.save": {
+    "en": "Save",
+    "zh-Hans": "保存"
+  },
+  "site.delete": {
+    "en": "Delete",
+    "zh-Hans": "删除"
+  },
+  "site.saved": {
+    "en": "Cookie saved.",
+    "zh-Hans": "Cookie 已保存。"
+  },
+  "site.clear": {
+    "en": "Clear this site’s data",
+    "zh-Hans": "清除此网站数据"
+  },
+  "site.cleared": {
+    "en": "Site data cleared. Reload to apply.",
+    "zh-Hans": "网站数据已清除，刷新页面后生效。"
+  },
+  "site.reload": {
+    "en": "Reload the page to apply permission changes.",
+    "zh-Hans": "刷新页面以应用权限修改。"
+  },
+  "site.ask": {
+    "en": "Ask",
+    "zh-Hans": "询问"
+  },
+  "site.allow": {
+    "en": "Allow",
+    "zh-Hans": "允许"
+  },
+  "site.block": {
+    "en": "Block",
+    "zh-Hans": "阻止"
+  },
+  "site.camera": {
+    "en": "Camera",
+    "zh-Hans": "摄像头"
+  },
+  "site.microphone": {
+    "en": "Microphone",
+    "zh-Hans": "麦克风"
+  },
+  "site.cameraMicrophone": {
+    "en": "Camera and microphone together",
+    "zh-Hans": "同时使用摄像头和麦克风"
+  },
+  "site.location": {
+    "en": "Location",
+    "zh-Hans": "位置信息"
+  },
+  "site.notifications": {
+    "en": "Notifications",
+    "zh-Hans": "通知"
+  },
+  "site.close": {
+    "en": "Close",
+    "zh-Hans": "关闭"
+  },
+  "history.open": {
+    "zh-Hans": "打开历史记录",
+    "en": "Open history"
+  },
+  "history.closed": {
+    "zh-Hans": "最近关闭的标签页",
+    "en": "Recently closed tabs"
+  },
+  "history.empty": {
+    "zh-Hans": "没有最近关闭的标签页",
+    "en": "No recently closed tabs"
   }
 }

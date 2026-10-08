@@ -71,7 +71,12 @@ public sealed partial class MainWindow
                 Check(Math.Abs(plus - end) < 2, "New tab button sits beside the last rendered tab without an empty gap");
             }
             else throw new Exception("Horizontal tab containers not realized");
-            Check(!ReopenButton.IsEnabled, "Reopen button starts disabled without closed tabs");
+            Check(ReopenButton.IsEnabled, "History menu is available without closed tabs");
+            ShowRecentHistory();
+            var emptyHistoryMenu = (Microsoft.UI.Xaml.Controls.MenuFlyout)ReopenButton.Tag;
+            Check(emptyHistoryMenu.Items.OfType<Microsoft.UI.Xaml.Controls.MenuFlyoutItem>().Any(item => item.IsEnabled && item.Text == T("Open history", "打开历史记录")),
+                "Empty closed-tab list still offers the full history entry");
+            emptyHistoryMenu.Hide();
             Check(Helm.Children.IndexOf(HomeButton) == Helm.Children.IndexOf(ReloadButton) + 1 &&
                 Helm.Children.IndexOf(ReopenButton) == Helm.Children.IndexOf(HomeButton) + 1, "Home and reopen buttons follow reload in order");
             var previousStart = Settings.StartPage;
@@ -93,7 +98,7 @@ public sealed partial class MainWindow
             await SelectAsync(blankNewTab);
             Check(active == blankNewTab && Welcome.Visibility == Visibility.Visible && !views.ContainsKey(blankNewTab.Id) && Settings.StartPage == fixture + "home",
                 "Blank new tab stays blank without loading the configured start page");
-            await SelectAsync(first); CloseTab(blankNewTab); closedTabs.Pop(); ReopenButton.IsEnabled = closedTabs.Count > 0;
+            await SelectAsync(first); CloseTab(blankNewTab); closedTabs.Pop();
             Settings.StartPage = "";
             await GoHomeAsync();
             await Wait(() => views[first.Id].Control.CoreWebView2.Source == "about:blank");
@@ -105,13 +110,35 @@ public sealed partial class MainWindow
             var lastClosed = AddTab(fixture + "last-closed", false, title: "Restored title", pinned: true, group: "Restored group");
             CloseTab(olderClosed); CloseTab(lastClosed);
             Check(ReopenButton.IsEnabled, "Closing a normal tab enables reopen");
+            ShowRecentHistory();
+            var historyMenu = (Microsoft.UI.Xaml.Controls.MenuFlyout)ReopenButton.Tag;
+            var closedItems = historyMenu.Items.OfType<Microsoft.UI.Xaml.Controls.MenuFlyoutItem>().Where(item => item.IsEnabled).ToArray();
+            Check(closedItems[1].Text == "Restored title" && closedItems[2].Text == (string.IsNullOrWhiteSpace(olderClosed.Title) ? olderClosed.Url : olderClosed.Title),
+                "Closed tabs are listed newest first with their titles");
+            var olderItem = closedItems[2];
+            var olderPeer = new Microsoft.UI.Xaml.Automation.Peers.MenuFlyoutItemAutomationPeer(olderItem);
+            ((Microsoft.UI.Xaml.Automation.Provider.IInvokeProvider)olderPeer.GetPattern(Microsoft.UI.Xaml.Automation.Peers.PatternInterface.Invoke)).Invoke();
+            historyMenu.Hide();
+            await Wait(() => active?.Url == fixture + "older-closed");
+            Check(closedTabs.Count == 1 && closedTabs.Peek().Url == fixture + "last-closed",
+                "Selecting an older closed tab restores only that tab and preserves the latest undo entry");
+            var restoredOlder = active!;
             Reopen_Click(ReopenButton, new());
             await Wait(() => active?.Url == fixture + "last-closed");
-            Check(active is { Pinned: true, Group: "Restored group" } && tabs.All(t => t.Url != fixture + "older-closed"), "Reopen restores the most recently closed tab and its metadata");
+            Check(active is { Pinned: true, Group: "Restored group" }, "Reopen restores the most recently closed tab and its metadata");
             var restoredClosed = active!;
-            Reopen(); await Wait(() => active?.Url == fixture + "older-closed");
-            Check(!ReopenButton.IsEnabled, "Reopen becomes disabled after the closed-tab stack is exhausted");
-            CloseTab(active!); CloseTab(restoredClosed); closedTabs.Clear(); ReopenButton.IsEnabled = false;
+            Reopen();
+            Check(closedTabs.Count == 0 && active == restoredClosed && ReopenButton.IsEnabled, "Exhausted undo leaves the active tab intact and history available");
+            ShowRecentHistory();
+            historyMenu = (Microsoft.UI.Xaml.Controls.MenuFlyout)ReopenButton.Tag;
+            var historyPeer = new Microsoft.UI.Xaml.Automation.Peers.MenuFlyoutItemAutomationPeer((Microsoft.UI.Xaml.Controls.MenuFlyoutItem)historyMenu.Items[0]);
+            ((Microsoft.UI.Xaml.Automation.Provider.IInvokeProvider)historyPeer.GetPattern(Microsoft.UI.Xaml.Automation.Peers.PatternInterface.Invoke)).Invoke();
+            historyMenu.Hide();
+            await Wait(() => OverlayLayer.Visibility == Visibility.Visible);
+            Check(FindAddressPart<Microsoft.UI.Xaml.Controls.TextBox>(OverlayLayer)?.PlaceholderText == T("Search history", "搜索历史记录"),
+                "History menu opens the searchable history panel");
+            DismissOverlay();
+            CloseTab(restoredOlder); CloseTab(restoredClosed); closedTabs.Clear();
             await SelectAsync(first);
             var firstView = views[first.Id];
             await firstView.Control.CoreWebView2.ExecuteScriptAsync("window.testMarker=42");
@@ -320,6 +347,44 @@ public sealed partial class MainWindow
                 Check(Address.Parent == AddressParking && editingAddressTab == null, "Ending address edit restores the tab label");
             }
             Settings.Sidebar = false; ApplySettings();
+            FocusAddress(); Root.UpdateLayout();
+            var infoItem = (Microsoft.UI.Xaml.Controls.ListViewItem)TopTabs.ContainerFromItem(active);
+            var infoButton = FindAddressPart<Microsoft.UI.Xaml.Controls.Button>(infoItem, "TabSiteInfo")!;
+            Check(infoButton.Visibility == Visibility.Visible, "Web tabs show the site information icon during address editing");
+            SiteInfo_Click(infoButton, new());
+            var siteFlyout = (Microsoft.UI.Xaml.Controls.Flyout)infoButton.Tag;
+            var sitePanel = (Microsoft.UI.Xaml.Controls.StackPanel)siteFlyout.Content;
+            Check(sitePanel.Children.OfType<Microsoft.UI.Xaml.Controls.Button>().Count() == 3 && editingAddressTab == active,
+                "Site information flyout contains connection, cookies and settings without ending address editing");
+            void InvokeSiteButton(Microsoft.UI.Xaml.Controls.Button button)
+            {
+                var peer = new Microsoft.UI.Xaml.Automation.Peers.ButtonAutomationPeer(button);
+                ((Microsoft.UI.Xaml.Automation.Provider.IInvokeProvider)peer.GetPattern(Microsoft.UI.Xaml.Automation.Peers.PatternInterface.Invoke)).Invoke();
+            }
+            await firstCore.ExecuteScriptAsync("document.cookie='siteInfoFixture=original;path=/';localStorage.setItem('siteInfoFixture','stored');sessionStorage.setItem('siteInfoFixture','stored')");
+            InvokeSiteButton(sitePanel.Children.OfType<Microsoft.UI.Xaml.Controls.Button>().Single(b => (string)b.Content == T("Cookies and site data  ›", "Cookie 和网站数据  ›")));
+            await Wait(() => sitePanel.Children.OfType<Microsoft.UI.Xaml.Controls.ScrollViewer>().Any());
+            var cookieList = (Microsoft.UI.Xaml.Controls.StackPanel)sitePanel.Children.OfType<Microsoft.UI.Xaml.Controls.ScrollViewer>().Single().Content;
+            var cookieRow = cookieList.Children.OfType<Microsoft.UI.Xaml.Controls.StackPanel>().Single(row => row.Children.OfType<Microsoft.UI.Xaml.Controls.TextBlock>().Any(text => text.Text.StartsWith("siteInfoFixture\n")));
+            cookieRow.Children.OfType<Microsoft.UI.Xaml.Controls.TextBox>().Single().Text = "modified";
+            InvokeSiteButton(((Microsoft.UI.Xaml.Controls.StackPanel)cookieRow.Children.Last()).Children.OfType<Microsoft.UI.Xaml.Controls.Button>().First());
+            await Wait(() => sitePanel.Children.OfType<Microsoft.UI.Xaml.Controls.TextBlock>().Any(text => text.Text == T("Cookie saved.", "Cookie 已保存。")));
+            Check((await firstCore.CookieManager.GetCookiesAsync(fixture)).Single(cookie => cookie.Name == "siteInfoFixture").Value == "modified", "Cookie edits update the actual native cookie store");
+            InvokeSiteButton(sitePanel.Children.OfType<Microsoft.UI.Xaml.Controls.Button>().Single(b => (string)b.Content == T("Clear this site's data", "清除此网站数据")));
+            await Wait(() => sitePanel.Children.OfType<Microsoft.UI.Xaml.Controls.TextBlock>().Any(text => text.Text == T("Site data cleared. Reload to apply.", "网站数据已清除，刷新页面后生效。")));
+            Check(!(await firstCore.CookieManager.GetCookiesAsync(fixture)).Any(cookie => cookie.Name == "siteInfoFixture") && await firstCore.ExecuteScriptAsync("localStorage.getItem('siteInfoFixture')===null&&sessionStorage.getItem('siteInfoFixture')===null") == "true",
+                "Clearing site data removes cookies, local storage and session storage");
+            InvokeSiteButton(sitePanel.Children.OfType<Microsoft.UI.Xaml.Controls.Button>().First());
+            InvokeSiteButton(sitePanel.Children.OfType<Microsoft.UI.Xaml.Controls.Button>().Single(b => (string)b.Content == T("Site settings  ↗", "网站设置  ↗")));
+            await Wait(() => OverlayLayer.Visibility == Visibility.Visible);
+            var settingsGrid = (Microsoft.UI.Xaml.Controls.Grid)((Microsoft.UI.Xaml.Controls.Border)OverlayLayer.Children[0]).Child;
+            var settingsPanel = settingsGrid.Children.OfType<Microsoft.UI.Xaml.Controls.StackPanel>().Single();
+            var locationChoice = settingsPanel.Children.OfType<Microsoft.UI.Xaml.Controls.ComboBox>().Single(box => (string)box.Header == T("Location", "位置信息"));
+            locationChoice.SelectedIndex = 1; await Task.Delay(100);
+            Check((await firstCore.Profile.GetNonDefaultPermissionSettingsAsync()).Any(permission => permission.PermissionKind == CoreWebView2PermissionKind.Geolocation && permission.PermissionState == CoreWebView2PermissionState.Allow),
+                "Site settings write actual native location permission");
+            locationChoice.SelectedIndex = 2; await Task.Delay(100);
+            DismissOverlay(); EndAddressEdit();
             Check(Root.KeyboardAcceleratorPlacementMode == Microsoft.UI.Xaml.Input.KeyboardAcceleratorPlacementMode.Hidden,
                 "Window shortcuts do not generate a persistent Ctrl+L tooltip");
             var layoutTabs = Enumerable.Range(0, 6).Select(_ => AddTab("", false, inSpace: "Tab layout fixture", loadBackground: false)).ToList();

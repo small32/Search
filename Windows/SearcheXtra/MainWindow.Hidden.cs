@@ -6,6 +6,28 @@ namespace SearcheXtra.Windows;
 
 public sealed partial class MainWindow
 {
+    private void ShowRecentHistory()
+    {
+        var menu = new MenuFlyout();
+        AddMenu(menu, T("Open history", "打开历史记录"), async () => await ShowHistoryAsync());
+        menu.Items.Add(new MenuFlyoutSeparator());
+        menu.Items.Add(new MenuFlyoutItem { Text = T("Recently closed tabs", "最近关闭的标签页"), IsEnabled = false });
+        foreach (var saved in closedTabs.Take(10))
+            AddMenu(menu, string.IsNullOrWhiteSpace(saved.Title) ? (string.IsNullOrWhiteSpace(saved.Url) ? T("New tab", "新标签页") : saved.Url) : saved.Title,
+                () => RestoreClosedTab(saved));
+        if (closedTabs.Count == 0)
+            menu.Items.Add(new MenuFlyoutItem { Text = T("No recently closed tabs", "没有最近关闭的标签页"), IsEnabled = false });
+        var visits = store.History.OrderByDescending(entry => entry.Visited).Take(8).ToArray();
+        if (visits.Length > 0)
+        {
+            menu.Items.Add(new MenuFlyoutSeparator());
+            menu.Items.Add(new MenuFlyoutItem { Text = T("Recently visited", "最近访问"), IsEnabled = false });
+            foreach (var visit in visits)
+                AddMenu(menu, string.IsNullOrWhiteSpace(visit.Title) ? visit.Url : visit.Title, () => AddTab(visit.Url));
+        }
+        ReopenButton.Tag = menu;
+        menu.ShowAt(ReopenButton);
+    }
     private async Task ShowHiddenAsync()
     {
         if (active == null || !AddressParser.IsWeb(active.Url) || ActiveView?.Control.CoreWebView2 is not { } core) return;

@@ -1102,6 +1102,7 @@ final class Browser: NSObject, ObservableObject {
         var id: String { host + wants }
     }
 
+    var transientSitePermissions: [String: Bool] = [:]
     @Published private(set) var asking: CaptureAsk?
     private var decide: ((WKPermissionDecision) -> Void)?
     private var askedAbout = ""
@@ -4530,7 +4531,7 @@ extension Browser: WKNavigationDelegate, WKUIDelegate {
         let key = "\(site)|\(type.rawValue)"
         let shy = tab(for: webView).map { $0.shy || !webView.configuration.websiteDataStore.isPersistent } ?? false
 
-        if !shy, let remembered = Store.settings.object(forKey: "capture." + key) as? Bool {
+        if let remembered = shy ? transientSitePermissions[key] : Store.settings.object(forKey: "capture." + key) as? Bool {
             decisionHandler(remembered ? .grant : .deny)
             return
         }
@@ -4592,7 +4593,7 @@ extension Browser: WKNavigationDelegate, WKUIDelegate {
               Browser.origin(asker.protocol, asker.host, asker.port) == site
         else { return give(.deny) }
         let key = "\(site)|location"
-        if !tab.shy, let remembered = Store.settings.object(forKey: "capture." + key) as? Bool {
+        if let remembered = tab.shy ? transientSitePermissions[key] : Store.settings.object(forKey: "capture." + key) as? Bool {
             return give(remembered ? .grant : .deny)
         }
         // One question at a time, as for the camera.

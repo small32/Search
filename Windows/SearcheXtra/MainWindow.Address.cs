@@ -33,6 +33,9 @@ public sealed partial class MainWindow
             host.Visibility = Visibility.Collapsed;
             if (host.Parent is Grid body)
             {
+                if (body.FindName("TabSiteInfo") is FrameworkElement info) info.Visibility = Visibility.Collapsed;
+                if (body.FindName("TabLetter") is FrameworkElement letter) letter.Visibility = Visibility.Visible;
+                if (body.FindName("TabFavicon") is FrameworkElement favicon) favicon.Visibility = Visibility.Visible;
                 if (body.FindName("TabLabel") is FrameworkElement label) label.Visibility = Visibility.Visible;
                 if (body.FindName("TabClose") is FrameworkElement close) close.Visibility = Visibility.Visible;
             }
@@ -52,6 +55,14 @@ public sealed partial class MainWindow
             host.Children.Add(Address);
         }
         host.Visibility = Visibility.Visible;
+        var isSite = AddressParser.IsWeb(editingAddressTab.Url);
+        var info = FindAddressPart<Button>(item, "TabSiteInfo")!;
+        info.Content = Glyph("sliders");
+        info.Visibility = isSite ? Visibility.Visible : Visibility.Collapsed;
+        ToolTipService.SetToolTip(info, T("Site information", "网站信息"));
+        Microsoft.UI.Xaml.Automation.AutomationProperties.SetName(info, T("Site information", "网站信息"));
+        FindAddressPart<TextBlock>(item, "TabLetter")!.Visibility = isSite ? Visibility.Collapsed : Visibility.Visible;
+        FindAddressPart<Image>(item, "TabFavicon")!.Visibility = isSite ? Visibility.Collapsed : Visibility.Visible;
         FindAddressPart<TextBlock>(item, "TabLabel")!.Visibility = Visibility.Collapsed;
         if (!Settings.Sidebar) item.Width = TabWidth(editingAddressTab);
         UpdateTitleBarRegions();
@@ -92,7 +103,7 @@ public sealed partial class MainWindow
     {
         if (editingAddressTab == null) return;
         for (var node = e.OriginalSource as DependencyObject; node != null; node = VisualTreeHelper.GetParent(node))
-            if (node == Address) return;
+            if (node == Address || node is FrameworkElement { Name: "TabSiteInfo" }) return;
         EndAddressEdit();
     }
 
