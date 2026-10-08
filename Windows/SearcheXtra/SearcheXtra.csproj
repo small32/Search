@@ -1,0 +1,40 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows10.0.19041.0</TargetFramework>
+    <TargetPlatformMinVersion>10.0.17763.0</TargetPlatformMinVersion>
+    <SupportedOSPlatformVersion>10.0.17763.0</SupportedOSPlatformVersion>
+    <Platforms>x64</Platforms>
+    <PlatformTarget>x64</PlatformTarget>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <UseWinUI>true</UseWinUI>
+    <WindowsPackageType>None</WindowsPackageType>
+    <WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
+    <SelfContained>true</SelfContained>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>AppIcon.ico</ApplicationIcon>
+    <Version>1.0.1</Version>
+    <PublishReadyToRun>true</PublishReadyToRun>
+    <PublishTrimmed>false</PublishTrimmed>
+  </PropertyGroup>
+  <ItemGroup>
+    <Content Update="Assets/reader.js" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="../../Sources/SearcheXtra/Resources/Translations.json" Link="Assets/Translations.json" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="AppIcon.ico" CopyToOutputDirectory="PreserveNewest" />
+    <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.8.260921001" />
+    <PackageReference Include="System.Security.Cryptography.ProtectedData" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="8.0.31" />
+    <Content Include="../../Sources/SearcheXtra/Resources/AppIcon.png" Link="Assets/AppIcon.png" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+  <Target Name="RequireX64" BeforeTargets="PrepareForBuild">
+    <Error Condition="'$(PlatformTarget)' != 'x64' or '$(RuntimeIdentifier)' != 'win-x64'" Text="SearcheXtra Windows supports x86_64 only." />
+  </Target>
+  <Target Name="PublishXamlResources" AfterTargets="Publish">
+    <ItemGroup>
+      <AppXamlResources Include="$(OutputPath)**\*.xbf;$(OutputPath)$(AssemblyName).pri" />
+    </ItemGroup>
+    <Copy SourceFiles="@(AppXamlResources)" DestinationFiles="@(AppXamlResources->'$(PublishDir)%(RecursiveDir)%(Filename)%(Extension)')" SkipUnchangedFiles="true" />
+  </Target>
+</Project>

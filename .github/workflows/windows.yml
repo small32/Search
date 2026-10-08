@@ -1,0 +1,27 @@
+name: Windows x64
+on:
+  push:
+    paths: ['Windows/**', '.github/workflows/windows.yml', 'VERSION', 'Sources/SearcheXtra/Resources/AppIcon.png']
+  pull_request:
+    paths: ['Windows/**', '.github/workflows/windows.yml', 'VERSION']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: windows-2022
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+      - name: Test and publish Windows x64
+        shell: pwsh
+        run: ./Windows/build.ps1
+      - uses: actions/upload-artifact@v4
+        with:
+          name: SearcheXtra-win-x64
+          path: |
+            Windows/artifacts/*.zip
+            Windows/artifacts/SHA256SUMS.txt
