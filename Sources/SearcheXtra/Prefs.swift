@@ -37,6 +37,13 @@ enum SidebarPosition: String, CaseIterable, Identifiable {
     }
 }
 
+enum BookmarkBarOpening: String, CaseIterable, Identifiable {
+    case standard, background, foreground
+
+    var id: String { rawValue }
+    var title: String { L10n.text("bookmarks.bar.opening.\(rawValue)") }
+}
+
 @MainActor
 final class Preferences: ObservableObject {
     private let store = Store.settings
@@ -247,6 +254,12 @@ final class Preferences: ObservableObject {
     @Published var bookmarksBar: Bool {
         didSet { store.set(bookmarksBar, forKey: "bookmarks.bar") }
     }
+    @Published var compactBookmarksBar: Bool {
+        didSet { store.set(compactBookmarksBar, forKey: "bookmarks.bar.compact") }
+    }
+    @Published var bookmarkBarOpening: BookmarkBarOpening {
+        didSet { store.set(bookmarkBarOpening.rawValue, forKey: "bookmarks.bar.opening") }
+    }
     /// Where a link goes, at the bottom of the page while the pointer is on
     /// it (see StatusLine.swift). On unless turned off.
     @Published var showsLinks: Bool {
@@ -452,6 +465,8 @@ final class Preferences: ObservableObject {
         peeksLinks = store.object(forKey: "links.peek") as? Bool ?? true
         littleLinks = store.bool(forKey: "links.little")
         bookmarksBar = store.bool(forKey: "bookmarks.bar")
+        compactBookmarksBar = store.bool(forKey: "bookmarks.bar.compact")
+        bookmarkBarOpening = store.string(forKey: "bookmarks.bar.opening").flatMap(BookmarkBarOpening.init) ?? .standard
         alwaysShowsDownloads = store.bool(forKey: "downloads.button")
         let links = store.object(forKey: "links.show") as? Bool ?? true
         showsLinks = links

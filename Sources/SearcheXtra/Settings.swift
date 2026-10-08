@@ -476,6 +476,20 @@ struct SettingsPanel: View {
                 Switch(on: $prefs.bookmarksBar)
             }
             Rule()
+            Line(L10n.text("bookmarks.bar.compact.title"), L10n.text("bookmarks.bar.compact.detail")) {
+                Switch(on: $prefs.compactBookmarksBar)
+            }
+            Rule()
+            Line(L10n.text("bookmarks.bar.opening.title"), L10n.text("bookmarks.bar.opening.detail")) {
+                Picker(L10n.text("bookmarks.bar.opening.title"), selection: $prefs.bookmarkBarOpening) {
+                    ForEach(BookmarkBarOpening.allCases) { item in
+                        Text(item.title).tag(item)
+                    }
+                }
+                .labelsHidden()
+                .pickerStyle(.menu)
+            }
+            Rule()
             Line(L10n.text("Settings.0764"), L10n.text("Settings.0765")) {
                 Switch(on: $prefs.showsReading)
             }

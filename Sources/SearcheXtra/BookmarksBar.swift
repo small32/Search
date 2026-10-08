@@ -16,13 +16,13 @@ struct BookmarksBar: View {
 
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 2) {
+            HStack(spacing: browser.prefs.compactBookmarksBar ? 0 : 2) {
                 ForEach(bookmarks.roots) { node in
-                    Item(node: node) {
+                    Item(node: node, compact: browser.prefs.compactBookmarksBar) {
                         if node.isFolder {
-                            BookmarkMenu.shared.popUp(node)
+                            BookmarkMenu.shared.popUp(node, in: browser)
                         } else if let text = node.url, let url = URL(string: text) {
-                            browser.visit(url)
+                            browser.visitBookmarkBar(url)
                         }
                     }
                     .overlay {
@@ -32,7 +32,7 @@ struct BookmarksBar: View {
                     }
                 }
             }
-            .padding(.horizontal, 10)
+            .padding(.horizontal, browser.prefs.compactBookmarksBar ? 6 : 10)
         }
         .frame(height: BookmarksBar.height)
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -44,11 +44,12 @@ struct BookmarksBar: View {
 
     private struct Item: View {
         let node: Bookmark
+        let compact: Bool
         let act: () -> Void
         @State private var hovering = false
 
         var body: some View {
-            HStack(spacing: 6) {
+            HStack(spacing: compact ? 3 : 6) {
                 if node.isFolder {
                     Image(systemName: "folder")
                         .font(.system(size: 10.5))
@@ -68,7 +69,7 @@ struct BookmarksBar: View {
                         .foregroundStyle(Palette.faint)
                 }
             }
-            .padding(.horizontal, 8)
+            .padding(.horizontal, compact ? 4 : 8)
             .frame(height: 22)
             .background(RoundedRectangle(cornerRadius: 6, style: .continuous).fill(hovering ? Palette.hover : .clear))
             .contentShape(Rectangle())

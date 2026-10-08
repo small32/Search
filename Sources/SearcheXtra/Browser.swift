@@ -3359,6 +3359,20 @@ final class Browser: NSObject, ObservableObject {
         }
     }
 
+    /// Ordinary clicks on the bookmarks bar follow its opening preference.
+    /// Command-click and middle-click retain their explicit new-tab behavior.
+    func visitBookmarkBar(_ url: URL) {
+        if NSApp.currentEvent?.modifierFlags.contains(.command) == true {
+            visit(url)
+            return
+        }
+        switch prefs.bookmarkBarOpening {
+        case .standard: visit(url)
+        case .background: open(url, foreground: false, from: active, mayWait: true)
+        case .foreground: open(url, foreground: true, from: active)
+        }
+    }
+
     /// A bookmark picked from the button's list or the full one. Either
     /// goes as the page starts: the list off the button used to stay open
     /// over the page it had just sent you to. A middle-click opens it in a

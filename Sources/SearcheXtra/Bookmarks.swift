@@ -1389,7 +1389,15 @@ final class BookmarkMenu: NSObject, NSMenuDelegate {
     private var watch: [Any] = []
     private let relay = Relay()
     /// What each folder's submenu holds, until it opens.
-    private var folders: [ObjectIdentifier: [Bookmark]] = [:]
+    private var folders: [ObjectIdentifier: Folder] = [:]
+    private struct Folder {
+        let nodes: [Bookmark]
+        weak var barBrowser: Browser?
+    }
+    private struct Destination {
+        let url: URL
+        weak var barBrowser: Browser?
+    }
     /// The items put in here, among SwiftUI's own.
     fileprivate static let mark = 0x5EAC
 
@@ -1443,9 +1451,9 @@ final class BookmarkMenu: NSObject, NSMenuDelegate {
 
     /// A folder of the bookmarks bar, opened as a menu at the pointer: the
     /// same items as the menu bar's, folders opening as they are reached.
-    func popUp(_ folder: Bookmark) {
+    func popUp(_ folder: Bookmark, in browser: Browser) {
         let menu = NSMenu(title: folder.title)
-        let made = items(for: folder.children ?? [])
+        let made = items(for: folder.children ?? [], barBrowser: browser)
         if made.isEmpty {
             let empty = NSMenuItem(title: L10n.text("Bookmarks.0263"), action: nil, keyEquivalent: "")
             empty.isEnabled = false
@@ -1455,7 +1463,7 @@ final class BookmarkMenu: NSObject, NSMenuDelegate {
         menu.popUp(positioning: nil, at: NSEvent.mouseLocation, in: nil)
     }
 
-    private func items(for nodes: [Bookmark]) -> [NSMenuItem] {
+    private func items(for nodes: [Bookmark], barBrowser: Browser? = nil) -> [NSMenuItem] {
         nodes.compactMap { node in
             let item: NSMenuItem
             if node.isFolder {
@@ -1463,12 +1471,12 @@ final class BookmarkMenu: NSObject, NSMenuDelegate {
                 item.image = NSImage(systemSymbolName: "folder", accessibilityDescription: nil)
                 let sub = NSMenu(title: node.title)
                 sub.delegate = self
-                folders[ObjectIdentifier(sub)] = node.children ?? []
+                folders[ObjectIdentifier(sub)] = Folder(nodes: node.children ?? [], barBrowser: barBrowser)
                 item.submenu = sub
             } else if let text = node.url, let url = URL(string: text) {
                 item = NSMenuItem(title: node.title, action: #selector(open(_:)), keyEquivalent: "")
                 item.target = self
-                item.representedObject = url
+                item.representedObject = Destination(url: url, barBrowser: barBrowser)
                 // The site's icon, as the bar wears it: a folder opened from
                 // the bar, or the Bookmarks menu, had none (idea 183).
                 if let icon = Favicons.shared.cached(node.site ?? "") {
@@ -1488,7 +1496,7 @@ final class BookmarkMenu: NSObject, NSMenuDelegate {
     func menuNeedsUpdate(_ menu: NSMenu) {
         guard let kids = folders[ObjectIdentifier(menu)] else { return }
         menu.removeAllItems()
-        let made = items(for: kids)
+        let made = items(for: kids.nodes, barBrowser: kids.barBrowser)
         if made.isEmpty {
             let empty = NSMenuItem(title: L10n.text("Bookmarks.0264"), action: nil, keyEquivalent: "")
             empty.isEnabled = false
@@ -1498,8 +1506,12 @@ final class BookmarkMenu: NSObject, NSMenuDelegate {
     }
 
     @objc private func open(_ item: NSMenuItem) {
-        guard let url = item.representedObject as? URL else { return }
-        browser?.visit(url)
+        guard let destination = item.representedObject as? Destination else { return }
+        if let barBrowser = destination.barBrowser {
+            barBrowser.visitBookmarkBar(destination.url)
+        } else {
+            browser?.visit(destination.url)
+        }
     }
 
     /// SwiftUI's delegate, with the bookmarks put in after its update.

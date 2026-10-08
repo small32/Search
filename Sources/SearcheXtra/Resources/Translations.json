@@ -1,4 +1,32 @@
 {
+  "bookmarks.bar.compact.title": {
+    "en": "Compact bookmarks bar",
+    "zh-Hans": "紧凑书签栏"
+  },
+  "bookmarks.bar.compact.detail": {
+    "en": "Reduce spacing between bookmarks, icons and titles.",
+    "zh-Hans": "缩小书签之间及图标与文字之间的间距。"
+  },
+  "bookmarks.bar.opening.title": {
+    "en": "Open bookmarks from the bar",
+    "zh-Hans": "书签栏打开方式"
+  },
+  "bookmarks.bar.opening.detail": {
+    "en": "Choose where bookmarks from the bar and its folders open. Default uses the current tab.",
+    "zh-Hans": "选择书签栏及其文件夹中的书签打开位置。默认在当前标签页打开。"
+  },
+  "bookmarks.bar.opening.standard": {
+    "en": "Default",
+    "zh-Hans": "默认"
+  },
+  "bookmarks.bar.opening.background": {
+    "en": "New background tab",
+    "zh-Hans": "新建后台标签页"
+  },
+  "bookmarks.bar.opening.foreground": {
+    "en": "New foreground tab",
+    "zh-Hans": "新建前台标签页"
+  },
   "AI.0001": {
     "en": "On this Mac",
     "zh-Hans": "在此 Mac 上"
