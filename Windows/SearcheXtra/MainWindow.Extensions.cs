@@ -9,31 +9,62 @@ namespace SearcheXtra.Windows;
 
 public sealed partial class MainWindow
 {
-    private async void StoreInstall_Click(object sender, RoutedEventArgs e) { if (active != null && CrxInstaller.StoreId(active.Url) is { } id) await InstallStoreExtensionAsync(id); }
     private bool extensionBusy;
     private async Task<CoreWebView2Profile> CurrentProfileAsync()
     {
         if (active == null) throw new InvalidOperationException("No active tab.");
         return (await GetViewAsync(active)).Control.CoreWebView2.Profile;
     }
-    private async Task InstallStoreExtensionAsync(string text)
+    private async Task InstallStoreExtensionAsync(string text, Action<string>? progress = null, Func<IReadOnlyList<string>, Task<bool>>? confirmUpdate = null)
     {
         var id = CrxInstaller.Id(text);
         if (id == null || extensionBusy) return;
         extensionBusy = true;
         try
         {
+            var installed = Settings.Extensions.FirstOrDefault(e => e.StoreId == id);
+            async Task Latest()
+            {
+                if (progress != null) { progress(T("Already up to date", "已是最新版本")); return; }
+                DismissOverlay();
+                await ShowCardAsync(T("Already up to date", "已是最新版本"), new TextBlock { Text = installed!.Name + " · " + installed.Version, TextWrapping = TextWrapping.Wrap });
+            }
+            if (installed != null)
+            {
+                Status.Text = T("Checking extension updates…", "正在检查扩展更新…");
+                progress?.Invoke(Status.Text);
+                if (await CrxInstaller.CheckUpdateAsync(id, installed.Version) == null) { await Latest(); return; }
+            }
             Status.Text = T("Downloading and verifying extension…", "正在下载并校验扩展…");
+            progress?.Invoke(Status.Text);
             var folder = await CrxInstaller.FetchAsync(id, Path.Combine(DataStore.Root, "Extensions"));
             using var doc = JsonDocument.Parse(await File.ReadAllTextAsync(Path.Combine(folder, "manifest.json")));
-            var permissions = doc.RootElement.TryGetProperty("permissions", out var p) ? p.GetRawText() : "[]";
-            if (doc.RootElement.TryGetProperty("host_permissions", out p)) permissions += "\n" + p.GetRawText();
-            DismissOverlay();
-            var explanation = new TextBlock { Text = T("Requested permissions:\n", "请求的权限：\n") + permissions, TextWrapping = TextWrapping.Wrap, MaxWidth = 480 };
-            if (await ShowCardAsync(T("Install extension", "安装扩展"), explanation, T("Install", "安装")) != ContentDialogResult.Primary) return;
+            if (installed != null && !CrxInstaller.IsNewerVersion(doc.RootElement.GetProperty("version").GetString()!, installed.Version))
+            {
+                Directory.Delete(folder, true); await Latest(); return;
+            }
+            var permissions = ExtensionPermissions.Describe(doc.RootElement, strings.Chinese);
+            if (confirmUpdate != null)
+            {
+                progress?.Invoke(T("Confirm update permissions", "请确认更新所需权限"));
+                if (!await confirmUpdate(permissions)) { progress?.Invoke(T("Update cancelled", "已取消更新")); return; }
+            }
+            else
+            {
+                DismissOverlay();
+                var explanation = new StackPanel { Spacing = 10, MaxWidth = 440 };
+                explanation.Children.Add(new TextBlock { Text = T("This extension will be able to:", "安装后，此扩展可以："), TextWrapping = TextWrapping.Wrap });
+                foreach (var permission in permissions)
+                    explanation.Children.Add(new TextBlock { Text = "• " + permission, TextWrapping = TextWrapping.Wrap });
+                if (permissions.Count == 0) explanation.Children.Add(new TextBlock { Text = T("No additional permissions requested.", "无需额外权限。"), TextWrapping = TextWrapping.Wrap });
+                var content = new ScrollViewer { Content = explanation, MaxHeight = 340, VerticalScrollBarVisibility = ScrollBarVisibility.Auto };
+                if (await ShowCardAsync(T("Install extension", "安装扩展"), content, T("Install", "安装")) != ContentDialogResult.Primary) return;
+            }
+            progress?.Invoke(T("Updating extension…", "正在更新扩展…"));
             await InstallExtensionFolderAsync(folder, id);
+            progress?.Invoke(T("Updated to version ", "已更新至版本 ") + Settings.Extensions.First(e => e.StoreId == id).Version);
         }
-        catch (Exception ex) { Status.Text = T("Extension installation failed: ", "扩展安装失败：") + ex.Message; }
+        catch (Exception ex) { if (progress != null) progress(T("Could not check or install the update. Try again.", "检查或安装更新失败，请重试。")); else Status.Text = T("Extension installation failed: ", "扩展安装失败：") + ex.Message; }
         finally { extensionBusy = false; }
     }
     private async Task InstallExtensionFolderAsync(string folder, string? storeId = null)
@@ -116,15 +147,56 @@ public sealed partial class MainWindow
     }
     private async Task ShowExtensionCardAsync(WebView2 view, CoreWebView2 source, InstalledExtension item)
     {
-        var pending = ShowCardAsync(item.Name, view);
+        double width = 360, height = 480;
+        void Resize()
+        {
+            view.Width = Math.Min(width, Math.Max(120, Root.ActualWidth - 80));
+            view.Height = Math.Min(height, Math.Max(80, Root.ActualHeight - 140));
+            if (view.Parent is Grid panel) { panel.Width = view.Width + 44; panel.MaxHeight = Math.Max(120, Root.ActualHeight - 32); }
+        }
+        void WindowResized(object sender, SizeChangedEventArgs args) => Resize();
+        Resize();
+        var pending = ShowCardAsync(item.Name, view, fitWindow: true);
+        void PopupResized(CoreWebView2 sender, CoreWebView2WebMessageReceivedEventArgs args)
+        {
+            if (args.Source != sender.Source || !args.Source.StartsWith($"chrome-extension://{item.Id}/", StringComparison.Ordinal)) return;
+            try
+            {
+                using var doc = JsonDocument.Parse(args.WebMessageAsJson);
+                if (!doc.RootElement.TryGetProperty("type", out var type) || type.GetString() != "popup-size") return;
+                var requestedWidth = doc.RootElement.GetProperty("width").GetDouble();
+                var requestedHeight = doc.RootElement.GetProperty("height").GetDouble();
+                if (!double.IsFinite(requestedWidth) || !double.IsFinite(requestedHeight)) return;
+                width = Math.Clamp(requestedWidth, 160, 800); height = Math.Clamp(requestedHeight, 100, 800); Resize();
+            }
+            catch (JsonException) { }
+        }
+        Root.SizeChanged += WindowResized;
         try
         {
             var options = source.Environment.CreateCoreWebView2ControllerOptions(); options.ProfileName = source.Profile.ProfileName; options.IsInPrivateModeEnabled = source.Profile.IsInPrivateModeEnabled;
             await view.EnsureCoreWebView2Async(source.Environment, options);
+            view.CoreWebView2.WebMessageReceived += PopupResized;
+            await view.CoreWebView2.AddScriptToExecuteOnDocumentCreatedAsync("""
+                (()=>{
+                  if(window!==top)return;
+                  let queued=false,last='';
+                  const measure=()=>{
+                    queued=false;const body=document.body;if(!body)return;
+                    const width=Math.ceil(Math.max(body.scrollWidth,body.getBoundingClientRect().width,document.documentElement.scrollWidth));
+                    const height=Math.ceil(Math.max(body.scrollHeight,body.getBoundingClientRect().height));
+                    const size=width+','+height;if(size===last)return;last=size;
+                    chrome.webview.postMessage({type:'popup-size',width,height});
+                  };
+                  const queue=()=>{if(!queued){queued=true;requestAnimationFrame(measure);}};
+                  document.addEventListener('DOMContentLoaded',()=>{new ResizeObserver(queue).observe(document.body);new MutationObserver(queue).observe(document.body,{childList:true,subtree:true,attributes:true});queue();},{once:true});
+                  window.addEventListener('load',queue);
+                })();
+                """);
             view.CoreWebView2.Navigate($"chrome-extension://{item.Id}/{item.Popup}");
             await pending;
         }
-        finally { view.Close(); }
+        finally { Root.SizeChanged -= WindowResized; if (view.CoreWebView2 is { } core) core.WebMessageReceived -= PopupResized; view.Close(); }
     }
     private void RefreshPinnedExtensions()
     {
@@ -132,17 +204,61 @@ public sealed partial class MainWindow
         foreach (var item in Settings.Extensions.Where(e => e.Enabled && e.Pinned))
         {
             var button = QuietButton(item.Name.Length > 0 ? item.Name[..1] : "◇"); ToolTipService.SetToolTip(button, item.Name);
+            if (ExtensionIconPath(item) is { } path)
+                button.Content = new Image { Source = new Microsoft.UI.Xaml.Media.Imaging.BitmapImage(new Uri(path)), Width = 16, Height = 16 };
+            Microsoft.UI.Xaml.Automation.AutomationProperties.SetName(button, item.Name);
+            var menu = new MenuFlyout();
+            AddMenu(menu, T("Unpin from title bar", "从标题栏取消固定"), () => SetExtensionPinned(item, false));
+            button.ContextFlyout = menu;
             button.Click += async (_, _) => await OpenExtensionPopupAsync(item); PinnedExtensions.Children.Add(button);
         }
         DownloadsButton.Visibility = Settings.AlwaysShowsDownloads || downloads.Count > 0 ? Visibility.Visible : Visibility.Collapsed;
+    }
+    private void SetExtensionPinned(InstalledExtension item, bool pinned)
+    {
+        item.Pinned = pinned; RefreshPinnedExtensions(); store.Notify(); ScheduleSave();
+    }
+    private static string? ExtensionIconPath(InstalledExtension item)
+    {
+        try
+        {
+            using var doc = JsonDocument.Parse(File.ReadAllText(Path.Combine(item.Folder, "manifest.json")));
+            var manifest = doc.RootElement;
+            JsonElement icon = default;
+            var hasActionIcon = (manifest.TryGetProperty("action", out var action) || manifest.TryGetProperty("browser_action", out action) || manifest.TryGetProperty("page_action", out action)) && action.TryGetProperty("default_icon", out icon);
+            if (!hasActionIcon && !manifest.TryGetProperty("icons", out icon)) return null;
+            var relative = icon.ValueKind == JsonValueKind.String ? icon.GetString() :
+                icon.ValueKind == JsonValueKind.Object ? icon.EnumerateObject().Where(p => int.TryParse(p.Name, out var size) && size > 0 && p.Value.ValueKind == JsonValueKind.String)
+                    .OrderBy(p => Math.Abs(int.Parse(p.Name) - 32)).Select(p => p.Value.GetString()).FirstOrDefault() : null;
+            if (string.IsNullOrWhiteSpace(relative)) return null;
+            var folder = Path.GetFullPath(item.Folder) + Path.DirectorySeparatorChar;
+            var path = Path.GetFullPath(Path.Combine(folder, relative));
+            return path.StartsWith(folder, StringComparison.OrdinalIgnoreCase) && File.Exists(path) ? path : null;
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or JsonException or ArgumentException) { return null; }
     }
     private async void Downloads_Click(object sender, RoutedEventArgs e) => await ShowDownloadsAsync();
     private void Extensions_Click(object sender, RoutedEventArgs e) => ExtensionsMenu();
     private void ExtensionsMenu()
     {
         var menu = new MenuFlyout();
-        foreach (var item in Settings.Extensions.Where(e => e.Enabled)) AddMenu(menu, (item.Pinned ? "● " : "") + item.Name, async () => await OpenExtensionPopupAsync(item));
-        AddMenu(menu, T("Manage extensions", "管理扩展"), async () => { Settings.SettingsPage = "extensions"; await ShowSettingsAsync(); });
+        foreach (var item in Settings.Extensions.Where(e => e.Enabled))
+        {
+            var entry = new MenuFlyoutSubItem { Text = item.Name };
+            var open = new MenuFlyoutItem { Text = T("Open extension", "打开扩展") };
+            open.Click += async (_, _) => await OpenExtensionPopupAsync(item);
+            entry.Items.Add(open);
+            if (item.Options.Length > 0)
+            {
+                var settings = new MenuFlyoutItem { Text = T("Extension settings", "扩展设置") };
+                settings.Click += (_, _) => AddTab($"chrome-extension://{item.Id}/{item.Options}");
+                entry.Items.Add(settings);
+            }
+            var pin = new ToggleMenuFlyoutItem { Text = T("Pin to title bar", "固定到标题栏"), IsChecked = item.Pinned };
+            pin.Click += (_, _) => SetExtensionPinned(item, pin.IsChecked);
+            entry.Items.Add(pin); menu.Items.Add(entry);
+        }
+        AddMenu(menu, T("Manage extensions", "扩展管理"), async () => await ShowExtensionManagerAsync());
         menu.Placement = Microsoft.UI.Xaml.Controls.Primitives.FlyoutPlacementMode.BottomEdgeAlignedRight;
         menu.ShowAt(ExtensionsButton);
     }

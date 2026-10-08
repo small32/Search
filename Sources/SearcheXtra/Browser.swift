@@ -1293,10 +1293,11 @@ final class Browser: NSObject, ObservableObject {
     @Published private(set) var renamingTab = false
 
     func beginTabEdit(_ tab: Tab) {
+        SiteCardPanel.hide()
         summoning = false
         editing = false
         renamingTab = false
-        tabDraft = tab.address.map(Address.editable) ?? tab.draft
+        tabDraft = tab.address.map(Address.tabEditable) ?? tab.draft
         editingTab = tab.id
         focusRequest += 1
     }
@@ -1304,6 +1305,7 @@ final class Browser: NSObject, ObservableObject {
     /// Rename. The name the tab is wearing arrives selected, so typing
     /// replaces it; emptying the field gives the page its own title back.
     func beginTabRename(_ tab: Tab) {
+        SiteCardPanel.hide()
         renamingTab = true
         tabDraft = tab.label
         editingTab = tab.id
@@ -1323,11 +1325,13 @@ final class Browser: NSObject, ObservableObject {
             refusals += 1
             return
         }
+        SiteCardPanel.hide()
         editingTab = nil
         tab.go(to: url)
     }
 
     func cancelTabEdit() {
+        SiteCardPanel.hide()
         editingTab = nil
         renamingTab = false
         tabDraft = ""

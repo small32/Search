@@ -4,11 +4,42 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json.Nodes;
 using System.Text.RegularExpressions;
+using System.Xml.Linq;
 
 namespace SearcheXtra.Windows;
 
 public static class CrxInstaller
 {
+    public static bool IsNewerVersion(string remote, string local)
+    {
+        static int[] Parts(string version)
+        {
+            var parts = version.Split('.');
+            if (parts.Length is < 1 or > 4 || parts.Any(p => !ushort.TryParse(p, System.Globalization.NumberStyles.None, System.Globalization.CultureInfo.InvariantCulture, out _)))
+                throw new InvalidDataException("Invalid extension version.");
+            return parts.Select(int.Parse).Concat(Enumerable.Repeat(0, 4 - parts.Length)).ToArray();
+        }
+        var newer = Parts(remote); var current = Parts(local);
+        for (var i = 0; i < 4; i++) if (newer[i] != current[i]) return newer[i] > current[i];
+        return false;
+    }
+    public static string? StoreVersion(string xml, string id)
+    {
+        var app = XDocument.Parse(xml).Descendants().FirstOrDefault(e => e.Name.LocalName == "app" && (string?)e.Attribute("appid") == id);
+        var check = app?.Elements().FirstOrDefault(e => e.Name.LocalName == "updatecheck");
+        var status = (string?)check?.Attribute("status");
+        if (status == "noupdate") return null;
+        if (status != "ok" || (string?)check?.Attribute("version") is not { Length: > 0 } version) throw new InvalidDataException("Could not check the store version.");
+        return version;
+    }
+    public static async Task<string?> CheckUpdateAsync(string id, string currentVersion)
+    {
+        if (Id(id) != id) throw new InvalidDataException("Invalid Chrome extension ID.");
+        using var client = new HttpClient { Timeout = TimeSpan.FromSeconds(60) };
+        var url = "https://clients2.google.com/service/update2/crx?response=updatecheck&prodversion=140.0.0.0&acceptformat=crx3&x=" + Uri.EscapeDataString($"id={id}&v={currentVersion}&uc");
+        var remote = StoreVersion(await client.GetStringAsync(url), id);
+        return remote != null && IsNewerVersion(remote, currentVersion) ? remote : null;
+    }
     public static string? Id(string text) => Regex.Match(text.ToLowerInvariant(), @"(?<![a-z])([a-p]{32})(?![a-z])") is { Success: true } m ? m.Groups[1].Value : null;
     public static string? StoreId(string url)
     {

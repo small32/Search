@@ -1,3 +1,5 @@
+SearcheXtra 2.0.2 为 macOS 和 Windows 提供卡片式扩展管理，支持搜索和开关控制扩展。Windows 同时支持将扩展图标固定到标题栏，修复 Chrome 扩展商店安装报错，简化权限确认界面，移除重复安装按钮，并修复扩展弹窗内容显示不全的问题。
+
 # SearcheXtra 1.0.0
 
 SearcheXtra 是基于 Office Commun 开发的 Search 修改。

@@ -94,6 +94,14 @@ enum Address {
     /// when the field would put that very scheme back, and a bare "/" only
     /// when nothing follows it — a port, a query, a fragment, plain http to
     /// somewhere that isn't this Mac or the local network, all stay.
+    static func isExtensionPage(_ page: URL) -> Bool {
+        ["chrome-extension", "webkit-extension"].contains(page.scheme?.lowercased() ?? "")
+    }
+
+    static func tabEditable(_ page: URL) -> String {
+        isExtensionPage(page) ? "" : editable(page)
+    }
+
     static func editable(_ page: URL) -> String {
         let full = page.absoluteString
         guard let scheme = page.scheme, full.lowercased().hasPrefix(scheme.lowercased() + "://") else { return full }

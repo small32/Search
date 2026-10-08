@@ -38,7 +38,16 @@ public sealed partial class MainWindow
         CaptionInset.Width = new(AppWindow.TitleBar.RightInset / scale);
         // Reserve empty caption space for dragging even when the tabs overflow.
         TopTabs.MaxWidth = Math.Max(0, Toolbar.ActualWidth - CaptionInset.Width.Value - Helm.ActualWidth - TitleActions.ActualWidth - Toolbar.ColumnDefinitions[0].ActualWidth - 72);
-        TopTabs.Width = Math.Min(TopTabs.MaxWidth, tabs.Where(t => t.Space == space).Sum(TabWidth));
+        var visible = tabs.Where(t => t.Space == space).ToList();
+        var pins = visible.Count(t => t.Pinned && t != editingAddressTab);
+        var editing = visible.Contains(editingAddressTab!);
+        addressTabWidth = Math.Min(372, TopTabs.MaxWidth);
+        var normal = visible.Count - pins - (editing ? 1 : 0);
+        normalTabWidth = normal == 0 ? 186 : Math.Clamp((TopTabs.MaxWidth - pins * 54 - (editing ? addressTabWidth : 0)) / normal, 80, 186);
+        foreach (var tab in visible)
+            if (TopTabs.ContainerFromItem(tab) is FrameworkElement item && item.Width != TabWidth(tab))
+                item.Width = TabWidth(tab);
+        TopTabs.Width = Math.Min(TopTabs.MaxWidth, visible.Sum(TabWidth));
         var regions = new List<RectInt32>();
         foreach (var element in new FrameworkElement[] { TopStrip, Helm, TitleActions })
         {

@@ -19,6 +19,7 @@ public sealed class PageView : IDisposable
     public Window? FloatingWindow { get; set; }
     public bool IsDisposed => disposed;
     public event Action<DownloadItem>? DownloadStarted;
+    public event Func<string, Task>? StoreInstallRequested;
     public event Func<CoreWebView2PermissionRequestedEventArgs, Task>? PermissionRequested;
     public event Func<CoreWebView2DownloadStartingEventArgs, Task>? DownloadLocationRequested;
     public event Action<string>? PreviewRequested;
@@ -162,6 +163,12 @@ public sealed class PageView : IDisposable
         {
             using var doc = JsonDocument.Parse(args.WebMessageAsJson);
             var type = doc.RootElement.GetProperty("type").GetString();
+            if (type == "store-install")
+            {
+                // Derive the ID from the trusted top-level store URL, never from page data.
+                if (CrxInstaller.StoreId(sender.Source) is { } id && StoreInstallRequested != null) await StoreInstallRequested(id);
+                return;
+            }
             if (type == "reading") { if (store.Settings.ShowsReading) tab.Reading = Math.Clamp(doc.RootElement.GetProperty("value").GetDouble(), 0, 100); return; }
             if (type == "flick" && FloatingWindow != null && store.Settings.FloatFlicks) { var area = Microsoft.UI.Windowing.DisplayArea.GetFromWindowId(FloatingWindow.AppWindow.Id, Microsoft.UI.Windowing.DisplayAreaFallback.Nearest).WorkArea; var x = doc.RootElement.GetProperty("x").GetDouble(); var y = doc.RootElement.GetProperty("y").GetDouble(); var size = FloatingWindow.AppWindow.Size; FloatingWindow.AppWindow.Move(new global::Windows.Graphics.PointInt32(x < 0 ? area.X + 18 : area.X + area.Width - size.Width - 18, y < 0 ? area.Y + 18 : area.Y + area.Height - size.Height - 18)); return; }
             if (type == "hover") { if (store.Settings.ShowsLinks) HoveredLink?.Invoke(doc.RootElement.GetProperty("url").GetString() ?? ""); return; }
@@ -184,7 +191,7 @@ public sealed class PageView : IDisposable
     {
         if (disposed || Control.CoreWebView2 is not { } core) return;
         if (documentScript != null) core.RemoveScriptToExecuteOnDocumentCreated(documentScript);
-        documentScript = await core.AddScriptToExecuteOnDocumentCreatedAsync(PageScripts.HiddenRules(store.HiddenElements) + (store.Settings.BlockTrackers && (!Uri.TryCreate(tab.Url, UriKind.Absolute, out var page) || store.Settings.Sites.GetValueOrDefault(page.Host)?.BlockTrackers != false) ? PageScripts.Ads : "") + PageScripts.Capture + PageScripts.Features + "window.__searchPrefs=" + JsonSerializer.Serialize(ScriptOptions()));
+        documentScript = await core.AddScriptToExecuteOnDocumentCreatedAsync(PageScripts.StoreBridge(new Strings(store.Settings).Text("Add to SearcheXtra", "添加至 SearcheXtra")) + PageScripts.HiddenRules(store.HiddenElements) + (store.Settings.BlockTrackers && (!Uri.TryCreate(tab.Url, UriKind.Absolute, out var page) || store.Settings.Sites.GetValueOrDefault(page.Host)?.BlockTrackers != false) ? PageScripts.Ads : "") + PageScripts.Capture + PageScripts.Features + "window.__searchPrefs=" + JsonSerializer.Serialize(ScriptOptions()));
     }
     private object ScriptOptions() => new { peek = store.Settings.PeeksLinks, links = store.Settings.ShowsLinks, scroll = store.Settings.AutoScroll, wait = store.Settings.WaitsForPlay, passkeys = store.Settings.Passkeys, passwords = store.Settings.SavesPasswords && !tab.IsPrivate, autocorrect = store.Settings.Autocorrect, reading = store.Settings.ShowsReading, flicks = store.Settings.FloatFlicks };
     public void Resume() { if (Control.CoreWebView2 is { } core) core.Resume(); tab.Sleeping = false; }

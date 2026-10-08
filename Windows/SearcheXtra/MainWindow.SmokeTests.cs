@@ -1,4 +1,5 @@
 using Microsoft.UI.Xaml;
+using Microsoft.Web.WebView2.Core;
 using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
@@ -74,11 +75,25 @@ public sealed partial class MainWindow
             Check(Helm.Children.IndexOf(HomeButton) == Helm.Children.IndexOf(ReloadButton) + 1 &&
                 Helm.Children.IndexOf(ReopenButton) == Helm.Children.IndexOf(HomeButton) + 1, "Home and reopen buttons follow reload in order");
             var previousStart = Settings.StartPage;
+            var previousLanguage = Settings.Language;
+            Settings.Language = "zh-Hans";
+            await views[first.Id].Control.CoreWebView2.ExecuteScriptAsync("navigator.geolocation.getCurrentPosition(()=>{},()=>{});true");
+            await Wait(() => OverlayLayer.Visibility == Visibility.Visible);
+            Check(OverlayLayer.Children[0] is Microsoft.UI.Xaml.Controls.Border { Child: Microsoft.UI.Xaml.Controls.Grid permissionCard } &&
+                permissionCard.Children.OfType<Microsoft.UI.Xaml.Controls.TextBlock>().Any(t => t.Text == "此网站请求：位置信息"),
+                "A real geolocation request displays a Chinese permission name");
+            DismissOverlay(); Settings.Language = previousLanguage;
             var homeTabCount = tabs.Count;
             Settings.StartPage = fixture + "home";
             await GoHomeAsync();
             await Wait(() => !first.Loading && views[first.Id].Control.CoreWebView2.Source == fixture + "home");
             Check(active == first && tabs.Count == homeTabCount, "Home navigates the current tab to the configured start page");
+            var blankNewTab = AddTab(foreground: false);
+            Check(blankNewTab.Url == "", "New tabs default to blank even when a start page is configured");
+            await SelectAsync(blankNewTab);
+            Check(active == blankNewTab && Welcome.Visibility == Visibility.Visible && !views.ContainsKey(blankNewTab.Id) && Settings.StartPage == fixture + "home",
+                "Blank new tab stays blank without loading the configured start page");
+            await SelectAsync(first); CloseTab(blankNewTab); closedTabs.Pop(); ReopenButton.IsEnabled = closedTabs.Count > 0;
             Settings.StartPage = "";
             await GoHomeAsync();
             await Wait(() => views[first.Id].Control.CoreWebView2.Source == "about:blank");
@@ -168,9 +183,41 @@ public sealed partial class MainWindow
                 const instance=crypto.randomUUID();chrome.runtime.onMessage.addListener((m,s,reply)=>{chrome.storage.local.get('probe',data=>reply({value:data.probe,instance}));return true;});
                 """);
             await File.WriteAllTextAsync(Path.Combine(mv2Folder, "content.js"), "chrome.runtime.sendMessage({probe:true},r=>{document.documentElement.dataset.mv2Background=r?.value||'missing';document.documentElement.dataset.mv2Instance=r?.instance||'missing';});");
-            await File.WriteAllTextAsync(Path.Combine(mv2Folder, "popup.html"), "<!doctype html><title>MV2 popup</title><p id='status'></p><script src='popup.js'></script>");
+            await File.WriteAllTextAsync(Path.Combine(mv2Folder, "popup.html"), "<!doctype html><title>MV2 popup</title><body style='margin:0;width:520px;min-height:620px'><p id='status'></p><script src='popup.js'></script></body>");
             await File.WriteAllTextAsync(Path.Combine(mv2Folder, "popup.js"), "chrome.storage.local.get('probe',d=>document.querySelector('#status').textContent=d.probe);chrome.runtime.sendMessage({probe:true},r=>document.body.dataset.instance=r.instance);");
             await InstallExtensionFolderAsync(mv2Folder); var mv2 = Settings.Extensions.Single(e => e.Folder == mv2Folder);
+            // Use a real icon file to verify title-bar pinning, persistence and removal.
+            File.Copy(Path.Combine(AppContext.BaseDirectory, "Assets", "AppIcon.png"), Path.Combine(mv2Folder, "icon.png"));
+            var iconManifest = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(await File.ReadAllTextAsync(Path.Combine(mv2Folder, "manifest.json")))!;
+            iconManifest["icons"] = JsonSerializer.SerializeToElement(new Dictionary<string, string> { ["32"] = "icon.png" });
+            await File.WriteAllTextAsync(Path.Combine(mv2Folder, "manifest.json"), JsonSerializer.Serialize(iconManifest));
+            SetExtensionPinned(mv2, true); Root.UpdateLayout(); UpdateTitleBarRegions();
+            Check(PinnedExtensions.Parent == TitleActions && TitleActions.Children.IndexOf(PinnedExtensions) + 1 == TitleActions.Children.IndexOf(ExtensionsButton), "Pinned extensions sit immediately beside the extensions button");
+            Check(PinnedExtensions.Children.Single() is Microsoft.UI.Xaml.Controls.Button { Content: Microsoft.UI.Xaml.Controls.Image }, "Pinned extension displays its manifest icon");
+            await store.SaveAsync();
+            Check((await DataStore.LoadAsync()).Settings.Extensions.Single(e => e.Id == mv2.Id).Pinned, "Extension pin survives settings reload");
+            await SetExtensionEnabledAsync(mv2, false); Check(PinnedExtensions.Children.Count == 0, "Disabled extension leaves the title bar");
+            await SetExtensionEnabledAsync(mv2, true); Check(PinnedExtensions.Children.Count == 1, "Re-enabled extension retains its pin");
+            SetExtensionPinned(mv2, false); Check(PinnedExtensions.Children.Count == 0, "Unpin removes the extension title-bar button");
+            var managerTask = ShowExtensionManagerAsync(); Root.UpdateLayout();
+            try
+            {
+                var enable = FindAddressPart<Microsoft.UI.Xaml.Controls.ToggleSwitch>(OverlayLayer)!;
+                Check(enable.Tag as string == mv2.Id && enable.IsOn, "Extension management cards expose an enabled-state switch");
+                enable.IsOn = false; await Wait(() => !mv2.Enabled && enable.IsEnabled);
+                Check(!(await firstView.Control.CoreWebView2.Profile.GetBrowserExtensionsAsync()).Single(e => e.Id == mv2.Id).IsEnabled, "Management switch disables the real extension");
+                enable.IsOn = true; await Wait(() => mv2.Enabled && enable.IsEnabled);
+                Check((await firstView.Control.CoreWebView2.Profile.GetBrowserExtensionsAsync()).Single(e => e.Id == mv2.Id).IsEnabled, "Management switch re-enables the real extension");
+                await store.SaveAsync(); Check((await DataStore.LoadAsync()).Settings.Extensions.Single(e => e.Id == mv2.Id).Enabled, "Extension management state persists after reload");
+                var search = FindAddressPart<Microsoft.UI.Xaml.Controls.TextBox>(OverlayLayer)!;
+                search.Text = "no-such-extension";
+                await Wait(() => FindAddressPart<Microsoft.UI.Xaml.Controls.ToggleSwitch>(OverlayLayer) == null);
+                Check(FindAddressPart<Microsoft.UI.Xaml.Controls.ToggleSwitch>(OverlayLayer) == null, "Extension management search filters cards");
+                search.Text = "";
+                await Wait(() => FindAddressPart<Microsoft.UI.Xaml.Controls.ToggleSwitch>(OverlayLayer) != null);
+                Check(FindAddressPart<Microsoft.UI.Xaml.Controls.ToggleSwitch>(OverlayLayer)?.IsOn == true, "Clearing extension search restores its card");
+            }
+            finally { DismissOverlay(); await managerTask; }
             Check((await firstView.Control.CoreWebView2.Profile.GetBrowserExtensionsAsync()).Single(e => e.Id == mv2.Id).IsEnabled, "MV2 manifest loads without conversion");
             first.Loading = true; firstView.Control.CoreWebView2.Reload(); await Wait(() => !first.Loading); await Task.Delay(150);
             Check(await firstView.Control.CoreWebView2.ExecuteScriptAsync("document.documentElement.dataset.mv2Background") == "\"MV2 persistent background\"", "MV2 persistent background, messaging and storage work");
@@ -178,9 +225,28 @@ public sealed partial class MainWindow
             await Task.Delay(250); Check(await firstView.Control.CoreWebView2.ExecuteScriptAsync("window.mv2Blocked") == "\"blocked\"", "MV2 blocking webRequest cancels a real request");
             var mv2Instance = await firstView.Control.CoreWebView2.ExecuteScriptAsync("document.documentElement.dataset.mv2Instance");
             var mv2Popup = AddTab($"chrome-extension://{mv2.Id}/popup.html", false); await SelectAsync(mv2Popup); await Wait(() => !mv2Popup.Loading && mv2Popup.Title == "MV2 popup"); await Task.Delay(150);
+            FocusAddress();
+            Check(Address.Text.Length == 0 && mv2Popup.Url.StartsWith("chrome-extension://") && editingAddressTab == mv2Popup,
+                "Extension tabs keep their real page URL but show an empty editable address");
+            Address.Text = fixture;
+            Check(Address.Text == fixture, "Extension tab address still accepts a normal URL");
+            EndAddressEdit();
             Check(await views[mv2Popup.Id].Control.CoreWebView2.ExecuteScriptAsync("document.querySelector('#status').textContent") == "\"MV2 persistent background\"", "MV2 browser_action popup accesses native extension storage");
             Check(mv2Instance != "null" && await views[mv2Popup.Id].Control.CoreWebView2.ExecuteScriptAsync("document.body.dataset.instance") == mv2Instance, "Opening another WebView preserves the running MV2 background instance");
-            CloseTab(mv2Popup); await SelectAsync(first); await RemoveExtensionAsync(mv2);
+            CloseTab(mv2Popup); await SelectAsync(first);
+            var popupView = new Microsoft.UI.Xaml.Controls.WebView2 { Width = 360, Height = 480 };
+            var popupTask = ShowExtensionCardAsync(popupView, firstView.Control.CoreWebView2, mv2);
+            try
+            {
+                await Wait(() => popupView.Width >= 520); Root.UpdateLayout();
+                Check(popupView.ActualWidth >= 520 && popupView.Height <= Root.ActualHeight - 140, "Extension popup fits its natural width and available window height");
+                Check(await popupView.CoreWebView2.ExecuteScriptAsync("document.documentElement.scrollWidth <= innerWidth") == "true", "Wide extension popup is not clipped horizontally");
+                await popupView.CoreWebView2.ExecuteScriptAsync("document.body.style.width='700px'");
+                await Wait(() => popupView.Width >= 700); Root.UpdateLayout();
+                Check(popupView.Parent is Microsoft.UI.Xaml.Controls.Grid panel && panel.Width == popupView.Width + 44, "Extension popup and its card resize together after content changes");
+            }
+            finally { DismissOverlay(); await popupTask; }
+            await RemoveExtensionAsync(mv2);
             await firstView.Control.CoreWebView2.ExecuteScriptAsync("""
                 (async()=>{const canvas=document.createElement('canvas');canvas.width=320;canvas.height=180;canvas.getContext('2d').fillRect(0,0,320,180);const video=document.createElement('video');video.muted=true;video.srcObject=canvas.captureStream(5);document.body.appendChild(video);await video.play();})()
                 """);
@@ -230,7 +296,56 @@ public sealed partial class MainWindow
                 Check(((Microsoft.UI.Xaml.Media.SolidColorBrush)glyph.Stroke).Color == Brush("Ink").Color, "Toolbar glyph contrast follows " + theme);
             }
             Root.RequestedTheme = ElementTheme.Default; SetupGlyphs();
-            FocusAddress(); Check(editingAddressTab == active && Address.Parent != AddressParking, "Address shortcut edits the active tab inline"); DismissOverlay();
+            foreach (var sidebar in new[] { false, true })
+            {
+                Settings.Sidebar = sidebar; ApplySettings(); FocusAddress(); Root.UpdateLayout();
+                var item = AddressList.ContainerFromItem(active) as Microsoft.UI.Xaml.Controls.ListViewItem;
+                var host = item == null ? null : FindAddressPart<Microsoft.UI.Xaml.Controls.Grid>(item, "TabAddressHost");
+                Check(editingAddressTab == active && host != null && Address.Parent == host && OverlayLayer.Visibility == Visibility.Collapsed,
+                    "Address edits inside the tab without a dialog, sidebar=" + sidebar);
+                var editorBorder = FindAddressPart<Microsoft.UI.Xaml.Controls.Border>(Address);
+                var editorContent = FindAddressPart<Microsoft.UI.Xaml.Controls.ScrollViewer>(Address, "ContentElement");
+                Check((editorBorder == null || editorBorder.BorderThickness == new Thickness(0)) &&
+                    editorContent is { ActualWidth: > 0, ActualHeight: > 0 },
+                    "Tab address has no input border or focus underline, sidebar=" + sidebar + ", border=" + editorBorder?.BorderThickness + ", content=" + editorContent?.ActualWidth + "x" + editorContent?.ActualHeight);
+                Check(sidebar || item != null && Math.Abs(item.ActualWidth - 372) < 1,
+                    "Address editing doubles the default tab width: actual=" + item?.ActualWidth);
+                Address.Text = "https://example.com/inline-address";
+                Root.UpdateLayout();
+                Check(FindAddressPart<Microsoft.UI.Xaml.Controls.TextBlock>(Address, "PlaceholderTextContentPresenter")?.Visibility == Visibility.Collapsed,
+                    "Address placeholder disappears while typing");
+                Check(Address.Text.EndsWith("inline-address") && Address.Parent == host && OverlayLayer.Visibility == Visibility.Collapsed,
+                    "Typing keeps the address inside the tab, sidebar=" + sidebar);
+                EndAddressEdit();
+                Check(Address.Parent == AddressParking && editingAddressTab == null, "Ending address edit restores the tab label");
+            }
+            Settings.Sidebar = false; ApplySettings();
+            Check(Root.KeyboardAcceleratorPlacementMode == Microsoft.UI.Xaml.Input.KeyboardAcceleratorPlacementMode.Hidden,
+                "Window shortcuts do not generate a persistent Ctrl+L tooltip");
+            var layoutTabs = Enumerable.Range(0, 6).Select(_ => AddTab("", false, inSpace: "Tab layout fixture", loadBackground: false)).ToList();
+            await SelectAsync(layoutTabs[0]); Root.UpdateLayout(); UpdateTitleBarRegions(); Root.UpdateLayout();
+            var crowdedWidth = normalTabWidth;
+            Check(crowdedWidth < 186 && crowdedWidth >= 80 && TopTabs.Items.Cast<BrowserTab>().All(t =>
+                TopTabs.ContainerFromItem(t) is Microsoft.UI.Xaml.Controls.ListViewItem { ActualWidth: > 0 } item && Math.Abs(item.ActualWidth - crowdedWidth) < 1),
+                "All visible tabs shrink together to fit the title bar");
+            FocusAddress(); Root.UpdateLayout(); UpdateTitleBarRegions(); Root.UpdateLayout();
+            Check(TopTabs.ContainerFromItem(active) is Microsoft.UI.Xaml.Controls.ListViewItem editItem && Math.Abs(editItem.ActualWidth - 372) < 1 && normalTabWidth < crowdedWidth,
+                "Editing reserves double width for the active tab and shrinks its neighbors");
+            EndAddressEdit(); Root.UpdateLayout(); UpdateTitleBarRegions(); Root.UpdateLayout();
+            Check(Math.Abs(normalTabWidth - crowdedWidth) < 1, "Ending address editing restores shared tab widths");
+            AppWindow.Resize(new global::Windows.Graphics.SizeInt32(1000, 820));
+            await Wait(() => { Root.UpdateLayout(); UpdateTitleBarRegions(); return normalTabWidth < crowdedWidth; });
+            Root.UpdateLayout();
+            Check(normalTabWidth < crowdedWidth, "Narrowing the window further shrinks the tabs");
+            foreach (var tab in layoutTabs.Skip(3)) CloseTab(tab);
+            Root.UpdateLayout(); UpdateTitleBarRegions(); Root.UpdateLayout();
+            Check(normalTabWidth > crowdedWidth && normalTabWidth <= 186, "Closing tabs expands the remaining tabs up to the default width");
+            foreach (var tab in layoutTabs.Skip(1).Take(2)) CloseTab(tab);
+            Root.UpdateLayout(); UpdateTitleBarRegions(); Root.UpdateLayout();
+            Check(normalTabWidth == 186 && TopTabs.ContainerFromItem(layoutTabs[0]) is Microsoft.UI.Xaml.Controls.ListViewItem lone && Math.Abs(lone.ActualWidth - 186) < 1,
+                "An uncrowded tab returns to its default width");
+            AppWindow.Resize(new global::Windows.Graphics.SizeInt32(1200, 820));
+            await SelectAsync(first); CloseTab(layoutTabs[0]); Root.UpdateLayout();
             foreach (var page in new[] { "general", "tabs", "shortcuts", "extensions", "passwords", "downloads", "privacy", "about" })
             {
                 Settings.SettingsPage = page; var panelTask = ShowSettingsAsync(); await Task.Delay(20);
@@ -254,9 +369,34 @@ public sealed partial class MainWindow
             first.Loading = true; firstCore.Reload(); await Wait(() => !first.Loading); await Task.Delay(100);
             if (Environment.GetEnvironmentVariable("SEARCHEXTRA_TEST_STORE") == "1")
             {
+                await VerifyStoreBridgeAsync(Check);
                 const string storeId = "aapbdbdomjkkjkaonfhkkikfgjllcleb";
                 var folder = await CrxInstaller.FetchAsync(storeId, Path.Combine(DataStore.Root, "StoreProbe")); await InstallExtensionFolderAsync(folder, storeId);
                 var storeExtension = Settings.Extensions.Single(e => e.StoreId == storeId); Check(storeExtension.Id == storeId, "Real Chrome store extension installs with original ID");
+                var installedFolder = storeExtension.Folder;
+                var updateTask = InstallStoreExtensionAsync(storeId);
+                await Wait(() => OverlayLayer.Visibility == Visibility.Visible); Root.UpdateLayout();
+                Check(FindAddressPart<Microsoft.UI.Xaml.Controls.TextBlock>(OverlayLayer)?.Text == T("Already up to date", "已是最新版本"), "Checking the current store version shows latest-version feedback");
+                DismissOverlay(); await updateTask;
+                Check(storeExtension.Folder == installedFolder, "Checking an up-to-date store extension does not reinstall it");
+                var inlineManager = ShowExtensionManagerAsync(); Root.UpdateLayout();
+                var managerCard = OverlayLayer.Children[0];
+                var updateMessages = new List<string>();
+                await InstallStoreExtensionAsync(storeId, updateMessages.Add, _ => Task.FromResult(true));
+                Check(OverlayLayer.Visibility == Visibility.Visible && OverlayLayer.Children[0] == managerCard, "Inline update checking keeps extension management open");
+                Check(updateMessages.First() == T("Checking extension updates…", "正在检查扩展更新…") && updateMessages.Last() == T("Already up to date", "已是最新版本"), "Inline update reports progress and latest-version feedback");
+                Check(storeExtension.Folder == installedFolder, "Inline latest-version checking does not reinstall the extension");
+                var previousVersion = storeExtension.Version;
+                storeExtension.Version = "0.0.1"; updateMessages.Clear();
+                await InstallStoreExtensionAsync(storeId, updateMessages.Add, permissions =>
+                {
+                    Check(OverlayLayer.Children[0] == managerCard && permissions.Count > 0, "Update permission confirmation remains inside extension management");
+                    return Task.FromResult(true);
+                });
+                Check(OverlayLayer.Visibility == Visibility.Visible && OverlayLayer.Children[0] == managerCard && storeExtension.Version == previousVersion && storeExtension.Folder != installedFolder,
+                    "Installing a newer store package preserves the management page and updates the local version");
+                Check(updateMessages.Last() == T("Updated to version ", "已更新至版本 ") + previousVersion, "Inline update displays its successful result and new version");
+                DismissOverlay(); await inlineManager;
                 await SetExtensionEnabledAsync(storeExtension, false); Check(!(await firstCore.Profile.GetBrowserExtensionsAsync()).Single(e => e.Id == storeId).IsEnabled, "Installed store extension disables natively");
                 await SetExtensionEnabledAsync(storeExtension, true); Check((await firstCore.Profile.GetBrowserExtensionsAsync()).Single(e => e.Id == storeId).IsEnabled, "Installed store extension enables natively");
                 await RemoveExtensionAsync(storeExtension); Check(!(await firstCore.Profile.GetBrowserExtensionsAsync()).Any(e => e.Id == storeId), "Store extension uninstalls natively");
@@ -293,5 +433,63 @@ public sealed partial class MainWindow
         {
             cancellation.Cancel(); server.Stop(); Close();
         }
+    }
+
+    private async Task VerifyStoreBridgeAsync(Action<bool, string> check)
+    {
+        const string id = "aapbdbdomjkkjkaonfhkkikfgjllcleb";
+        const string nextId = "cjpalhdlnbpafiamejdnhcphjbkeiagm";
+        using var probe = new PageView(new BrowserTab(), store, () => { }, _ => { });
+        Pages.Children.Add(probe.Control);
+        try
+        {
+            await probe.InitializeAsync();
+            var core = probe.Control.CoreWebView2;
+            var requests = new List<string>(); var downloads = 0;
+            probe.StoreInstallRequested += value => { requests.Add(value); return Task.CompletedTask; };
+            probe.DownloadStarted += _ => downloads++;
+            core.WebResourceRequested += async (_, args) =>
+            {
+                if (!args.Request.Uri.Contains("searchextra-store-fixture")) return;
+                var html = "<!doctype html><title>Store fixture</title><button id='enabled'>Add to Chrome</button><button disabled id='disabled'>添加至 Chrome</button><script>window.originalClicks=0;document.addEventListener('click',()=>window.originalClicks++);</script>";
+                var deferral = args.GetDeferral();
+                try
+                {
+                    var stream = new global::Windows.Storage.Streams.InMemoryRandomAccessStream();
+                    using var writer = new global::Windows.Storage.Streams.DataWriter(stream);
+                    writer.WriteBytes(Encoding.UTF8.GetBytes(html)); await writer.StoreAsync(); writer.DetachStream(); stream.Seek(0);
+                    args.Response = core.Environment.CreateWebResourceResponse(stream, 200, "OK", "Content-Type: text/html; charset=utf-8");
+                }
+                finally { deferral.Complete(); }
+            };
+            async Task Navigate(string url)
+            {
+                var loaded = new TaskCompletionSource<bool>();
+                void Ready(CoreWebView2 sender, CoreWebView2NavigationCompletedEventArgs args) => loaded.TrySetResult(args.IsSuccess);
+                core.NavigationCompleted += Ready;
+                try { core.Navigate(url); check(await loaded.Task.WaitAsync(TimeSpan.FromSeconds(20)), "Store bridge fixture loads"); }
+                finally { core.NavigationCompleted -= Ready; }
+                await Task.Delay(200);
+            }
+            await Navigate($"https://chromewebstore.google.com/detail/searchextra-store-fixture/{id}");
+            check(await core.ExecuteScriptAsync("document.querySelectorAll('button[data-search-store=add]').length") == "2", "Enabled and disabled Chrome install buttons are connected to SearcheXtra");
+            await core.ExecuteScriptAsync("document.querySelector('button[data-search-store=add]').click()");
+            await Task.Delay(100);
+            check(requests.SequenceEqual(new[] { id }) && downloads == 0 && await core.ExecuteScriptAsync("window.originalClicks") == "0", "Store button invokes native installation without Chrome's download handler");
+            await core.ExecuteScriptAsync($"history.pushState(null,'','/detail/searchextra-store-fixture/{nextId}')");
+            await Task.Delay(100);
+            await core.ExecuteScriptAsync("document.querySelector('button[data-search-store=add]').click()");
+            await Task.Delay(100);
+            check(requests.Last() == nextId, "Store SPA navigation installs the current listing");
+            await core.ExecuteScriptAsync($"chrome.webview.postMessage({{type:'store-install',id:'{id}'}})");
+            await Task.Delay(100);
+            check(requests.Last() == nextId, "Store installation ignores IDs supplied by page messages");
+            var count = requests.Count;
+            await Navigate($"https://store-fixture.invalid/detail/searchextra-store-fixture/{id}");
+            await core.ExecuteScriptAsync("chrome.webview.postMessage({type:'store-install'})");
+            await Task.Delay(100);
+            check(requests.Count == count, "Non-store origins cannot request extension installation");
+        }
+        finally { Pages.Children.Remove(probe.Control); }
     }
 }

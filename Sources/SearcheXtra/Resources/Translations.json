@@ -4970,5 +4970,101 @@
   "release100.start3": {
     "en": "Restored sessions keep their original pages; private tabs still use a blank page.",
     "zh-Hans": "恢复会话时保留原有页面；无痕标签页仍使用空白页。"
+  },
+  "extensions.open": {
+    "en": "Open extension",
+    "zh-Hans": "打开扩展"
+  },
+  "extensions.settings": {
+    "en": "Extension settings",
+    "zh-Hans": "扩展设置"
+  },
+  "extensions.manage": {
+    "en": "Manage extensions",
+    "zh-Hans": "扩展管理"
+  },
+  "extensions.openManager": {
+    "en": "Open",
+    "zh-Hans": "打开"
+  },
+  "extensions.search": {
+    "en": "Search extensions",
+    "zh-Hans": "搜索扩展"
+  },
+  "extensions.empty": {
+    "en": "No extensions found",
+    "zh-Hans": "没有找到扩展"
+  },
+  "extensions.details": {
+    "en": "Details",
+    "zh-Hans": "详情"
+  },
+  "extensions.enabled": {
+    "en": "Enabled",
+    "zh-Hans": "已启用"
+  },
+  "extensions.disabled": {
+    "en": "Disabled",
+    "zh-Hans": "已停用"
+  },
+  "extensions.enable": {
+    "en": "Enable {0}",
+    "zh-Hans": "启用 {0}"
+  },
+  "extensions.pin": {
+    "en": "Pin to title bar",
+    "zh-Hans": "固定到标题栏"
+  },
+  "extensions.newTab": {
+    "en": "Use for new tabs",
+    "zh-Hans": "用于新标签页"
+  },
+  "extensions.version": {
+    "en": "Version {0}",
+    "zh-Hans": "版本 {0}"
+  },
+  "extensions.update": {
+    "en": "Update from store",
+    "zh-Hans": "从商店更新"
+  },
+  "extensions.checking": {
+    "en": "Checking for updates…",
+    "zh-Hans": "正在检查更新…"
+  },
+  "extensions.latest": {
+    "en": "Already up to date",
+    "zh-Hans": "已是最新版本"
+  },
+  "extensions.updated": {
+    "en": "Extension updated",
+    "zh-Hans": "扩展已更新"
+  },
+  "extensions.updateFailed": {
+    "en": "Could not check or install the update. Try again.",
+    "zh-Hans": "检查或安装更新失败，请重试。"
+  },
+  "extensions.downloading": {
+    "en": "Downloading and verifying update…",
+    "zh-Hans": "正在下载并校验更新…"
+  },
+  "extensions.updating": {
+    "en": "Updating extension…",
+    "zh-Hans": "正在更新扩展…"
+  },
+  "extensions.confirmUpdate": {
+    "en": "Confirm update permissions",
+    "zh-Hans": "请确认更新所需权限"
+  },
+  "extensions.cancelled": {
+    "en": "Update cancelled",
+    "zh-Hans": "已取消更新"
+  },
+  "extensions.confirm": {
+    "en": "Update",
+    "zh-Hans": "更新"
+  },
+  "extensions.cancel": {
+    "en": "Cancel",
+    "zh-Hans": "取消"
   }
 }

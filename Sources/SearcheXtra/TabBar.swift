@@ -302,10 +302,9 @@ struct TabBar: View {
         let pair = browser.prefs.splitView ? splits.first(where: { $0.left == tab.id }) : nil
         if let pair, let right = tabs.first(where: { $0.id == pair.right }) {
             let editingPair = browser.editingTab == tab.id || browser.editingTab == right.id
-            let pairedWidth = splitItemWidth(base: width)
-            let displayedWidth = interactive && editingPair ? min(340, room) : pairedWidth
+            let pairedWidth = interactive && editingPair ? min(Metrics.tabWidth * 2, room) : splitItemWidth(base: width)
             SplitTabItem(browser: browser, prefs: browser.prefs, left: tab, right: right,
-                         width: displayedWidth, height: height,
+                         width: pairedWidth, height: height,
                          live: activeID.map { pair.contains($0) } ?? false,
                          focusedID: activeID,
                          interactive: interactive, pill: pill)
@@ -353,7 +352,8 @@ struct TabBar: View {
         if let id = browser.editingTab, let tab = browser.tabs.first(where: { $0.id == id }) {
             let splitWidth = browser.prefs.splitView ? browser.split(for: tab).map { _ in splitItemWidth(base: each) } : nil
             let oldWidth = splitWidth ?? (tab.pin != nil ? Metrics.pinWidth : each)
-            total += min(340, strip - lights - leading - 12) - oldWidth
+            let editWidth = min(Metrics.tabWidth * 2, room(in: strip))
+            total += editWidth - oldWidth
         }
         return total
     }
@@ -382,25 +382,26 @@ struct TabBar: View {
         let items = browser.prefs.usesTabGroups ? ungrouped + grouped : displayed
         let pins = displayed.filter { $0.pin != nil }.count
         if browser.prefs.usesTabGroups {
-            let count = items.count
+            let edit = addressReservation(in: strip, tabs: items, splits: browser.splits)
+            let count = items.count - (edit > 0 ? 1 : 0)
             guard count > 0 else { return Metrics.tabWidth }
             let extra = pairWidthExtra(in: items, base: Metrics.tabMinWidth, splits: browser.splits)
-            let spent = CGFloat(pins) * Metrics.pinWidth + extra
+            let spent = pinnedWidth(in: strip, tabs: displayed) + extra + edit
                 + browser.tabGroups.reduce(CGFloat.zero) { $0 + GroupHeading.width(for: $1.name) }
-                + CGFloat(max(0, pins + count + browser.tabGroups.count - 1)) * Metrics.tabGap
+                + CGFloat(max(0, pins + items.count + browser.tabGroups.count - 1)) * Metrics.tabGap
             return max(Metrics.tabMinWidth, min(Metrics.tabWidth, (room(in: strip) - spent) / CGFloat(count)))
         }
         return width(in: strip, tabs: displayed, splits: browser.splits)
     }
 
     private func width(in strip: CGFloat, tabs: [Tab], splits: [TabSplit]) -> CGFloat {
-        let pinned = CGFloat(tabs.filter { $0.pin != nil }.count)
         let looseTabs = tabs.filter { $0.pin == nil }
-        let loose = CGFloat(looseTabs.count)
+        let edit = addressReservation(in: strip, tabs: looseTabs, splits: splits)
+        let loose = CGFloat(looseTabs.count - (edit > 0 ? 1 : 0))
         guard loose > 0 else { return Metrics.tabWidth }
         let extra = pairWidthExtra(in: looseTabs, base: Metrics.tabMinWidth, splits: splits)
-        let spent = pinned * Metrics.pinWidth
-            + extra + CGFloat(max(0, tabs.count - 1)) * Metrics.tabGap
+        let spent = pinnedWidth(in: strip, tabs: tabs)
+            + extra + edit + CGFloat(max(0, tabs.count - 1)) * Metrics.tabGap
         return max(Metrics.tabMinWidth, min(Metrics.tabWidth, (room(in: strip) - spent) / loose))
     }
 
@@ -408,6 +409,21 @@ struct TabBar: View {
         guard browser.prefs.splitView else { return tabs }
         let right = Set(splits.map(\.right))
         return tabs.filter { !right.contains($0.id) }
+    }
+
+    private func addressReservation(in strip: CGFloat, tabs: [Tab], splits: [TabSplit]) -> CGFloat {
+        guard let id = browser.editingTab,
+              let tab = tabs.first(where: { candidate in candidate.id == id || (browser.prefs.splitView && splits.contains { $0.left == candidate.id && $0.contains(id) }) }),
+              tab.pin == nil else { return 0 }
+        let paired = browser.prefs.splitView && splits.contains { $0.left == tab.id && $0.contains(id) }
+        return min(Metrics.tabWidth * 2, room(in: strip))
+            - (paired ? splitItemWidth(base: Metrics.tabMinWidth) - Metrics.tabMinWidth : 0)
+    }
+
+    private func pinnedWidth(in strip: CGFloat, tabs: [Tab]) -> CGFloat {
+        tabs.filter { $0.pin != nil }.reduce(CGFloat.zero) { total, tab in
+            total + (browser.editingTab == tab.id ? min(Metrics.tabWidth * 2, room(in: strip)) : Metrics.pinWidth)
+        }
     }
 
     private func splitItemWidth(base: CGFloat) -> CGFloat {
@@ -505,7 +521,7 @@ private struct TabPill: View {
     /// A pinned tab is a square, an edited one is a field, everything else is
     /// its share of what is left.
     private var span: CGFloat {
-        if editing { return min(340, room) }
+        if editing { return min(Metrics.tabWidth * 2, room) }
         return pinned ? Metrics.pinWidth : width
     }
 
@@ -821,6 +837,7 @@ struct TabAddressField: NSViewRepresentable {
         let field = NSTextField()
         field.delegate = context.coordinator
         field.isBordered = false
+        field.isBezeled = false
         field.drawsBackground = false
         field.focusRingType = .none
         field.font = .systemFont(ofSize: 12.5)
@@ -829,12 +846,11 @@ struct TabAddressField: NSViewRepresentable {
         field.cell?.wraps = false
         field.stringValue = browser.tabDraft
         context.coordinator.watch(field)
-        // The site card stands under whichever field the address is in.
-        SiteCardPanel.follow(browser, anchor: field)
         return field
     }
 
     static func dismantleNSView(_ field: NSTextField, coordinator: Coordinator) {
+        SiteCardPanel.hide()
         coordinator.unwatch()
     }
 
@@ -860,6 +876,7 @@ struct TabAddressField: NSViewRepresentable {
         DispatchQueue.main.async {
             field.window?.makeFirstResponder(field)
             guard let editor = field.currentEditor() as? NSTextView else { return }
+            editor.drawsBackground = false
             editor.selectedTextAttributes = [
                 .backgroundColor: NSColor(Palette.ink.opacity(0.11)),
                 .foregroundColor: Palette.NS.ink,
@@ -878,6 +895,7 @@ struct TabAddressField: NSViewRepresentable {
 
         func controlTextDidChange(_ note: Notification) {
             guard let field = note.object as? NSTextField else { return }
+            SiteCardPanel.hide()
             typing = true
             browser.tabDraft = field.stringValue
             typing = false
@@ -1041,10 +1059,11 @@ struct TabMenu: View {
             browser.duplicate()
         }
         .disabled(tab.isBlank)
-        // The card a click on the tab you are on shows under its address.
+        // Site information is an explicit action, separate from address editing.
         Button(L10n.text("TabBar.1114")) {
             if browser.activeID != tab.id { browser.select(tab) }
             browser.beginTabEdit(tab)
+            SiteCardPanel.show(for: tab, in: browser)
         }
         .disabled(tab.isBlank || tab.address == nil || tab.pin != nil)
         Button(L10n.text("TabBar.1115")) {

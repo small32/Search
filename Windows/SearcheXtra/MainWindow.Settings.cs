@@ -132,15 +132,7 @@ public sealed partial class MainWindow
                 ActionRow("Unpacked extension", "未打包扩展", T("Choose folder…", "选择目录…"), async () => { await ChooseExtensionFolderAsync(); render(page); });
                 ActionRow("Extension package (MV2 / MV3)", "扩展文件（MV2 / MV3）", T("Import CRX / ZIP…", "导入 CRX / ZIP…"), async () => { await ChooseExtensionPackageAsync(); render(page); });
                 Toggle("Extensions in private tabs", "无痕标签页使用扩展", Settings.ExtensionsInPrivate, value => Settings.ExtensionsInPrivate = value, T("Applies to newly opened private tabs.", "应用于新打开的无痕标签页。"));
-                foreach (var extension in Settings.Extensions.ToArray())
-                {
-                    Toggle(extension.Name, extension.Name, extension.Enabled, async value => await SetExtensionEnabledAsync(extension, value), extension.Version + (extension.ManifestVersion > 0 ? " · MV" + extension.ManifestVersion : ""));
-                    if (extension.StoreId != null) ActionRow("Update from store", "从商店更新", T("Check", "检查"), async () => await InstallStoreExtensionAsync(extension.StoreId));
-                    ActionRow("Pinned", "固定", extension.Pinned ? "●" : "○", () => { extension.Pinned = !extension.Pinned; Changed(); render(page); });
-                    ActionRow("Open extension", "打开扩展", T("Open", "打开"), async () => await OpenExtensionPopupAsync(extension));
-                    if (extension.Options.Length > 0) ActionRow("Extension options", "扩展选项", T("Open", "打开"), () => { DismissOverlay(); AddTab($"chrome-extension://{extension.Id}/{extension.Options}"); });
-                    ActionRow("Remove extension", "移除扩展", T("Remove", "移除"), async () => { await RemoveExtensionAsync(extension); render(page); });
-                }
+                ActionRow("Manage extensions", "扩展管理", T("Open", "打开"), async () => { DismissOverlay(); await ShowExtensionManagerAsync(); });
                 break;
             case "passwords":
                 ActionRow("Saved passwords", "已保存的密码", T("Manage…", "管理…"), async () => { DismissOverlay(); await ShowPasswordsAsync(); });

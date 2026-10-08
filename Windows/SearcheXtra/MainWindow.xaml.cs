@@ -65,6 +65,7 @@ public sealed partial class MainWindow : Window
         BackButton.RightTapped += async (_, e) => { e.Handled = true; await ShowNavigationHistoryAsync(true, BackButton); };
         ForwardButton.RightTapped += async (_, e) => { e.Handled = true; await ShowNavigationHistoryAsync(false, ForwardButton); };
         TopSettings.RightTapped += (_, e) => { e.Handled = true; Menu_Click(this, new()); };
+        ExtensionsButton.RightTapped += async (_, e) => { e.Handled = true; await ShowExtensionManagerAsync(); };
         InstallShortcuts();
         Activated += async (_, e) => { if (Settings.FloatsAway && e.WindowActivationState == WindowActivationState.Deactivated && ActiveView is { FloatingWindow: null } view && await view.Control.CoreWebView2.ExecuteScriptAsync("[...document.querySelectorAll('video')].some(v=>!v.paused)") == "true") await TogglePictureInPictureAsync(false); };
         if (Environment.GetEnvironmentVariable("SEARCHEXTRA_SMOKE_TEST") is { Length: > 0 } report)
@@ -86,7 +87,7 @@ public sealed partial class MainWindow : Window
             var index = Math.Clamp(restored.ActiveIndex, 0, current.Count - 1);
             _ = SelectAsync(current[index]);
         }
-        else AddTab();
+        else AddTab(Settings.StartPage.Length > 0 ? Settings.StartPage : NewTabUrl());
     }
 
     private void OnStoreChanged() => DispatcherQueue.TryEnqueue(() => { ApplySettings(); RefreshBookmarkBar(); });
@@ -113,16 +114,15 @@ public sealed partial class MainWindow : Window
         UpdateBench();
     }
 
-    private string HomeUrl(bool isPrivate = false)
+    private string NewTabUrl(bool isPrivate = false)
     {
-        if (Settings.StartPage.Length > 0) return Settings.StartPage;
         if ((!isPrivate || Settings.ExtensionsInPrivate) && Settings.Extensions.FirstOrDefault(e => e.Enabled && e.NewTab.Length > 0) is { } newtab)
             return $"chrome-extension://{newtab.Id}/{newtab.NewTab}";
         return "";
     }
     private async Task GoHomeAsync()
     {
-        var url = HomeUrl(active?.IsPrivate ?? false);
+        var url = Settings.StartPage;
         if (active == null) { AddTab(url); return; }
         if (url.Length > 0) { await NavigateAsync(url); return; }
         ActiveView?.Navigate("about:blank");
@@ -133,7 +133,7 @@ public sealed partial class MainWindow : Window
 
     private BrowserTab AddTab(string? url = null, bool foreground = true, bool isPrivate = false, string title = "", bool pinned = false, string? inSpace = null, bool loadBackground = true, string group = "")
     {
-        url ??= HomeUrl(isPrivate);
+        url ??= NewTabUrl(isPrivate);
         var tab = new BrowserTab { Url = url, Title = title, Pinned = pinned, IsPrivate = isPrivate, Space = inSpace ?? space, Group = group, UseIcons = Settings.IconGlyphs };
         tabs.Add(tab);
         var menu = new MenuFlyout();
@@ -171,6 +171,7 @@ public sealed partial class MainWindow : Window
         if (!views.TryGetValue(tab.Id, out var view))
         {
             view = new PageView(tab, store, () => ScheduleSave(), url => AddTab(url, true, tab.IsPrivate));
+            view.StoreInstallRequested += async id => { await SelectAsync(tab); await InstallStoreExtensionAsync(id); };
             view.DownloadStarted += download => { downloads.Add(download); RefreshPinnedExtensions(); Status.Text = T("Downloading: ", "正在下载：") + download.Name; download.Operation.StateChanged += (_, _) => { if (download.Operation.State == Microsoft.Web.WebView2.Core.CoreWebView2DownloadState.Completed && !tab.IsPrivate) { store.Downloads.RemoveAll(d => d.Path == download.Path); store.Downloads.Insert(0, new(download.Path, download.Operation.Uri, DateTimeOffset.Now)); ScheduleSave(); } }; };
             view.NewWindowTarget += async _ => { var child = AddTab("", true, tab.IsPrivate); return (await GetViewAsync(child)).Control.CoreWebView2; };
             view.HoveredLink += url => { if (active == tab) Status.Text = url; };
@@ -178,7 +179,7 @@ public sealed partial class MainWindow : Window
             view.PermissionRequested += async args =>
             {
                 if (active != tab) { args.State = Microsoft.Web.WebView2.Core.CoreWebView2PermissionState.Deny; return; }
-                var allowed = await ShowCardAsync(new Uri(args.Uri).Host, new TextBlock { Text = T("This site requests: ", "此网站请求：") + args.PermissionKind, TextWrapping = TextWrapping.Wrap }, T("Allow", "允许")) == ContentDialogResult.Primary;
+                var allowed = await ShowCardAsync(new Uri(args.Uri).Host, new TextBlock { Text = T("This site requests: ", "此网站请求：") + SitePermissionName(args.PermissionKind.ToString()), TextWrapping = TextWrapping.Wrap }, T("Allow", "允许")) == ContentDialogResult.Primary;
                 args.State = allowed ? Microsoft.Web.WebView2.Core.CoreWebView2PermissionState.Allow : Microsoft.Web.WebView2.Core.CoreWebView2PermissionState.Deny;
                 if (!tab.IsPrivate) { GetSite(new Uri(args.Uri).Host).Permissions[args.PermissionKind.ToString()] = allowed ? "allow" : "deny"; ScheduleSave(); }
             };
@@ -279,14 +280,12 @@ public sealed partial class MainWindow : Window
     {
         if (active == null) return;
         if (active.Url.Length > 0 && active.Url != "about:blank" && Welcome.Visibility == Visibility.Visible) { Welcome.Visibility = Visibility.Collapsed; }
-        if (editingAddressTab == null) Address.Text = active.Url == "about:blank" ? "" : active.Url;
+        if (editingAddressTab == null) Address.Text = EditableTabAddress(active.Url);
         Title = (active.Title.Length > 0 ? active.Title + " — " : "") + "SearcheXtra" + (active.IsPrivate ? T(" · Private", " · 无痕") : "");
         LoadingBar.Visibility = active.Loading ? Visibility.Visible : Visibility.Collapsed;
         var core = ActiveView?.Control.CoreWebView2;
         BackButton.IsEnabled = core?.CanGoBack == true;
         ForwardButton.IsEnabled = core?.CanGoForward == true;
-        StoreInstall.Visibility = CrxInstaller.StoreId(active.Url) != null ? Visibility.Visible : Visibility.Collapsed;
-        StoreInstall.Content = T("Add to SearcheXtra", "添加至 SearcheXtra");
     }
     private PageView? ActiveView => active != null && views.TryGetValue(active.Id, out var view) ? view : null;
 
@@ -383,16 +382,17 @@ public sealed partial class MainWindow : Window
     }
     private void TopTabs_SelectionChanged(object sender, SelectionChangedEventArgs e) { if (!selecting && TopTabs.SelectedItem is BrowserTab tab) _ = SelectAsync(tab); }
     private void SideTabs_SelectionChanged(object sender, SelectionChangedEventArgs e) { if (!selecting && SideTabs.SelectedItem is BrowserTab tab) _ = SelectAsync(tab); }
-    private async void Address_Submitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args) => await NavigateAsync(args.QueryText);
-    private void Address_Changed(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
+    private async void Address_KeyDown(object sender, KeyRoutedEventArgs args)
     {
-        if (args.Reason != AutoSuggestionBoxTextChangeReason.UserInput) return;
-        var query = sender.Text.Trim();
+        if (args.Key == VirtualKey.Enter) { args.Handled = true; await NavigateAsync(Address.Text); }
+        else if (args.Key == VirtualKey.Escape) { args.Handled = true; EndAddressEdit(); }
+    }
+    private void Address_Changed(object sender, TextChangedEventArgs args)
+    {
+        var query = Address.Text.Trim();
         siteOffer = Settings.SearchesSites && searchSite == null ? SiteSearch.Match(Settings, query) : null;
         Address.PlaceholderText = searchSite != null ? T("Search ", "搜索 ") + searchSite.Name : siteOffer != null ? T("Tab to search ", "按 Tab 搜索 ") + siteOffer.Name : T("Address or search", "网址或搜索");
-        sender.ItemsSource = query.Length < 2 ? null : store.History.Where(h => h.Url.Contains(query, StringComparison.OrdinalIgnoreCase) || h.Title.Contains(query, StringComparison.OrdinalIgnoreCase)).Select(h => h.Url).Distinct().Take(8).ToList();
     }
-    private void Address_Chosen(AutoSuggestBox sender, AutoSuggestBoxSuggestionChosenEventArgs args) => sender.Text = args.SelectedItem.ToString();
     private void InstallShortcuts()
     {
         Root.KeyboardAccelerators.Clear();

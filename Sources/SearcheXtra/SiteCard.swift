@@ -1,16 +1,9 @@
 import AppKit
-import Combine
 import SecurityInterface
 import SwiftUI
 
-// The site card: what a click on the tab you are on shows under its address,
-// in the column and in the bar across the top alike — whether the connection
-// is private, and the few things that belong to the page (copy its address,
-// print it, its zoom, whether it may play sound by itself, whether its videos
-// float out). Right-click › Site Information… opens the same. It goes as soon
-// as you type, when the address is left, or when one of its lines is used.
-// From #56, whose bar it came with; the bar itself stayed out, since Search
-// has the column or the strip, never a second row over the page.
+// Site information opens explicitly from the tab context menu.
+// Editing an address stays entirely inside the tab.
 
 /// The card's own small window, under the tab's address. It never takes the
 /// keys: the address stays in the tab being edited, the caret where it was,
@@ -24,47 +17,21 @@ enum SiteCardPanel {
 
     // MARK: - when
 
-    /// The field the address is being edited in. SwiftUI can make it and
-    /// throw it away several times as the edit begins, so the card follows
-    /// the browser's edit rather than any one field, and stands under the one
-    /// with the caret.
-    private static weak var anchor: NSView?
-    private static var watching: [ObjectIdentifier: AnyCancellable] = [:]
-    /// The address as the edit began with it.
     private static var original: String?
 
-    static func follow(_ browser: Browser, anchor field: NSView) {
-        anchor = field
-        let key = ObjectIdentifier(browser)
-        guard watching[key] == nil else { return }
-        watching[key] = browser.$editingTab.combineLatest(browser.$tabDraft)
-            .receive(on: DispatchQueue.main)
-            .sink { [weak browser] editing, draft in
-                MainActor.assumeIsolated {
-                    guard let browser else { return }
-                    guard let id = editing, !browser.renamingTab,
-                          let tab = browser.tabs.first(where: { $0.id == id }), !tab.isBlank
-                    else { original = nil; hide(); return }
-                    if original == nil {
-                        // The edit began: the card comes up under the field once it
-                        // is in its window.
-                        original = draft
-                        place(tab, browser, tries: 0)
-                    } else if draft != original {
-                        // Typing somewhere else: the card was about the page you are on.
-                        hide()
-                    }
-                }
-            }
+    static func show(for tab: Tab, in browser: Browser) {
+        hide()
+        original = browser.tabDraft
+        place(tab, browser, tries: 0)
     }
 
     private static func place(_ tab: Tab, _ browser: Browser, tries: Int) {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.03) {
             guard original != nil, browser.editingTab == tab.id, browser.tabDraft == original else { return }
             // The field with the caret in it is the one on screen; failing
-            // that, the latest one made.
+            // that, wait until the inline field has acquired focus.
             let focused = ((browser.window ?? Links.window)?.firstResponder as? NSTextView)?.delegate as? NSTextField
-            guard let field = focused ?? anchor, field.window != nil else {
+            guard let field = focused, field.window != nil else {
                 if tries < 15 { place(tab, browser, tries: tries + 1) }
                 return
             }
@@ -75,7 +42,6 @@ enum SiteCardPanel {
     /// Under `field`, the tab's address, in `browser`'s window.
     private static func show(for tab: Tab, in browser: Browser, under field: NSView) {
         guard let window = field.window else { return }
-        hide()
         let card = SiteCard(browser: browser, tab: tab) {
             SiteCardPanel.hide()
             browser.cancelTabEdit()
@@ -135,6 +101,7 @@ enum SiteCardPanel {
     }
 
     static func hide() {
+        original = nil
         if let resign { NotificationCenter.default.removeObserver(resign) }
         resign = nil
         guard let panel else { return }

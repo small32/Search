@@ -1,8 +1,7 @@
 import SwiftUI
 import WebKit
 
-/// Settings › Extensions: what is installed, and the two ways in — a Chrome
-/// Web Store link, or a folder.
+/// Settings › Extensions: installation preferences and the management entry.
 struct ExtensionsPage: View {
     @ObservedObject var browser: Browser
 
@@ -85,18 +84,11 @@ struct ExtensionsPage: View {
                     }
                 }
 
-                if extensions.installed.isEmpty {
-                    Card { Nothing(L10n.text("ExtensionsUI.0490")) }
-                } else {
-                    Card {
-                        ForEach(Array(extensions.installed.enumerated()), id: \.element.id) { index, item in
-                            if index > 0 { Rule() }
-                            Row(item: item, extensions: extensions)
-                        }
+                Card {
+                    Line(L10n.text("extensions.manage")) {
+                        Pill(L10n.text("extensions.openManager")) { ExtensionManagerWindow.shared.show() }
                     }
                 }
-
-                Recorders()
 
                 Card {
                     Line(L10n.text("ExtensionsUI.0491"), L10n.text("ExtensionsUI.0492")) {
@@ -110,101 +102,6 @@ struct ExtensionsPage: View {
             guard Crx.id(in: link) != nil else { return }
             extensions.install(from: link)
             link = ""
-        }
-    }
-
-    /// The extensions you let record your screen, each one to take back.
-    @available(macOS 15.4, *)
-    private struct Recorders: View {
-        @ObservedObject private var capture = ExtensionCapture.shared
-
-        var body: some View {
-            let ids = ExtensionCapture.allowedIDs
-            if !ids.isEmpty {
-                Card {
-                    VStack(spacing: 0) {
-                        ForEach(Array(ids.enumerated()), id: \.element) { index, id in
-                            if index > 0 { Rule() }
-                            Line(Browser.extensionName(id), L10n.text("ExtensionsUI.0494")) {
-                                Pill(L10n.text("ExtensionsUI.0495")) { ExtensionCapture.forget(id) }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    @available(macOS 15.4, *)
-    private struct Row: View {
-        let item: Installed
-        @ObservedObject var extensions: Extensions
-        @State private var hovering = false
-
-        var body: some View {
-            let context = extensions.contexts[item.id]
-            HStack(spacing: 12) {
-                Group {
-                    if let icon = context?.webExtension.icon(for: CGSize(width: 32, height: 32)) {
-                        Image(nsImage: icon).resizable().interpolation(.high)
-                    } else {
-                        Image(systemName: "puzzlepiece.extension").foregroundStyle(Palette.muted)
-                    }
-                }
-                .frame(width: 22, height: 22)
-                VStack(alignment: .leading, spacing: 2) {
-                    Text(item.name)
-                        .font(.system(size: 13))
-                        .foregroundStyle(Palette.ink)
-                        .lineLimit(1)
-                    Text(detail(context))
-                        .font(.system(size: 11.5))
-                        .foregroundStyle(Palette.muted)
-                        .lineLimit(1)
-                        .help(item.source ?? "")
-                }
-                Spacer(minLength: 8)
-                if hovering {
-                    Quick(item.pinned == true ? L10n.text("ExtensionsUI.0496") : L10n.text("ExtensionsUI.0497")) {
-                        extensions.setPinned(item.id, !(item.pinned ?? false))
-                    }
-                    if context?.overrideNewTabPageURL != nil {
-                        let on = Store.settings.object(forKey: "extensions.newtab.\(item.id)") as? Bool == true
-                        Quick(on ? L10n.text("ExtensionsUI.0498") : L10n.text("ExtensionsUI.0499")) {
-                            Store.settings.set(!on, forKey: "extensions.newtab.\(item.id)")
-                            extensions.objectWillChange.send()
-                        }
-                    }
-                    if item.source != nil || !item.fromStore {
-                        Quick(L10n.text("ExtensionsUI.0500")) { extensions.reload(item.id) }
-                    }
-                    if context?.optionsPageURL != nil {
-                        Quick(L10n.text("ExtensionsUI.0501")) { extensions.openOptions(item.id) }
-                    }
-                    Quick(L10n.text("ExtensionsUI.0502"), tint: .red.opacity(0.75)) { extensions.remove(item.id) }
-                }
-                Switch(on: Binding(get: { item.enabled }, set: { extensions.setEnabled(item.id, $0) }))
-            }
-            .padding(.horizontal, 14)
-            .padding(.vertical, 10)
-            .background(hovering ? Palette.hover : .clear)
-            .onHover { hovering = $0 }
-        }
-
-        /// Where it was loaded from, by the folder's name — the whole path
-        /// is in the tooltip.
-        private var folder: String {
-            item.source.map { L10n.text("ExtensionsUI.0503", String(describing: URL(fileURLWithPath: $0).lastPathComponent)) } ?? L10n.text("ExtensionsUI.0504")
-        }
-
-        private func detail(_ context: WKWebExtensionContext?) -> String {
-            var parts = [L10n.text("ExtensionsUI.0505", String(describing: item.version)), item.fromStore ? L10n.text("ExtensionsUI.0506") : folder]
-            if item.enabled, context == nil { parts.append(L10n.text("ExtensionsUI.0507")) }
-            if context?.overrideNewTabPageURL != nil, Store.settings.object(forKey: "extensions.newtab.\(item.id)") as? Bool == true {
-                parts.append(L10n.text("ExtensionsUI.0508"))
-            }
-            if let errors = context?.errors, !errors.isEmpty { parts.append(L10n.text("ExtensionsUI.1291", String(describing: errors.count), String(describing: errors.count == 1 ? "" : "s"))) }
-            return parts.joined(separator: " · ")
         }
     }
 }

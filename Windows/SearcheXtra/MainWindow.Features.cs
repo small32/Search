@@ -11,6 +11,22 @@ namespace SearcheXtra.Windows;
 
 public sealed partial class MainWindow
 {
+    private string SitePermissionName(string kind) => kind switch
+    {
+        "Geolocation" => T("Location", "位置信息"),
+        "Camera" => T("Camera", "摄像头"),
+        "Microphone" => T("Microphone", "麦克风"),
+        "Notifications" => T("Notifications", "通知"),
+        "OtherSensors" => T("Device sensors", "设备传感器"),
+        "ClipboardRead" => T("Read clipboard", "读取剪贴板"),
+        "MultipleAutomaticDownloads" => T("Automatic downloads", "自动下载多个文件"),
+        "FileReadWrite" => T("Read and write files", "读取和写入文件"),
+        "Autoplay" => T("Autoplay media", "自动播放媒体"),
+        "LocalFonts" => T("Local fonts", "本机字体"),
+        "MidiSystemExclusiveMessages" => T("MIDI devices", "MIDI 设备"),
+        "WindowManagement" => T("Window management", "窗口管理"),
+        _ => T("Other site permissions", "其他网站权限")
+    };
     private async Task PreviewLinkAsync(string url)
     {
         if (ActiveView?.Control.CoreWebView2 is not { } source) return;
@@ -41,7 +57,7 @@ public sealed partial class MainWindow
         zoom.ValueChanged += (_, _) => { site.Zoom = zoom.Value; ActiveView?.ApplySettings(); ScheduleSave(); }; panel.Children.Add(zoom);
         foreach (var permission in new[] { "Camera", "Microphone", "Geolocation", "Notifications", "ClipboardRead" })
         {
-            var options = new ComboBox { Header = permission, ItemsSource = new[] { T("Ask", "询问"), T("Allow", "允许"), T("Block", "阻止") }, SelectedIndex = site.Permissions.GetValueOrDefault(permission) switch { "allow" => 1, "deny" => 2, _ => 0 } };
+            var options = new ComboBox { Header = SitePermissionName(permission), ItemsSource = new[] { T("Ask", "询问"), T("Allow", "允许"), T("Block", "阻止") }, SelectedIndex = site.Permissions.GetValueOrDefault(permission) switch { "allow" => 1, "deny" => 2, _ => 0 } };
             options.SelectionChanged += async (_, _) => { if (options.SelectedIndex < 0) return; site.Permissions[permission] = new[] { "ask", "allow", "deny" }[options.SelectedIndex]; if (ActiveView?.Control.CoreWebView2 is { } core && Enum.TryParse<CoreWebView2PermissionKind>(permission, out var kind)) await core.Profile.SetPermissionStateAsync(kind, uri.GetLeftPart(UriPartial.Authority), options.SelectedIndex switch { 1 => CoreWebView2PermissionState.Allow, 2 => CoreWebView2PermissionState.Deny, _ => CoreWebView2PermissionState.Default }); ScheduleSave(); }; panel.Children.Add(options);
         }
         var clear = QuietButton(T("Clear this site's data", "清除此网站数据"));

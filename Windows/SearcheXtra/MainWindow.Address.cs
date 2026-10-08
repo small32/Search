@@ -9,8 +9,13 @@ public sealed partial class MainWindow
 {
     private BrowserTab? editingAddressTab;
     private Guid? pressedActiveTab;
+    private double normalTabWidth = 186;
+    private double addressTabWidth = 372;
     private ListView AddressList => Settings.Sidebar ? SideTabs : TopTabs;
-    private double TabWidth(BrowserTab tab) => tab == editingAddressTab ? 340 : tab.Pinned ? 54 : 186;
+    private double TabWidth(BrowserTab tab) => tab == editingAddressTab ? addressTabWidth : tab.Pinned ? 54 : normalTabWidth;
+
+    private static string EditableTabAddress(string url) => url is "" or "about:blank" ||
+        url.StartsWith("chrome-extension://", StringComparison.OrdinalIgnoreCase) ? "" : url;
 
     private static T? FindAddressPart<T>(DependencyObject root, string? name = null) where T : FrameworkElement
     {
@@ -48,10 +53,9 @@ public sealed partial class MainWindow
         }
         host.Visibility = Visibility.Visible;
         FindAddressPart<TextBlock>(item, "TabLabel")!.Visibility = Visibility.Collapsed;
-        FindAddressPart<Button>(item, "TabClose")!.Visibility = Visibility.Collapsed;
         if (!Settings.Sidebar) item.Width = TabWidth(editingAddressTab);
         UpdateTitleBarRegions();
-        if (focus) { Address.Focus(FocusState.Programmatic); FindAddressPart<TextBox>(Address)?.SelectAll(); }
+        if (focus) { Address.Focus(FocusState.Programmatic); Address.SelectAll(); }
     }
 
     private void FocusAddress()
@@ -61,7 +65,7 @@ public sealed partial class MainWindow
         editingAddressTab = active;
         searchSite = null; siteOffer = null;
         Address.PlaceholderText = T("Address or search", "网址或搜索");
-        Address.Text = active.Url is "" or "about:blank" ? "" : active.Url;
+        Address.Text = EditableTabAddress(active.Url);
         if (changed) RefreshTabLists();
         AddressList.ScrollIntoView(active);
         Root.UpdateLayout();
@@ -74,7 +78,6 @@ public sealed partial class MainWindow
         if (editingAddressTab == null) return;
         ParkAddress();
         editingAddressTab = null;
-        Address.ItemsSource = null;
         RefreshTabLists();
     }
 

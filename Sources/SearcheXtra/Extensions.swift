@@ -808,30 +808,36 @@ final class Extensions: NSObject, ObservableObject {
         }
     }
 
-    private func update(_ item: Installed) async {
-        var parts = URLComponents(string: "https://clients2.google.com/service/update2/crx")!
-        parts.queryItems = [
-            URLQueryItem(name: "response", value: "updatecheck"),
-            URLQueryItem(name: "prodversion", value: Crx.chromeVersion),
-            URLQueryItem(name: "acceptformat", value: "crx3"),
-            URLQueryItem(name: "x", value: "id=\(item.id)&v=\(item.version)&uc"),
-        ]
-        guard let url = parts.url,
-              let (data, _) = try? await URLSession.shared.data(from: url),
-              let xml = String(data: data, encoding: .utf8),
-              // The answer is the <updatecheck> element alone: status="ok"
-              // with a version when there is a newer one, "noupdate" when
-              // not. Read across the whole reply, the first version="" is
-              // the XML declaration's "1.0", and status="ok" is on <app>
-              // either way — which took every reply for an update.
-              let check = xml.range(of: #"<updatecheck\b[^>]*>"#, options: .regularExpression)
-                .map({ String(xml[$0]) }),
-              check.contains("status=\"ok\""),
-              let version = check.range(of: #"\bversion="([^"]+)""#, options: .regularExpression)
-                .map({ String(check[$0].dropFirst(9).dropLast()) }),
-              version != item.version
-        else { return }
+    func update(_ item: Installed, manual: Bool = false, progress: ((String) -> Void)? = nil,
+                confirmPermissions: (([String]) async -> Bool)? = nil) async -> String? {
+        guard item.fromStore else { return nil }
+        if manual { guard busy == nil else { return nil }; busy = item.id }
+        defer { if manual { busy = nil } }
+        progress?(L10n.text("extensions.checking"))
         do {
+            var parts = URLComponents(string: "https://clients2.google.com/service/update2/crx")!
+            parts.queryItems = [
+                URLQueryItem(name: "response", value: "updatecheck"),
+                URLQueryItem(name: "prodversion", value: Crx.chromeVersion),
+                URLQueryItem(name: "acceptformat", value: "crx3"),
+                URLQueryItem(name: "x", value: "id=\(item.id)&v=\(item.version)&uc"),
+            ]
+            let (data, response) = try await URLSession.shared.data(from: parts.url!)
+            guard let http = response as? HTTPURLResponse, (200..<300).contains(http.statusCode),
+                  let xml = String(data: data, encoding: .utf8),
+                  // The answer is the <updatecheck> element alone: status="ok"
+                  // with a version when there is a newer one, "noupdate" when
+                  // not. Read across the whole reply, the first version="" is
+                  // the XML declaration's "1.0", and status="ok" is on <app>
+                  // either way — which took every reply for an update.
+                  let check = xml.range(of: #"<updatecheck\b[^>]*>"#, options: .regularExpression)
+                    .map({ String(xml[$0]) }) else { throw Crx.Refused.empty }
+            if check.contains("status=\"noupdate\"") { return manual ? L10n.text("extensions.latest") : nil }
+            guard check.contains("status=\"ok\""),
+                  let version = check.range(of: #"\bversion="([^"]+)""#, options: .regularExpression)
+                    .map({ String(check[$0].dropFirst(9).dropLast()) }) else { throw Crx.Refused.empty }
+            guard try ExtensionVersion.isNewer(version, than: item.version) else { return manual ? L10n.text("extensions.latest") : nil }
+            progress?(L10n.text("extensions.downloading"))
             let zip = try Crx.verifiedZip(try await Crx.fetch(item.id), id: item.id)
             let staged = Extensions.stagingFolder(for: item.id)
             defer { try? FileManager.default.removeItem(at: staged) }
@@ -839,29 +845,39 @@ final class Extensions: NSObject, ObservableObject {
             try ExtensionShims.prepare(staged, fresh: true)
             let found = try await WKWebExtension(resourceBaseURL: staged)
             guard let current = installed.first(where: { $0.id == item.id }), current.fromStore,
-                  current.version == item.version else { return }
+                  current.version == item.version else { return nil }
+            guard let packageVersion = found.version else { throw Crx.Refused.empty }
+            guard try ExtensionVersion.isNewer(packageVersion, than: current.version) else { return manual ? L10n.text("extensions.latest") : nil }
             // Everything it could do, sites included, against what it was
             // allowed when it was added or last asked about.
             let wants = Set(Extensions.grants(found, in: staged))
             if !wants.isSubset(of: Set(current.permissions)) {
-                guard await ask(install: "An update to \(item.name)", wants: Extensions.describe(found, in: staged), icon: found.icon(for: CGSize(width: 64, height: 64))) else {
-                    return
+                let accepted: Bool
+                if let confirmPermissions {
+                    progress?(L10n.text("extensions.confirmUpdate"))
+                    accepted = await confirmPermissions(Extensions.describe(found, in: staged))
+                } else {
+                    accepted = await ask(install: "An update to \(item.name)", wants: Extensions.describe(found, in: staged), icon: found.icon(for: CGSize(width: 64, height: 64)))
                 }
+                guard accepted else { return manual ? L10n.text("extensions.cancelled") : nil }
             }
             guard let index = installed.firstIndex(where: { $0.id == item.id }), installed[index].fromStore,
                   installed[index].version == item.version,
-                  installed[index].permissions == current.permissions else { return }
+                  installed[index].permissions == current.permissions else { return nil }
             let target = Extensions.folder(for: item.id)
+            progress?(L10n.text("extensions.updating"))
             try ExtensionFiles.replace(staged, at: target)
             unload(item.id)
             errors[item.id] = nil
             workersChanged()
-            installed[index].version = found.version ?? version
+            installed[index].version = packageVersion
             installed[index].permissions = wants.sorted()
             save()
             if installed[index].enabled { await load(installed[index]) }
+            return manual ? L10n.text("extensions.updated") : nil
         } catch {
             NSLog("Extensions: update of %@ failed: %@", item.id, error.localizedDescription)
+            return manual ? L10n.text("extensions.updateFailed") : nil
         }
     }
 
@@ -1556,10 +1572,37 @@ private struct ExtensionButtons: View {
                     extensions.menuOpen.toggle()
                 }
                 .background(Anchor(id: Extensions.menuAnchor))
+                .overlay {
+                    ManagementShortcut {
+                        extensions.menuOpen = false
+                        ExtensionManagerWindow.shared.show()
+                    }
+                }
                 .popover(isPresented: $extensions.menuOpen, arrowEdge: edge) {
                     ExtensionMenu(extensions: extensions)
                 }
             }
+        }
+    }
+
+    private struct ManagementShortcut: NSViewRepresentable {
+        let action: () -> Void
+        func makeNSView(context: Context) -> ShortcutView {
+            let view = ShortcutView()
+            view.action = action
+            return view
+        }
+        func updateNSView(_ view: ShortcutView, context: Context) { view.action = action }
+        final class ShortcutView: NSView {
+            var action: (() -> Void)?
+            override func hitTest(_ point: NSPoint) -> NSView? {
+                guard let event = NSApp.currentEvent,
+                      event.type == .rightMouseDown || event.type == .rightMouseUp,
+                      bounds.contains(convert(point, from: superview)) else { return nil }
+                return self
+            }
+            override func rightMouseDown(with event: NSEvent) { action?() }
+            override func rightMouseUp(with event: NSEvent) {}
         }
     }
 
@@ -1637,7 +1680,7 @@ private struct ExtensionIcon: View {
 
 /// What a right-click on an extension offers, in the row and in the list.
 @available(macOS 15.4, *)
-private struct ExtensionActions: View {
+struct ExtensionActions: View {
     let id: String
     let name: String
     let extensions: Extensions
@@ -1646,7 +1689,7 @@ private struct ExtensionActions: View {
         let pinned = extensions.installed.first { $0.id == id }?.pinned ?? false
         SwiftUI.Button(pinned ? L10n.text("Extensions.0462") : L10n.text("Extensions.0463")) { extensions.setPinned(id, !pinned) }
         if extensions.contexts[id]?.optionsPageURL != nil {
-            SwiftUI.Button(L10n.text("Extensions.0464")) { extensions.openOptions(id) }
+            SwiftUI.Button(L10n.text("extensions.settings")) { extensions.menuOpen = false; extensions.openOptions(id) }
         }
         SwiftUI.Button(L10n.text("Extensions.0465")) { extensions.reload(id) }
         Divider()
@@ -1715,10 +1758,9 @@ private struct ExtensionMenu: View {
                     extensions.menuOpen = false
                     DispatchQueue.main.async { extensions.installFolder() }
                 }
-                Foot("gearshape", L10n.text("Extensions.0474")) {
+                Foot("gearshape", L10n.text("extensions.manage")) {
                     extensions.menuOpen = false
-                    Store.settings.set("extensions", forKey: "settings.page")
-                    extensions.browser?.tuning = true
+                    DispatchQueue.main.async { ExtensionManagerWindow.shared.show() }
                 }
             }
             .padding(6)

@@ -123,11 +123,12 @@ public sealed partial class MainWindow
             return new(keyword.Template.Replace("%s", Uri.EscapeDataString(parts[1])));
         return AddressParser.Resolve(text, Settings.SearchTemplate.Replace("%s", "{0}"));
     }
-    private async Task<ContentDialogResult> ShowCardAsync(string title, UIElement content, string? primary = null)
+    private async Task<ContentDialogResult> ShowCardAsync(string title, UIElement content, string? primary = null, bool fitWindow = false)
     {
         if (OverlayLayer.Visibility == Visibility.Visible) return ContentDialogResult.None;
         var done = new TaskCompletionSource<ContentDialogResult>();
         var panel = new Grid { Width = content is FrameworkElement { Width: > 560 } sized ? sized.Width + 44 : 560, MaxHeight = 650, Padding = new(22), RowSpacing = 16 };
+        if (fitWindow && content is FrameworkElement popup) { panel.Width = popup.Width + 44; panel.MaxHeight = Math.Max(120, Root.ActualHeight - 32); }
         panel.RowDefinitions.Add(new() { Height = GridLength.Auto }); panel.RowDefinitions.Add(new() { Height = new(1, GridUnitType.Star) }); panel.RowDefinitions.Add(new() { Height = GridLength.Auto });
         var header = new Grid(); var heading = new TextBlock { Text = title, FontSize = 17, FontWeight = Microsoft.UI.Text.FontWeights.SemiBold };
         header.Children.Add(heading); var close = QuietButton("×"); close.HorizontalAlignment = HorizontalAlignment.Right; close.Click += (_, _) => overlayClose?.Invoke(); header.Children.Add(close); panel.Children.Add(header);

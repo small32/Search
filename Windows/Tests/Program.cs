@@ -77,5 +77,22 @@ var nestedPath = Path.Combine(DataStore.Root, "nested.zip"); await File.WriteAll
 Check(JsonDocument.Parse(File.ReadAllText(Path.Combine(nestedFolder, "manifest.json"))).RootElement.GetProperty("manifest_version").GetInt32() == 2, "ZIP import discovers nested original MV2 manifest");
 using var unsafeBytes = new MemoryStream(); using (var archive = new ZipArchive(unsafeBytes, ZipArchiveMode.Create, true)) { using var writer = new StreamWriter(archive.CreateEntry("../escape.txt").Open()); writer.Write("bad"); }
 Check(Reject(() => CrxInstaller.Unpack(unsafeBytes.ToArray(), Path.Combine(DataStore.Root, "bad"))) && !File.Exists(Path.Combine(DataStore.Root, "escape.txt")), "Archive traversal rejected before writing");
+using var permissionManifest = JsonDocument.Parse("""
+    {"permissions":["downloads","webRequest","webRequestBlocking","nativeMessaging","futurePermission"],"host_permissions":["https://*/*","http://localhost/*"],"optional_permissions":["history"]}
+    """);
+var permissionLabels = ExtensionPermissions.Describe(permissionManifest.RootElement, true);
+Check(permissionLabels.Contains("管理下载的文件") && permissionLabels.Contains("与电脑上的其他应用通信"), "Extension consent describes capabilities in plain language");
+Check(permissionLabels.Count(p => p == "查看或修改网站的网络请求") == 1 && !permissionLabels.Any(p => p.Contains("localhost") || p.Contains("futurePermission") || p.Contains("历史")), "Consent groups duplicates and excludes raw identifiers and optional permissions");
+using var siteManifest = JsonDocument.Parse("""{"content_scripts":[{"matches":["https://*.example.com/*"]}]}""");
+Check(ExtensionPermissions.Describe(siteManifest.RootElement, false).Single() == "Read and change data on example.com and its subdomains", "Content-script site access is described in English");
+using var emptyManifest = JsonDocument.Parse("{}");
+Check(ExtensionPermissions.Describe(emptyManifest.RootElement, true).Count == 0, "Extensions without additional permissions have an empty consent list");
+Check(CrxInstaller.IsNewerVersion("1.10", "1.9") && CrxInstaller.IsNewerVersion("2", "1.99.99.99"), "Extension updates compare numeric version components");
+Check(!CrxInstaller.IsNewerVersion("1.2.0.0", "1.2") && !CrxInstaller.IsNewerVersion("1.9", "1.10"), "Equal padded versions and older store versions do not reinstall");
+Check(Reject(() => CrxInstaller.IsNewerVersion("not-a-version", "1")) && Reject(() => CrxInstaller.IsNewerVersion("65536", "1")), "Invalid extension versions cannot be treated as updates");
+var updateXml = $"<?xml version='1.0'?><gupdate xmlns='http://www.google.com/update2/response'><app appid='{id}' status='ok'><updatecheck status='ok' version='2.0.17'/></app></gupdate>";
+Check(CrxInstaller.StoreVersion(updateXml, id) == "2.0.17", "Store version comes from the matching extension update element");
+Check(CrxInstaller.StoreVersion($"<gupdate><app appid='{id}' status='ok'><updatecheck status='noupdate'/></app></gupdate>", id) == null, "Store no-update response is recognized");
+Check(Reject(() => CrxInstaller.StoreVersion($"<gupdate><app appid='{id}' status='error'/></gupdate>", id)), "Malformed or failed store checks are not reported as latest");
 if (args.Length == 2 && args[0] == "--store-probe") { var folder = await CrxInstaller.FetchAsync(args[1], Path.Combine(DataStore.Root, "store")); Console.WriteLine("Verified Chrome store package: " + folder); }
 Console.WriteLine($"PASS: {count} checks. Isolated test data: {DataStore.Root}");

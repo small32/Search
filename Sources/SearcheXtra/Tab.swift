@@ -569,11 +569,11 @@ final class Tab: ObservableObject, Identifiable {
     /// can't find your way back to.
     var label: String {
         if let name, !name.isEmpty { return name }
-        if popup, let host = address?.host(), !host.isEmpty {
+        if popup, let address, !Address.isExtensionPage(address), let host = address.host(), !host.isEmpty {
             return host.hasPrefix("www.") ? String(host.dropFirst(4)) : host
         }
         if !title.isEmpty { return title }
-        if let address { return Address.pretty(address) }
+        if let address, !Address.isExtensionPage(address) { return Address.pretty(address) }
         return L10n.text("Tab.1084")
     }
 
