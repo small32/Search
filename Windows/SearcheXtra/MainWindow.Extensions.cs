@@ -137,11 +137,13 @@ public sealed partial class MainWindow
         DownloadsButton.Visibility = Settings.AlwaysShowsDownloads || downloads.Count > 0 ? Visibility.Visible : Visibility.Collapsed;
     }
     private async void Downloads_Click(object sender, RoutedEventArgs e) => await ShowDownloadsAsync();
+    private void Extensions_Click(object sender, RoutedEventArgs e) => ExtensionsMenu();
     private void ExtensionsMenu()
     {
         var menu = new MenuFlyout();
         foreach (var item in Settings.Extensions.Where(e => e.Enabled)) AddMenu(menu, (item.Pinned ? "● " : "") + item.Name, async () => await OpenExtensionPopupAsync(item));
         AddMenu(menu, T("Manage extensions", "管理扩展"), async () => { Settings.SettingsPage = "extensions"; await ShowSettingsAsync(); });
-        menu.ShowAt(Settings.Sidebar ? MenuButton : TopSettings);
+        menu.Placement = Microsoft.UI.Xaml.Controls.Primitives.FlyoutPlacementMode.BottomEdgeAlignedRight;
+        menu.ShowAt(ExtensionsButton);
     }
 }

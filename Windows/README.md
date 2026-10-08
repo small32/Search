@@ -1,6 +1,6 @@
 # SearcheXtra for Windows
 
-Windows 版使用 C# / .NET 8、WinUI 3 和 WebView2，与 macOS 的 Swift 源码独立维护。窗口保留 Windows 原生标题栏：最小化、最大化 / 还原、关闭位于右上角；按住左键拖动、双击最大化及系统窗口菜单由 Windows 处理。
+Windows 版使用 C# / .NET 8、WinUI 3 和 WebView2，与 macOS 的 Swift 源码独立维护。标签页位于 Windows 标题栏，新建加号紧邻末尾标签；设置与扩展入口常驻右侧，并随浅色 / 深色主题更新图标。窗口保留 Windows 原生标题栏按钮：最小化、最大化 / 还原、关闭位于右上角；按住左键拖动、双击最大化及系统窗口菜单由 Windows 处理。
 
 ## 系统与运行
 

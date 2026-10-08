@@ -40,6 +40,8 @@ public sealed partial class MainWindow : Window
         SetupGlyphs();
         AppWindow.Resize(new global::Windows.Graphics.SizeInt32(1200, 820));
         ((OverlappedPresenter)AppWindow.Presenter).SetBorderAndTitleBar(true, true);
+        SetupTitleBar();
+        Root.ActualThemeChanged += (_, _) => { SetupGlyphs(); UpdateTitleBarColors(); };
         AppWindow.SetIcon(Path.Combine(AppContext.BaseDirectory, "AppIcon.ico"));
         saveTimer = DispatcherQueue.CreateTimer();
         saveTimer.Interval = TimeSpan.FromMilliseconds(650);
@@ -89,6 +91,8 @@ public sealed partial class MainWindow : Window
     private void ApplySettings()
     {
         Root.RequestedTheme = Settings.Theme switch { "dark" => ElementTheme.Dark, "light" => ElementTheme.Light, _ => ElementTheme.Default };
+        SetupGlyphs();
+        UpdateTitleBarColors();
         TopTabs.Visibility = Settings.Sidebar ? Visibility.Collapsed : Visibility.Visible;
         LayoutChrome();
         Sidebar.Visibility = Settings.Sidebar ? Visibility.Visible : Visibility.Collapsed;
@@ -140,6 +144,7 @@ public sealed partial class MainWindow : Window
         RefreshPins(visible);
         if (active != null) { TopTabs.SelectedItem = active; SideTabs.SelectedItem = active; }
         selecting = false;
+        UpdateTitleBarRegions();
     }
 
     private async Task<PageView> GetViewAsync(BrowserTab tab)

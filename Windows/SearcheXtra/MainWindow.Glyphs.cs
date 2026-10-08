@@ -32,6 +32,6 @@ public sealed partial class MainWindow
     private void SetupGlyphs()
     {
         BackButton.Content = Glyph("back"); ForwardButton.Content = Glyph("forward");
-        ((Button)Helm.Children[2]).Content = Glyph("reload"); SettingsButton.Content = Glyph("sliders"); TopSettings.Content = Glyph("sliders");
+        ((Button)Helm.Children[2]).Content = Glyph("reload"); SettingsButton.Content = Glyph("sliders"); TopSettings.Content = Glyph("sliders"); ExtensionsButton.Content = Glyph("extensions");
     }
 }

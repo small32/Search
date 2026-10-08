@@ -62,6 +62,14 @@ public sealed partial class MainWindow
             await Wait(() => !first.Loading && first.Title == "SearcheXtra fixture");
             measurements["FirstWebViewAndLocalNavigationMs"] = watch.Elapsed.TotalMilliseconds;
             Check(views.ContainsKey(first.Id), "Foreground page initialized");
+            Root.UpdateLayout(); UpdateTitleBarRegions(); Root.UpdateLayout();
+            if (TopTabs.ContainerFromIndex(TopTabs.Items.Count - 1) is FrameworkElement lastTab)
+            {
+                var end = lastTab.TransformToVisual(TopStrip).TransformPoint(new global::Windows.Foundation.Point(lastTab.ActualWidth, 0)).X;
+                var plus = TopNew.TransformToVisual(TopStrip).TransformPoint(new global::Windows.Foundation.Point()).X;
+                Check(Math.Abs(plus - end) < 2, "New tab button sits beside the last rendered tab without an empty gap");
+            }
+            else throw new Exception("Horizontal tab containers not realized");
             var firstView = views[first.Id];
             await firstView.Control.CoreWebView2.ExecuteScriptAsync("window.testMarker=42");
             var blank = AddTab("", false); await SelectAsync(blank);
@@ -175,7 +183,18 @@ public sealed partial class MainWindow
             Settings.SidebarRight = true; ApplySettings(); Check(Microsoft.UI.Xaml.Controls.Grid.GetColumn(Sidebar) == 2 && RightSidebarColumn.Width.Value == 232, "Right sidebar uses macOS width");
             Settings.NavigationLeft = true; Settings.Sidebar = false; ApplySettings(); Check(Microsoft.UI.Xaml.Controls.Grid.GetColumn(Helm) == 1, "Navigation buttons move before horizontal tabs");
             Check(AppWindow.Presenter is Microsoft.UI.Windowing.OverlappedPresenter { HasTitleBar: true, HasBorder: true, IsMinimizable: true, IsMaximizable: true }, "Windows owns native caption buttons and title bar dragging");
-            Check(Toolbar.Height == 52 && OmniboxLayer.Visibility == Visibility.Collapsed, "Browser toolbar has 52 point strip and no permanent address bar");
+            Check(ExtendsContentIntoTitleBar && Toolbar.Height == 48 && OmniboxLayer.Visibility == Visibility.Collapsed, "Tabs occupy the 48 point Windows title bar with no permanent address bar");
+            Root.UpdateLayout(); UpdateTitleBarRegions(); Root.UpdateLayout();
+            var plusX = TopNew.TransformToVisual(TopStrip).TransformPoint(new global::Windows.Foundation.Point()).X;
+            Check(Math.Abs(plusX - TopTabs.ActualWidth) < 1, "New tab button directly follows the horizontal tab list");
+            Check(TopSettings.Visibility == Visibility.Visible && ExtensionsButton.Visibility == Visibility.Visible && Helm.Parent == Toolbar, "Settings and extensions remain in the title bar");
+            foreach (var theme in new[] { ElementTheme.Light, ElementTheme.Dark })
+            {
+                Root.RequestedTheme = theme; SetupGlyphs();
+                var glyph = (Microsoft.UI.Xaml.Shapes.Path)((Microsoft.UI.Xaml.Controls.Canvas)TopSettings.Content).Children[0];
+                Check(((Microsoft.UI.Xaml.Media.SolidColorBrush)glyph.Stroke).Color == Brush("Ink").Color, "Toolbar glyph contrast follows " + theme);
+            }
+            Root.RequestedTheme = ElementTheme.Default; SetupGlyphs();
             FocusAddress(); Check(OmniboxLayer.Visibility == Visibility.Visible, "Address shortcut raises floating omnibox"); DismissOverlay();
             foreach (var page in new[] { "general", "tabs", "shortcuts", "extensions", "passwords", "downloads", "privacy", "ai", "about" })
             {

@@ -44,25 +44,18 @@ public sealed partial class MainWindow
     }
     private void LayoutChrome()
     {
-        Toolbar.Visibility = Settings.Sidebar ? Visibility.Collapsed : Visibility.Visible;
+        Toolbar.Visibility = Visibility.Visible;
         TopStrip.Visibility = Settings.Sidebar ? Visibility.Collapsed : Visibility.Visible;
-        TopSettings.Visibility = Settings.Sidebar ? Visibility.Collapsed : Visibility.Visible;
-        Toolbar.Children.Remove(Helm);
-        SidebarHeader.Children.Remove(Helm);
-        if (Settings.Sidebar)
-        {
-            SidebarHeader.Children.Add(Helm);
-            Grid.SetColumn(Helm, 0);
-            Helm.Margin = new(4, 0, 0, 0); Helm.HorizontalAlignment = HorizontalAlignment.Left;
-        }
-        else
-        {
-            Toolbar.Children.Add(Helm);
-            Toolbar.ColumnDefinitions[1].Width = Settings.NavigationLeft ? new(90) : new(1, GridUnitType.Star);
-            Toolbar.ColumnDefinitions[2].Width = Settings.NavigationLeft ? new(1, GridUnitType.Star) : GridLength.Auto;
-            Grid.SetColumn(Helm, Settings.NavigationLeft ? 1 : 2); Grid.SetColumn(TopStrip, Settings.NavigationLeft ? 2 : 1);
-            Helm.Margin = new(8, 0, 10, 0);
-        }
+        TopSettings.Visibility = Visibility.Visible;
+        ExtensionsButton.Visibility = Visibility.Visible;
+        Toolbar.ColumnDefinitions[1].Width = Settings.NavigationLeft ? GridLength.Auto : new(1, GridUnitType.Star);
+        Toolbar.ColumnDefinitions[2].Width = Settings.NavigationLeft ? new(1, GridUnitType.Star) : GridLength.Auto;
+        Grid.SetColumn(Helm, Settings.NavigationLeft ? 1 : 2);
+        Grid.SetColumn(TopStrip, Settings.NavigationLeft ? 2 : 1);
+        Helm.Margin = new(8, 0, 10, 0);
+        SidebarHeader.Visibility = Visibility.Collapsed;
+        Sidebar.RowDefinitions[0].Height = new(0);
+        UpdateTitleBarRegions();
         SpacesButton.Visibility = Settings.UsesSpaces ? Visibility.Visible : Visibility.Collapsed;
         UpdateSidebarFold();
     }
