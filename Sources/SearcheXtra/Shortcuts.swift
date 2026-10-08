@@ -176,8 +176,6 @@ struct Command: Identifiable {
         Command("view.reloadOrigin", L10n.text("Shortcuts.0892"), .view, KeyCombo("r", option: true)) { $0.reload(fromOrigin: true) },
         Command("view.reader", L10n.text("Shortcuts.0893"), .view, KeyCombo("r", shift: true)) { $0.toggleReader() },
         Command("view.float", L10n.text("Shortcuts.0894"), .view, KeyCombo("p", shift: true)) { $0.toggleFloat() },
-        Command("view.summarize", L10n.text("Shortcuts.0895"), .view, nil) { $0.summarizePage() },
-        Command("view.ask", L10n.text("Shortcuts.0896"), .view, nil) { $0.askAboutPage() },
         Command("view.hide", L10n.text("Shortcuts.0897"), .view, KeyCombo("h", shift: true)) { $0.toggleHiding() },
         Command("view.hidden", L10n.text("Shortcuts.0898"), .view, KeyCombo("u", shift: true)) { $0.reviewing.toggle() },
         Command("view.zoomIn", L10n.text("Shortcuts.0899"), .view, KeyCombo("+")) { $0.zoom(by: 1.1) },
@@ -443,6 +441,4 @@ extension Command {
     /// to the page.
     static let split: Set<String> = ["tabs.split", "tabs.focusLeftPane", "tabs.focusRightPane", "tabs.focusOtherPane",
                                      "tabs.swapSplit", "tabs.separateSplit"]
-    /// The AI add-on's: with it off, not listed.
-    static let ai: Set<String> = ["view.summarize", "view.ask"]
 }

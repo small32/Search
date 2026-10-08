@@ -118,16 +118,6 @@ struct SearcheXtraApp: App {
                     .shortcut("view.reader")
                 Button(L10n.text("App.0134")) { browser.toggleFloat() }
                     .shortcut("view.float")
-                // The AI add-on's, only once it is on (Settings › AI).
-                if browser.prefs.ai {
-                    Divider()
-                    Button(L10n.text("App.0135")) { browser.summarizePage() }
-                        .shortcut("view.summarize")
-                        .disabled(browser.active?.isBlank ?? true)
-                    Button(L10n.text("App.0136")) { browser.askAboutPage() }
-                        .shortcut("view.ask")
-                        .disabled(browser.active?.isBlank ?? true)
-                }
                 Divider()
                 Button(L10n.text("App.0137")) { browser.toggleHiding() }
                     .shortcut("view.hide")
@@ -412,7 +402,10 @@ struct ContentView: View {
         .animation(Motion.glide, value: browser.prefs.sidebar)
         .animation(Motion.glide, value: browser.prefs.sidePosition)
         .animation(.easeOut(duration: 0.12), value: fullscreenTab?.id)
-        .onAppear { if room == nil { room = chrome } }
+        .onAppear {
+            if room == nil { room = chrome }
+            if let tab = browser.active, tab.isBlank, browser.editingTab == nil { browser.beginTabEdit(tab) }
+        }
         .onChange(of: chrome) { old, new in make(room: new, after: old) }
     }
 
@@ -433,15 +426,6 @@ struct ContentView: View {
                             .transition(.move(edge: .top).combined(with: .opacity))
                     }
                 }
-                .overlay(alignment: .topTrailing) {
-                    if let assistant = browser.assisting, assistant.tab == tab.id {
-                        AssistantPanel(browser: browser, assistant: assistant)
-                            .padding(.top, browser.finding ? 64 : 14)
-                            .padding(.trailing, 14)
-                            .transition(.move(edge: .trailing).combined(with: .opacity))
-                    }
-                }
-                .animation(Motion.settle, value: browser.assisting?.id)
                 .overlay(alignment: .topLeading) {
                     if let asked = browser.suggesting, asked.tab == tab.id {
                         AccountList(browser: browser, asked: asked)
@@ -1144,10 +1128,6 @@ struct ContentView: View {
                 browser.dropChoice()
                 return true
             }
-            if browser.assisting != nil {
-                browser.closeAssistant()
-                return true
-            }
             if browser.veiling {
                 browser.toggleHiding()
                 return true
@@ -1253,7 +1233,6 @@ struct ContentView: View {
         if ShortcutStore.shared.anyChanged, let combo = KeyCombo(event: event) {
             if let command = ShortcutStore.shared.changedCommand(on: combo) {
                 if Command.split.contains(command.id), !browser.prefs.splitView { return false }
-                if Command.ai.contains(command.id), !browser.prefs.ai { return false }
                 command.run(browser)
                 return true
             }

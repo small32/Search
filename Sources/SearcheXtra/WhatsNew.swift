@@ -32,8 +32,6 @@ enum WhatsNew {
     /// Every switch worth meeting, oldest last. The card shows this
     /// version's, and the older ones still off.
     static let toggles: [Toggle] = [
-        Toggle(title: L10n.text("WhatsNew.1189"), detail: L10n.text("WhatsNew.1190"),
-               since: "1.0.5", get: { $0.ai }, set: { $0.ai = $1 }),
         Toggle(title: L10n.text("WhatsNew.1191"), detail: L10n.text("WhatsNew.1192"),
                since: "1.0.5", get: { $0.splitView }, set: { $0.splitView = $1 }),
         Toggle(title: L10n.text("WhatsNew.1193"), detail: L10n.text("WhatsNew.1194"),

@@ -95,6 +95,10 @@ SearcheXtra 将界面留给标签页和网页。标签页可以横排在顶部�
 
 ## 开发说明
 
+### Windows 版本
+
+仓库的 `Windows/` 目录包含使用 C#、WinUI 3 与 WebView2 重建的 Windows x64 版本，最低支持 Windows 10 1809。功能、平台差异、构建与测试方法见 [Windows 开发说明](Windows/README.md)。
+
 ### 源码与上游
 
 上游项目为 [driceroland/Search](https://github.com/driceroland/Search)。本仓库在其基础上维护中文支持、语言切换及 GitHub Actions 发布流程。

@@ -183,7 +183,15 @@ struct AppLogo: View {
             .resizable()
             .interpolation(.high)
             .aspectRatio(contentMode: .fit)
+            .clipShape(AppIconMask())
             .accessibilityHidden(true)
+    }
+}
+
+private struct AppIconMask: Shape {
+    func path(in rect: CGRect) -> Path {
+        let radius = min(rect.width, rect.height) / 4
+        return Path(roundedRect: rect, cornerSize: CGSize(width: radius, height: radius))
     }
 }
 

@@ -606,8 +606,8 @@ private struct PinSquare: View {
             }
         }
         .contentShape(RoundedRectangle(cornerRadius: scale * 9 / 34, style: .continuous))
-        .modifier(OneClick(double: live) {
-            if live { browser.goHome(tab) } else { browser.select(tab) }
+        .modifier(OneClick(double: false) {
+            if live { browser.beginTabEdit(tab) } else { browser.select(tab) }
         })
         // Put down, like ⌘W: close() is what knows a pin isn't removed.
         .overlay { MiddleClick { browser.close(tab) } }

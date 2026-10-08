@@ -1,4 +1,4 @@
-# SearcheXtra 1.0.1
+# SearcheXtra 2.0.0
 
 ## 书签栏改进
 
@@ -7,6 +7,21 @@
 - 设置立即生效并保存在本机，提供英文和简体中文文案。
 - 保留 Command 点击和中键点击的快捷打开行为；后台标签页遵循现有延迟加载设置。
 
+## Windows 版
+
+- 支持 Windows 10 1809 及以上、x86_64，使用 C#、WinUI 3 与 WebView2。
+- 标签页位于标题栏，扩展与设置入口固定在最小化按钮左侧。
+- 刷新按钮右侧提供主页与恢复关闭标签页按钮。
+- 安装时检测并补装 .NET 与 Windows App SDK，应用不再携带运行库。
+- macOS 和 Windows 均移除 AI 功能与模型下载，并清理未使用的 SDK 组件。
+
+- 两端支持点击当前标签页直接输入网址或搜索，Ctrl+L / ⌘L 聚焦标签内输入框。
+- 两端支持中键关闭标签页。
+- 应用、窗口、任务栏、快捷方式、安装向导和卸载入口统一使用圆角矩形应用图标。
+- 合并重复逻辑并清理未使用的事件入口；平台差异见 `Windows/README.md`。
+
 ## 下载与安装
 
-适用于 Apple 芯片 Mac，要求 macOS 14 或更新版本。下载 `SearcheXtra-1.0.1-arm64.zip`，解压后将 `SearcheXtra.app` 放入“应用程序”文件夹。`SHA256SUMS.txt` 提供安装包校验值。
+- macOS：Apple 芯片，macOS 14+；下载 `SearcheXtra-2.0.0-arm64.zip`，解压后将应用放入“应用程序”。
+- Windows：Windows 10 1809+ / x86_64；推荐下载 `SearcheXtra-2.0.0-win-x64-setup.exe`。安装器自动检测并补装所需运行库。ZIP 为需系统运行库的便携包。
+- `SHA256SUMS.txt` 提供上述文件的 SHA-256 校验值。

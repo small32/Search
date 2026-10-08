@@ -540,22 +540,9 @@ private struct TabPill: View {
         .background { ground }
         .modifier(Shake(travel: shake))
         .contentShape(RoundedRectangle(cornerRadius: 9, style: .continuous))
-        // Never both at once.
-        //
-        // A view carrying a single tap *and* a double tap has to wait out the
-        // system's double-click delay before it can conclude that a click was
-        // single — and that delay is a preference, adjustable up to a second.
-        // Which is exactly how long a tab took to come forward.
-        //
-        // So each tab carries one gesture. The pinned square you are already
-        // on has nothing to do on a single click, so it takes the double one
-        // and goes back to the page it was pinned at — or, there already,
-        // edits its letter; everything else answers the first click at
-        // once. Change Letter in the menu covers the rest.
-        .modifier(OneClick(double: live && pinned) {
-            if live && pinned {
-                browser.goHome(tab)
-            } else if live && !pinned {
+        // Active tabs edit immediately; other tabs switch on the first click.
+        .modifier(OneClick(double: false) {
+            if live {
                 browser.beginTabEdit(tab)
             } else {
                 browser.select(tab)
@@ -867,8 +854,9 @@ struct TabAddressField: NSViewRepresentable {
         if !coordinator.typing, field.stringValue != browser.tabDraft {
             field.stringValue = browser.tabDraft
         }
-        guard !coordinator.claimed else { return }
+        guard !coordinator.claimed || coordinator.focusRequest != browser.focusRequest else { return }
         coordinator.claimed = true
+        coordinator.focusRequest = browser.focusRequest
         DispatchQueue.main.async {
             field.window?.makeFirstResponder(field)
             guard let editor = field.currentEditor() as? NSTextView else { return }
@@ -883,6 +871,7 @@ struct TabAddressField: NSViewRepresentable {
     final class Coordinator: NSObject, NSTextFieldDelegate {
         var browser: Browser
         var claimed = false
+        var focusRequest = -1
         var typing = false
 
         init(browser: Browser) { self.browser = browser }
@@ -1167,7 +1156,7 @@ struct MiddleClick: NSViewRepresentable {
         (view as? Catch)?.act = act
     }
 
-    private final class Catch: NSView {
+    final class Catch: NSView {
         var act: () -> Void = {}
         private var pressed = false
 
@@ -1182,6 +1171,7 @@ struct MiddleClick: NSViewRepresentable {
         }
 
         override func otherMouseDown(with event: NSEvent) {
+            guard event.buttonNumber == 2 else { return }
             pressed = true
         }
 
@@ -1189,7 +1179,7 @@ struct MiddleClick: NSViewRepresentable {
         /// tab: a middle button pressed by mistake can be taken back the way
         /// a click on the cross can, by moving off before letting go.
         override func otherMouseUp(with event: NSEvent) {
-            guard pressed else { return }
+            guard event.buttonNumber == 2, pressed else { return }
             pressed = false
             if bounds.contains(convert(event.locationInWindow, from: nil)) { act() }
         }

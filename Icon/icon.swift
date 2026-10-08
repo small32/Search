@@ -24,8 +24,11 @@ for size in [16, 32, 128, 256, 512] {
         NSGraphicsContext.saveGraphicsState()
         NSGraphicsContext.current = context
         context.imageInterpolation = .high
-        image.draw(in: NSRect(x: 0, y: 0, width: pixels, height: pixels),
-                   from: .zero, operation: .copy, fraction: 1)
+        let bounds = NSRect(x: 0, y: 0, width: pixels, height: pixels)
+        context.cgContext.clear(bounds)
+        let radius = CGFloat(pixels) / 4
+        NSBezierPath(roundedRect: bounds, xRadius: radius, yRadius: radius).addClip()
+        image.draw(in: bounds, from: .zero, operation: .sourceOver, fraction: 1)
         NSGraphicsContext.restoreGraphicsState()
         guard let png = bitmap.representation(using: .png, properties: [:])
         else { fatalError("Cannot encode icon bitmap") }

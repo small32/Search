@@ -1,0 +1,102 @@
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Input;
+using Microsoft.UI.Xaml.Media;
+
+namespace SearcheXtra.Windows;
+
+public sealed partial class MainWindow
+{
+    private BrowserTab? editingAddressTab;
+    private Guid? pressedActiveTab;
+    private ListView AddressList => Settings.Sidebar ? SideTabs : TopTabs;
+    private double TabWidth(BrowserTab tab) => tab == editingAddressTab ? 340 : tab.Pinned ? 54 : 186;
+
+    private static T? FindAddressPart<T>(DependencyObject root, string? name = null) where T : FrameworkElement
+    {
+        if (root is T match && (name == null || match.Name == name)) return match;
+        for (var i = 0; i < VisualTreeHelper.GetChildrenCount(root); i++)
+            if (FindAddressPart<T>(VisualTreeHelper.GetChild(root, i), name) is { } child) return child;
+        return null;
+    }
+
+    private void ParkAddress()
+    {
+        if (Address.Parent is Grid host && host != AddressParking)
+        {
+            host.Children.Remove(Address);
+            host.Visibility = Visibility.Collapsed;
+            if (host.Parent is Grid body)
+            {
+                if (body.FindName("TabLabel") is FrameworkElement label) label.Visibility = Visibility.Visible;
+                if (body.FindName("TabClose") is FrameworkElement close) close.Visibility = Visibility.Visible;
+            }
+            AddressParking.Children.Add(Address);
+        }
+    }
+
+    private void AttachAddressEditor(bool focus)
+    {
+        if (editingAddressTab == null) return;
+        if (AddressList.ContainerFromItem(editingAddressTab) is not ListViewItem item) return;
+        if (FindAddressPart<Grid>(item, "TabAddressHost") is not { } host) return;
+        if (Address.Parent != host)
+        {
+            ParkAddress();
+            AddressParking.Children.Remove(Address);
+            host.Children.Add(Address);
+        }
+        host.Visibility = Visibility.Visible;
+        FindAddressPart<TextBlock>(item, "TabLabel")!.Visibility = Visibility.Collapsed;
+        FindAddressPart<Button>(item, "TabClose")!.Visibility = Visibility.Collapsed;
+        if (!Settings.Sidebar) item.Width = TabWidth(editingAddressTab);
+        UpdateTitleBarRegions();
+        if (focus) { Address.Focus(FocusState.Programmatic); FindAddressPart<TextBox>(Address)?.SelectAll(); }
+    }
+
+    private void FocusAddress()
+    {
+        if (active == null) return;
+        var changed = editingAddressTab != active;
+        editingAddressTab = active;
+        searchSite = null; siteOffer = null;
+        Address.PlaceholderText = T("Address or search", "网址或搜索");
+        Address.Text = active.Url is "" or "about:blank" ? "" : active.Url;
+        if (changed) RefreshTabLists();
+        AddressList.ScrollIntoView(active);
+        Root.UpdateLayout();
+        AttachAddressEditor(true);
+        DispatcherQueue.TryEnqueue(() => AttachAddressEditor(true));
+    }
+
+    private void EndAddressEdit()
+    {
+        if (editingAddressTab == null) return;
+        ParkAddress();
+        editingAddressTab = null;
+        Address.ItemsSource = null;
+        RefreshTabLists();
+    }
+
+    private void TabBody_PointerPressed(object sender, PointerRoutedEventArgs e)
+    {
+        if (sender is FrameworkElement { Tag: BrowserTab tab } element &&
+            e.GetCurrentPoint(element).Properties.PointerUpdateKind == Microsoft.UI.Input.PointerUpdateKind.LeftButtonPressed)
+            pressedActiveTab = active == tab && editingAddressTab != tab ? tab.Id : null;
+    }
+
+    private void AddressOutside_PointerPressed(object sender, PointerRoutedEventArgs e)
+    {
+        if (editingAddressTab == null) return;
+        for (var node = e.OriginalSource as DependencyObject; node != null; node = VisualTreeHelper.GetParent(node))
+            if (node == Address) return;
+        EndAddressEdit();
+    }
+
+    private void TabBody_Tapped(object sender, TappedRoutedEventArgs e)
+    {
+        if (sender is FrameworkElement { Tag: BrowserTab tab } && pressedActiveTab == tab.Id && active == tab)
+            FocusAddress();
+        pressedActiveTab = null;
+    }
+}
