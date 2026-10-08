@@ -8,7 +8,12 @@ try {
         $taskScaled = [Drawing.Bitmap]::new($taskSize, $taskSize)
         $taskScaling = [Drawing.Graphics]::FromImage($taskScaled)
         $taskScaling.InterpolationMode = [Drawing.Drawing2D.InterpolationMode]::HighQualityBicubic
-        $taskScaling.DrawImage($taskSource, 0, 0, $taskSize, $taskSize)
+        # Match the inner plate crop used by macOS, without the outer white mat.
+        $taskArtwork = [Drawing.RectangleF]::new(
+            [single]($taskSource.Width * 160 / 1254), [single]($taskSource.Height * 172 / 1254),
+            [single]($taskSource.Width * 930 / 1254), [single]($taskSource.Height * 910 / 1254))
+        $taskScaling.DrawImage($taskSource, [Drawing.RectangleF]::new(0, 0, $taskSize, $taskSize),
+            $taskArtwork, [Drawing.GraphicsUnit]::Pixel)
         $taskScaling.Dispose()
         $taskBitmap = [Drawing.Bitmap]::new($taskSize, $taskSize)
         $taskGraphics = [Drawing.Graphics]::FromImage($taskBitmap)

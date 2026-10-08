@@ -5162,5 +5162,9 @@
   "history.empty": {
     "zh-Hans": "没有最近关闭的标签页",
     "en": "No recently closed tabs"
+  },
+  "navigation.home": {
+    "en": "Home",
+    "zh-Hans": "主页"
   }
 }

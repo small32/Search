@@ -9,6 +9,11 @@ let source = URL(fileURLWithPath: #filePath).deletingLastPathComponent()
     .deletingLastPathComponent().appendingPathComponent("Sources/SearcheXtra/Resources/AppIcon.png")
 guard let image = NSImage(contentsOf: source) else { fatalError("Missing app icon: \(source.path)") }
 try files.createDirectory(at: out, withIntermediateDirectories: true)
+// Fit the artwork's inner plate to the icon mask, excluding the outer white mat.
+let artwork = NSRect(x: image.size.width * 160 / 1254,
+                     y: image.size.height * (1254 - 172 - 910) / 1254,
+                     width: image.size.width * 930 / 1254,
+                     height: image.size.height * 910 / 1254)
 var entries: [[String: String]] = []
 for size in [16, 32, 128, 256, 512] {
     for scale in [1, 2] {
@@ -28,7 +33,7 @@ for size in [16, 32, 128, 256, 512] {
         context.cgContext.clear(bounds)
         let radius = CGFloat(pixels) / 4
         NSBezierPath(roundedRect: bounds, xRadius: radius, yRadius: radius).addClip()
-        image.draw(in: bounds, from: .zero, operation: .sourceOver, fraction: 1)
+        image.draw(in: bounds, from: artwork, operation: .sourceOver, fraction: 1)
         NSGraphicsContext.restoreGraphicsState()
         guard let png = bitmap.representation(using: .png, properties: [:])
         else { fatalError("Cannot encode icon bitmap") }

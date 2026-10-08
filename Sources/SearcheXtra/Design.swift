@@ -109,8 +109,8 @@ enum Metrics {
     /// measured, not guessed — so this leaves them the same air on their right
     /// that the window gives them on their left.
     static let lights: CGFloat = 100
-    /// Back, forward, reload and history: four doors with four-point gaps.
-    static let helm: CGFloat = 4 * 26 + 3 * 4 + 8
+    /// Back, forward, reload, home and history, with four-point gaps.
+    static let helm: CGFloat = 5 * 26 + 4 * 4 + 8
     /// The same doors again, in the sidebar, where they sit right of
     /// the lights instead. The column already has 10 of horizontal padding
     /// of its own before this even starts, so this is the lights' own edge
@@ -139,7 +139,7 @@ enum Metrics {
     static let fieldWidth: CGFloat = 560
     /// The column of titles down the left, in the way that has one.
     static let side: CGFloat = 232
-    static let sideMin: CGFloat = 176
+    static let sideMin: CGFloat = 244
     static let sideMax: CGFloat = 440
 }
 
@@ -174,7 +174,17 @@ struct AppLogo: View {
         guard let url = L10n.resourceBundle.url(forResource: "AppIcon", withExtension: "png"),
               let image = NSImage(contentsOf: url)
         else { preconditionFailure("Missing application icon") }
-        return image
+        let artwork = NSRect(x: image.size.width * 160 / 1254,
+                             y: image.size.height * (1254 - 172 - 910) / 1254,
+                             width: image.size.width * 930 / 1254,
+                             height: image.size.height * 910 / 1254)
+        let fitted = NSImage(size: NSSize(width: 1024, height: 1024))
+        fitted.lockFocus()
+        NSGraphicsContext.current?.imageInterpolation = .high
+        image.draw(in: NSRect(x: 0, y: 0, width: 1024, height: 1024),
+                   from: artwork, operation: .copy, fraction: 1)
+        fitted.unlockFocus()
+        return fitted
     }()
 
     var body: some View {

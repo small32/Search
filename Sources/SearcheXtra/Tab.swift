@@ -1258,6 +1258,33 @@ final class Tab: ObservableObject, Identifiable {
         icon = nil
     }
 
+    /// Home without a configured website returns this tab to its empty state.
+    /// Discard observers before the old document can report another URL.
+    func returnToBlank() {
+        discard()
+        address = nil
+        committed = nil
+        pending = nil
+        held = nil
+        heldOver = nil
+        memory = nil
+        picture = nil
+        cover = nil
+        title = ""
+        icon = nil
+        failure = nil
+        loading = false
+        progress = 0
+        canGoBack = false
+        canGoForward = false
+        reader = false
+        reading = 0
+        typing = false
+        immersed = false
+        draft = ""
+    }
+
+
     func touch() { touched = Date() }
 
     /// True when the web view holds nothing — never loaded, or emptied —

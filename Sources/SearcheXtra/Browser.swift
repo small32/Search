@@ -4034,6 +4034,27 @@ final class Browser: NSObject, ObservableObject {
         }
     }
 
+    /// The toolbar's Home button keeps the current tab and its privacy mode.
+    func openHome() {
+        let tab: Tab
+        if let current = active {
+            tab = current
+        } else {
+            tab = Tab(configuration: Web.configuration(space: spaceID))
+            adopt(tab)
+        }
+        summoning = false
+        if let page = prefs.startPageURL {
+            typed = ""
+            editing = false
+            tab.go(to: page)
+        } else {
+            tab.returnToBlank()
+            editBlankTab(tab)
+        }
+        rememberSession()
+    }
+
     func reload(fromOrigin: Bool = false) { active?.reload(fromOrigin: fromOrigin) }
     func back() { active?.back() }
     func forward() { active?.forward() }

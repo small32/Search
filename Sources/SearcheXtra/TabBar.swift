@@ -22,7 +22,7 @@ struct TabBar: View {
     @State private var nearby = false
     @State private var plussed = false
     /// The helm's width when it stands before the tabs rather than after them.
-    private var leading: CGFloat { browser.prefs.navigationLeft ? Metrics.helm - 8 + Metrics.tabGap : 0 }
+    private var leading: CGFloat { browser.prefs.navigationLeft ? Metrics.helm - 8 + 26 + 2 * Metrics.tabGap : 0 }
     /// How wide the doors at the far end are, extension buttons included.
     @State private var doors: CGFloat = 0
 
@@ -44,7 +44,12 @@ struct TabBar: View {
 
                 HStack(spacing: Metrics.tabGap) {
                     // Back, forward and reload by the lights, when asked.
-                    if browser.prefs.navigationLeft { Helm(browser: browser) }
+                    if browser.prefs.navigationLeft {
+                        HStack(spacing: Metrics.tabGap) {
+                            Helm(browser: browser)
+                            BookmarkDoor(browser: browser, arrowEdge: .bottom)
+                        }
+                    }
                     // The space on screen, first, when there are spaces.
                     // Above the tabs, for the name it shows over them a moment
                     // after a switch.
@@ -157,9 +162,9 @@ struct TabBar: View {
                         FetchDoor(browser: browser, fetches: browser.fetches)
                         ExtensionSlot()
                         if !browser.prefs.navigationLeft {
-                            Helm(browser: browser).padding(.trailing, 8)
+                            Helm(browser: browser)
+                            BookmarkDoor(browser: browser, arrowEdge: .bottom)
                         }
-                        BookmarkDoor(browser: browser, arrowEdge: .bottom)
                     }
                     .background {
                         GeometryReader { box in
@@ -461,6 +466,8 @@ struct Helm: View {
                 }
                 .opacity(0.3)
                 .allowsHitTesting(false)
+                Door(icon: "house", help: L10n.text("navigation.home")) { browser.openHome() }
+                    .accessibilityLabel(L10n.text("navigation.home"))
                 HistoryDoor(browser: browser)
             }
         }
@@ -489,6 +496,8 @@ struct Helm: View {
                 }
                 .disabled(tab.isBlank)
                 .opacity(tab.isBlank ? 0.3 : 1)
+                Door(icon: "house", help: L10n.text("navigation.home")) { browser.openHome() }
+                    .accessibilityLabel(L10n.text("navigation.home"))
                 HistoryDoor(browser: browser)
             }
             .animation(Motion.quick, value: back)

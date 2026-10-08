@@ -55,7 +55,7 @@ final class Preferences: ObservableObject {
     var startPageURL: URL? { StartPage.url(from: startPage) }
 
     /// Back, forward and reload before the tabs rather than after them, with
-    /// the tabs across the top. Off unless asked for.
+    /// the tabs across the top. Leads by default; settings can move it back.
     @Published var navigationLeft: Bool {
         didSet { store.set(navigationLeft, forKey: "toolbar.left") }
     }
@@ -342,6 +342,12 @@ final class Preferences: ObservableObject {
 
     init() {
         startPage = store.string(forKey: "start.page") ?? ""
+        // Move existing installations to the requested leading layout once.
+        // Later choices made in Settings remain in effect.
+        if !store.bool(forKey: "toolbar.leading-layout") {
+            store.set(true, forKey: "toolbar.left")
+            store.set(true, forKey: "toolbar.leading-layout")
+        }
         navigationLeft = store.bool(forKey: "toolbar.left")
         // Carried over from when there were four ways of holding the browser
         // and this was one of them.

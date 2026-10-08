@@ -78,6 +78,53 @@ final class StartPageTests: XCTestCase {
         XCTAssertEqual(browser.active?.isBlank, true)
     }
 
+    func testNavigationMovesLeftOnceAndPreservesLaterChoices() {
+        let keys = ["toolbar.left", "toolbar.leading-layout"]
+        let previous = keys.map { Store.settings.object(forKey: $0) }
+        defer {
+            for (key, value) in zip(keys, previous) {
+                if let value { Store.settings.set(value, forKey: key) }
+                else { Store.settings.removeObject(forKey: key) }
+            }
+        }
+        Store.settings.set(false, forKey: "toolbar.left")
+        Store.settings.removeObject(forKey: "toolbar.leading-layout")
+        let prefs = Preferences()
+        XCTAssertTrue(prefs.navigationLeft)
+        prefs.navigationLeft = false
+        XCTAssertFalse(Preferences().navigationLeft)
+    }
+
+    func testHomeNavigatesCurrentTabWithoutAddingTabs() {
+        let browser = Browser(record: WindowRecord())
+        browser.open(URL(string: "http://127.0.0.1:1/previous")!, foreground: true)
+        let id = browser.activeID
+        let count = browser.tabs.count
+        Shared.prefs.startPage = "http://127.0.0.1:1/home"
+        browser.openHome()
+        XCTAssertEqual(browser.activeID, id)
+        XCTAssertEqual(browser.tabs.count, count)
+        XCTAssertEqual(browser.active?.address?.absoluteString, Shared.prefs.startPage)
+        Shared.prefs.startPage = ""
+        browser.openHome()
+        XCTAssertEqual(browser.activeID, id)
+        XCTAssertEqual(browser.tabs.count, count)
+        XCTAssertEqual(browser.active?.isBlank, true)
+        XCTAssertNil(browser.active?.pending)
+        XCTAssertEqual(browser.active?.title, "")
+    }
+
+    func testHomeKeepsPrivateTabPrivate() {
+        let browser = Browser(record: WindowRecord())
+        browser.newShyTab()
+        let id = browser.activeID
+        Shared.prefs.startPage = "http://127.0.0.1:1/home"
+        browser.openHome()
+        XCTAssertEqual(browser.activeID, id)
+        XCTAssertEqual(browser.active?.shy, true)
+        XCTAssertEqual(browser.active?.address?.absoluteString, Shared.prefs.startPage)
+    }
+
     func testExplicitWindowPagesCanSkipStartPage() {
         Shared.prefs.startPage = "http://127.0.0.1:1/start"
         let browser = Browser(record: WindowRecord(), opensStartPage: false)
