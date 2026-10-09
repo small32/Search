@@ -41,6 +41,9 @@ struct ImportPanel: View {
     @State private var forExtensions = false
     @State private var bringing = false
     @State private var brought: [Said]?
+    /// Whether that import left any bookmarks behind, which is what the
+    /// offer to show the bar is for.
+    @State private var marksLanded = false
 
     struct Said: Hashable {
         let ok: Bool
@@ -117,6 +120,16 @@ struct ImportPanel: View {
                         Pill(L10n.text("ImportPanel.0559")) {
                             browser.bringingIn = nil
                             browser.bookmarking = true
+                        }
+                        // The bar is off until it is asked for, and nobody asks
+                        // for a row that has nothing in it. Bookmarks having just
+                        // arrived is the one moment it is worth offering, and the
+                        // sheet goes so that the bar is seen where it appears.
+                        if marksLanded, !browser.prefs.bookmarksBar {
+                            Pill(L10n.text("upstream.import.bookmarksBar")) {
+                                withAnimation(Motion.glide) { browser.prefs.bookmarksBar = true }
+                                browser.bringingIn = nil
+                            }
                         }
                         Pill(L10n.text("ImportPanel.0560")) {
                             browser.bringingIn = nil
@@ -353,6 +366,8 @@ struct ImportPanel: View {
     // MARK: - bringing
 
     private func bring(from source: ImportSource) {
+        // This import's own answer, not the one before it in the same sheet.
+        marksLanded = false
         let profile = profile(of: source)
         let extensions = wantsExtensions ? fresh(source) : []
         // A kind it has none of isn't read at all: no keychain question for
@@ -389,6 +404,7 @@ struct ImportPanel: View {
         }
         if marks {
             let (added, already, kept) = browser.takeBookmarks(from: source, profile: profile, replacing: replaceBookmarks)
+            marksLanded = added + already > 0
             said[1] = kept
                 ? Said(ok: false, text: L10n.text("ImportPanel.1311", String(describing: source.name), String(describing: added.formatted())))
                 : Said(ok: true, text: added == 0 && already == 0 ? L10n.text("ImportPanel.1312", String(describing: source.name))

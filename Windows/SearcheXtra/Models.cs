@@ -95,7 +95,12 @@ public sealed class Bookmark
 }
 public sealed record HistoryEntry(string Url, string Title, DateTimeOffset Visited);
 public sealed record DownloadRecord(string Path, string Url, DateTimeOffset Date);
-public sealed record SavedTab(string Url, string Title, bool Pinned, string Space, string Group = "");
+public sealed record SavedTab(string Url, string Title, bool Pinned, string Space, string Group = "")
+{
+    [System.Text.Json.Serialization.JsonIgnore] public Guid? ClosedBatch { get; init; }
+    [System.Text.Json.Serialization.JsonIgnore] public int ClosedIndex { get; init; } = -1;
+    [System.Text.Json.Serialization.JsonIgnore] public bool WasActive { get; init; }
+}
 public sealed class SessionState
 {
     public List<SavedTab> Tabs { get; set; } = [];

@@ -10,6 +10,25 @@ namespace SearcheXtra.Windows;
 
 public static class CrxInstaller
 {
+    public static string ValidateFolder(string folder)
+    {
+        var directory = new DirectoryInfo(Path.GetFullPath(folder));
+        var root = (directory.ResolveLinkTarget(true) ?? directory).FullName.TrimEnd(Path.DirectorySeparatorChar);
+        var pending = new Stack<string>(); pending.Push(root);
+        var seen = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        while (pending.TryPop(out var path))
+        {
+            if (!seen.Add(path)) continue;
+            foreach (var item in new DirectoryInfo(path).EnumerateFileSystemInfos())
+            {
+                var target = item.Attributes.HasFlag(FileAttributes.ReparsePoint) ? item.ResolveLinkTarget(true) : item;
+                if (target == null || (!target.FullName.Equals(root, StringComparison.OrdinalIgnoreCase) && !target.FullName.StartsWith(root + Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase)))
+                    throw new InvalidDataException("Extension folder contains a link outside its package.");
+                if (target.Attributes.HasFlag(FileAttributes.Directory)) pending.Push(target.FullName);
+            }
+        }
+        return root;
+    }
     public static bool IsNewerVersion(string remote, string local)
     {
         static int[] Parts(string version)

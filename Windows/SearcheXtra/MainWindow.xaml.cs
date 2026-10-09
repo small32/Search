@@ -143,7 +143,7 @@ public sealed partial class MainWindow : Window
         AddMenu(menu, T("Split beside current", "与当前页分屏"), () => { if (active != null && active != tab) { splitOwner = active; split = tab; _ = SelectAsync(active); } });
         AddMenu(menu, T("Move to space…", "移至空间…"), async () => await MoveTabAsync(tab));
         AddMenu(menu, T("Set tab group…", "设置标签组…"), async () => { var name = await PromptAsync(T("Tab group (empty to remove)", "标签组（留空移出分组）"), T("Group name", "组名"), tab.Group); if (name != null) { tab.Group = name; RefreshTabLists(); ScheduleSave(); } });
-        AddMenu(menu, T("Close group", "关闭标签组"), () => { if (tab.Group.Length > 0) foreach (var member in tabs.Where(t => t.Group == tab.Group && t.Space == tab.Space).ToArray()) CloseTab(member); });
+        AddMenu(menu, T("Close group", "关闭标签组"), () => CloseGroup(tab));
         AddMenu(menu, T("Close", "关闭"), () => CloseTab(tab));
         tab.PropertyChanged += (_, _) => { if (active == tab) UpdateChrome(); };
         tabMenus[tab.Id] = menu;
@@ -175,6 +175,7 @@ public sealed partial class MainWindow : Window
             view.StoreInstallRequested += async id => { await SelectAsync(tab); await InstallStoreExtensionAsync(id); };
             view.DownloadStarted += download => { downloads.Add(download); RefreshPinnedExtensions(); Status.Text = T("Downloading: ", "正在下载：") + download.Name; download.Operation.StateChanged += (_, _) => { if (download.Operation.State == Microsoft.Web.WebView2.Core.CoreWebView2DownloadState.Completed && !tab.IsPrivate) { store.Downloads.RemoveAll(d => d.Path == download.Path); store.Downloads.Insert(0, new(download.Path, download.Operation.Uri, DateTimeOffset.Now)); ScheduleSave(); } }; };
             view.NewWindowTarget += async _ => { var child = AddTab("", true, tab.IsPrivate); return (await GetViewAsync(child)).Control.CoreWebView2; };
+            view.OpenLinkRequested += (url, foreground) => AddTab(url, foreground, tab.IsPrivate);
             view.HoveredLink += url => { if (active == tab) Status.Text = url; };
             view.PreviewRequested += async url => await PreviewLinkAsync(url);
             view.PermissionRequested += async args =>
@@ -302,11 +303,18 @@ public sealed partial class MainWindow : Window
         if (ActiveView?.Control.CoreWebView2?.Source != uri.AbsoluteUri) ActiveView?.Navigate(uri.AbsoluteUri);
     }
 
-    private void CloseTab(BrowserTab tab)
+    private void CloseGroup(BrowserTab tab)
+    {
+        if (tab.Group.Length == 0) return;
+        var batch = Guid.NewGuid(); var front = active;
+        foreach (var member in tabs.Where(t => t.Group == tab.Group && t.Space == tab.Space).Reverse().ToArray())
+            CloseTab(member, batch, member == front);
+    }
+    private void CloseTab(BrowserTab tab, Guid? batch = null, bool wasActive = false)
     {
         if (editingAddressTab == tab) EndAddressEdit();
         if (!tabs.Contains(tab)) return;
-        if (!tab.IsPrivate) closedTabs.Push(new(tab.Url, tab.Title, tab.Pinned, tab.Space, tab.Group));
+        if (!tab.IsPrivate) closedTabs.Push(new(tab.Url, tab.Title, tab.Pinned, tab.Space, tab.Group) { ClosedBatch = batch, ClosedIndex = tabs.IndexOf(tab), WasActive = wasActive });
         if (views.Remove(tab.Id, out var view)) { Pages.Children.Remove(view.Control); view.Dispose(); }
         tabs.Remove(tab); tabMenus.Remove(tab.Id);
         if (split == tab || splitOwner == tab) { split = null; splitOwner = null; }
@@ -318,7 +326,8 @@ public sealed partial class MainWindow : Window
     }
     private void Reopen()
     {
-        if (closedTabs.TryPeek(out var saved)) RestoreClosedTab(saved);
+        if (!closedTabs.TryPeek(out var saved)) return;
+        if (saved.ClosedBatch is { } batch) RestoreClosedGroup(batch); else RestoreClosedTab(saved);
     }
     private void RestoreClosedTab(SavedTab saved)
     {
@@ -327,7 +336,24 @@ public sealed partial class MainWindow : Window
         closedTabs.Clear();
         foreach (var tab in remaining.Reverse())
             if (!ReferenceEquals(tab, saved)) closedTabs.Push(tab);
-        AddTab(saved.Url, true, false, saved.Title, saved.Pinned, saved.Space, group: saved.Group);
+        RestoreTab(saved, true);
+    }
+    private BrowserTab RestoreTab(SavedTab saved, bool foreground)
+    {
+        var tab = AddTab(saved.Url, false, false, saved.Title, saved.Pinned, saved.Space, loadBackground: false, group: saved.Group);
+        if (saved.ClosedIndex >= 0) tabs.Move(tabs.IndexOf(tab), Math.Min(saved.ClosedIndex, tabs.Count - 1));
+        RefreshTabLists();
+        if (foreground) _ = SelectAsync(tab);
+        return tab;
+    }
+    private void RestoreClosedGroup(Guid batch)
+    {
+        var members = closedTabs.Where(tab => tab.ClosedBatch == batch).OrderBy(tab => tab.ClosedIndex).ToArray();
+        var remaining = closedTabs.Where(tab => tab.ClosedBatch != batch).Reverse().ToArray();
+        closedTabs.Clear(); foreach (var tab in remaining) closedTabs.Push(tab);
+        BrowserTab? front = null;
+        foreach (var saved in members) { var tab = RestoreTab(saved, false); if (saved.WasActive) front = tab; }
+        if (front != null) _ = SelectAsync(front);
     }
     private void ScheduleSave() { if (!closing) { saveTimer.Stop(); saveTimer.Start(); } }
     private async Task SaveStateAsync()

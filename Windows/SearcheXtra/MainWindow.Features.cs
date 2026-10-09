@@ -67,11 +67,13 @@ public sealed partial class MainWindow
     private async Task ShowImportAsync()
     {
         var panel = new StackPanel { Spacing = 12 };
+        var showBar = QuietButton(T("Show the bookmarks bar", "显示书签栏")); showBar.Visibility = Visibility.Collapsed;
+        showBar.Click += (_, _) => { Settings.BookmarksBar = true; ApplySettings(); ScheduleSave(); DismissOverlay(); };
         var profile = QuietButton(T("Chrome / Edge / Firefox / Brave profile folder", "Chrome / Edge / Firefox / Brave 配置目录"));
         profile.Click += async (_, _) =>
         {
             var picker = new FolderPicker(); picker.FileTypeFilter.Add("*"); InitializeWithWindow.Initialize(picker, WindowNative.GetWindowHandle(this)); var folder = await picker.PickSingleFolderAsync(); if (folder == null) return;
-            try { var result = await BrowserImport.ProfileAsync(folder.Path); store.Bookmarks.AddRange(result.Bookmarks); store.History = store.History.Concat(result.History).DistinctBy(h => h.Url).OrderByDescending(h => h.Visited).Take(10000).ToList(); store.Notify(); ScheduleSave(); Status.Text = T("Imported bookmarks and history.", "已导入书签和历史记录。"); }
+            try { var result = await BrowserImport.ProfileAsync(folder.Path); store.Bookmarks.AddRange(result.Bookmarks); store.History = store.History.Concat(result.History).DistinctBy(h => h.Url).OrderByDescending(h => h.Visited).Take(10000).ToList(); store.Notify(); ScheduleSave(); Status.Text = T("Imported bookmarks and history.", "已导入书签和历史记录。"); showBar.Visibility = result.Bookmarks.Count > 0 && !Settings.BookmarksBar ? Visibility.Visible : Visibility.Collapsed; }
             catch (Exception ex) { Status.Text = ex.Message; }
         };
         panel.Children.Add(profile);
@@ -79,7 +81,7 @@ public sealed partial class MainWindow
         bookmarks.Click += async (_, _) => { DismissOverlay(); await ShowBookmarksAsync(); };
         var passwords = QuietButton(T("Passwords CSV", "密码 CSV")); passwords.Click += async (_, _) => { DismissOverlay(); await ImportPasswordsAsync(); };
         var extensions = QuietButton(T("Import extension folder", "导入扩展目录")); extensions.Click += async (_, _) => await ChooseExtensionFolderAsync();
-        panel.Children.Add(bookmarks); panel.Children.Add(passwords); panel.Children.Add(extensions); await ShowCardAsync(T("Bring things over", "导入数据"), panel);
+        panel.Children.Add(bookmarks); panel.Children.Add(passwords); panel.Children.Add(extensions); panel.Children.Add(showBar); await ShowCardAsync(T("Bring things over", "导入数据"), panel);
     }
     private async Task ImportPasswordsAsync()
     {

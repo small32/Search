@@ -69,11 +69,15 @@ public sealed partial class MainWindow
     }
     private async Task InstallExtensionFolderAsync(string folder, string? storeId = null)
     {
+        try { folder = await Task.Run(() => CrxInstaller.ValidateFolder(folder)); }
+        catch (InvalidDataException) { throw new InvalidDataException(T("The extension folder contains a link to files outside its package.", "扩展目录包含指向扩展包外文件的链接，无法安装。")); }
         using var doc = JsonDocument.Parse(await File.ReadAllTextAsync(Path.Combine(folder, "manifest.json")));
         var manifest = doc.RootElement;
         var manifestVersion = manifest.GetProperty("manifest_version").GetInt32();
         if (manifestVersion is not (2 or 3)) throw new InvalidDataException(T("Only Manifest V2 and V3 extensions are supported.", "仅支持 Manifest V2 和 V3 扩展。"));
-        var profile = await CurrentProfileAsync();
+        var regular = active?.IsPrivate == true ? tabs.FirstOrDefault(tab => !tab.IsPrivate && tab.Space == space) ?? AddTab("", false) : active;
+        if (regular == null) return;
+        var profile = (await GetViewAsync(regular)).Control.CoreWebView2.Profile;
         if (storeId != null && Settings.Extensions.FirstOrDefault(e => e.StoreId == storeId) is { } previous) { var installed = (await profile.GetBrowserExtensionsAsync()).FirstOrDefault(e => e.Id == previous.Id); if (installed != null) await installed.RemoveAsync(); }
         CoreWebView2BrowserExtension native;
         try { native = await profile.AddBrowserExtensionAsync(folder); }

@@ -39,8 +39,11 @@ enum ExtensionShims {
     /// one needs nothing redone, which matters at launch — preparing reads
     /// every script and page an extension ships.
     nonisolated static let stamp = ".search-shim"
+    /// Raised when `prepare` changes what it does to a package, so that
+    /// extensions prepared before are prepared again.
+    nonisolated private static let preparation = "2"
     nonisolated static let version: String = {
-        SHA256.hash(data: Data((script + PasskeyRelay.page).utf8)).prefix(8).map { String(format: "%02x", $0) }.joined() + (Store.testing ? "-test" : "")
+        SHA256.hash(data: Data((script + PasskeyRelay.page + preparation).utf8)).prefix(8).map { String(format: "%02x", $0) }.joined() + (Store.testing ? "-test" : "")
     }()
 
     /// `fresh`: a package just unpacked or copied in. What only Search writes
@@ -86,6 +89,7 @@ enum ExtensionShims {
         if var background = manifest["background"] as? [String: Any] {
             // A manifest is not a way out of its own package: a worker path
             // that resolves outside the folder, or is a link, is left alone.
+            if let worker = background["service_worker"] as? String { unlink(worker, in: folder) }
             if let worker = background["service_worker"] as? String,
                let path = inside(worker, of: folder) {
                 if var source = try? String(contentsOf: path, encoding: .utf8) {
@@ -151,6 +155,27 @@ enum ExtensionShims {
             }
             try? html.write(to: url, atomically: true, encoding: .utf8)
         }
+    }
+
+    /// A worker that is a link to another file of its own package
+    /// (StopTheMadness ships `background-143.js` → `background.js`) is made
+    /// a copy of that file, so it can carry the shim. A link that leads out
+    /// of the package is left as it is, and so left alone.
+    nonisolated private static func unlink(_ name: String, in folder: URL) {
+        let path = folder.appendingPathComponent(name.trimmingCharacters(in: CharacterSet(charactersIn: "/"))).standardizedFileURL
+        guard path.path.hasPrefix(folder.standardizedFileURL.path + "/"),
+              (try? path.resourceValues(forKeys: [.isSymbolicLinkKey]).isSymbolicLink) == true
+        else { return }
+        let root = folder.resolvingSymlinksInPath().path
+        let parent = path.deletingLastPathComponent().resolvingSymlinksInPath().path
+        let target = path.resolvingSymlinksInPath()
+        guard parent == root || parent.hasPrefix(root + "/"),
+              target.path.hasPrefix(root + "/"),
+              (try? target.resourceValues(forKeys: [.isRegularFileKey]).isRegularFile) == true,
+              let data = try? Data(contentsOf: target)
+        else { return }
+        try? FileManager.default.removeItem(at: path)
+        try? data.write(to: path)
     }
 
     /// A path a package names, resolved and kept inside the folder it came
@@ -2673,11 +2698,14 @@ enum ExtensionShims {
           return port;
         };
         const connect = runtime.connect;
-        // Only a port to the extension itself: another extension would hear
-        // the numbered wrapper, not the message.
+        // Only a port to the extension itself, and never a content script's:
+        // another extension would hear the numbered wrapper, not the message,
+        // and a content script's port reaches the worker with the website as
+        // sender, so the worker leaves it plain; numbering one end only hides
+        // its messages from the extension.
         put(runtime, "connect", (...args) => {
           const port = connect.apply(runtime, args);
-          return typeof args[0] === "string" && args[0] !== runtime.id ? port : number(port);
+          return inContent || (typeof args[0] === "string" && args[0] !== runtime.id) ? port : number(port);
         });
         const onConnect = runtime.onConnect;
         const add = onConnect.addListener, remove = onConnect.removeListener, has = onConnect.hasListener;
@@ -3497,7 +3525,7 @@ enum ExtensionShims {
         case "downloads.download":
             let spec = first as? [String: Any] ?? [:]
             guard let url = (spec["url"] as? String).flatMap(URL.init(string:)) else { throw Unsupported(what: "No url to download") }
-            guard let web = browser.active?.built ?? browser.tabs.lazy.compactMap(\.built).first else {
+            guard let web = ExtensionShims.downloadPage(active: browser.active, tabs: browser.tabs) else {
                 throw Unsupported(what: "No page to download through")
             }
             if let name = spec["filename"] as? String, !name.isEmpty {
@@ -3601,7 +3629,7 @@ enum ExtensionShims {
             let found = context.webExtension
             return ["id": id, "name": found.displayName ?? "", "shortName": found.displayShortName ?? "",
                     "version": found.version ?? "", "description": found.displayDescription ?? "",
-                    "enabled": true, "type": "extension", "installType": id.hasPrefix("local-") ? "development" : "normal",
+                    "enabled": true, "type": "extension", "installType": owner.installed.first { $0.id == id }?.fromStore == false ? "development" : "normal",
                     "mayDisable": true, "offlineEnabled": true, "isApp": false, "hostPermissions": [], "permissions": []]
         case "management.getAll":
             return []
@@ -4157,6 +4185,14 @@ enum ExtensionShims {
 
     /// Popups extensions set for their buttons: per tab, or "*" for all.
     static var popups: [String: [String: String]] = [:]
+    /// The page an extension's downloads.download goes through: the tab in
+    /// front, or another of yours, never a private tab — a download goes
+    /// with the sign-ins of the page it's made through, and a private tab's
+    /// are its own, whatever the extension may see.
+    static func downloadPage(active: Tab?, tabs: [Tab]) -> WKWebView? {
+        ([active].compactMap { $0 } + tabs).filter { !$0.shy }.lazy.compactMap(\.built).first
+    }
+
     /// Downloads an extension asked for, by address, until they land; then
     /// the files they became, which are the only ones it may open.
     static var askedDownloads: [URL: String] = [:]

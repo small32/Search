@@ -60,6 +60,19 @@ var damaged = crx.ToArray(); damaged[^1] ^= 1;
 Check(Reject(() => CrxInstaller.VerifiedZip(damaged, id)), "Tampered CRX3 rejected");
 Check(Reject(() => CrxInstaller.VerifiedZip(crx, new string('a', 32))), "Wrong extension ID rejected");
 var unpack = Path.Combine(DataStore.Root, "unpack"); CrxInstaller.Unpack(zip, unpack); CrxInstaller.PreserveId(unpack, id, crx);
+Check(CrxInstaller.ValidateFolder(unpack) == Path.GetFullPath(unpack), "Ordinary extension packages pass the directory boundary check");
+if (OperatingSystem.IsWindows())
+{
+    var outside = Path.Combine(DataStore.Root, "outside-extension"); Directory.CreateDirectory(outside);
+    using var junction = System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo("cmd.exe")
+    {
+        Arguments = $"/c mklink /J \"{Path.Combine(unpack, "outside-link")}\" \"{outside}\"",
+        UseShellExecute = false, CreateNoWindow = true, RedirectStandardOutput = true, RedirectStandardError = true
+    })!;
+    junction.WaitForExit();
+    Check(junction.ExitCode == 0 && Reject(() => CrxInstaller.ValidateFolder(unpack)), "A directory junction outside the extension package is rejected");
+    Directory.Delete(Path.Combine(unpack, "outside-link"));
+}
 Check(JsonDocument.Parse(File.ReadAllText(Path.Combine(unpack, "manifest.json"))).RootElement.GetProperty("key").GetString() == Convert.ToBase64String(key), "Unpacked extension preserves Chrome ID");
 var crx2Signature = rsa.SignData(zip, HashAlgorithmName.SHA1, RSASignaturePadding.Pkcs1);
 var crx2 = Encoding.ASCII.GetBytes("Cr24").Concat(BitConverter.GetBytes(2)).Concat(BitConverter.GetBytes(key.Length)).Concat(BitConverter.GetBytes(crx2Signature.Length)).Concat(key).Concat(crx2Signature).Concat(zip).ToArray();

@@ -26,6 +26,7 @@ public sealed class PageView : IDisposable
     public event Action<string>? HoveredLink;
     public event Func<Login, Task>? PasswordOffered;
     public event Func<string, Task<CoreWebView2>>? NewWindowTarget;
+    public event Action<string, bool>? OpenLinkRequested;
 
     public PageView(BrowserTab tab, DataStore store, Action changed, Action<string> open)
     { this.tab = tab; this.store = store; this.changed = changed; this.open = open; }
@@ -59,6 +60,7 @@ public sealed class PageView : IDisposable
         core.DocumentTitleChanged += TitleChanged;
         core.SourceChanged += SourceChanged;
         core.NewWindowRequested += NewWindowRequested;
+        core.ContextMenuRequested += ContextMenuRequested;
         core.DownloadStarting += DownloadStarting;
         core.WebMessageReceived += MessageReceived;
         core.ProcessFailed += ProcessFailed;
@@ -79,7 +81,9 @@ public sealed class PageView : IDisposable
                 try
                 {
                     // Re-adding an installed extension unloads its background and open extension pages.
-                    var extension = item != null && installed.TryGetValue(item.Id, out var current) ? current : await core.Profile.AddBrowserExtensionAsync(folder);
+                    CoreWebView2BrowserExtension extension;
+                    if (item != null && installed.TryGetValue(item.Id, out var current)) extension = current;
+                    else { await Task.Run(() => CrxInstaller.ValidateFolder(folder)); extension = await core.Profile.AddBrowserExtensionAsync(folder); }
                     if (item != null && extension.IsEnabled != item.Enabled) await extension.EnableAsync(item.Enabled);
                 }
                 catch { /* A removed/incompatible extension must not prevent browsing. */ }
@@ -134,6 +138,23 @@ public sealed class PageView : IDisposable
         try { args.Handled = true; if (NewWindowTarget != null) args.NewWindow = await NewWindowTarget(args.Uri); else open(args.Uri); }
         finally { deferral.Complete(); }
     }
+    private void ContextMenuRequested(CoreWebView2 sender, CoreWebView2ContextMenuRequestedEventArgs args)
+    {
+        if (!args.ContextMenuTarget.HasLinkUri) return;
+        var link = args.ContextMenuTarget.LinkUri;
+        var original = args.MenuItems.FirstOrDefault(item => item.Name is "openLinkInNewWindow" or "openLinkInNewTab");
+        if (original == null) return;
+        var index = args.MenuItems.IndexOf(original); args.MenuItems.Remove(original);
+        var chinese = new Strings(store.Settings).Chinese;
+        foreach (var foreground in new[] { false, true })
+        {
+            var label = foreground ? (chinese ? "在新标签页中打开链接并切换" : "Open link in new tab and go to it") : (chinese ? "在新标签页中打开链接" : "Open link in new tab");
+            var item = sender.Environment.CreateContextMenuItem(label, null, CoreWebView2ContextMenuItemKind.Command);
+            item.CustomItemSelected += (_, _) => OpenLink(link, foreground);
+            args.MenuItems.Insert(index++, item);
+        }
+    }
+    internal void OpenLink(string link, bool foreground) => OpenLinkRequested?.Invoke(link, foreground);
     private void ProcessFailed(CoreWebView2 sender, CoreWebView2ProcessFailedEventArgs args) { tab.Loading = false; tab.Title = "Page process stopped · Reload"; }
 
     private static readonly HashSet<string> Trackers = new(StringComparer.OrdinalIgnoreCase)
@@ -240,7 +261,7 @@ public sealed class PageView : IDisposable
         {
             core.NavigationStarting -= NavigationStarting; core.NavigationCompleted -= NavigationCompleted;
             core.DocumentTitleChanged -= TitleChanged; core.SourceChanged -= SourceChanged;
-            core.NewWindowRequested -= NewWindowRequested; core.DownloadStarting -= DownloadStarting;
+            core.NewWindowRequested -= NewWindowRequested; core.ContextMenuRequested -= ContextMenuRequested; core.DownloadStarting -= DownloadStarting;
             core.WebMessageReceived -= MessageReceived; core.ProcessFailed -= ProcessFailed;
             core.WebResourceRequested -= ResourceRequested;
             core.PermissionRequested -= CorePermissionRequested;

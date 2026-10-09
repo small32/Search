@@ -22,6 +22,11 @@ public sealed partial class MainWindow
             var started = Stopwatch.StartNew();
             while (!predicate()) { if (started.Elapsed > TimeSpan.FromSeconds(20)) throw new TimeoutException("Page initialization timed out"); await Task.Delay(25); }
         }
+        async Task WaitAsync(Func<Task<bool>> predicate)
+        {
+            var started = Stopwatch.StartNew();
+            while (!await predicate()) { if (started.Elapsed > TimeSpan.FromSeconds(20)) throw new TimeoutException("Extension initialization timed out"); await Task.Delay(25); }
+        }
         try
         {
             server.Start();
@@ -141,6 +146,26 @@ public sealed partial class MainWindow
             CloseTab(restoredOlder); CloseTab(restoredClosed); closedTabs.Clear();
             await SelectAsync(first);
             var firstView = views[first.Id];
+            var groupedFirst = AddTab(fixture + "group-first", false, loadBackground: false, group: "Batch group");
+            var betweenGroups = AddTab(fixture + "between-groups", false, loadBackground: false);
+            var groupedLast = AddTab(fixture + "group-last", false, loadBackground: false, group: "Batch group");
+            await SelectAsync(groupedLast);
+            CloseGroup(groupedFirst);
+            Check(tabs.Contains(betweenGroups) && !tabs.Contains(groupedFirst) && !tabs.Contains(groupedLast), "Close group leaves unrelated tabs open");
+            Reopen(); await Wait(() => active?.Url == fixture + "group-last");
+            var restoredMembers = tabs.Where(tab => tab.Group == "Batch group").ToArray();
+            Check(restoredMembers.Length == 2 && restoredMembers[0].Url == fixture + "group-first" && restoredMembers[1] == active,
+                "One undo restores the entire group and its previously active member");
+            Check(tabs.IndexOf(restoredMembers[0]) < tabs.IndexOf(betweenGroups) && tabs.IndexOf(betweenGroups) < tabs.IndexOf(restoredMembers[1]),
+                "Group undo restores tabs around unrelated tabs in their original positions");
+            foreach (var member in restoredMembers) CloseTab(member); CloseTab(betweenGroups); closedTabs.Clear();
+            await SelectAsync(first);
+            firstView.OpenLink(fixture + "behind-link", false);
+            var behindLink = tabs.Last();
+            Check(active == first && behindLink.Url == fixture + "behind-link", "Opening a link behind keeps the current page selected");
+            firstView.OpenLink(fixture + "front-link", true); await Wait(() => active?.Url == fixture + "front-link");
+            Check(active != first, "Explicit foreground link opening switches to the new tab");
+            CloseTab(active!); CloseTab(behindLink); closedTabs.Clear(); await SelectAsync(first);
             await firstView.Control.CoreWebView2.ExecuteScriptAsync("window.testMarker=42");
             var blank = AddTab("", false); await SelectAsync(blank);
             watch.Restart(); await SelectAsync(first);
@@ -271,9 +296,28 @@ public sealed partial class MainWindow
                 await popupView.CoreWebView2.ExecuteScriptAsync("document.body.style.width='700px'");
                 await Wait(() => popupView.Width >= 700); Root.UpdateLayout();
                 Check(popupView.Parent is Microsoft.UI.Xaml.Controls.Grid panel && panel.Width == popupView.Width + 44, "Extension popup and its card resize together after content changes");
+                await popupView.CoreWebView2.ExecuteScriptAsync("window.marked=false;chrome.storage.local.set({removedMarker:'must disappear'},()=>window.marked=true)");
+                await WaitAsync(async () => await popupView.CoreWebView2.ExecuteScriptAsync("window.marked") == "true");
+                await popupView.CoreWebView2.ExecuteScriptAsync("localStorage.setItem('removedSiteMarker','must disappear');window.fileAccess='pending';chrome.extension.isAllowedFileSchemeAccess(value=>window.fileAccess=value)");
+                await WaitAsync(async () => await popupView.CoreWebView2.ExecuteScriptAsync("window.fileAccess") != "\"pending\"");
+                measurements["NativeExtensionFileSchemeAccess"] = await popupView.CoreWebView2.ExecuteScriptAsync("window.fileAccess") == "true" ? 1 : 0;
+                await popupView.CoreWebView2.ExecuteScriptAsync("window.filePermission='pending';chrome.permissions.contains({origins:['file:///*']},value=>window.filePermission=value)");
+                await WaitAsync(async () => await popupView.CoreWebView2.ExecuteScriptAsync("window.filePermission") != "\"pending\"");
+                Check(await popupView.CoreWebView2.ExecuteScriptAsync("window.filePermission") == "false", "A native extension with only HTTP permissions has no file-origin permission");
             }
             finally { DismissOverlay(); await popupTask; }
             await RemoveExtensionAsync(mv2);
+            await InstallExtensionFolderAsync(mv2Folder);
+            var reinstalled = Settings.Extensions.Single(extension => extension.Folder == mv2Folder);
+            Check(reinstalled.Id == mv2.Id, "Loading the same extension folder keeps its native Chrome identity");
+            var storageTab = AddTab($"chrome-extension://{reinstalled.Id}/popup.html");
+            await Wait(() => !storageTab.Loading && storageTab.Title == "MV2 popup");
+            var storageCore = views[storageTab.Id].Control.CoreWebView2;
+            await storageCore.ExecuteScriptAsync("window.removedMarker='pending';chrome.storage.local.get('removedMarker',data=>window.removedMarker=data.removedMarker||'empty')");
+            await WaitAsync(async () => await storageCore.ExecuteScriptAsync("window.removedMarker") != "\"pending\"");
+            Check(await storageCore.ExecuteScriptAsync("window.removedMarker") == "\"empty\"", "Uninstalling an extension clears its native storage before reinstall");
+            Check(await storageCore.ExecuteScriptAsync("localStorage.getItem('removedSiteMarker')") == "null", "Uninstalling an extension clears its page-origin storage before reinstall");
+            CloseTab(storageTab); await SelectAsync(first); await RemoveExtensionAsync(reinstalled);
             await firstView.Control.CoreWebView2.ExecuteScriptAsync("""
                 (async()=>{const canvas=document.createElement('canvas');canvas.width=320;canvas.height=180;canvas.getContext('2d').fillRect(0,0,320,180);const video=document.createElement('video');video.muted=true;video.srcObject=canvas.captureStream(5);document.body.appendChild(video);await video.play();})()
                 """);

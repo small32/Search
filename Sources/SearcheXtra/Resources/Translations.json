@@ -5166,5 +5166,25 @@
   "navigation.home": {
     "en": "Home",
     "zh-Hans": "主页"
+  },
+  "upstream.group.reopen": {
+    "en": "Reopen Closed Group",
+    "zh-Hans": "恢复关闭的标签组"
+  },
+  "upstream.link.foreground": {
+    "en": "Open Link in New Tab and Go to It",
+    "zh-Hans": "在新标签页中打开链接并切换"
+  },
+  "upstream.import.bookmarksBar": {
+    "en": "Show the bookmarks bar",
+    "zh-Hans": "显示书签栏"
+  },
+  "upstream.extension.alreadyLoaded": {
+    "en": "Already installed. Press Reload to take its changes",
+    "zh-Hans": "此扩展已安装。点击重新加载以应用目录中的修改。"
+  },
+  "upstream.extension.sourceMoved": {
+    "en": "{0} wasn't reloaded — its folder now leads somewhere else",
+    "zh-Hans": "未重新加载 {0}：扩展目录已指向其他位置。"
   }
 }
